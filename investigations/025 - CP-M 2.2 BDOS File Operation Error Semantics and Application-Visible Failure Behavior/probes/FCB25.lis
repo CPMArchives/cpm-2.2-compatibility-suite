@@ -1,0 +1,81 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:32:23 2026	Page 1
+Source file: FCB25.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Activate ONE25.DAT, corrupt its identity before Close, and dump failure state.
+                       2      2         ORG 100H
+0100  11 8a 01         3      3         LD DE,FCB
+0103  0e 0f            4      4         LD C,15
+0105  cd 05 00         5      5         CALL 5
+0108  32 88 01         6      6         LD (ORC),A
+010b  3e 58            7      7         LD A,'X'
+010d  32 8b 01         8      8         LD (FCB+1),A
+0110  11 8a 01         9      9         LD DE,FCB
+0113  0e 10           10     10         LD C,16
+0115  cd 05 00        11     11         CALL 5
+0118  32 89 01        12     12         LD (CRC),A
+011b  11 6d 01        13     13         LD DE,MSG
+011e  0e 09           14     14         LD C,9
+0120  cd 05 00        15     15         CALL 5
+0123  3a 88 01        16     16         LD A,(ORC)
+0126  cd 51 01        17     17         CALL HEX
+0129  3a 89 01        18     18         LD A,(CRC)
+012c  cd 51 01        19     19         CALL HEX
+012f  11 8a 01        20     20         LD DE,FCB
+0132  01 24 00        21     21         LD BC,36
+0135  cd 39 01        22     22         CALL DUMP
+0138  c9              23     23         RET
+0139  1a              24     24 DUMP:   LD A,(DE)
+013a  c5              25     25         PUSH BC
+013b  d5              26     26         PUSH DE
+013c  cd 51 01        27     27         CALL HEX
+013f  d1              28     28         POP DE
+0140  c1              29     29         POP BC
+0141  13              30     30         INC DE
+0142  0b              31     31         DEC BC
+0143  78              32     32         LD A,B
+0144  b1              33     33         OR C
+0145  20 f2           34     34         JR NZ,DUMP
+0147  1e 0d           35     35         LD E,13
+0149  cd 65 01        36     36         CALL OUT
+014c  1e 0a           37     37         LD E,10
+014e  c3 65 01        38     38         JP OUT
+0151  f5              39     39 HEX:    PUSH AF
+0152  0f              40     40         RRCA
+0153  0f              41     41         RRCA
+0154  0f              42     42         RRCA
+0155  0f              43     43         RRCA
+0156  cd 5a 01        44     44         CALL NIB
+0159  f1              45     45         POP AF
+015a  e6 0f           46     46 NIB:    AND 0FH
+015c  c6 30           47     47         ADD A,'0'
+015e  fe 3a           48     48         CP '9'+1
+0160  38 02           49     49         JR C,HOUT
+0162  c6 07           50     50         ADD A,7
+0164  5f              51     51 HOUT:   LD E,A
+0165  c5              52     52 OUT:    PUSH BC
+0166  0e 02           53     53         LD C,2
+0168  cd 05 00        54     54         CALL 5
+016b  c1              55     55         POP BC
+016c  c9              56     56         RET
+016d  4f 50 45 4e     57     57 MSG:    DB 'OPEN/CORRUPT/CLOSE RC/FCB=','$'
+0171  2f 43 4f 52     57     58
+0175  52 55 50 54     57     59
+0179  2f 43 4c 4f     57     60
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:32:23 2026	Page 2
+Source file: FCB25.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+017d  53 45 20 52     57     61
+0181  43 2f 46 43     57     62
+0185  42 3d 24        57     63
+0188  00              58     64 ORC:    DB 0
+0189  00              59     65 CRC:    DB 0
+018a  00 4f 4e 45     60     66 FCB:    DB 0,'ONE25   ','DAT',0,0,0,0
+018e  32 35 20 20     60     67
+0192  20 44 41 54     60     68
+0196  00 00 00 00     60     69
+019a                  61     70         DS 20
+01ae                  62     71         END

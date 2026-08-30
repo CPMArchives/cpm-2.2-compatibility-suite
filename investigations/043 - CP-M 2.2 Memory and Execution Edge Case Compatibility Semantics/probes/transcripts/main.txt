@@ -1,0 +1,46 @@
+spawn cpmsim -z -d <local-workspace>/g-p-6a682f002be881918281554d644daf48/stage043/probes/case
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>EDGE43
+EDGE43 ENTRYSP RET PRIVATE_PRE/POST TPA_LAST OLD/TEST PATCH VER EBA9 EB5F 02F5 02F5 EC05 00 A5 5A 0022
+
+A>ZRET43
+ZERORET43 RET TO 0000H
+A>EDGE43
+EDGE43 ENTRYSP RET PRIVATE_PRE/POST TPA_LAST OLD/TEST PATCH VER EBA9 EB5F 02F5 02F5 EC05 00 A5 5A 0022
+
+A>FN043
+FN043 PRIVATE STACK FUNCTION 0
+A>EDGE43
+EDGE43 ENTRYSP RET PRIVATE_PRE/POST TPA_LAST OLD/TEST PATCH VER EBA9 EB5F 02F5 02F5 EC05 00 A5 5A 0022
+
+A>OVER43
+OVER43 CCP AND RET OVERWRITTEN; WBOOT
+A>EDGE43
+EDGE43 ENTRYSP RET PRIVATE_PRE/POST TPA_LAST OLD/TEST PATCH VER EBA9 EB5F 02F5 02F5 EC05 00 A5 5A 0022
+
+A>MAXOK43
+MAXOK43 EXECUTED
+A>MAXBAD43
+BAD LOAD
+A>[0;31mE (15627) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 22 ms, waited for 0 ms
+CPU executed 5781929 t-states in 4 ms
+Clock frequency 1239.42 MHz

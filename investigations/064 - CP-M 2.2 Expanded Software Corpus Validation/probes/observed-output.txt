@@ -1,0 +1,23 @@
+Investigation 064 observed output summary
+
+T01 Turbo Pascal normal: Version 3.01A identified itself as CP/M-80, Z80.
+It loaded HELLO.PAS, compiled four lines, ran the in-memory result, and printed
+TP64 PASS.
+
+T02 Turbo Pascal failure: BAD.PAS produced a syntax-error diagnostic. The
+embedded THIS MUST NOT RUN marker was not executed.
+
+T03 Turbo Pascal processor boundary: the identical product did not display
+its banner or return to CCP during the bounded Intel 8080-mode run. It was
+stopped by scripted emulator shutdown. No exact unsupported-opcode behavior
+is inferred.
+
+T04 FORTRAN normal: F80 created HELLO.REL; LINK-80 3.44 linked FORLIB and
+created a 6656-byte HELLO.COM; the generated executable printed F80-64 PASS
+and terminated.
+
+T05 FORTRAN missing source: F80 reported File not found for MISSING and entered
+its own command/error prompt. The emulator was then stopped by the script.
+
+All cases used fresh recreated images and deterministic input. Complete raw
+transcripts and before/after images are preserved.

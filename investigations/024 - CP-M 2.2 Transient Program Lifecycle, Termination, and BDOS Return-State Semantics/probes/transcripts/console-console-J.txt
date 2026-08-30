@@ -1,0 +1,37 @@
+spawn cpmsim -z -d cases/console-J
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>CONS24 J
+C24
+
+A>OBS24 AFTER-CONSOLE-J
+ENTRY23 FORMAT=01
+REGREC=A9EB6C00FF00FFF9EFEBF822D2D3CEBD4E8B10C7C63100676800000101
+PZ0000-0007=C303FA4000C306EC
+FCB005C-007F=0041465445522D434F20202000000008002020202020202020202020000000000013B5FB
+TAIL0080-00FF=102041465445522D434F4E534F4C452D4A008CB397691525B40123A8FAB4A23D832AE1B91FE6B8F4E2B3104A50EB9A99600EE7CF3BD2F3DF8CA57B83FC592911A3465C5C3CB38031250917DABC928E83FCCA02BC4CE09AC4E511F14C9BAF37868416C08EE477C3307974C2F4EEC5EBCD9153F1C2103BF48CBAE7BC450CAF9399
+STACK16=5FEB0000242424202020202053554200
+LIVE DRIVE USER=00 00
+DMA OPEN READ DATA=02 00 443032332D44454641554C542D444D41
+
+A>[0;31mE (6173) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 9 ms, waited for 0 ms
+CPU executed 1704262 t-states in 0 ms
+Clock frequency 1760.60 MHz

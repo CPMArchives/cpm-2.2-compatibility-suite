@@ -1,0 +1,387 @@
+; Investigation 015 controlled physical disk-error probe
+; Custom emulator port 18: OUT 1 fails next physical read, OUT 2 next write.
+	ORG 0100H
+START:
+	LD SP,STACKTOP
+	LD A,(0080H)
+	OR A
+	JR Z,MODE_N
+	LD A,(0082H)
+	AND 05FH
+	CP 'A'
+	JP Z,MODE_A
+	CP 'B'
+	JP Z,MODE_B
+	CP 'C'
+	JP Z,MODE_C
+	CP 'D'
+	JP Z,MODE_D
+	CP 'E'
+	JP Z,MODE_E
+	CP 'F'
+	JP Z,MODE_F
+	CP 'G'
+	JP Z,MODE_G
+	CP 'H'
+	JP Z,MODE_H
+	CP 'I'
+	JP Z,MODE_I
+	CP 'J'
+	JP Z,MODE_J
+	CP 'P'
+	JP Z,MODE_P
+	CP 'U'
+	JP Z,MODE_U
+
+; Normal sequential-read control, no injected fault.
+MODE_N:
+	LD A,'N'
+	CALL CASEHEAD
+	LD HL,FREAD
+	CALL OPENFCB
+	LD A,0EEH
+	CALL FILLBUF
+	LD C,20
+	CALL CALLFCB
+	LD DE,LRETURNED
+	CALL REPORT
+	RET
+
+; A/G: sequential physical read failure. G receives ^C at handler.
+MODE_A:
+	LD A,'A'
+	JR SEQREADFAIL
+MODE_G:
+	LD A,'G'
+SEQREADFAIL:
+	CALL CASEHEAD
+	LD HL,FREAD
+	CALL OPENFCB
+	LD A,0EEH
+	CALL FILLBUF
+	LD DE,LBEFORE
+	CALL REPORT
+	CALL ARMREAD
+	LD C,20
+	CALL CALLFCB
+	LD DE,LRETURNED
+	CALL REPORT
+	RET
+
+; B: random physical read failure at record zero.
+MODE_B:
+	LD A,'B'
+	CALL CASEHEAD
+	LD HL,FREAD
+	CALL OPENFCB
+	XOR A
+	LD (FCB+33),A
+	LD (FCB+34),A
+	LD (FCB+35),A
+	LD A,0EEH
+	CALL FILLBUF
+	LD DE,LBEFORE
+	CALL REPORT
+	CALL ARMREAD
+	LD C,33
+	CALL CALLFCB
+	LD DE,LRETURNED
+	CALL REPORT
+	RET
+
+; C/H: sequential physical write failure. H receives ^C at handler.
+MODE_C:
+	LD A,'C'
+	JR SEQWRITEFAIL
+MODE_H:
+	LD A,'H'
+SEQWRITEFAIL:
+	CALL CASEHEAD
+	LD HL,FWRITE
+	CALL OPENFCB
+	LD A,'S'
+	CALL FILLBUF
+	LD DE,LBEFORE
+	CALL REPORT
+	CALL ARMWRITE
+	LD C,21
+	CALL CALLFCB
+	LD DE,LRETURNED
+	CALL REPORT
+	RET
+
+; P: the isolated I066 emulator writes the selected physical sector and then
+; reports a physical error. This models an acknowledged partial-completion
+; boundary without claiming a particular controller algorithm.
+MODE_P:
+	LD A,'P'
+	CALL CASEHEAD
+	LD HL,FWRITE
+	CALL OPENFCB
+	LD A,'P'
+	CALL FILLBUF
+	LD DE,LBEFORE
+	CALL REPORT
+	CALL ARMPOSTWRITE
+	LD C,21
+	CALL CALLFCB
+	LD DE,LRETURNED
+	CALL REPORT
+	RET
+
+; U: attempt to open on explicit drive B with no drive-B image attached.
+MODE_U:
+	LD A,'U'
+	CALL CASEHEAD
+	LD HL,FREAD
+	CALL LOADFCB
+	LD A,2
+	LD (FCB),A
+	LD C,15
+	CALL CALLFCB
+	LD DE,LRETURNED
+	CALL REPORT
+	RET
+
+; D: random physical write failure at allocated record zero.
+MODE_D:
+	LD A,'D'
+	CALL CASEHEAD
+	LD HL,FWRITE
+	CALL OPENFCB
+	XOR A
+	LD (FCB+33),A
+	LD (FCB+34),A
+	LD (FCB+35),A
+	LD A,'R'
+	CALL FILLBUF
+	LD DE,LBEFORE
+	CALL REPORT
+	CALL ARMWRITE
+	LD C,34
+	CALL CALLFCB
+	LD DE,LRETURNED
+	CALL REPORT
+	RET
+
+; E: physical directory-write failure during Make.
+MODE_E:
+	LD A,'E'
+	CALL CASEHEAD
+	LD HL,FNEW
+	CALL LOADFCB
+	LD DE,LBEFORE
+	CALL REPORT
+	CALL ARMWRITE
+	LD C,22
+	CALL CALLFCB
+	LD DE,LRETURNED
+	CALL REPORT
+	RET
+
+; F: physical directory-write failure during Close. Open an existing file,
+; make its activated FCB dirty without a preceding disk write, and request a
+; changed RC so an uninjected Close would rewrite the directory entry.
+MODE_F:
+	LD A,'F'
+	CALL CASEHEAD
+	LD HL,FCLOSE
+	CALL OPENFCB
+	LD A,(FCB+14)
+	AND 07FH
+	LD (FCB+14),A
+	LD A,2
+	LD (FCB+15),A
+	LD DE,LBEFORE
+	CALL REPORT
+	CALL ARMWRITE
+	LD C,16
+	CALL CALLFCB
+	LD DE,LRETURNED
+	CALL REPORT
+	RET
+
+; I/J: documented logical missing-data controls. These do not arm a physical
+; fault and distinguish ordinary BDOS return codes from Bad Sector.
+MODE_I:
+	LD A,'I'
+	CALL CASEHEAD
+	LD HL,FREAD
+	CALL OPENFCB
+	LD A,1
+	LD (FCB+32),A
+	LD A,0EEH
+	CALL FILLBUF
+	LD C,20
+	CALL CALLFCB
+	LD DE,LRETURNED
+	CALL REPORT
+	RET
+MODE_J:
+	LD A,'J'
+	CALL CASEHEAD
+	LD HL,FREAD
+	CALL OPENFCB
+	LD A,1
+	LD (FCB+33),A
+	XOR A
+	LD (FCB+34),A
+	LD (FCB+35),A
+	LD A,0EEH
+	CALL FILLBUF
+	LD C,33
+	CALL CALLFCB
+	LD DE,LRETURNED
+	CALL REPORT
+	RET
+
+ARMREAD:
+	LD DE,LARMREAD
+	CALL PUTS9
+	LD A,1
+	OUT (18),A
+	RET
+ARMWRITE:
+	LD DE,LARMWRITE
+	CALL PUTS9
+	LD A,2
+	OUT (18),A
+	RET
+ARMPOSTWRITE:
+	LD DE,LARMPOST
+	CALL PUTS9
+	LD A,3
+	OUT (18),A
+	RET
+
+OPENFCB:
+	CALL LOADFCB
+	LD C,15
+	CALL CALLFCB
+	XOR A
+	LD (FCB+32),A
+	RET
+CALLFCB:
+	LD DE,FCB
+	CALL 0005H
+	LD (RESULT),A
+	RET
+LOADFCB:
+	LD DE,FCB
+	LD BC,16
+	LDIR
+	XOR A
+	LD HL,FCB+16
+	LD B,20
+LF0:	LD (HL),A
+	INC HL
+	DJNZ LF0
+	RET
+FILLBUF:
+	LD HL,BUF
+	LD B,128
+FB0:	LD (HL),A
+	INC HL
+	DJNZ FB0
+	LD DE,BUF
+	LD C,26
+	CALL 0005H
+	RET
+
+REPORT:
+	PUSH DE
+	LD C,25
+	CALL 0005H
+	LD (CURDISK),A
+	POP HL
+	CALL PUTS
+	LD A,(RESULT)
+	CALL HEXBYTE
+	LD A,' '
+	CALL PUTC
+	LD A,(CURDISK)
+	CALL HEXBYTE
+	LD A,' '
+	CALL PUTC
+	LD HL,FCB
+	LD B,36
+RD0:	LD A,(HL)
+	INC HL
+	PUSH HL
+	CALL HEXBYTE
+	LD A,' '
+	CALL PUTC
+	POP HL
+	DJNZ RD0
+	LD A,(BUF)
+	CALL HEXBYTE
+	CALL CRLF
+	RET
+CASEHEAD:
+	LD (CASECHAR),A
+	LD DE,LCASE
+	CALL PUTS9
+	LD A,(CASECHAR)
+	CALL PUTC
+	CALL CRLF
+	RET
+PUTS9:
+	LD C,9
+	CALL 0005H
+	RET
+PUTS:	LD A,(HL)
+	INC HL
+	OR A
+	RET Z
+	CALL PUTC
+	JR PUTS
+PUTC:
+	PUSH BC
+	PUSH DE
+	PUSH HL
+	LD E,A
+	LD C,2
+	CALL 0005H
+	POP HL
+	POP DE
+	POP BC
+	RET
+CRLF:
+	LD A,13
+	CALL PUTC
+	LD A,10
+	JP PUTC
+HEXBYTE:
+	PUSH AF
+	RRCA
+	RRCA
+	RRCA
+	RRCA
+	CALL NIBBLE
+	POP AF
+NIBBLE:
+	AND 0FH
+	ADD A,'0'
+	CP '9'+1
+	JR C,NOUT
+	ADD A,7
+NOUT:	JP PUTC
+
+FREAD: DB 0,'ATTR    ','DAT',0,0,0,0
+FWRITE: DB 0,'CLOSEME ','DAT',0,0,0,0
+FCLOSE: DB 0,'DSKFILE ','DAT',0,0,0,0
+FNEW: DB 0,'NEW015  ','DAT',0,0,0,0
+LCASE: DB 'CASE $'
+LBEFORE: DB 'BEFORE ',0
+LRETURNED: DB 'RETURNED ',0
+LARMREAD: DB 'ARM READ',13,10,'$'
+LARMWRITE: DB 'ARM WRITE',13,10,'$'
+LARMPOST: DB 'ARM WRITE-THEN-ERROR',13,10,'$'
+RESULT: DB 0
+CURDISK: DB 0
+CASECHAR: DB 0
+FCB: DS 36,0
+BUF: DS 128,0
+	DS 192
+STACKTOP:
+	END START

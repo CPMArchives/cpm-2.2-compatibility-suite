@@ -1,0 +1,589 @@
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 029 is complete.
+
+The authoritative Compatibility Ledger currently incorporates findings
+through Investigation 029.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports, architecture documents,
+roadmaps, specifications, or other existing BetterCP/M files.
+
+Create Investigation 030 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Define the CP/M 2.2 BDOS file lifecycle compatibility contract.
+
+Previous investigations established:
+
+- FCB identification and Open-Close foundations;
+- directory search;
+- sequential read;
+- sequential write;
+- file creation;
+- deletion and rename;
+- random access;
+- file size behavior;
+- allocation state;
+- BDOS calling conventions;
+- failure behavior.
+
+Investigation 030 determines the relationship between those operations
+during the lifetime of a file.
+
+Determine:
+
+- file creation state;
+- file growth behavior;
+- extent transitions;
+- allocation changes;
+- FCB state changes;
+- directory metadata visibility;
+- Close File effects;
+- Open File reconstruction;
+- multi-extent file behavior.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read and incorporate:
+
+Investigation 008:
+    FCB File Identification and Open-Close Semantics.
+
+Investigation 009:
+    Directory Search and DMA Transfer Semantics.
+
+Investigation 010:
+    Sequential Read Semantics.
+
+Investigation 011:
+    Sequential Write and File Creation Semantics.
+
+Investigation 012:
+    File Deletion and Rename Semantics.
+
+Investigation 013:
+    Random Access and File Size Semantics.
+
+Investigation 017:
+    Allocation Vector and Disk Parameter Block Semantics.
+
+Investigation 025:
+    File Operation Error Semantics.
+
+Investigation 026:
+    BDOS System State Functions.
+
+Investigation 027:
+    BDOS Call Interface Convention.
+
+Investigation 029:
+    Directory Search Enumeration Contract.
+
+
+Do not duplicate individual operation semantics.
+
+Focus on lifecycle state transitions.
+
+
+SCOPE
+
+Investigate:
+
+- Make File state;
+- file extension;
+- extent creation;
+- allocation changes;
+- directory entry changes;
+- FCB changes;
+- Close File behavior;
+- Open File behavior;
+- multi-extent files;
+- lifecycle-related failures.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- CP/M 3 extensions;
+- MP/M;
+- host filesystem behavior;
+- BetterCP/M implementation design;
+- internal BDOS algorithms except where required for compatibility analysis.
+
+
+Do not require:
+
+- exact DRI implementation;
+- private memory structures;
+- undocumented behavior.
+
+
+KEY QUESTIONS
+
+
+1. FILE CREATION STATE
+
+Determine:
+
+- state after Make File;
+- initial FCB contents;
+- directory visibility;
+- allocation state;
+- behavior before first write;
+- behavior after Close;
+- behavior after reopen.
+
+
+2. FILE GROWTH
+
+Determine:
+
+- record count changes;
+- file size changes;
+- allocation changes;
+- directory updates;
+- FCB updates.
+
+Test:
+
+- small files;
+- extent boundary transitions;
+- multi-extent files.
+
+
+3. EXTENT MANAGEMENT
+
+Determine:
+
+- extent numbering;
+- extent boundaries;
+- relationship between extents and directory entries;
+- relationship between extents and FCB fields;
+- multi-extent access behavior.
+
+
+4. FCB STATE CHANGES
+
+Determine:
+
+- FCB contents after Make File;
+- FCB contents after Open;
+- FCB contents after Write;
+- FCB contents after Random Write;
+- FCB contents after Close;
+- FCB contents after reopen.
+
+
+Investigate:
+
+- EX;
+- S1;
+- S2;
+- RC;
+- allocation fields;
+- random record fields.
+
+
+Determine:
+
+- fields applications may rely upon;
+- fields that are implementation-specific.
+
+
+5. DIRECTORY METADATA STATE
+
+Determine:
+
+- when file state becomes visible through directory operations;
+- relationship between directory entries and extents;
+- metadata changes after modification;
+- metadata after Close.
+
+
+Cross-reference Investigation 029.
+
+
+6. CLOSE FILE SEMANTICS
+
+Determine:
+
+- metadata committed by Close;
+- persistence guarantees;
+- behavior after failed operations;
+- application assumptions after successful Close.
+
+
+7. OPEN FILE SEMANTICS
+
+Determine:
+
+- state reconstructed by Open;
+- FCB contents after Open;
+- extent selection;
+- multi-extent behavior;
+- relationship between directory state and FCB state.
+
+
+8. RANDOM ACCESS LIFECYCLE EFFECTS
+
+Investigate:
+
+- random writes within existing files;
+- random writes beyond end of file;
+- extent creation;
+- allocation changes;
+- reopened state.
+
+
+Do not duplicate Investigation 013.
+
+
+9. MULTI-EXTENT FILE BEHAVIOR
+
+Determine:
+
+- how applications access multi-extent files;
+- how sequential operations cross extents;
+- how directory searches expose extents;
+- how reopening affects access.
+
+
+10. FAILURE CONDITIONS
+
+Determine behavior for:
+
+- directory full;
+- disk full;
+- allocation failure;
+- failed extension;
+- failed Close;
+- incomplete file operations.
+
+
+Separate:
+
+returned BDOS errors
+
+from:
+
+implementation behavior.
+
+
+11. APPLICATION ASSUMPTIONS
+
+Determine which assumptions are valid:
+
+- closed files can be reopened consistently;
+- file metadata survives reopening;
+- extent information remains valid;
+- directory state reflects file state;
+- FCB fields remain meaningful.
+
+12. DRI SOURCE ANALYSIS
+
+Review BDOS source material for:
+
+- Make File processing;
+- Open File processing;
+- Close File processing;
+- extent handling;
+- directory updates;
+- allocation handling;
+- FCB updates.
+
+
+Extract:
+
+- compatibility-relevant behavior;
+- implementation-specific behavior.
+
+
+13. EXPERIMENTAL PROGRAMS
+
+Create deterministic probes:
+
+CREATE30:
+
+    File creation state.
+
+GROW30:
+
+    File growth behavior.
+
+EXTENT30:
+
+    Extent transition behavior.
+
+FCB30:
+
+    FCB state changes.
+
+CLOSE30:
+
+    Close and persistence behavior.
+
+OPEN30:
+
+    Reopen state reconstruction.
+
+FAIL30:
+
+    Lifecycle failure behavior.
+
+
+Each probe must include:
+
+- purpose;
+- procedure;
+- observed behavior;
+- compatibility conclusion.
+
+
+14. CONTROLLED TEST MATRIX
+
+Include:
+
+
+FILE CREATION
+
+- Make File only;
+- Make File then Close;
+- Make File then Write;
+- Make File then reopen.
+
+
+FILE GROWTH
+
+- empty file;
+- small file;
+- extent boundary;
+- multiple extents.
+
+
+FCB STATE
+
+- after Make File;
+- after Open;
+- after Write;
+- after Close;
+- after reopen.
+
+
+DIRECTORY STATE
+
+- before write;
+- after write;
+- after Close;
+- after reopen.
+
+
+RANDOM ACCESS
+
+- random write inside file;
+- random write beyond end of file;
+- reopen after extension.
+
+
+FAILURE
+
+- directory full;
+- disk full;
+- allocation failure;
+- failed extension.
+
+
+15. EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+
+    documented behavior.
+
+B:
+
+    DRI implementation behavior.
+
+I:
+
+    experimental observation.
+
+D:
+
+    unresolved policy.
+
+
+These labels are internal investigation classifications only.
+
+
+Ledger evidence must use:
+
+    I030
+    BDOS
+    IG
+    AG
+
+
+16. COMPATIBILITY CLASSIFICATION
+
+Classify each conclusion:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Do not require:
+
+- internal algorithms;
+- private data structures;
+- undocumented FCB behavior;
+- allocation ordering.
+
+
+17. EXISTING LEDGER REVIEW
+
+Review:
+
+- FCB-related entries;
+- file-operation entries;
+- allocation entries;
+- directory entries;
+- error-handling entries.
+
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicates to avoid.
+
+
+18. PROPOSED LEDGER ADDITIONS
+
+The current ledger ends after Investigation 029.
+
+Determine the next available ledger entry number.
+
+Do not modify the Compatibility Ledger.
+
+
+Include:
+
+Proposed Compatibility Ledger additions
+
+and:
+
+Proposed existing-entry updates.
+
+
+Each entry must contain:
+
+
+NNNN. Title
+
+    Description.
+
+    Disposition:
+
+    Evidence:
+
+    Conformance:
+
+
+19. REPORT STRUCTURE
+
+Create:
+
+Investigation 030 - CP/M 2.2 BDOS File Lifecycle, Extent Management,
+and Metadata State Transition Semantics.md
+
+
+Include:
+
+1. Objective and scope
+
+2. Relationship to previous investigations
+
+3. Documentation findings
+
+4. BDOS source findings
+
+5. File creation behavior
+
+6. File growth behavior
+
+7. Extent behavior
+
+8. FCB state behavior
+
+9. Directory metadata behavior
+
+10. Close File behavior
+
+11. Open File behavior
+
+12. Multi-extent behavior
+
+13. Failure behavior
+
+14. Experimental results
+
+15. Compatibility conclusions
+
+16. Proposed ledger additions
+
+17. Existing-entry updates
+
+18. Open questions
+
+19. Conformance implications
+
+
+20. FINAL REVIEW
+
+Verify that the investigation determines:
+
+- file creation state;
+- file growth behavior;
+- extent behavior;
+- allocation changes;
+- FCB state changes;
+- persistence behavior;
+- application assumptions.
+
+
+Ensure conclusions are classified as:
+
+- documented;
+- DRI-specific;
+- experimentally observed;
+- unresolved.
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M storage architecture.
+
+Do not infer modern filesystem behavior.
+
+Determine the CP/M 2.2 compatibility contract only.
+
+The output must be an evidence report suitable for inclusion in the BetterCP/M compatibility investigation archive.

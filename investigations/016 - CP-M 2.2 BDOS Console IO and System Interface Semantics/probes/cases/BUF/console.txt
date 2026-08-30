@@ -1,0 +1,39 @@
+spawn cpmsim -z -d /private/tmp/inv016-runs/BUF
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>BUF006
+
+BUF006 max count data[8] conlen con[24] listlen calls
+SIMPLE 08 03 41 42 43 EE EE EE EE EE 04 41 42 43 0D FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 04 
+LFTERM 08 02 41 42 EE EE EE EE EE EE 03 41 42 0D 0D FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 03 
+EMPTY  08 00 EE EE EE EE EE EE EE EE 01 0D 42 0D 0D FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 01 
+FULL   03 03 41 42 43 EE EE EE EE EE 04 41 42 43 0D FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 03 
+BS     08 02 41 43 EE EE EE EE EE EE 07 41 42 08 20 08 43 0D FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 05 
+DEL    08 02 41 43 EE EE EE EE EE EE 07 41 42 08 20 08 43 0D FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 05 
+CTRL-E 08 02 41 42 EE EE EE EE EE EE 05 41 0D 0A 42 0D 43 0D FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 04 
+CTRL-U 08 01 43 42 EE EE EE EE EE EE 08 41 42 23 0D 0A 20 43 0D FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 05 
+CTRL-X 08 01 43 42 EE EE EE EE EE EE 0A 41 42 08 20 08 08 20 08 43 0D FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 05 
+CTRL-R 08 03 41 42 43 EE EE EE EE EE 0C 41 42 23 0D 0A 20 20 20 41 42 43 0D FF FF FF FF FF FF FF FF FF FF FF FF 00 05 
+CTRL-P 08 02 41 42 EE EE EE EE EE EE 03 41 42 0D 0D 0A 20 20 20 41 42 43 0D FF FF FF FF FF FF FF FF FF FF FF FF 02 04 
+
+A>[0;31mE (30956) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 50 ms, waited for 0 ms
+CPU executed 1473584 t-states in 2 ms
+Clock frequency 642.64 MHz

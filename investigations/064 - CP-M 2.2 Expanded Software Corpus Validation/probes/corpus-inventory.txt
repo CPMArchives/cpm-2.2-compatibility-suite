@@ -1,0 +1,51 @@
+Investigation 064 expanded corpus inventory
+
+Executed additions
+------------------
+
+1. Borland Turbo Pascal 3.01A for CP/M-80, Z80
+   Files: TURBO.COM, TURBO.OVR, TURBO.MSG
+   Archive source: https://github.com/skx/cpm-dist (public historical mirror)
+   Discovery manifest: https://github.com/antirez/ZOT/blob/master/cpm-software/download.sh
+   Category: high-level language, IDE/compiler, generated runtime.
+   Platform assumption: explicitly identifies CP/M-80 and Z80; ANSI terminal.
+   Evidence: T01-T03, full transcripts and disk images (I).
+
+2. Microsoft FORTRAN-80 3.44 / LINK-80 3.44 toolchain
+   Files: F80.COM, M80.COM, L80.COM, FORLIB.REL
+   Archive source: https://deramp.com/downloads/microsoft/CPM%20Software/FORTRAN-80%20(F80%20v3.44)/
+   Category: compiled high-level language, relocatable library/link workflow.
+   Platform assumption: CP/M-80 files and console; tested in Z80 environment.
+   Evidence: T04-T05, generated REL/COM, transcripts and disk images (I).
+
+Retained earlier representative corpus
+--------------------------------------
+
+- I047: DRI standard utilities.
+- I048: ASM/MAC/RMAC/LINK development workflows; third-party startup samples.
+- I049/I053: WordStar 3.00, MBASIC 5.2/Wumpus and Adventure.
+- I050/I053: Kermit-80 and direct-hardware communications boundaries.
+- I051/I053: QTERM, KSCOPE and named hardware-profile boundaries.
+- I062: cross-implementation conformance pilot.
+
+Candidates identified but not executed
+--------------------------------------
+
+The Don Maslin index identifies SuperCalc, Perfect Calc, dBASE II, Perfect
+Filer, VanData accounting, PBBS, and printer utilities. During this
+investigation, direct retrieval returned an authenticated HTML login page
+rather than the named ZIP files. RetroArchive independently identifies dBASE
+II and public-domain BBS families, but its download endpoint was unavailable
+to the experimental host. No bytes from those failed acquisitions are retained
+or claimed as software evidence.
+
+Consequently spreadsheet, database, packaged business, BBS, and dedicated
+printer-workflow execution remain open. Identification is documentation only,
+not an experimental compatibility result.
+
+Rights note
+-----------
+
+The executed compiler binaries remain copyrighted historical software. Their
+public archive availability is not a statement that they are freeware. They
+are preserved here solely as pinned research fixtures for this investigation.

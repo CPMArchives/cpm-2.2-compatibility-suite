@@ -1,0 +1,161 @@
+Investigation 072 — Final Release Candidate Engineering Gap Assessment
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Current Investigation State
+
+Investigation 071 — CP/M 2.2 Conformance Framework Finalization is
+complete.
+
+The current Compatibility Ledger incorporates findings through
+Investigation 071.
+
+Investigation 071 established: - 62 frozen top-level conformance
+identifiers. - 627 proposition-level cases and versioned oracles. -
+Complete proposition traceability. - No POLICY PENDING compatibility
+cases. - A frozen conformance framework.
+
+Create Investigation 072 as a new evidence report.
+
+Investigation Rules
+
+-   Do not modify the Compatibility Ledger directly.
+-   Do not modify previous investigation artifacts.
+-   Create a new investigation report.
+-   This is an evidence and readiness assessment only.
+-   Do not implement BetterCP/M changes.
+
+Objective
+
+Determine whether the BetterCP/M CP/M 2.2 compatibility specification is
+ready to proceed to release candidate preparation.
+
+Assess whether existing compatibility artifacts are complete, internally
+consistent, reproducible, and sufficient for producing the CP/M 2.2
+Compatibility Standard Release Candidate.
+
+Identify remaining gaps and classify them.
+
+Relationship to Earlier Investigations
+
+Investigation 069: Compatibility Ledger Integrity Resolution.
+
+Investigation 070: Policy Pending Resolution.
+
+Investigation 071: Conformance Framework Finalization.
+
+Scope
+
+Investigate: - compatibility specification readiness; - ledger
+completeness and integrity; - policy resolution completeness; -
+conformance framework readiness; - evidence model completeness; -
+certification model readiness; - release artifact requirements; -
+reproducibility requirements.
+
+Non-Goals
+
+Do not: - discover new CP/M behavior; - modify compatibility
+propositions; - change ledger dispositions; - redesign the conformance
+framework; - implement BetterCP/M; - create the release candidate
+package.
+
+Investigation Questions
+
+1.  Compatibility Contract Readiness
+
+Determine: - whether the CP/M 2.2 compatibility boundary is explicitly
+defined; - whether BetterCP/M commitments are clear; - whether
+exclusions and non-guarantees are documented; - whether compatibility
+profiles are sufficiently defined.
+
+2.  Ledger Readiness
+
+Determine: - whether the Compatibility Ledger is complete; - whether
+identifiers, dispositions, evidence, and conformance mappings are
+consistent; - whether any ledger issues block release candidate
+creation.
+
+Do not modify the ledger directly.
+
+3.  Policy Readiness
+
+Determine: - whether all policy decisions are resolved; - whether
+release applicability is explicit; - whether any remaining ambiguity
+blocks release.
+
+4.  Conformance Readiness
+
+Determine: - whether the frozen conformance framework is sufficient; -
+whether tests, oracles, evidence requirements, and certification rules
+are complete; - whether any missing framework element blocks release.
+
+5.  Release Artifact Readiness
+
+Determine whether the following are sufficiently defined: -
+compatibility standard document; - conformance specification; - profile
+definitions; - certification rules; - evidence requirements; - release
+manifest.
+
+6.  Remaining Engineering Gaps
+
+Classify every identified issue:
+
+RELEASE BLOCKER: Must be resolved before release candidate preparation.
+
+RELEASE RECOMMENDATION: Should be addressed but does not block
+preparation.
+
+IMPLEMENTATION FOLLOW-UP: Deferred to BetterCP/M development.
+
+FUTURE ENHANCEMENT: Outside initial release candidate scope.
+
+Evidence Discipline
+
+Classify evidence as:
+
+A: documented behavior.
+
+B: DRI implementation behavior.
+
+I: experimental observation.
+
+D: unresolved policy.
+
+Report Structure
+
+Create:
+
+Investigation 072 - Final Release Candidate Engineering Gap
+Assessment.md
+
+Required sections:
+
+1.  Objective and scope
+2.  Authoritative inputs
+3.  Relationship to previous investigations
+4.  Compatibility readiness assessment
+5.  Ledger readiness assessment
+6.  Policy readiness assessment
+7.  Conformance readiness assessment
+8.  Release artifact readiness assessment
+9.  Identified gaps
+10. Gap classifications
+11. Required actions before release candidate preparation
+12. Final release readiness conclusion
+
+Final Review
+
+Before completing the investigation, verify: - all investigation
+questions are answered; - all findings identify evidence sources; - gaps
+are classified; - compatibility requirements are separated from
+implementation choices; - unsupported assumptions are removed.
+
+Final Requirement
+
+The investigation must answer:
+
+Is the BetterCP/M CP/M 2.2 compatibility specification ready to proceed
+to release candidate preparation?
+
+The answer must be based on existing investigation artifacts and
+evidence, not new compatibility research.

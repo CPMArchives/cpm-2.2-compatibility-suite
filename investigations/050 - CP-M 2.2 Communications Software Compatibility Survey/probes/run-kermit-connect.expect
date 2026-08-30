@@ -1,0 +1,31 @@
+#!/usr/bin/expect -f
+set timeout 15
+set send_slow {1 0.04}
+set root [file normalize [file join [file dirname [info script]] ..]]
+set emu "<project-root>/investigations/049 - CP-M 2.2 Application Compatibility Survey/probes/mosteksim"
+set work [file join $root work]
+log_file -noappend [file join $root probes transcripts kermit-connect-raw.txt]
+spawn -noecho $emu -z -d [file join $work disks] -r [file join $work roms] -c [file join $work config-kermit.txt]
+expect "A>"
+send -s "b:\r"
+expect "B>"
+send -s "kermit\r"
+expect "Kermit-80   0B:>"
+send -s "set escape\r"
+expect "new escape character"
+send "\035"
+expect "Kermit-80   0B:>"
+send -s "connect\r"
+after 800
+send -s "AT\r"
+after 500
+send "\035"
+after 200
+send "c"
+expect "Kermit-80   0B:>"
+send -s "exit\r"
+expect "B>"
+send "\034"
+expect ">>>"
+send "q\n"
+expect eof

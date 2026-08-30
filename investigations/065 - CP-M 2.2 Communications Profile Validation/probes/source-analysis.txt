@@ -1,0 +1,23 @@
+INVESTIGATION 065 SOURCE ANALYSIS
+
+QTERM IMSAI patch (third-party source)
+  QT-IMSAI.ASM defines channel-A status/data ports 23h/22h and channel-B
+  status/data ports 25h/24h. Its input and output routines poll readiness
+  bits and directly execute IN/OUT. Source selected T01-T06; it is not
+  experimental evidence and is not a portable CP/M interface.
+
+IMSAI CP/M 2.2 BIOS (profile implementation)
+  The BIOS implements IOBYTE dispatch for logical CON/RDR/PUN/LST and contains
+  modem routines at the IMSAI ports. This confirms that logical routing and
+  direct hardware access coexist but remain distinct surfaces.
+
+z80pack IMSAI HAL/SIO (emulator implementation)
+  SIO2A maps ports 22h/23h to a host Unix-domain socket and exposes connection
+  state/readiness through its emulated status. system-9600.conf and
+  system-1200.conf select the tested nominal settings. This source defines the
+  named experimental profile only; it does not define CP/M compatibility.
+
+XMODEM source/documentation
+  The preserved sources document 128-byte checksum/CRC workflows, retries,
+  and selectable BIOS/direct I/O. The I065 peer implements only the checksum
+  receiver needed to test QTERM. Protocol details remain application behavior.

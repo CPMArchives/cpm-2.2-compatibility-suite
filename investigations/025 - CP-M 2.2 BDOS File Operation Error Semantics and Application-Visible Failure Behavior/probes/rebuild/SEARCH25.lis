@@ -1,0 +1,126 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:58:35 2026	Page 1
+Source file: SEARCH25.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Search failure/exhaustion and DMA aftermath.
+                       2      2         ORG 100H
+0100  11 51 02         3      3         LD DE,DMA
+0103  0e 1a            4      4         LD C,26
+0105  cd 05 00         5      5         CALL 5
+0108  cd 41 01         6      6         CALL FILL
+010b  11 09 02         7      7         LD DE,MISS
+010e  0e 11            8      8         LD C,17
+0110  cd 05 00         9      9         CALL 5
+0113  11 93 01        10     10         LD DE,L_FIRST
+0116  cd 4c 01        11     11         CALL SHOW
+0119  0e 12           12     12         LD C,18
+011b  cd 05 00        13     13         CALL 5
+011e  11 b0 01        14     14         LD DE,L_NEXT0
+0121  cd 4c 01        15     15         CALL SHOW
+0124  cd 41 01        16     16         CALL FILL
+0127  11 2d 02        17     17         LD DE,ONE
+012a  0e 11           18     18         LD C,17
+012c  cd 05 00        19     19         CALL 5
+012f  11 d2 01        20     20         LD DE,L_MATCH
+0132  cd 4c 01        21     21         CALL SHOW
+0135  0e 12           22     22         LD C,18
+0137  cd 05 00        23     23         CALL 5
+013a  11 ed 01        24     24         LD DE,L_EXHAUST
+013d  cd 4c 01        25     25         CALL SHOW
+0140  c9              26     26         RET
+0141  21 51 02        27     27 FILL:   LD HL,DMA
+0144  06 80           28     28         LD B,128
+0146  36 a5           29     29 F0:     LD (HL),0A5H
+0148  23              30     30         INC HL
+0149  10 fb           31     31         DJNZ F0
+014b  c9              32     32         RET
+014c  f5              33     33 SHOW:   PUSH AF
+014d  0e 09           34     34         LD C,9
+014f  cd 05 00        35     35         CALL 5
+0152  f1              36     36         POP AF
+0153  cd 77 01        37     37         CALL HEX
+0156  11 51 02        38     38         LD DE,DMA
+0159  01 20 00        39     39         LD BC,32
+015c  c3 5f 01        40     40         JP DUMP
+015f  1a              41     41 DUMP:   LD A,(DE)
+0160  c5              42     42         PUSH BC
+0161  d5              43     43         PUSH DE
+0162  cd 77 01        44     44         CALL HEX
+0165  d1              45     45         POP DE
+0166  c1              46     46         POP BC
+0167  13              47     47         INC DE
+0168  0b              48     48         DEC BC
+0169  78              49     49         LD A,B
+016a  b1              50     50         OR C
+016b  20 f2           51     51         JR NZ,DUMP
+016d  1e 0d           52     52         LD E,13
+016f  cd 8b 01        53     53         CALL OUT
+0172  1e 0a           54     54         LD E,10
+0174  c3 8b 01        55     55         JP OUT
+0177  f5              56     56 HEX:    PUSH AF
+0178  0f              57     57         RRCA
+0179  0f              58     58         RRCA
+017a  0f              59     59         RRCA
+017b  0f              60     60         RRCA
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:58:35 2026	Page 2
+Source file: SEARCH25.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+017c  cd 80 01        61     61         CALL NIB
+017f  f1              62     62         POP AF
+0180  e6 0f           63     63 NIB:    AND 0FH
+0182  c6 30           64     64         ADD A,'0'
+0184  fe 3a           65     65         CP '9'+1
+0186  38 02           66     66         JR C,HOUT
+0188  c6 07           67     67         ADD A,7
+018a  5f              68     68 HOUT:   LD E,A
+018b  c5              69     69 OUT:    PUSH BC
+018c  0e 02           70     70         LD C,2
+018e  cd 05 00        71     71         CALL 5
+0191  c1              72     72         POP BC
+0192  c9              73     73         RET
+0193  53 45 41 52     74     74 L_FIRST:DB 'SEARCH-FIRST-NOMATCH RC/DMA=','$'
+0197  43 48 2d 46     74     75
+019b  49 52 53 54     74     76
+019f  2d 4e 4f 4d     74     77
+01a3  41 54 43 48     74     78
+01a7  20 52 43 2f     74     79
+01ab  44 4d 41 3d     74     80
+01af  24              74     81
+01b0  53 45 41 52     75     82 L_NEXT0:DB 'SEARCH-NEXT-AFTER-NOMATCH RC/DMA=','$'
+01b4  43 48 2d 4e     75     83
+01b8  45 58 54 2d     75     84
+01bc  41 46 54 45     75     85
+01c0  52 2d 4e 4f     75     86
+01c4  4d 41 54 43     75     87
+01c8  48 20 52 43     75     88
+01cc  2f 44 4d 41     75     89
+01d0  3d 24           75     90
+01d2  53 45 41 52     76     91 L_MATCH:DB 'SEARCH-FIRST-ONE25 RC/DMA=','$'
+01d6  43 48 2d 46     76     92
+01da  49 52 53 54     76     93
+01de  2d 4f 4e 45     76     94
+01e2  32 35 20 52     76     95
+01e6  43 2f 44 4d     76     96
+01ea  41 3d 24        76     97
+01ed  53 45 41 52     77     98 L_EXHAUST:DB 'SEARCH-NEXT-EXHAUST RC/DMA=','$'
+01f1  43 48 2d 4e     77     99
+01f5  45 58 54 2d     77    100
+01f9  45 58 48 41     77    101
+01fd  55 53 54 20     77    102
+0201  52 43 2f 44     77    103
+0205  4d 41 3d 24     77    104
+0209  00 5a 5a 5a     78    105 MISS:   DB 0,'ZZZZZZZZ','ZZZ',0,0,0,0
+020d  5a 5a 5a 5a     78    106
+0211  5a 5a 5a 5a     78    107
+0215  00 00 00 00     78    108
+0219                  79    109         DS 20
+022d  00 4f 4e 45     80    110 ONE:    DB 0,'ONE25   ','DAT',0,0,0,0
+0231  32 35 20 20     80    111
+0235  20 44 41 54     80    112
+0239  00 00 00 00     80    113
+023d                  81    114         DS 20
+0251                  82    115 DMA:    DS 128
+02d1                  83    116         END

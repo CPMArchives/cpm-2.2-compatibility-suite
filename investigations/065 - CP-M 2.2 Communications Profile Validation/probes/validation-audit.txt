@@ -1,0 +1,5 @@
+PASS: report has exactly 14 required numbered sections.
+PASS: seven validation records contain every required field.
+PASS: successful transfer, injected retry, disconnect, unavailable, and timing artifacts are present.
+PASS: normal and retry recovered records are identical and 128 bytes.
+PASS: profile and generic CP/M conclusions are separated.

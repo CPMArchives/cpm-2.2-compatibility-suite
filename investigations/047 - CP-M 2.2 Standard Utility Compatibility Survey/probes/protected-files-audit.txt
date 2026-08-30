@@ -1,0 +1,21 @@
+Investigation 047 protected-file audit
+======================================
+
+Baseline: probes/protected-before.sha256
+Baseline entries: 2883
+Check: shasum -a 256 -c probes/protected-before.sha256
+Mismatches: none
+
+The baseline includes every regular file then present under
+<project-root>, including all prior investigations,
+implementation material, and the authoritative Compatibility Ledger.
+
+Authoritative ledger:
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 046.txt
+
+SHA-256 before and after:
+544ee061fe8e19c5e0b429d989b9946694b59561634eb0c51205e78666d3f3ee
+
+Result: no pre-existing BetterCP/M file was modified.  Only the new
+Investigation 047 directory is installed after this audit.
+

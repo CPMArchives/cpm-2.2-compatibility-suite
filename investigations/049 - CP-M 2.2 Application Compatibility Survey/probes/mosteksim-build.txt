@@ -1,0 +1,55 @@
+rm -f *.o
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o sim8080.o ../../z80core/sim8080.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simcore.o ../../z80core/simcore.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simdis.o ../../z80core/simdis.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simfun.o ../../z80core/simfun.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simglb.o ../../z80core/simglb.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simice.o ../../z80core/simice.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simint.o ../../z80core/simint.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simmain.o ../../z80core/simmain.c
+../../z80core/simmain.c:477:6: warning: variable 'fname' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+  477 |         if (cpu == Z80)
+      |             ^~~~~~~~~~
+../../z80core/simmain.c:484:17: note: uninitialized use occurs here
+  484 |         if ((fd = open(fname, O_WRONLY | O_CREAT, 0600)) == -1
+      |                        ^~~~~
+../../z80core/simmain.c:477:2: note: remove the 'if' if its condition is always true
+  477 |         if (cpu == Z80)
+      |         ^~~~~~~~~~~~~~~
+  478 |                 fname = "core.z80";
+../../z80core/simmain.c:474:19: note: initialize the variable 'fname' to silence this warning
+  474 |         const char *fname;
+      |                          ^
+      |                           = NULL
+../../z80core/simmain.c:560:6: warning: variable 'fname' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+  560 |         if (cpu == Z80)
+      |             ^~~~~~~~~~
+../../z80core/simmain.c:567:18: note: uninitialized use occurs here
+  567 |         if ((fp = fopen(fname, "r")) == NULL) {
+      |                         ^~~~~
+../../z80core/simmain.c:560:2: note: remove the 'if' if its condition is always true
+  560 |         if (cpu == Z80)
+      |         ^~~~~~~~~~~~~~~
+  561 |                 fname = "core.z80";
+../../z80core/simmain.c:557:19: note: initialize the variable 'fname' to silence this warning
+  557 |         const char *fname;
+      |                          ^
+      |                           = NULL
+2 warnings generated.
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simz80.o ../../z80core/simz80.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simz80-cb.o ../../z80core/simz80-cb.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simz80-dd.o ../../z80core/simz80-dd.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simz80-ddcb.o ../../z80core/simz80-ddcb.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simz80-ed.o ../../z80core/simz80-ed.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simz80-fd.o ../../z80core/simz80-fd.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simz80-fdcb.o ../../z80core/simz80-fdcb.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simcfg.o simcfg.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simio.o simio.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simmem.o simmem.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simctl.o simctl.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o simbdos.o ../../iodevices/simbdos.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o unix_terminal.o ../../iodevices/unix_terminal.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o mostek-cpu.o ../../iodevices/mostek-cpu.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   -c -o mostek-fdc.o ../../iodevices/mostek-fdc.c
+cc -std=c99 -D_DEFAULT_SOURCE  -O3 -U_FORTIFY_SOURCE -Wall -Wextra -Wwrite-strings -DCONFDIR=\"/usr/local/share/z80pack/mosteksim/conf\" -DDISKSDIR=\"/usr/local/share/z80pack/mosteksim/disks\" -DBOOTROM=\"/usr/local/share/z80pack/mosteksim/roms\"  -I. -I../../z80core -I../../iodevices   sim8080.o simcore.o simdis.o simfun.o simglb.o simice.o simint.o simmain.o simz80.o simz80-cb.o simz80-dd.o simz80-ddcb.o simz80-ed.o simz80-fd.o simz80-fdcb.o simcfg.o simio.o simmem.o simctl.o simbdos.o unix_terminal.o mostek-cpu.o mostek-fdc.o  -o ../mosteksim
+ld: warning: reducing alignment of section __DATA,__common from 0x8000 to 0x4000 because it exceeds segment maximum alignment

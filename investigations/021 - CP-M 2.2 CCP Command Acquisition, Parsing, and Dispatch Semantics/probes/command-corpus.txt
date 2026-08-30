@@ -1,0 +1,37 @@
+Exact commands submitted by run-ccp021.exp, in order.
+`<TAB>` denotes the single byte 09h. Every line is followed by CR (0Dh).
+
+01  <empty>
+02  <SPACE>
+03  <SPACE><SPACE><SPACE>
+04  <TAB>
+05  <SPACE><TAB><SPACE>
+06  dir
+07  DiR
+08  <SPACE><SPACE><SPACE>DIR
+09  DIR<SPACE><SPACE><SPACE><SPACE>NOEXIST.*
+10  A:
+11  B:
+12  A:
+13  B:DIR
+14  B:NOEXIST
+15  DIR
+16  DIR.COM
+17  TYPE.COM
+18  DI
+19  DIRX
+20  NOEXIST
+21  FOO.TXT
+22  :FOO
+23  AA:
+24  FOO:BAR
+25  FOO;BAR
+26  PARSE21<SPACE>one<SPACE>two
+27  parse21<SPACE><SPACE><SPACE>a:b<SPACE>*.com
+28  127 bytes of ASCII X
+
+Separate fatal-path corpus (`run-invalid-drive.exp`): Q:<CR>, followed by a
+deterministic `x` response to the DRI BDOS Select handler.
+
+The corpus deliberately samples source-significant delimiters and boundaries;
+it is not an arbitrary byte fuzzing campaign.

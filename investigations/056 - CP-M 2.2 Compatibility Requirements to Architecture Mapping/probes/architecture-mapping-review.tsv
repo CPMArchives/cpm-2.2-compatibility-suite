@@ -1,0 +1,16 @@
+id	compatibility_requirement	evidence_source	responsible_boundary	validation_method	classification
+M056-01	COM load/entry, page-zero state and TPA ownership	A IG/AG; I001,I023,I028,I034,I043	Transient runtime / memory	MEM-001 through MEM-005; CCP-003/006/007	REQUIRED
+M056-02	CCP acquisition, parsing, resident commands, lookup/load and lifecycle	A/B DRI CCP; I021-I024,I028,I032,I047	CCP / command environment	CCP-001 through CCP-007	REQUIRED
+M056-03	Standard SUBMIT/XSUB interoperation	B DRI software; I042,I047,I048,I054	CCP plus BDOS public/console boundary	CCP-008 deterministic stream	REQUIRED
+M056-04	BDOS gateway and call/return convention	A/B; I002,I027,I041	BDOS public-call boundary	BDOS-CALL-001; MEM-006	REQUIRED
+M056-05	Formatted/direct/buffered console behavior	A/B; I003-I006,I016	BDOS console-service boundary	BDOS-CON-001 through 005	REQUIRED plus POLICY PENDING edges
+M056-06	Drive/user/DMA/login/read-only system state	A/B; I007,I014,I017,I026,I031	BDOS system/disk-state boundary	BDOS-STATE-001 through 003; BDOS-FILE-010	REQUIRED
+M056-07	FCB directory and file lifecycle semantics	A/B; I008-I013,I029-I030,I037	BDOS file/directory/storage boundary	BDOS-FILE-001 through 012	REQUIRED
+M056-08	Configured BIOS discovery, boot, character and logical-sector services	A AG; B CBIOS; I018-I020,I035-I040	BIOS configured-platform boundary	BIOS-001 through 006	REQUIRED for configured platform
+M056-09	Logical/physical failure propagation and promised recovery	A/B; I015,I025,I033,I044	Cross-layer error/recovery boundary	ERROR-001 through 005	REQUIRED / POLICY PENDING profile cases
+M056-10	Writable/executable self-modifying application TPA	A/B/I043,I048,I054	Transient runtime / memory	MEM-003 at multiple valid placements	REQUIRED strict community
+M056-11	Terminal, IOBYTE and logical-device selection	A/B/I018,I038-I039,I049-I050; D	Profile selection plus BIOS/BDOS console boundaries	BIOS-003,APP-001,COMM-001/002	POLICY PENDING where not fixed
+M056-12	Direct ports, MMIO, controllers and peripherals	B vendor software; I040,I050-I053; D	Declared hardware profile	BIOS-007,COMM-004,HW-001 through 003	POLICY PENDING / NOT GUARANTEED baseline
+M056-13	Private addresses, stacks, algorithms and host mechanisms	B source; I041,I045,I054	No required runtime owner	Substitution/anti-requirement review	NOT REQUIRED
+M056-14	Unspecified registers, residues, ordering and invalid-call aftermath	A silence; B/I001-I054	Owning public boundary must permit variation	I052 negative/variant mappings	NOT GUARANTEED
+M056-15	Applicability and traceability of a conformance claim	I052-I055; D for profile selection	Profile/claim selection and validation/evidence	652-row map, 62-test inventory, profile applicability audit	REQUIRED process implication

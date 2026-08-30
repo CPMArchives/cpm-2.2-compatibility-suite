@@ -1,0 +1,76 @@
+Investigation 010 observed results
+==================================
+
+Accepted run: 14 August 2026
+System: DRI CP/M 2.2, z80pack cpmsim 1.39, Z80 CBIOS 1.2
+Probe: READ010.COM
+Probe SHA-256: 995b1a1a5f8e2d7e461f6e2eb1b34cb2d38f2c8ed6a5fc2dde04253dc6c03a5a
+
+The complete machine transcript is in observed-raw.txt. Each probe line records
+the case, Function-15 result, Function-20 result, current drive, byte 0080h,
+FCB bytes 0-32, and 128 bytes at the active DMA address. Buffers were filled
+with EEh before reads. Marker records contain one identifying byte followed by
+zeros.
+
+Controlled media
+----------------
+
+A: EMPTY.DAT       0 host bytes / 0 CP/M records
+A: ONE.DAT       128 host bytes / 1 record, marker A
+A: MULTI.DAT     384 host bytes / 3 records, markers M N O
+A: PART.DAT      200 host bytes / 2 records, markers P Q
+A: BOUND.DAT   16384 host bytes / 128 records, records 127/128 marked Y/Z
+A: BIG.DAT     16640 host bytes / 130 records, records 128-130 marked Z/M/N
+A: READONLY.DAT  128 host bytes / 1 record, marker R, read-only attribute
+B: BFILE.DAT     128 host bytes / 1 record, marker B
+
+The CP/M image hashes before and after the accepted run were identical:
+
+  A: 62939440df5dd48cae73a1d0d61ec05aa34d9e344b33cbcb956b8e14bfd9e4cb
+  B: 59810ab5dc1c033181ce6aa657adcb2a4975c8e893613fe103b2ddca2db8e75f
+
+Decoded observations
+--------------------
+
+1. EMPTY: open returned 00h. Two reads returned 01h. CR and the other captured
+   FCB bytes stayed unchanged; DMA remained EEh.
+2. ONE: the first read returned 00h, copied marker A to DMA, and changed CR from
+   0 to 1. Two later reads returned 01h; DMA remained EEh and the FCB stayed at
+   CR=1.
+3. MULTI: three reads returned 00h, produced M, N, O, and left CR=1, 2, 3.
+   The next read returned 01h without replacing the EEh buffer.
+4. PART: two reads returned 00h. The second supplied a complete 128-byte record
+   beginning Q and padded with zeros by the controlled image preparation. CR
+   became 2; the next read returned 01h. Function 20 reported no host-byte count.
+5. BOUND: read 128 returned 00h with marker Z, EX=0, RC=80h, CR=80h. The next
+   two reads returned 01h. In this DRI implementation those failed attempts
+   changed EX to 1 and then 2 while CR remained 80h; DMA remained EEh.
+6. BIG: read 128 returned Z with EX=0, CR=80h. Read 129 automatically opened
+   extent 1, returned M, and left EX=1, RC=02h, CR=1 with the new allocation
+   map. Read 130 returned N and left CR=2. The next read returned 01h.
+7. ALT-DMA: after Function 26 selected the alternate buffer, Function 20 put A
+   there while byte 0080h retained its E1h sentinel.
+8. EXPLICIT-B: an FCB drive byte of 2 opened and read B:BFILE.DAT while the
+   current default drive reported by Function 25 remained A (00h).
+9. READONLY: the read-only file opened and read successfully. Its high type bit
+   remained present in the FCB; DMA received marker R.
+10. UNOPENED: a filename FCB with no open-produced allocation state returned
+    01h, left DMA unchanged, and did not become an activated FCB.
+11. INVALID: a synthetic FCB with RC=1 but a zero allocation map returned 01h
+    and left DMA unchanged. This is outside the documented input contract.
+
+Interpretation limits
+---------------------
+
+- Directory codes returned by Function 15 vary with directory slot and are not
+  Function-20 results.
+- The experiment establishes ordinary Function-20 returns 00h and 01h in this
+  DRI system. The manual specifies zero versus nonzero, not a portable taxonomy
+  of additional error values.
+- An EEh DMA buffer after EOF establishes DRI's observed non-transfer behavior;
+  callers must not treat DMA as valid unless Function 20 reports success.
+- Physical media/read errors were not forced. DRI source routes them through
+  its disk-error handler rather than defining an additional portable Function-20
+  result contract.
+- The exact-boundary EX drift is reproducible DRI implementation behavior, not
+  a required post-EOF FCB representation.

@@ -1,0 +1,58 @@
+Investigation 070A completion audit
+==================================
+
+Scope
+-----
+New evidence only. The canonical ledger and all pre-existing BetterCP/M files
+were treated as protected inputs.
+
+Accepted workflows
+------------------
+PASS  boot -> CCP -> CROSS70A load/entry -> BDOS/state/BIOS -> RET -> CCP
+PASS  SAVE make/write/close -> DIR visibility -> ERA -> no-file/free allocation
+PASS  logical sequential/random missing data -> normal return -> CROSS70A -> CCP
+PASS  physical read error -> ignore -> CROSS70A/DIR -> CCP
+PASS  physical read error -> Control-C warm recovery -> CROSS70A/DIR -> CCP
+
+Build audit
+-----------
+PASS  CROSS70A rebuild byte-identical within Investigation 070A
+PASS  FAULT066 rebuild byte-identical to accepted preserved binary
+FAULT066 SHA-256:
+2365c3bac5b06f36e584610a0da5d6b1d3d19e2f0496f70a8e4b18e23307f4ec
+
+Ledger audit
+------------
+PASS  627 unique IDs, contiguous 0001-0627
+PASS  no duplicate IDs, gaps, missing dispositions, or exact duplicate propositions
+PASS  424 REQUIRED + 105 NOT GUARANTEED + 49 NOT REQUIRED + 49 POLICY PENDING
+PASS  no cross-layer proposition/classification contradiction found
+PASS  no ledger edit proposed or performed
+
+Preservation audit
+------------------
+Ledger before SHA-256:
+40d5e514a698bbabdfe8c7d926cea39b9962e17d83b25f2a2915ea4882014097
+Ledger after SHA-256:
+40d5e514a698bbabdfe8c7d926cea39b9962e17d83b25f2a2915ea4882014097
+PASS  protected-before.sha256 and protected-after.sha256 are identical
+PASS  protected.diff is empty
+PASS  prior investigations, architecture, roadmap, specifications, and implementation unchanged
+PASS  no ZIP archive created
+
+Artifact audit
+--------------
+PASS  report exists
+PASS  source, binaries, and listings exist
+PASS  harnesses and build instructions exist
+PASS  four raw console transcripts exist
+PASS  ready and after disk images exist
+PASS  directory listings and image hashes exist
+PASS  isolated fault-emulator source and binary exist
+PASS  structural/semantic ledger reviews exist
+PASS  SHA256SUMS.txt exists
+
+Conclusion
+----------
+PASS  The canonical Investigation 069 propositions compose into a consistent
+      externally visible CP/M 2.2 contract for the validated system chains.

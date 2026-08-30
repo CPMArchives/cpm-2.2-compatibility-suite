@@ -1,0 +1,66 @@
+spawn ./imsaisim -R
+
+ #####    ###     #####    ###            #####    ###   #     #
+#     #  #   #   #     #  #   #          #     #    #    ##   ##
+#     # #     #  #     # #     #         #          #    # # # #
+ #####  #     #   #####  #     #  #####   #####     #    #  #  #
+#     # #     #  #     # #     #               #    #    #     #
+#     #  #   #   #     #  #   #          #     #    #    #     #
+ #####    ###     #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+IMSAI 8080 Simulation Release 1.19
+Copyright (C) 2008-2025 by Udo Munk & 2018-2021 by David McNaughton
+
+CPU speed is 2 MHz, CPU executes undocumented instructions
+SIO 1A running at 9600 baud
+SIO 1B running at 1200 baud
+SIO 2A running at 9600 baud
+SIO 2B running at 2400 baud
+
+Web server builtin, but disabled
+
+RAM 0000H - FFFFH
+ROM D800H - DFFFH mpu-a-rom.hex
+Power-on jump address at D800H
+MPU-B Banked ROM/RAM enabled
+MMU has 7 additional RAM banks of 48 KB
+
+Loader statistics for file ./roms/mpu-a-rom.hex:
+START : D800H
+END   : DF7FH
+PC    : D800H
+LOADED: 0780H (1920)
+
+DISK MAP: [./disks/disk.map]
+A:DSK:='drivea.dsk'
+[0;33mW (6243) diskmanager: Failed to stat disk image: driveb.dsk, error: 2[0m
+[0;33mW (6247) diskmanager: B:DSK: Image file 'driveb.dsk' is invalid[0m
+[0;33mW (6253) diskmanager: Failed to stat disk image: drivec.dsk, error: 2[0m
+[0;33mW (6254) diskmanager: C:DSK: Image file 'drivec.dsk' is invalid[0m
+[0;33mW (6258) diskmanager: Failed to stat disk image: drived.dsk, error: 2[0m
+[0;33mW (6260) diskmanager: D:DSK: Image file 'drived.dsk' is invalid[0m
+
+SIO PORT MAP:
+SIO1.portA = WEBTTY STDIO  
+SIO1.portB = VIOKBD  
+SIO2.portA = WEBPTR SCKTSRV  
+SIO2.portB = MODEM  
+54K CP/M 2.2 VERS B03
+
+
+A>; put your boot commands into profile.sub
+A>stat
+A: R/W, Space: 7k
+
+
+A>BASE051
+BASE051: public BDOS control
+VERSION MISMATCH
+
+A>
+
+User Interrupt at 0xd446
+I/O ran for 27 ms, waited for 0 ms
+CPU executed 5841461 t-states in 3501 ms
+Clock frequency 1.66 MHz

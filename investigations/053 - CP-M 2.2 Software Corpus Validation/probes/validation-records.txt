@@ -1,0 +1,118 @@
+INVESTIGATION 053 DETERMINISTIC VALIDATION RECORDS
+
+Common controls
+- All input was scripted; no manual application input was used.
+- Each mutating run began from a restored image.
+- Environment binaries and source fixtures are identified by SHA-256.
+- Raw transcripts and before/after images are preserved under probes/.
+
+V053-01 — DRI standard utility workflow
+Purpose: Validate ordinary utility composition.
+Environment: z80pack cpmsim, 64K CP/M 2.2 Z80 CBIOS.
+Procedure: Assemble/load/run HELLO42; PIP copy; STAT; ED create; DDT inspect;
+SUBMIT/XSUB buffered input; DUMP; rerun executable.
+Observed: Expected files and output appeared; copied source compared identical;
+submitted BATCH42 reached Function 10 consumer; executable reran.
+Conclusion: Established CCP, BDOS, FCB/DMA, memory, and termination contracts
+are sufficient. Maps UTIL-001, UTIL-004, CCP-008; evidence I.
+
+V053-02 — Standard utility failure paths
+Purpose: Validate controlled ordinary failures.
+Environment: Same as V053-01.
+Procedure: ASM missing source and PIP missing input.
+Observed: ASM reported NO SOURCE FILE PRESENT; PIP reported NO FILE and the
+command cycle continued.
+Conclusion: Expected application consumption of existing file failures; no new
+OS diagnostic requirement. Maps ERROR-001, UTIL-001; evidence I.
+
+V053-03 — Development toolchain workflow
+Purpose: Validate executable generation and multi-module workflow.
+Environment: z80pack cpmsim, CP/M 2.2.
+Procedure: ASM/LOAD, MAC/LOAD, RMAC modules, LINK, run small and multi-record
+outputs, inspect/execute under DDT and SID, repeat through SUBMIT.
+Observed: ABS48, MACRO48, DEV48, BIG48, and BATCH48 executed expected markers;
+DEV48 and BATCH48 compared byte-identically.
+Conclusion: Established transient, file, memory, CCP, and tool workflow surface
+is sufficient. Maps UTIL-002 through UTIL-004; evidence I.
+
+V053-04 — Link failure
+Purpose: Distinguish product failure presentation from CP/M failure.
+Procedure: Link BAD48 with unresolved ABSENT.
+Observed: LINK printed UNDEFINED SYMBOLS and the command cycle continued.
+Conclusion: Linker's wording is NOT REQUIRED; underlying files and console
+remain within the contract. Maps UTIL-003; evidence I.
+
+V053-05 — WordStar edit/save
+Purpose: Validate full-screen application plus storage lifecycle.
+Environment: Mostek 56K CP/M 2.2, preserved Adds terminal configuration.
+Procedure: Open APP49.TXT, enter two known lines, save, DIR, TYPE.
+Observed: WordStar 3.00 completed save; DIR found the file; TYPE reproduced both
+lines; application disk changed as expected.
+Conclusion: Existing console/profile and FCB/DMA lifecycle suffice. Exact escape
+stream and WordStar UI are NOT REQUIRED baseline behavior. Maps APP-001; I.
+
+V053-06 — BASIC/Wumpus
+Purpose: Validate interpreter-hosted software and interrupt/return.
+Procedure: MBASIC WUMP, deterministic response, reach first move, Ctrl-C,
+SYSTEM.
+Observed: Wumpus reached room prompt; BASIC reported break and returned to CP/M;
+disk unchanged.
+Conclusion: Existing console, file, transient, and termination contract suffices.
+Maps APP-002; I.
+
+V053-07 — Adventure
+Purpose: Validate a large native multi-file transient.
+Procedure: Run AD, seed 123, decline instructions, reach initial location, quit.
+Observed: Expected location, score, STOP, and B> return; disk unchanged.
+Conclusion: Existing large-TPA, multi-file read, console, and termination surface
+suffices. Maps APP-003; I.
+
+V053-08 — Generic Kermit startup
+Purpose: Validate portable communications application command/file layer.
+Procedure: Start Kermit 4.11, VERSION, SHOW, exit.
+Observed: Generic CP/M-80 identity, configuration pages, prompt, and clean return;
+disk unchanged.
+Conclusion: Existing CP/M and logical-device surface suffices for startup. Maps
+COMM-001; I.
+
+V053-09 — Kermit no-peer transfer
+Purpose: Validate boundary/failure behavior without inventing a peer.
+Procedure: SEND known TEST50.TXT, leave peer absent, scripted Control-C, exit.
+Observed: Send-init bytes emitted; Kermit recovered to prompt; disk unchanged.
+Conclusion: Application recovery is observed; successful transfer is not claimed.
+Maps COMM-003; I.
+
+V053-10 — Kermit unsupported capability and missing file
+Purpose: Separate generic-build limitations and BDOS file failure.
+Procedure: SET SPEED 9600; BREAK; SEND absent file.
+Observed: Speed reported not implemented; missing file reported and prompt
+remained usable.
+Conclusion: Generic CP/M need not provide baud/BREAK; file failure is already
+covered. Maps COMM-001/003; I.
+
+V053-11 — Portable control
+Purpose: Confirm the environment before hardware mismatch tests.
+Procedure: Run BASE051 via public BDOS Functions 9 and 12.
+Observed: VERSION=22 PASS and B> return; disk unchanged.
+Conclusion: Public CP/M path operates normally. Maps BDOS-STATE-001/MEM-001; I.
+
+V053-12 — QTERM unsupported IMSAI port
+Purpose: Locate failure of machine-patched communications software.
+Procedure: Run IMSAI QTERM on Mostek with unused-port traps enabled.
+Observed: CP/M loaded it and banner printed; execution trapped at PC 0112h on
+IN 23h.
+Conclusion: Failure is an IMSAI hardware-profile mismatch, not a missing generic
+CP/M requirement. Maps COMM-004/BIOS-007; I.
+
+V053-13 — KSCOPE unsupported Dazzler port
+Purpose: Locate failure of direct-display software.
+Procedure: Run Cromemco KSCOPE on Mostek with unused-port traps enabled.
+Observed: CP/M sign-on printed; execution trapped at PC 0110h on OUT 0Eh.
+Conclusion: Failure is a Dazzler-profile mismatch, not a generic CP/M defect.
+Maps HW-001/BIOS-007; I.
+
+Harness-boundary note
+The copied I047/I048 harnesses end by closing scripted console input; cpmsim then
+reports that it cannot read console input and enters its monitor. This occurs
+after all expected final markers and is harness shutdown behavior, not evidence
+of a CP/M software failure.

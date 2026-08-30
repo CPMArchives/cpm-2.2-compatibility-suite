@@ -1,0 +1,17 @@
+Investigation 048 protected-file audit
+======================================
+
+Baseline: probes/protected-before.sha256
+Baseline entries: 2976
+Verification: shasum -a 256 -c probes/protected-before.sha256
+Mismatches: none
+
+The baseline covers every regular file present under
+<project-root> before Investigation 048, including the
+authoritative ledger, all earlier investigations, and implementation files.
+
+Authoritative ledger before/after SHA-256:
+f6ccc204328608d8377a1f1652cb8b4309f2e2329a4e347c5625976e45f08dc2
+
+Only the new Investigation 048 directory is installed after verification.
+

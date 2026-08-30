@@ -1,0 +1,78 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:01:49 2026	Page 1
+Source file: MEM28.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1  ORG 100H
+0100  31 bf 01         2      2  LD SP,STACK
+0103  21 27 01         3      3  LD HL,MSG
+0106  cd bf 01         4      4  CALL PUTS
+0109  3a 00 30         5      5  LD A,(03000H)
+010c  cd e6 01         6      6  CALL HEXB
+010f  cd d7 01         7      7  CALL SPACE
+0112  3a 00 40         8      8  LD A,(04000H)
+0115  cd e6 01         9      9  CALL HEXB
+0118  cd d7 01        10     10  CALL SPACE
+011b  3a 00 80        11     11  LD A,(08000H)
+011e  cd e6 01        12     12  CALL HEXB
+0121  cd dc 01        13     13  CALL CRLF
+0124  c3 05 02        14     14  JP EXIT
+0127  4d 45 4d 32     15     15 MSG: DB 'MEM28 [3000 4000 8000] ',0
+012b  38 20 5b 33     15     16
+012f  30 30 30 20     15     17
+0133  34 30 30 30     15     18
+0137  20 38 30 30     15     19
+013b  30 5d 20 00     15     20
+013f                  16     21  DS 128
+01bf                  17     22 STACK:
+01bf  7e              18     23 PUTS: LD A,(HL)
+01c0  23              19     24  INC HL
+01c1  b7              20     25  OR A
+01c2  c8              21     26  RET Z
+01c3  5f              22     27  LD E,A
+01c4  cd c9 01        23     28  CALL PUTC
+01c7  18 f6           24     29  JR PUTS
+01c9  f5              25     30 PUTC: PUSH AF
+01ca  c5              26     31  PUSH BC
+01cb  d5              27     32  PUSH DE
+01cc  e5              28     33  PUSH HL
+01cd  0e 02           29     34  LD C,2
+01cf  cd 05 00        30     35  CALL 5
+01d2  e1              31     36  POP HL
+01d3  d1              32     37  POP DE
+01d4  c1              33     38  POP BC
+01d5  f1              34     39  POP AF
+01d6  c9              35     40  RET
+01d7  1e 20           36     41 SPACE: LD E,' '
+01d9  c3 c9 01        37     42  JP PUTC
+01dc  1e 0d           38     43 CRLF: LD E,13
+01de  cd c9 01        39     44  CALL PUTC
+01e1  1e 0a           40     45  LD E,10
+01e3  c3 c9 01        41     46  JP PUTC
+01e6  f5              42     47 HEXB: PUSH AF
+01e7  0f              43     48  RRCA
+01e8  0f              44     49  RRCA
+01e9  0f              45     50  RRCA
+01ea  0f              46     51  RRCA
+01eb  cd ef 01        47     52  CALL NIB
+01ee  f1              48     53  POP AF
+01ef  e6 0f           49     54 NIB: AND 0FH
+01f1  c6 30           50     55  ADD A,'0'
+01f3  fe 3a           51     56  CP '9'+1
+01f5  38 02           52     57  JR C,NOUT
+01f7  c6 07           53     58  ADD A,7
+01f9  5f              54     59 NOUT: LD E,A
+01fa  c3 c9 01        55     60  JP PUTC
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:01:49 2026	Page 2
+Source file: MEM28.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+01fd  7c              56     61 HEXW: LD A,H
+01fe  cd e6 01        57     62  CALL HEXB
+0201  7d              58     63  LD A,L
+0202  c3 e6 01        59     64  JP HEXB
+0205  0e 00           60     65 EXIT: LD C,0
+0207  c3 05 00        61     66  JP 5
+                      62     67
+020a                  63     68  END

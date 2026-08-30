@@ -1,0 +1,112 @@
+Investigation 009 observed output and decoded results
+=====================================================
+
+Question tested
+---------------
+
+Functions 17/18 calling and continuation behavior, 128-byte directory-record
+transfer, directory-code offsets, wildcards, no-match behavior, explicit and
+changed drives, alternate DMA addresses, and repeatability.
+
+Environment
+-----------
+
+z80pack commit 91fd28eb04e675c2127df88ed3f40675e15282e2;
+cpmsim Release 1.39 in Z80 mode, executable SHA-256
+30374c2df2f44118d2b36a8bfef651a9f2d0ee9b9ddd0039c044b9f06df4708d;
+byte-identified DRI CP/M 2.2 CCP+BDOS; z80pack Z80 CBIOS V1.2.
+
+The disposable images began as distribution cpm22-1.dsk and cpm22-2.dsk
+copies. Their file areas were cleared while system tracks were retained.
+cpmtools `ibm-3740` writes populated entries in this order:
+
+  A user 0: ALPHA.TXT, BETA.TXT, GAMMA.BIN, DELTA.TXT,
+            EPSILON.TXT, DSRCH009.COM
+  A user 1: UONE.TXT
+  B user 0: BRAVO.TXT, BETA.TXT, OMEGA.BIN
+
+Final prepared image hashes before and after both accepted read-only runs:
+
+  A e24361d1cca8fd955be6c283ba14fdb95fd34bc9ca3f59067484e9b374a7eb80
+  B 61dc7812f0b070e89546bf8c11e58348f03bbf858d26d11826fc12987706d88a
+
+Probe
+-----
+
+Source: DSRCH009.ASM
+Binary SHA-256: ea1c35a31340d516161daa8eed74b9391a6f5e2c7fe651644feb4d47c874b074
+
+Each output line contains:
+
+  label, BDOS result, function-25 current disk, byte 0080h,
+  all 128 bytes at the active caller DMA address.
+
+The complete raw terminal capture is `observed-raw.txt`. It preserves every
+directory record and emulator banner. The following is the decoded result.
+
+Results
+-------
+
+1. Exact `BETA.TXT` Search First returned 1. DMA contained the first A
+   directory record: ALPHA at entry 0, BETA at 1, GAMMA at 2, DELTA at 3.
+   Thus the matching entry began at DMA+32.
+2. Search Next for that exact FCB returned FFh. DRI nevertheless replaced DMA
+   with the last directory record read. Because the manual defines DMA data
+   only on success, that failure content is diagnostic, not a valid result.
+3. A separately prefilled-EE no-match search also returned FFh and overwrote
+   DMA with DRI's last internal directory record.
+4. The A wildcard `????????.TXT`, EX=`?`, returned:
+
+      code 0 ALPHA.TXT   first record entry 0
+      code 1 BETA.TXT    first record entry 1
+      code 3 DELTA.TXT   first record entry 3
+      code 0 EPSILON.TXT second record entry 0
+      FFh end
+
+5. Restarting with Search First repeated codes 0 then 1 and the same records.
+   Unchanged media therefore produced repeatable physical-directory order.
+6. Search First wrote ALPHA's record to BUF1. Function 26 then selected BUF2;
+   Search Next continued to BETA and wrote the same directory record to BUF2.
+   DMA change did not restart the search.
+7. Alternate-DMA exact DELTA returned code 3 at BUF2 while page-zero byte 0080
+   retained sentinel E1h. All 128 BUF2 bytes were the expected first record.
+8. Explicit-drive-B wildcard search returned BRAVO code 0, BETA code 1, then
+   FFh. Function 25 remained A after each call, showing temporary selection and
+   restoration while continuation stayed on B.
+9. A default-drive wildcard Search First returned ALPHA on A. Function 14 then
+   selected B. Search Next returned code 0 with B's directory record (BRAVO),
+   not the next A match. DRI retained the directory position but interpreted
+   continuation on the new current drive. This sequence is not portable.
+10. With FCB `dr='?'`, DRI disabled automatic drive selection and matched every
+    directory entry on current A, irrespective of name/type/extent and user.
+    Codes were 0,1,2,3,0,1,2, then FFh; code 2 in the second record selected
+    the user-1 UONE entry whose directory byte 0 was 01h.
+
+Expected versus observed
+------------------------
+
+All documented successful results, result offsets, wildcard matches,
+continuation, explicit-drive restoration, alternate DMA placement, and FFh
+termination matched the manual and source. The DRI failure-buffer overwrite
+and drive-change continuation matched source-derived expectations but are not
+documented valid-result contracts.
+
+Rejected development run
+------------------------
+
+The first development binary left DE at FCB+16 after copying a template, so
+every Search First correctly failed against the wrong address. That binary and
+run are rejected. They are not preserved as evidence. The final source,
+binary, hashes, decoded observations, and raw capture all correspond to the
+corrected accepted run.
+
+Limitations
+-----------
+
+The controlled disks use the ibm-3740 format, four 32-byte directory entries
+per 128-byte record, drives A/B, and users 0/1. No media mutation occurred
+during enumeration. BIOS sector/track activity was not instrumented because
+the compatibility-visible 128-byte transfer and DRI internal-buffer boundary
+were established directly. This does not establish order across modified
+directories, all DPBs, damaged media, concurrent mutation, or physical-error
+handling.

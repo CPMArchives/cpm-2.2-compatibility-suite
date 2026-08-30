@@ -1,0 +1,95 @@
+Investigation 048 experimental results
+======================================
+
+Test 1 - Absolute assembly and loading
+Purpose: Exercise the basic source-to-COM workflow and one-record boundary.
+Procedure: ASM B:ABS48; LOAD B:ABS48; execute B:ABS48.
+Observed: ASM ended without errors. LOAD reported 0100h-0111h, 12h bytes and
+one record. The program printed ABS48 OK and returned to A>.
+Conclusion: Existing explicit-drive FCB, HEX, LOAD, COM-at-0100h, BDOS output,
+and return contracts are sufficient (REQUIRED). Exact tool text is NOT REQUIRED.
+
+Test 2 - Macro assembly
+Purpose: Exercise stored macro expansion and the MAC output workflow.
+Procedure: MAC B:MACRO48; LOAD B:MACRO48; execute it.
+Observed: MAC expanded EMIT, ended without errors, and produced outputs from
+which LOAD created one COM record. Execution printed MACRO48 OK.
+Conclusion: Ordinary CP/M source/file/memory services support the workflow
+(REQUIRED). Macro language and HEX/PRN/SYM formats are tool contracts, not new
+OS requirements (NOT REQUIRED of BetterCP/M itself).
+
+Test 3 - Relocatable assembly, external resolution, and linking
+Purpose: Exercise intermediate REL files and a two-module link.
+Procedure: RMAC B:MAIN48 and B:MSG48; LINK B:DEV48=B:MAIN48,B:MSG48; run.
+Observed: RMAC produced both REL modules. LINK resolved MSGOUT at 0104h,
+reported code 0100h-0116h, generated DEV48.COM/SYM, and DEV48 printed TOOL48 OK.
+Conclusion: Existing CP/M file, memory, command, and COM execution behavior is
+sufficient (REQUIRED). REL encoding and symbol resolution are tool semantics.
+
+Test 4 - Multi-record executable boundary
+Purpose: Verify generated output crossing 128-byte records.
+Procedure: RMAC and LINK BIG48 containing 300 reserved bytes; STAT and run it.
+Observed: LINK reported code size 013Eh at 0100h-023Dh. STAT reported three
+records; the generated 384-byte COM printed BIG48 OK.
+Conclusion: Sequential record growth, close persistence, contiguous COM load,
+and execution across multiple records are REQUIRED existing behavior. Padding
+bytes and exact block allocation are NOT GUARANTEED.
+
+Test 5 - Undefined external failure
+Purpose: Exercise a linker error without physical media failure.
+Procedure: RMAC BAD48 referencing ABSENT; LINK B:BADOUT=B:BAD48.
+Observed: LINK listed UNDEFINED SYMBOLS and ABSENT, printed a map, created
+BADOUT.COM/SYM, and returned to A>. Later tests succeeded.
+Conclusion: Underlying file calls and usable CCP recovery are REQUIRED.
+Creation/content of partial linker outputs and exact diagnostic text are
+NOT GUARANTEED as OS behavior and such output must not be treated as validated.
+
+Test 6 - DDT linked-image debugging
+Purpose: Exercise debugger loading, visible TPA, breakpoint patching, and G0.
+Procedure: DDT B:DEV48.COM; D100,116; G100,0103; G0.
+Observed: DDT loaded at 0100h, displayed expected bytes, the program printed
+TOOL48 OK and stopped at 0103h, then G0 returned to A>.
+Conclusion: Public page zero, writable/executable TPA, loader and programmed
+restart contracts are REQUIRED. Debugger formatting/patch internals are NOT REQUIRED.
+
+Test 7 - SID linked-image debugging
+Purpose: Independently exercise symbolic-debugger execution lifecycle.
+Procedure: SID B:DEV48.COM; D100,116; G100,0103; G0.
+Observed: SID reported PC 0100h/end D0FFh, displayed the same code with record
+padding, stopped at 0103h after TOOL48 OK, and G0 returned to A>.
+Conclusion: Existing execution/memory/restart requirements are sufficient.
+The reported high-memory end and exact display are NOT GUARANTEED universally.
+
+Test 8 - Batch development workflow
+Purpose: Exercise command acquisition across tool completions.
+Procedure: SUBMIT BUILD48 ran RMAC twice, LINK to BATCH48, then B:BATCH48.
+Observed: Commands ran in order; BATCH48 printed TOOL48 OK; extracted
+BATCH48.COM was byte-identical to the interactively built DEV48.COM.
+Conclusion: Existing entry 0620 and ordinary tool lifecycle behavior are
+independently strengthened (REQUIRED); no new proposition is needed.
+
+Test 9 - Successful-link temporary-file cleanup
+Purpose: Check the documented default-disk intermediate-file convention.
+Procedure: Inspect A: after all successful and undefined-symbol link steps.
+Observed: No XX*/YY*.$$$ or submission $$$ file remained. Expected B: REL,
+SYM, HEX, PRN and COM artifacts were present; BADOUT.COM/SYM also remained.
+Conclusion: Adequate temporary directory space and standard file lifecycle are
+required. Exact temporary names, placement, cleanup after abnormal termination,
+and partial outputs are NOT REQUIRED/NOT GUARANTEED OS behavior.
+
+Test 10 - Compiler-generated runtime smoke test
+Purpose: Bound compiler claims when no compiler executable is available.
+Procedure: Execute supplied B:SPEED, whose source identifies Hi-Tech C.
+Observed: It printed CPU speed is unlimited and returned to A>.
+Conclusion: One compiled COM runs under the existing transient contract (I).
+Its direct clock-port dependency is profile-specific, and no compiler behavior
+or general runtime ABI is established (NOT GUARANTEED).
+
+Repeatability
+-------------
+Three runs began from the same preserved images. Runs two and three produced
+byte-identical A:/B: after-images. Runs one and two had identical semantic
+transcripts after removing only emulator shutdown address/timing. All extracted
+COM/REL hashes and disk hashes are preserved. The harness shutdown diagnostic
+after the final A> is NOT CP/M evidence.
+

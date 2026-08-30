@@ -1,0 +1,16 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:01:49 2026	Page 1
+Source file: ERROR28.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1  ORG 100H
+0100  11 09 01         2      2  LD DE,MSG
+0103  0e 09            3      3  LD C,9
+0105  cd 05 00         4      4  CALL 5
+0108  c9               5      5  RET
+0109  45 52 52 4f      6      6 MSG: DB 'ERROR28 EXECUTED',13,10,'$'
+010d  52 32 38 20      6      7
+0111  45 58 45 43      6      8
+0115  55 54 45 44      6      9
+0119  0d 0a 24         6     10
+011c                   7     11  END

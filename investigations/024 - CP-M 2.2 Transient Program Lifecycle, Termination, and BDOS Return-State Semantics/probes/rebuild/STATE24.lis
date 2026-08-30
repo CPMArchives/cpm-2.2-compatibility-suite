@@ -1,0 +1,54 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:10:35 2026	Page 1
+Source file: STATE24.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Mutate drive/user/DMA/page zero, then terminate according to tail R/F/J.
+                       2      2         ORG 100H
+0100  11 60 01         3      3         LD DE,MSG
+0103  0e 09            4      4         LD C,9
+0105  cd 05 00         5      5         CALL 5
+0108  1e 01            6      6         LD E,1
+010a  0e 0e            7      7         LD C,14
+010c  cd 05 00         8      8         CALL 5                  ; current drive B
+010f  1e 01            9      9         LD E,1
+0111  0e 20           10     10         LD C,32
+0113  cd 05 00        11     11         CALL 5                  ; user 1
+0116  11 00 02        12     12         LD DE,0200H
+0119  0e 1a           13     13         LD C,26
+011b  cd 05 00        14     14         CALL 5                  ; nondefault DMA
+011e  3e 40           15     15         LD A,40H
+0120  32 03 00        16     16         LD (0003H),A            ; LIST-field IOBYTE test, console unchanged
+0123  2a 01 00        17     17         LD HL,(0001H)
+0126  22 41 00        18     18         LD (0041H),HL
+0129  3e c3           19     19         LD A,0C3H
+012b  32 40 00        20     20         LD (0040H),A            ; 0040: JP original WBOOT
+012e  21 40 00        21     21         LD HL,0040H
+0131  22 01 00        22     22         LD (0001H),HL
+0134  32 00 00        23     23         LD (0000H),A
+0137  2a 06 00        24     24         LD HL,(0006H)
+013a  22 44 00        25     25         LD (0044H),HL
+013d  32 43 00        26     26         LD (0043H),A            ; 0043: JP original BDOS
+0140  21 43 00        27     27         LD HL,0043H
+0143  22 06 00        28     28         LD (0006H),HL
+0146  32 05 00        29     29         LD (0005H),A
+0149  3e 11           30     30         LD A,011H              ; coherent packed user 1 / drive B state
+014b  32 04 00        31     31         LD (0004H),A
+014e  3a 82 00        32     32         LD A,(0082H)            ; first letter after leading blank
+0151  fe 46           33     33         CP 'F'
+0153  28 06           34     34         JR Z,DOF0
+0155  fe 4a           35     35         CP 'J'
+0157  ca 00 00        36     36         JP Z,0000H
+015a  c9              37     37         RET
+015b  0e 00           38     38 DOF0:   LD C,0
+015d  c3 05 00        39     39         JP 0005H
+0160  53 54 41 54     40     40 MSG:    DB 'STATE24 MUTATE B/U1/DMA0200/PZ',13,10,'$'
+0164  45 32 34 20     40     41
+0168  4d 55 54 41     40     42
+016c  54 45 20 42     40     43
+0170  2f 55 31 2f     40     44
+0174  44 4d 41 30     40     45
+0178  32 30 30 2f     40     46
+017c  50 5a 0d 0a     40     47
+0180  24              40     48
+0181                  41     49         END

@@ -1,0 +1,54 @@
+Investigation 013 observed results
+==================================
+
+Accepted run: 14 August 2026; DRI CP/M 2.2 on z80pack cpmsim 1.39
+Probe SHA-256: ffb2307721e310af88df7a1a33727d6d0088350c8e65be7e288ed3c209d5d431
+
+Image hashes
+------------
+
+A before 705c7c6c07de5e17efec698a23f2e28edc528a08caf2033bb94ff30b5f603e03
+A after  f1f27f4cbd108a5ae9effcb209c1b29f9f9ad7420f379c12e88c628ade57c0dc
+B before 659a932c46c2841d9e475f92a9b01d6c271761f69657320bfa8a4cc0ccf05388
+B after  906482bdb4568e8fe5e5d33fc08ffc407692e87ad10ea3e61a689e43cb2b29a9
+
+A changed through intended writes. B changed only by successful creation of
+empty FULLWR.DAT; its attempted data allocation failed.
+
+Decoded findings
+----------------
+
+1. FCB bytes 33,34,35 are r0 least-significant, r1 middle, r2 high. Function 36
+   mapped EX/S2/CR states to 0,1,127,128,255,256,65535 exactly. CR=128 and
+   EX=1/CR=0 both mapped to 128. It returned no specified result and performed
+   no observable disk access; it maps sequential state to random, not reverse.
+2. Function 35 produced r0-r2 record counts: empty=0, one=1, 127=127,
+   128=128, multi-extent 130=130. A was incidental FFh from directory scanning.
+3. Random reads 0,64,129 returned 00 and DMA markers A,00,N. Random field stayed
+   fixed; EX/S2/CR changed to the addressed position. Record 130 returned 01,
+   missing extent record 256 returned 04, and empty record 0 returned 01.
+4. Failed reads left the EEh DMA sentinel. Sparse record 5 returned 01 while
+   written record 10 returned 00/S. Random reads did not advance r0-r2.
+5. Random overwrite record 0 and append record 1 both returned 00; Close made
+   ONE.DAT two records. Each write consumed a full 128-byte DMA record.
+6. Writing sparse record 10 returned 00, set RC=11, and after Close Function 35
+   reported virtual size 11. Holes remained unwritten; only required allocation
+   units were consumed.
+7. Writing record 128 created/opened extent 1, set EX=1/CR=0/RC=1, did not
+   advance random record 128, and after Close size was 129.
+8. Writing record 65535 succeeded with EX=31, S2/module=15, CR=127, RC=128.
+   After Close Function 35 returned 00 00 01, meaning 65536 records (8 MiB
+   virtual size), while only one data block was allocated.
+9. r2=1 on Function 33 returned documented overflow code 06. Allocation-full B
+   Make succeeded empty; random Write returned 02 and allocated no record.
+10. Post-run directory: ONE=2, SPARSE virtual=11, CROSS=129, MAXREC=65536.
+    Physical allocation was only 55K total on A, demonstrating virtual holes.
+
+Result-code interpretation
+--------------------------
+
+00 success; 01 unwritten data/ordinary missing record; 03 close failure during
+seek; 04 unwritten extent on read; 05 new extent cannot be created on write;
+06 r2 nonzero/seek beyond physical CP/M 2.2 limit. Code 02 is documented in the
+table but not returned by random read; DRI uses 02 for allocation-full writes.
+Exact physical BIOS error handling remains separate.

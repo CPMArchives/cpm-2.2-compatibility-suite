@@ -1,0 +1,74 @@
+Investigation 049 observed results
+==================================
+
+T01 WordStar startup and terminal path (normal)
+Purpose: verify a historically significant full-screen word processor starts.
+Procedure: boot the Mostek CP/M 2.2 image; select B:; execute WS.COM.
+Observed: WordStar release 3.00 displayed its no-file menu using cursor-address
+control sequences and identified its configured display/printer environment.
+Conclusion: transient loading, console output, and a configured terminal path
+were sufficient.  The exact escape stream is profile behavior, not generic
+CP/M behavior.
+
+T02 WordStar document lifecycle (normal/file operation)
+Purpose: verify application-level create, sequential output, close, reopen by
+CCP utilities, and persisted text.
+Procedure: on the capacity-controlled WordStar fixture, open APP49.TXT, enter
+two known lines, use ^KX, then DIR and TYPE the file.
+Observed: WordStar saved and returned to B>; DIR listed APP49.TXT; TYPE emitted
+BETTERCPM APPLICATION SURVEY and SECOND LINE.  Extracted file bytes contain
+CR/LF between lines and CP/M 1Ah padding to a 128-byte record.  Two independent
+runs produced identical after-image SHA-256 ca597d45aa0df1bd5bdbaf69f9d549ff5a2cfe8117ac1ef0f5cc4ae6b9944ee4.
+Conclusion: existing COM/console/FCB-DMA/file/record contracts support this
+workflow; no new OS proposition was exposed.
+
+T03 WordStar full-disk save (boundary/failure)
+Purpose: observe application handling of exhausted distribution-disk capacity.
+Procedure: restore the unmodified WordStar disk, create FULL49.TXT, type a
+known line, and request save.
+Observed: WordStar displayed "ERROR E12: DISK FULL" and remained in its editor
+error path; the disposable image changed from SHA-256 24703b7f...e663cd to
+f797a63e...6bcc.  No claim is made that the partial image contains a valid file.
+Conclusion: a logical write/allocation failure must be observable through the
+documented BDOS result path.  WordStar's wording, code E12, screen placement,
+and partial-write policy are NOT REQUIRED OS behavior.
+
+T04 Microsoft BASIC-80 / Wumpus (normal/control interruption)
+Purpose: test an interpreter-hosted historical game and console lifecycle.
+Procedure: execute MBASIC WUMP, answer N to instructions, wait for the first
+SHOOT OR MOVE prompt, send Control-C, issue SYSTEM.
+Observed: BASIC-80 Rev. 5.2 loaded WUMP.BAS, printed a room/tunnel state,
+reported "Break in 680", returned to its Ok prompt, and SYSTEM returned to B>.
+The application disk remained byte-identical at SHA-256 3a7c4de4...e565c1.
+Conclusion: documented console input/output, command loading, and termination
+contracts suffice for the tested path; the BASIC runtime and game algorithm
+are not OS requirements.
+
+T05 Adventure A02 multi-file startup (normal/boundary-sized application)
+Purpose: test a 39,680-byte COM program that opens a separate 63,616-byte
+message file plus several data files.
+Procedure: construct a disposable IBM-3740 disk from preserved A02 files;
+execute AD; supply seed 123; decline instructions; reach the first location;
+QUIT and answer YES.
+Observed: Adventure loaded all required files, printed the initial location,
+scored the one-turn session, executed STOP, and returned to B>.  The disk was
+byte-identical before and after at SHA-256 3517fa99...417b8.
+Conclusion: the existing large-transient, multi-file, console, and normal
+termination requirements suffice.  Application message/data formats are
+NOT REQUIRED OS interfaces.
+
+T06 Literal interface-pattern screen (unusual historical/static)
+Purpose: identify leads for public or private system-interface dependence.
+Procedure: scan preserved WS.COM, MBASIC.COM, and AD.COM for exact instruction
+byte patterns used in Investigation 042.
+Observed: all three contain literal CALL 0005h matches; all contain literal
+JP 0000h and/or memory-ceiling loads; no JP 0005h match was found.
+Conclusion: execution corroborates public CP/M use, but literal matches alone
+do not prove control flow and create no new requirement.
+
+Untested categories and paths
+-----------------------------
+No adequate local spreadsheet, database, communications, or packaged business
+application was available.  WordStar printing, communications hardware,
+application save/recovery, alternate memory sizes, and corrupted application
+data were not performed.  No evidence is claimed for these cases.

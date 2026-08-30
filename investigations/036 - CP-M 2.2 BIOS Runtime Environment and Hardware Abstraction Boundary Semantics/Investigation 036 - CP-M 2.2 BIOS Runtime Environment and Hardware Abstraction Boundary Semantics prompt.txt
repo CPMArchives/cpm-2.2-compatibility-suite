@@ -1,0 +1,693 @@
+Investigation 036 — CP/M 2.2 BIOS Runtime Environment and Hardware Abstraction Boundary Semantics Prompt
+
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 035 is complete.
+
+The authoritative Compatibility Ledger currently incorporates findings
+through Investigation 035.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports, architecture documents,
+roadmaps, specifications, or other existing BetterCP/M files.
+
+Create Investigation 036 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Define the CP/M 2.2 BIOS runtime environment and hardware abstraction
+boundary compatibility contract.
+
+Previous investigations established:
+
+- the documented BIOS interface;
+- BIOS jump table semantics;
+- BDOS interaction;
+- device behavior;
+- memory layout;
+- boot behavior;
+- restart behavior.
+
+
+Investigation 036 determines the broader compatibility boundary created
+by the BIOS layer.
+
+The objective is not only to determine what BIOS officially provides,
+but to determine what CP/M software historically assumed about BIOS.
+
+
+Investigate:
+
+- BIOS jump table usage;
+- direct BIOS calls;
+- BIOS-visible memory structures;
+- runtime hardware abstraction;
+- vendor BIOS conventions;
+- application dependence on BIOS behavior.
+
+
+Determine:
+
+- which BIOS behaviors are part of the compatibility contract;
+- which behaviors are implementation-specific;
+- which historical conventions must be preserved for software compatibility.
+
+
+COMPATIBILITY STANDARD
+
+This investigation must consider:
+
+- documented CP/M 2.2 behavior;
+- common CP/M programming practices;
+- widespread ecosystem assumptions;
+- de facto compatibility requirements.
+
+
+Do not limit investigation to only documented APIs.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read and incorporate:
+
+
+Investigation 018:
+
+    CP/M 2.2 Character Devices and IOBYTE Semantics.
+
+
+Investigation 019:
+
+    CP/M 2.2 BIOS Disk Interface and Logical-Sector Semantics.
+
+
+Investigation 020:
+
+    CP/M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics.
+
+
+Investigation 033:
+
+    CP/M 2.2 BDOS/BIOS Error Propagation and Recovery Semantics.
+
+
+Investigation 034:
+
+    CP/M 2.2 Memory Layout, System Area, and Transient Program
+    Boundary Semantics.
+
+
+Investigation 035:
+
+    CP/M 2.2 Cold Boot, Warm Boot, and Restart Semantics.
+
+
+Do not duplicate previous investigations.
+
+Focus on BIOS as a runtime compatibility boundary.
+
+
+SCOPE
+
+Investigate:
+
+- BIOS jump table;
+- direct BIOS invocation;
+- BIOS entry conventions;
+- disk BIOS services;
+- console BIOS services;
+- list device services;
+- reader/punch services;
+- BIOS-visible state;
+- vendor BIOS variations.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- BetterCP/M hardware architecture;
+- specific emulator design;
+- modern device abstraction;
+- CP/M 3 BIOS extensions;
+- MP/M BIOS behavior.
+
+
+Do not assume:
+
+- applications only use BDOS;
+- BIOS is an internal component;
+- undocumented behavior is irrelevant.
+
+
+KEY QUESTIONS
+
+
+1. BIOS AS A PUBLIC INTERFACE
+
+Determine whether BIOS functions constitute a public compatibility
+interface.
+
+Investigate:
+
+- programs calling BIOS directly;
+- utilities bypassing BDOS;
+- common BIOS access patterns.
+
+
+Determine:
+
+- whether direct BIOS access must be supported;
+- what level of compatibility is required.
+
+
+2. BIOS JUMP TABLE CONTRACT
+
+Determine the complete BIOS jump table contract.
+
+Investigate:
+
+- entry ordering;
+- calling conventions;
+- register usage;
+- return values;
+- preserved registers.
+
+
+Determine:
+
+- what software may assume;
+- what variations existed.
+
+
+3. DIRECT BIOS CALLING CONVENTIONS
+
+Determine how software invokes BIOS routines.
+
+Investigate:
+
+- fixed addresses;
+- jump table access;
+- parameter passing;
+- return behavior.
+
+
+Determine:
+
+- compatibility requirements;
+- common programming practices.
+
+4. BIOS CONSOLE SERVICES
+
+Determine the runtime compatibility contract for BIOS console services.
+
+Investigate:
+
+- CONIN;
+- CONOUT;
+- CONST;
+- LIST;
+- READER;
+- PUNCH.
+
+
+Determine:
+
+- blocking behavior;
+- status behavior;
+- character handling;
+- control character handling;
+- return conventions.
+
+
+Determine:
+
+- whether applications commonly depend on BIOS console behavior
+  directly.
+
+
+5. BIOS DISK SERVICES
+
+Determine the runtime compatibility contract for BIOS disk services.
+
+Investigate:
+
+- SELDSK;
+- SETTRK;
+- SETSEC;
+- SETDMA;
+- READ;
+- WRITE;
+- LISTST;
+- SECTRAN.
+
+
+Determine:
+
+- calling conventions;
+- parameter expectations;
+- return values;
+- error behavior.
+
+
+Determine:
+
+- whether direct BIOS disk access is historically used by software.
+
+
+6. BIOS MEMORY STRUCTURES
+
+Determine whether BIOS exposes memory structures that software
+depends upon.
+
+Investigate:
+
+- jump table;
+- disk parameter tables;
+- disk parameter blocks;
+- translation tables;
+- buffers;
+- system variables.
+
+
+Determine:
+
+- which structures are compatibility-visible;
+- which are implementation details.
+
+
+7. VENDOR BIOS VARIATIONS
+
+Investigate common CP/M BIOS variations.
+
+Determine:
+
+- which variations were normal;
+- which differences software tolerated;
+- which differences caused compatibility problems.
+
+
+Investigate:
+
+- vendor-specific BIOS modifications;
+- customized hardware environments;
+- common aftermarket BIOS implementations.
+
+
+Determine:
+
+- what BetterCP/M must emulate;
+- what must remain configurable.
+
+
+8. APPLICATION AND UTILITY BIOS USAGE
+
+Investigate software that accesses BIOS directly.
+
+Include categories:
+
+- system utilities;
+- assemblers;
+- debuggers;
+- disk tools;
+- communications software;
+- hardware diagnostics.
+
+
+Determine:
+
+- why software bypassed BDOS;
+- what assumptions it made;
+- what compatibility requirements result.
+
+
+9. BIOS ERROR AND RECOVERY BEHAVIOR
+
+Determine how direct BIOS users observe failures.
+
+Investigate:
+
+- disk errors;
+- console failures;
+- device unavailable conditions;
+- retry behavior.
+
+
+Cross-reference:
+
+Investigation 033.
+
+
+Determine:
+
+- application-visible behavior;
+- required compatibility behavior.
+
+
+10. BIOS AND CCP INTERACTION
+
+Determine how CCP interacts with BIOS.
+
+Investigate:
+
+- command input;
+- console output;
+- warm boot;
+- disk access;
+- system restart.
+
+
+Determine:
+
+- which behavior is CCP-specific;
+- which behavior comes from BIOS.
+
+
+11. BIOS AND BDOS BOUNDARY
+
+Determine the division of responsibility between BIOS and BDOS.
+
+Investigate:
+
+- error handling;
+- device access;
+- disk management;
+- buffering;
+- state management.
+
+
+Determine:
+
+- what behavior software can observe;
+- what implementations may vary.
+
+
+12. DRI SOURCE ANALYSIS
+
+Review available source material for:
+
+- BIOS jump table;
+- BIOS calls;
+- CCP BIOS usage;
+- BDOS/BIOS interface;
+- example BIOS implementations.
+
+
+Extract:
+
+- documented behavior;
+- implementation behavior;
+- historical conventions.
+
+
+Do not produce:
+
+- source walkthroughs;
+- hardware-specific BIOS tutorials.
+
+
+13. EXPERIMENTAL PROGRAMS
+
+Create deterministic probes:
+
+
+BIOS36:
+
+    Enumerate BIOS entry behavior.
+
+
+CON36:
+
+    Test direct BIOS console access.
+
+
+DISK36:
+
+    Test direct BIOS disk access.
+
+
+VECTOR36:
+
+    Examine BIOS jump table behavior.
+
+
+ERROR36:
+
+    Test BIOS error behavior.
+
+
+Each probe must include:
+
+- purpose;
+- procedure;
+- observed behavior;
+- compatibility conclusion.
+
+
+14. CONTROLLED TEST MATRIX
+
+Include:
+
+
+CONSOLE
+
+- direct BIOS input;
+- direct BIOS output;
+- status checks;
+- control characters.
+
+
+DISK
+
+- sector selection;
+- DMA changes;
+- read/write operations;
+- errors.
+
+
+DEVICES
+
+- list device;
+- reader;
+- punch.
+
+
+DIRECT ACCESS
+
+- BDOS versus BIOS;
+- standard applications;
+- utilities.
+
+
+VARIATIONS
+
+- different BIOS layouts;
+- different device configurations;
+- different disk systems.
+
+15. EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+
+    documented behavior.
+
+B:
+
+    DRI implementation behavior.
+
+I:
+
+    experimental observation.
+
+D:
+
+    unresolved policy.
+
+
+These labels are internal investigation classifications only.
+
+
+Ledger evidence must use:
+
+    I036
+    BIOS
+    BDOS
+    CCP
+    DEVICE
+    IG
+    AG
+
+
+16. COMPATIBILITY CLASSIFICATION
+
+Classify each conclusion:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Do not require:
+
+- a single universal BIOS implementation;
+- hardware-specific behavior;
+- undocumented private BIOS routines;
+- vendor-specific extensions unless historically widespread.
+
+
+17. EXISTING LEDGER REVIEW
+
+Review affected Compatibility Ledger entries:
+
+- BIOS jump table;
+- BIOS disk interface;
+- BIOS console interface;
+- device behavior;
+- error handling;
+- boot behavior;
+- memory-visible system structures.
+
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+
+The current Compatibility Ledger ends after Investigation 035.
+
+Determine the next available ledger entry number.
+
+Do not modify the Compatibility Ledger.
+
+
+18. PROPOSED LEDGER ADDITIONS
+
+Include:
+
+Proposed Compatibility Ledger additions
+
+and:
+
+Proposed existing-entry updates.
+
+
+Each entry must contain:
+
+
+NNNN. Title
+
+    Description.
+
+    Disposition:
+
+    Evidence:
+
+    Conformance:
+
+
+19. REPORT STRUCTURE
+
+Create:
+
+Investigation 036 - CP/M 2.2 BIOS Runtime Environment and Hardware
+Abstraction Boundary Semantics.md
+
+
+Include:
+
+
+1. Objective and scope
+
+2. Compatibility standard
+
+3. Relationship to previous investigations
+
+4. Documentation findings
+
+5. BIOS source findings
+
+6. BIOS as a public interface
+
+7. BIOS jump table contract
+
+8. Direct BIOS calling conventions
+
+9. Console service behavior
+
+10. Disk service behavior
+
+11. BIOS memory structures
+
+12. Vendor BIOS variations
+
+13. Application and utility BIOS usage
+
+14. BIOS error behavior
+
+15. BIOS/CCP interaction
+
+16. BIOS/BDOS boundary
+
+17. Experimental results
+
+18. Compatibility conclusions
+
+19. Proposed ledger additions
+
+20. Existing-entry updates
+
+21. Open questions
+
+22. Conformance implications
+
+
+20. FINAL REVIEW
+
+Verify that the investigation determines:
+
+- whether BIOS is part of the practical CP/M application interface;
+- what direct BIOS users expect;
+- what BIOS behaviors are compatibility-critical;
+- what variations are acceptable;
+- what historical conventions must be preserved.
+
+
+Ensure conclusions distinguish:
+
+- documented CP/M behavior;
+- DRI implementation behavior;
+- vendor conventions;
+- widespread ecosystem assumptions;
+- experimental observations;
+- unresolved policy.
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design a new BetterCP/M hardware abstraction layer.
+
+Do not replace CP/M BIOS semantics with modern device models.
+
+Determine the CP/M 2.2 BIOS runtime environment and hardware
+abstraction boundary compatibility contract only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

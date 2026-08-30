@@ -1,0 +1,29 @@
+Investigation 018 accepted observations
+========================================
+
+Raw result row:
+01 C1 5A 01 00 00 A5 A5 00 A5 A5 5A 06 05 08
+
+Decoded:
+- Function 11 first retained console Z and returned ready=01.
+- Function 3 called BIOS READER once, returned fixture byte C1 unchanged, did
+  not echo it, and did not consume pending console Z. Function 1 then returned
+  Z=5A through the established console path.
+- Functions 4 and 5 passed 41 09 10 80 unchanged to PUNCH/LIST respectively.
+- A later Function 4 TAB and Function 5 TAB were also raw. Function 2 TAB after
+  console A expanded to seven spaces, proving Function 4/5 did not update the
+  DRI formatted-console column.
+- Function 5 Ctrl-P was ordinary LIST data. A following Function 2 X was not
+  copied to LIST, so Function 5 did not toggle DRI printer-echo state.
+- Function 7 initially returned 00, matching 0003h. Function 8 with E=A5 made
+  0003h=A5 and a following Function 7 returned A5. Restoring with Function 8
+  made 0003h=00. The PUNCH fixture observed A5 during the call, demonstrating
+  that a BIOS entry can consult the live IOBYTE; BDOS did not decode it.
+- DMA sentinels at 0080h and the alternate address remained A5/5A.
+
+Captured streams:
+PUNCH: 41 09 10 80 09 51
+LIST:  41 09 10 80 09
+CON:   41 20 20 20 20 20 20 20
+
+Both accepted post-run disk images are byte-identical to their before images.

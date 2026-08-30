@@ -1,0 +1,47 @@
+Investigation 041 DRI software ecosystem observations
+=====================================================
+
+DUMP.ASM
+- Defines BDOS as 0005h and invokes documented functions there.
+- Treats JMP 0000h as the reboot route.
+
+AS0COM.ASM
+- Reads the word at BDOS+1 (0006h) to compute the configured high-memory bound.
+- Demonstrates historically significant use of the documented jump operand,
+  without requiring a fixed numeric BDOS address.
+
+SYSGEN.ASM
+- Uses CALL 0005h for high-level services.
+- Reads the WBOOT operand and computes BIOS disk-vector addresses relative to it.
+- Demonstrates direct BIOS access by a system utility using configured vectors.
+
+XSUB1.ASM
+- Saves the operands of the WBOOT and BDOS page-zero jumps.
+- Temporarily redirects the 0005h operand to a trap, chains the saved real BDOS
+  target, and restores state on completion.
+- Establishes historical significance for writable/interposable page-zero
+  gateways in the DRI flat-memory environment, not permanence of any target.
+
+CPMOVE.ASM
+- Reads BDOS+1 for relocation/serialization work and changes a copied JMP BDOS
+  instruction into CALL while constructing a relocated system.
+- Its private relocation and serialization layout is a DRI tool detail.
+
+CBIOS.ASM
+- Installs JMP WBOOT at 0000h and JMP BDOS at 0005h before entering the CCP.
+- Provides the ordered BIOS jump table and keeps private handlers behind it.
+
+OS3BDOS.ASM
+- Names the 0006h operand and defines BIOS calls by offsets from the configured
+  BIOS base.
+- Its internal BDOS labels, stacks, dispatch, and handler addresses are private.
+
+Compatibility synthesis
+-----------------------
+Development tools, disk utilities, and system utilities commonly use the public
+0005h gateway, inspect its operand for the configured ceiling, derive the BIOS
+table from WBOOT, and sometimes interpose vectors. These patterns support the
+documented gateway/vector contracts and a strict flat-memory compatibility
+profile. They do not support hard-coded BDOS/BIOS addresses or direct calls to
+private implementation labels as universal application interfaces.
+

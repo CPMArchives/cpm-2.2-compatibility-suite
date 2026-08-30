@@ -1,0 +1,41 @@
+Investigation 024 accepted result summary
+=========================================
+
+Immediate termination
+---------------------
+RET, Function 0, and JMP 0000h all returned to a usable prompt. No second cold
+boot banner appeared. The following OBS24 entry had standard vectors, A/user 0,
+and initial DMA 0080h for all three.
+
+Mutated state
+-------------
+Before termination STATE24 selected B, user 1, DMA 0200h, IOBYTE 40h, and safe
+trampoline vectors at 0000h and 0005h.
+
+RET:
+  prompt/current drive A; live user 1;
+  page zero C3 40 00 40 10 C3 43 00 (trampolines and IOBYTE survive);
+  OBS24 receives initial DMA 0080h.
+
+Function 0 and JMP 0000h (identical accepted results):
+  prompt/current drive B; live user 1;
+  page zero C3 03 FA 40 11 C3 06 EC (vectors reconstructed; IOBYTE 40 survives
+  in this BIOS; packed B/user-1 state survives);
+  OBS24 receives initial DMA 0080h.
+
+Files
+-----
+Make and Write Sequential succeeded for each distinct R/F/JOPEN24.DAT file.
+Close was deliberately omitted. The next program could Open the directory
+entry, but Read Sequential returned 01h (EOF), RC was zero, and no written data
+was returned. All three termination mechanisms therefore performed no implicit
+FCB Close/finalization.
+
+Console and abnormal cases
+--------------------------
+Function 2 output completed on all three paths. IOBYTE 40h survived all three
+on this BIOS, so reset behavior is BIOS-dependent rather than a universal CCP
+cleanup guarantee. Out-of-range BDOS Function 41 returned 00h and execution
+continued. BADSP24's RET consumed its supplied 0000h word and entered the warm
+start path; CP/M did not validate or repair the invalid application stack.
+

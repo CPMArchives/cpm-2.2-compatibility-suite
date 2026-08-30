@@ -1,0 +1,11 @@
+INVESTIGATION 056 PROTECTED-FILES AUDIT
+
+SHA-256 manifests were generated before and after installation for every
+pre-existing file under <project-root>, excluding only the
+new Investigation 056 directory.
+
+Result: byte-identical manifests. No prior investigation, Compatibility Ledger,
+or BetterCP/M implementation file changed.
+
+Authoritative ledger SHA-256 before and after:
+59b47c3d4ffd5232492e37605a0cbe031d2967056c794e26eae16b5e06e05713

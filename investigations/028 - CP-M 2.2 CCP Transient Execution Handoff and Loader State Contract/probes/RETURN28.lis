@@ -1,0 +1,19 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:01:49 2026	Page 1
+Source file: RETURN28.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1  ORG 100H
+0100  3e a5            2      2  LD A,0A5H
+0102  32 00 50         3      3  LD (05000H),A
+0105  11 00 03         4      4  LD DE,0300H
+0108  0e 1a            5      5  LD C,26
+010a  cd 05 00         6      6  CALL 5
+010d  1e 01            7      7  LD E,1
+010f  0e 0e            8      8  LD C,14
+0111  cd 05 00         9      9  CALL 5
+0114  1e 07           10     10  LD E,7
+0116  0e 20           11     11  LD C,32
+0118  cd 05 00        12     12  CALL 5
+011b  c9              13     13  RET
+011c                  14     14  END

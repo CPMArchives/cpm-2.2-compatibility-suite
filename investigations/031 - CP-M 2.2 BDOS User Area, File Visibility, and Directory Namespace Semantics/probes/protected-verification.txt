@@ -1,0 +1,1243 @@
+<project-root>/.DS_Store: OK
+<project-root>/Archive 2.zip: OK
+<project-root>/Archive.zip: OK
+<project-root>/BetterCP:M Investigation Prompt Specification.txt: OK
+<project-root>/Development Roadmap.txt: OK
+<project-root>/architecture/.DS_Store: OK
+<project-root>/architecture/01 Architectural Principles.txt: OK
+<project-root>/architecture/02 Overall System Architecture.txt: OK
+<project-root>/architecture/03 Architectural Boundaries.txt: OK
+<project-root>/architecture/04 Memory Architecture.txt: OK
+<project-root>/architecture/05 Boot Architecture.txt: OK
+<project-root>/architecture/06 Command Environment.txt: OK
+<project-root>/architecture/07 System Services.txt: OK
+<project-root>/architecture/08 Hardware Abstraction.txt: OK
+<project-root>/architecture/09 Program Execution Model.txt: OK
+<project-root>/architecture/10 Storage and File-System Architecture.txt: OK
+<project-root>/architecture/11 System State - revised.txt: OK
+<project-root>/architecture/12 Compatibility Architecture.txt: OK
+<project-root>/architecture/13 Architectural Constraints and Invariants.txt: OK
+<project-root>/architecture/14 Extension Architecture.txt: OK
+<project-root>/architecture/15 Open Questions.txt: OK
+<project-root>/architecture/gophermap: OK
+<project-root>/compatibility/.DS_Store: OK
+<project-root>/compatibility/01 Compatibility Policy.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 003.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 004.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 005.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 006.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 007.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 008.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 009.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 010.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 011.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 012.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 013.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 014.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 015.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 016.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 017.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 018.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 019.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 020.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 021.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 022.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 023.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 024.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 025.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 026.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 027.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 028.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 029.txt: OK
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 030.txt: OK
+<project-root>/compatibility/03 Conformance Strategy.txt: OK
+<project-root>/compatibility/Investigation 020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics prompt.txt: OK
+<project-root>/compatibility/gophermap: OK
+<project-root>/future/.DS_Store: OK
+<project-root>/future/Future Ideas - Updated.txt: OK
+<project-root>/future/Future Ideas.txt: OK
+<project-root>/future/Montezuma Micro CONFIG - Lessons for BetterCPM.md: OK
+<project-root>/future/gophermap: OK
+<project-root>/gophermap: OK
+<project-root>/investigations/.DS_Store: OK
+<project-root>/investigations/001 - CP-M 2.2 Transient Program Entry Environment.zip: OK
+<project-root>/investigations/002 - CP:M 2.2 BDOS Call and Return Convention.zip: OK
+<project-root>/investigations/003 - CP:M 2.2 BDOS Console Output and String Output Semantics.zip: OK
+<project-root>/investigations/004 - CP:M 2.2 BDOS Direct Console IO and Console Status Semantics.zip: OK
+<project-root>/investigations/005 - CP:M 2.2 BDOS Console Input and Echo Semantics.zip: OK
+<project-root>/investigations/006 - CP:M 2.2 BDOS Buffered Console Input and Line Editing Semantics.zip: OK
+<project-root>/investigations/007 - CP:M 2.2 BDOS Disk Reset Selection and Drive-State Query Semantics.zip: OK
+<project-root>/investigations/008 - CP-M 2.2 FCB File Identification and Open-Close Semantics.zip: OK
+<project-root>/investigations/009 - CP-M 2.2 BDOS Directory Search and DMA Transfer Semantics.zip: OK
+<project-root>/investigations/010 - CP-M 2.2 BDOS Sequential Read Semantics.zip: OK
+<project-root>/investigations/011 - CP-M 2.2 BDOS Sequential Write and File Creation Semantics.zip: OK
+<project-root>/investigations/012 - CP-M 2.2 BDOS File Deletion and Rename Semantics.zip: OK
+<project-root>/investigations/013 - CP-M 2.2 BDOS Random Access and File Size Semantics.zip: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/Investigation 014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics prompt.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/Investigation 014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics.md: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/PROT014.ASM: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/PROT014.COM: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/README.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/A/after.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/A/before.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/A/console.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/A/directory.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/B/after.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/B/before.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/B/console.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/B/directory.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/C/after.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/C/before.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/C/console.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/C/directory.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/D/after.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/D/before.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/D/console.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/D/directory.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/E/after.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/E/before.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/E/console.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/E/directory.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/F/after.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/F/before.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/F/console.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/F/directory.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/G/after.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/G/before.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/G/console.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/G/directory.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/H/after.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/H/before.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/H/console.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/H/directory.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/I/after.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/I/before.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/I/console.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/I/directory.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/J/after.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/J/before.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/J/console.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/J/directory.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/K/after.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/K/before.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/K/console.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/K/directory.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/N/after.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/N/before.sha256: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/N/console.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/cases/N/directory.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/images-after/drivea-A.dsk: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/images-after/drivea-B.dsk: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/images-after/drivea-C.dsk: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/images-after/drivea-D.dsk: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/images-after/drivea-E.dsk: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/images-after/drivea-F.dsk: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/images-after/drivea-G.dsk: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/images-after/drivea-H.dsk: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/images-after/drivea-I.dsk: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/images-after/drivea-J.dsk: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/images-after/drivea-K.dsk: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/images-after/drivea-N.dsk: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/images-before/drivea.dsk: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/observed-output.txt: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/run-all-prot014.sh: OK
+<project-root>/investigations/014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/probes/run-prot014-case.exp: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/Investigation 015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics prompt.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/Investigation 015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics.md: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/PHYS015.ASM: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/PHYS015.COM: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/README.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/build-emulator.sh: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/A/after.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/A/before.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/A/console.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/A/directory.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/B/after.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/B/before.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/B/console.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/B/directory.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/C/after.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/C/before.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/C/console.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/C/directory.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/D/after.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/D/before.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/D/console.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/D/directory.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/E/after.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/E/before.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/E/console.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/E/directory.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/F/after.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/F/before.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/F/console.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/F/directory.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/G/after.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/G/before.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/G/console.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/G/directory.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/H/after.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/H/before.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/H/console.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/H/directory.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/I/after.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/I/before.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/I/console.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/I/directory.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/J/after.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/J/before.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/J/console.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/J/directory.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/N/after.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/N/before.sha256: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/N/console.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/cases/N/directory.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/cpmsim/cpmsim: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/cpmsim/srcsim/COPYING: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/cpmsim/srcsim/Makefile: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/cpmsim/srcsim/sim.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/cpmsim/srcsim/simcfg.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/cpmsim/srcsim/simcfg.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/cpmsim/srcsim/simctl.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/cpmsim/srcsim/simctl.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/cpmsim/srcsim/simio.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/cpmsim/srcsim/simio.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/cpmsim/srcsim/simmem.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/cpmsim/srcsim/simmem.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/cpmsim/srcsim/simport.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/COPYING: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/altair-88-2sio.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/altair-88-2sio.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/altair-88-dcdd.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/altair-88-dcdd.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/altair-88-sio.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/altair-88-sio.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/apu/LICENSE: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/apu/README.md: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/apu/am9511.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/apu/am9511.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/apu/floatcnv.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/apu/floatcnv.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/apu/ova.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/apu/ova.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/apu/types.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/cromemco-88ccc.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/cromemco-88ccc.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/cromemco-d+7a.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/cromemco-d+7a.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/cromemco-dazzler.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/cromemco-dazzler.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/cromemco-fdc.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/cromemco-fdc.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/cromemco-hal.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/cromemco-hal.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/cromemco-tu-art.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/cromemco-tu-art.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/cromemco-wdi.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/cromemco-wdi.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/diskmanager.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/diskmanager.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/generic-at-modem.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/generic-at-modem.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/imsai-fif.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/imsai-fif.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/imsai-hal.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/imsai-hal.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/imsai-sio2.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/imsai-sio2.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/imsai-vio-charset.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/imsai-vio.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/imsai-vio.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/libtelnet.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/libtelnet.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/mds-isbc201.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/mds-isbc201.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/mds-isbc202.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/mds-isbc202.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/mds-isbc206.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/mds-isbc206.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/mds-monitor.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/mds-monitor.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/mostek-cpu.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/mostek-cpu.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/mostek-fdc.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/mostek-fdc.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/proctec-vdm-charset.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/proctec-vdm.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/proctec-vdm.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/rtc80.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/rtc80.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/sd-fdc.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/sd-fdc.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/simbdos.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/simbdos.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/tarbell_fdc.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/tarbell_fdc.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/unix_network.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/unix_network.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/unix_terminal.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/iodevices/unix_terminal.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/COPYING: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/Makefile.in-os: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/alt8080.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/altregs.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/altz80.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/fonts/Makefile: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/fonts/OFL.TXT: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/fonts/bdf2c.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/fonts/font12.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/fonts/font14.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/fonts/font16.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/fonts/font18.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/fonts/font20.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/fonts/font22.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/fonts/font24.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/fonts/font28.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/fonts/font32.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/log.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/sim8080.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/sim8080.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simcore.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simcore.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simdefs.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simdis.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simdis.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simfun.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simfun.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simglb.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simglb.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simice.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simice.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simint.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simint.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simmain.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simmain.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simpanel.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simpanel.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simsdl.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simsdl.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simz80-cb.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simz80-cb.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simz80-dd.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simz80-dd.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simz80-ddcb.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simz80-ddcb.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simz80-ed.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simz80-ed.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simz80-fd.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simz80-fd.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simz80-fdcb.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simz80-fdcb.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simz80.c: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/emulator-src/z80core/simz80.h: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/images-after/drivea-A.dsk: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/images-after/drivea-B.dsk: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/images-after/drivea-C.dsk: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/images-after/drivea-D.dsk: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/images-after/drivea-E.dsk: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/images-after/drivea-F.dsk: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/images-after/drivea-G.dsk: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/images-after/drivea-H.dsk: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/images-after/drivea-I.dsk: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/images-after/drivea-J.dsk: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/images-after/drivea-N.dsk: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/images-before/drivea.dsk: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/observed-output.txt: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/run-all-phys015.sh: OK
+<project-root>/investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/probes/run-phys015-case.exp: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/Investigation 016 - CP-M 2.2 BDOS Console IO and System Interface Semantics prompt.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/Investigation 016 - CP-M 2.2 BDOS Console IO and System Interface Semantics.md: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/BLOCK016.ASM: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/BLOCK016.COM: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/BUF006.ASM: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/BUF006.COM: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/DIO004.ASM: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/DIO004.COM: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/IN005.ASM: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/IN005.COM: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/OUT003.ASM: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/OUT003.COM: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/README.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/SCRL016.COM: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/SCROLL016.ASM: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/SYS016.ASM: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/SYS016.COM: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/artifact-hashes.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCK10C/after.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCK10C/before.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCK10C/console.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCK10C/directory-a.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCK10C/directory-b.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCK10C/drivea.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCK10C/driveb.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCK1C/after.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCK1C/before.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCK1C/console.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCK1C/directory-a.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCK1C/directory-b.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCK1C/drivea.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCK1C/driveb.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCKQ/after.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCKQ/before.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCKQ/console.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCKQ/directory-a.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCKQ/directory-b.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCKQ/drivea.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BLOCKQ/driveb.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BUF/after.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BUF/before.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BUF/console.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BUF/directory-a.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BUF/directory-b.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BUF/drivea.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/BUF/driveb.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIO6/after.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIO6/before.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIO6/console.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIO6/directory-a.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIO6/directory-b.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIO6/drivea.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIO6/driveb.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOE/after.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOE/before.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOE/console.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOE/directory-a.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOE/directory-b.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOE/drivea.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOE/driveb.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOF/after.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOF/before.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOF/console.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOF/directory-a.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOF/directory-b.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOF/drivea.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOF/driveb.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOO/after.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOO/before.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOO/console.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOO/directory-a.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOO/directory-b.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOO/drivea.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOO/driveb.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOS/after.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOS/before.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOS/console.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOS/directory-a.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOS/directory-b.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOS/drivea.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/DIOS/driveb.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/IN/after.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/IN/before.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/IN/console.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/IN/directory-a.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/IN/directory-b.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/IN/drivea.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/IN/driveb.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/OUT/after.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/OUT/before.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/OUT/console.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/OUT/directory-a.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/OUT/directory-b.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/OUT/drivea.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/OUT/driveb.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/SCROLL/after.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/SCROLL/before.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/SCROLL/console.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/SCROLL/directory-a.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/SCROLL/directory-b.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/SCROLL/drivea.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/SCROLL/driveb.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/SYS/after.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/SYS/before.sha256: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/SYS/console.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/SYS/directory-a.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/SYS/directory-b.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/SYS/drivea.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/cases/SYS/driveb.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/drivea-BLOCK10C.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/drivea-BLOCK1C.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/drivea-BLOCKQ.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/drivea-BUF.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/drivea-DIO6.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/drivea-DIOE.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/drivea-DIOF.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/drivea-DIOO.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/drivea-DIOS.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/drivea-IN.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/drivea-OUT.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/drivea-SYS.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/driveb-BLOCK10C.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/driveb-BLOCK1C.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/driveb-BLOCKQ.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/driveb-BUF.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/driveb-DIO6.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/driveb-DIOE.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/driveb-DIOF.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/driveb-DIOO.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/driveb-DIOS.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/driveb-IN.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/driveb-OUT.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-after/driveb-SYS.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-before/drivea.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/images-before/driveb.dsk: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/ledger-hash.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/observed-output.txt: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/prior-reports/Investigation 003 - CP-M 2.2 BDOS Console Output and String Output Semantics.md: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/prior-reports/Investigation 004 - CP-M 2.2 BDOS Direct Console IO and Console Status Semantics.md: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/prior-reports/Investigation 005 - CP-M 2.2 BDOS Console Input and Echo Semantics.md: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/prior-reports/Investigation 006 - CP-M 2.2 BDOS Buffered Console Input and Line Editing Semantics.md: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/prior-reports/Investigation 007 - CP-M 2.2 BDOS Disk Reset Selection and Drive-State Query Semantics.md: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/run-all-console016.sh: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/run-console016-case.exp: OK
+<project-root>/investigations/016 - CP-M 2.2 BDOS Console IO and System Interface Semantics/probes/source-hashes.sha256: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/Investigation 017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics prompt.txt: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/Investigation 017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics.md: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/probes/README.txt: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/probes/STATE017.ASM: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/probes/STATE017.COM: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/probes/artifact-hashes.sha256: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/probes/images-after/drivea.dsk: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/probes/images-after/driveb.dsk: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/probes/images-before/drivea.dsk: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/probes/images-before/driveb.dsk: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/probes/ledger-hash.txt: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/probes/observed-output.txt: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/probes/rebuild.sha256: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/probes/run-state017.exp: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/probes/source-hashes.sha256: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/probes/transcripts/after.sha256: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/probes/transcripts/before.sha256: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/probes/transcripts/console.txt: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/probes/transcripts/directory-after-a.txt: OK
+<project-root>/investigations/017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics/probes/transcripts/directory-after-b.txt: OK
+<project-root>/investigations/018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics/Investigation 018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics prompt.txt: OK
+<project-root>/investigations/018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics/Investigation 018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics.md: OK
+<project-root>/investigations/018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics/probes/CHAR018.ASM: OK
+<project-root>/investigations/018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics/probes/CHAR018.COM: OK
+<project-root>/investigations/018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics/probes/README.txt: OK
+<project-root>/investigations/018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics/probes/artifact-hashes.sha256: OK
+<project-root>/investigations/018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics/probes/images-after/drivea.dsk: OK
+<project-root>/investigations/018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics/probes/images-after/driveb.dsk: OK
+<project-root>/investigations/018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics/probes/images-before/drivea.dsk: OK
+<project-root>/investigations/018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics/probes/images-before/driveb.dsk: OK
+<project-root>/investigations/018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics/probes/ledger-hash.txt: OK
+<project-root>/investigations/018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics/probes/observed-output.txt: OK
+<project-root>/investigations/018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics/probes/rebuild.sha256: OK
+<project-root>/investigations/018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics/probes/run-char018.exp: OK
+<project-root>/investigations/018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics/probes/source-hashes.sha256: OK
+<project-root>/investigations/018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics/probes/transcripts/after.sha256: OK
+<project-root>/investigations/018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics/probes/transcripts/before.sha256: OK
+<project-root>/investigations/018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics/probes/transcripts/console.txt: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/Investigation 019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics prompt.txt: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/Investigation 019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics.md: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/BIOS019.ASM: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/BIOS019.COM: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/BIOS019.lst: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/README.txt: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/artifact-hashes.sha256: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/images-after/drivea.dsk: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/images-after/driveb.dsk: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/images-before/drivea.dsk: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/images-before/driveb.dsk: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/ledger-hash.txt: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/observed-output.txt: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/preexisting-report-hashes.sha256: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/rebuild.sha256: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/run-bios019.exp: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/source-hashes.sha256: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/transcripts/after.sha256: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/transcripts/before.sha256: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/transcripts/console.txt: OK
+<project-root>/investigations/019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics/probes/transcripts/directory-after-a.txt: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/.DS_Store: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/Investigation 020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics prompt.txt: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/Investigation 020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics.md: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/BIOS020.ASM: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/BIOS020.COM: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/BIOS020.lst: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/PZERO20.ASM: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/PZERO20.COM: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/PZERO20.lst: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/README.txt: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/WBOOT20.ASM: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/WBOOT20.COM: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/WBOOT20.lst: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/artifact-hashes.sha256: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/emulator-version.txt: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/image-hashes.sha256: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/images-after/drivea.dsk: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/images-after/driveb.dsk: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/images-before/drivea.dsk: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/images-before/driveb.dsk: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/ledger-hash.txt: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/observed-output.txt: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/page-zero-after.txt: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/page-zero-before.txt: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/rebuild.sha256: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/rebuild/BIOS020.COM: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/rebuild/PZERO20.COM: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/rebuild/WBOOT20.COM: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/run-bios020.exp: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/source-hashes.sha256: OK
+<project-root>/investigations/020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics/probes/transcripts/console.txt: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/.DS_Store: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/Investigation 021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics prompt.txt: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/Investigation 021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics.md: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/MARK21.ASM: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/MARK21.COM: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/MARK21.lst: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/PARSE21.ASM: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/PARSE21.COM: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/PARSE21.lst: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/README.txt: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/artifact-hashes.sha256: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/command-corpus.txt: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/console.txt: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/directory-listings.txt: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/emulator-version.txt: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/image-hashes.sha256: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/images-after/drivea.dsk: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/images-after/driveb.dsk: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/images-base/drivea.dsk: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/images-base/driveb.dsk: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/images-fixture/drivea.dsk: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/images-fixture/driveb.dsk: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/ledger-hash.txt: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/observed-output.txt: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/rebuild.sha256: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/rebuild/MARK21.COM: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/rebuild/PARSE21.COM: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/run-ccp021.exp: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/run-invalid-drive.exp: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/source-hashes.sha256: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/transcripts/console-invalid-drive.txt: OK
+<project-root>/investigations/021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics/probes/transcripts/console-main.txt: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/Investigation 022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics prompt.txt: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/Investigation 022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics.md: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/BOUND.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/BOUND.HDR: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/BOUND22.ASM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/F0TERM22.ASM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/F0TERM22.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/F0TERM22.lst: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/J0TERM22.ASM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/J0TERM22.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/J0TERM22.lst: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/LOAD22.ASM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/LOAD22.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/LOAD22.lst: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/MARK-A0.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/MARK-A1.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/MARK-B0.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/MARK-B1.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/MARK22.ASM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/MAXOK.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/MAXOK.HDR: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/MINRET22.ASM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/MINRET22.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/MINRET22.lst: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/PART22.ASM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/PART22.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/PART22.lst: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/README.txt: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/RET22.ASM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/RET22.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/RET22.lst: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/STATE22.ASM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/STATE22.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/STATE22.lst: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/artifact-hashes.sha256: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/command-corpus.txt: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/directory-listings.txt: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/emulator-version.txt: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/image-hashes.sha256: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/images-after/drivea.dsk: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/images-after/driveb.dsk: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/images-base/drivea.dsk: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/images-base/driveb.dsk: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/images-fixture/drivea.dsk: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/images-fixture/driveb.dsk: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/images-return/drivea-f0.dsk: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/images-return/drivea-j0.dsk: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/images-return/drivea-ret.dsk: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/images-return/driveb-f0.dsk: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/images-return/driveb-j0.dsk: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/images-return/driveb-ret.dsk: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/ledger-hash.txt: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/make-fixtures.sh: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/observed-output.txt: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/rebuild.sha256: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/rebuild/BOUND.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/rebuild/F0TERM22.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/rebuild/J0TERM22.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/rebuild/LOAD22.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/rebuild/MARK-A0.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/rebuild/MARK-A1.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/rebuild/MARK-B0.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/rebuild/MARK-B1.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/rebuild/MAXOK.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/rebuild/MINRET22.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/rebuild/PART22.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/rebuild/RET22.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/rebuild/STATE22.COM: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/run-lookup-load.exp: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/run-return-path.exp: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/source-hashes.sha256: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/transcripts/console-boundary-pre-part22.txt: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/transcripts/console-f0.txt: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/transcripts/console-j0.txt: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/transcripts/console-main.txt: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/transcripts/console-preliminary.txt: OK
+<project-root>/investigations/022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics/probes/transcripts/console-ret.txt: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/Investigation 023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics prompt.txt: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/Investigation 023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics.md: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/BIG23.COM: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/DMACHK.DAT: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/ENTRY23.ASM: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/ENTRY23.COM: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/ENTRY23.lis: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/README.txt: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/artifact-hashes.sha256: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/command-corpus.txt: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/directory-listings.txt: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/emulator-version.txt: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/image-hashes.sha256: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/images-after/drivea.dsk: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/images-after/driveb.dsk: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/images-base/drivea.dsk: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/images-base/driveb.dsk: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/images-fixture/drivea.dsk: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/images-fixture/driveb.dsk: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/ledger-hash.txt: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/make-fixtures.sh: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/make-variants.sh: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/observed-output.txt: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/rebuild.sha256: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/rebuild/BIG23.COM: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/rebuild/ENTRY23.COM: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/run-entry023.exp: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/run-max023.exp: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/run-usercheck.exp: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/source-hashes.sha256: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/transcripts/console-main.txt: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/transcripts/console-max.txt: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/transcripts/console-repeat.txt: OK
+<project-root>/investigations/023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics/probes/transcripts/console-usercheck.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/Investigation 024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics prompt.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/Investigation 024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics.md: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/BAD24.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/BAD24.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/BAD24.lis: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/BADSP24.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/BADSP24.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/BADSP24.lis: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/BDOS024.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/BDOS024.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/BDOS024.lis: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/CHECK24.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/CHECK24.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/CHECK24.lis: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/CONSOLE24.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/CONSOLE24.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/CONSOLE24.lis: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/FILE24.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/FILE24.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/FILE24.lis: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/JUMP24.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/JUMP24.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/JUMP24.lis: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/OBS24.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/OBS24.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/README.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/STATE24.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/STATE24.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/STATE24.lis: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/TERM24.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/TERM24.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/TERM24.lis: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/build.sh: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/bad/drivea.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/bad/driveb.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/badsp/drivea.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/badsp/driveb.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/console-F/drivea.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/console-F/driveb.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/console-J/drivea.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/console-J/driveb.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/console-R/drivea.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/console-R/driveb.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/f0/drivea.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/f0/driveb.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/file-F/drivea.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/file-F/driveb.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/file-J/drivea.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/file-J/driveb.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/file-R/drivea.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/file-R/driveb.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/j0/drivea.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/j0/driveb.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/state-F/drivea.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/state-F/driveb.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/state-J/drivea.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/state-J/driveb.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/state-R/drivea.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/state-R/driveb.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/term/drivea.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/cases/term/driveb.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/directory-listings.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/emulator-version.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/image-hashes.sha256: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/images-base/drivea.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/images-base/driveb.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/images-fixture/drivea.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/images-fixture/driveb.dsk: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/ledger-hash.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/make-fixtures.sh: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/observed-output.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild.sha256: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/BAD24.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/BAD24.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/BAD24.lis: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/BADSP24.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/BADSP24.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/BADSP24.lis: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/BDOS024.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/BDOS024.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/BDOS024.lis: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/CHECK24.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/CHECK24.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/CHECK24.lis: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/CONSOLE24.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/CONSOLE24.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/CONSOLE24.lis: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/FILE24.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/FILE24.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/FILE24.lis: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/JUMP24.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/JUMP24.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/JUMP24.lis: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/STATE24.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/STATE24.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/STATE24.lis: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/TERM24.ASM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/TERM24.COM: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/rebuild/TERM24.lis: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/run-case024.exp: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/run-console024.exp: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/run-file024.exp: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/run-state024.exp: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/source-hashes.sha256: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/transcripts/console-bad-f41.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/transcripts/console-badsp.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/transcripts/console-console-F.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/transcripts/console-console-J.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/transcripts/console-console-R.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/transcripts/console-file-F.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/transcripts/console-file-J.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/transcripts/console-file-R.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/transcripts/console-state-F.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/transcripts/console-state-J.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/transcripts/console-state-R.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/transcripts/console-term-f0.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/transcripts/console-term-j0.txt: OK
+<project-root>/investigations/024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics/probes/transcripts/console-term-ret.txt: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/Investigation 025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior prompt.txt: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/Investigation 025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior.md: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/DISK25.ASM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/DISK25.COM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/DISK25.lis: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/EMPTY25.DAT: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/FCB25.ASM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/FCB25.COM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/FCB25.lis: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/FILEERR25.ASM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/FILEERR25.COM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/FILEERR25.lis: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/FILLER25.DAT: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/ONE25.DAT: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/OPEN25.ASM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/OPEN25.COM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/OPEN25.lis: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/READ25.ASM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/READ25.COM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/READ25.lis: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/README.txt: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/SEARCH25.ASM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/SEARCH25.COM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/SEARCH25.lis: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/USER1.DAT: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/WRITE25.ASM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/WRITE25.COM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/WRITE25.lis: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/build.sh: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/allocfull/drivea.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/allocfull/driveb.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/dirfull/drivea.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/dirfull/driveb.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/drivec/drivea.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/drivec/driveb.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/driveinvalid/drivea.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/driveinvalid/driveb.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/fcb/drivea.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/fcb/driveb.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/fileerr/drivea.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/fileerr/driveb.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/open/drivea.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/open/driveb.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/read/drivea.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/read/driveb.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/readonly/drivea.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/readonly/driveb.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/search/drivea.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/cases/search/driveb.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/directory-listings.txt: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/emulator-version.txt: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/image-hashes.sha256: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/images-allocfull-before/drivea.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/images-allocfull-before/driveb.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/images-base/drivea.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/images-base/driveb.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/images-dirfull-before/drivea.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/images-dirfull-before/driveb.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/images-fixture/drivea.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/images-fixture/driveb.dsk: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/ledger-hash.txt: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/observed-output.txt: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild.sha256: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/DISK25.ASM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/DISK25.COM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/DISK25.lis: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/FCB25.ASM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/FCB25.COM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/FCB25.lis: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/FILEERR25.ASM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/FILEERR25.COM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/FILEERR25.lis: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/OPEN25.ASM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/OPEN25.COM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/OPEN25.lis: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/READ25.ASM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/READ25.COM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/READ25.lis: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/SEARCH25.ASM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/SEARCH25.COM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/SEARCH25.lis: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/WRITE25.ASM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/WRITE25.COM: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/rebuild/WRITE25.lis: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/run-fatal025.exp: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/run-returning025.exp: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/source-hashes.sha256: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/transcripts/console-allocfull.txt: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/transcripts/console-dirfull.txt: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/transcripts/console-drive-c.txt: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/transcripts/console-drive-invalid.txt: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/transcripts/console-fcb.txt: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/transcripts/console-fileerr.txt: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/transcripts/console-open.txt: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/transcripts/console-read.txt: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/transcripts/console-readonly.txt: OK
+<project-root>/investigations/025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior/probes/transcripts/console-search.txt: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/Investigation 026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics prompt.txt: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/Investigation 026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics.md: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/CHECK26.ASM: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/CHECK26.COM: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/CHECK26.lis: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/COMMON26.INC: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/DPB26.ASM: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/DPB26.COM: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/DPB26.lis: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/PROTECT26.ASM: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/PROTECT26.COM: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/PROTECT26.lis: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/README.txt: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/RESET26.ASM: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/RESET26.COM: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/RESET26.lis: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/STATE26.ASM: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/STATE26.COM: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/STATE26.lis: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/TERMSTATE26.ASM: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/TERMSTATE26.COM: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/TERMSTATE26.lis: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/artifact-hashes.sha256: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/build-instructions.txt: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/build.sh: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/cases/f0/drivea.dsk: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/cases/f0/driveb.dsk: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/cases/jump/drivea.dsk: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/cases/jump/driveb.dsk: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/cases/main/drivea.dsk: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/cases/main/driveb.dsk: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/cases/ret/drivea.dsk: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/cases/ret/driveb.dsk: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/directory-listings.txt: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/emulator-version.txt: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/image-hashes.sha256: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/images-before/drivea.dsk: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/images-before/driveb.dsk: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/ledger-hash.txt: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/observed-output.txt: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/protected-files-before.sha256: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/rebuild.sha256: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/rebuild/CHECK26.COM: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/rebuild/CHECK26.COM.original: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/rebuild/DPB26.COM: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/rebuild/DPB26.COM.original: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/rebuild/PROTECT26.COM: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/rebuild/PROTECT26.COM.original: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/rebuild/RESET26.COM: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/rebuild/RESET26.COM.original: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/rebuild/STATE26.COM: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/rebuild/STATE26.COM.original: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/rebuild/TERMSTATE26.COM: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/rebuild/TERMSTATE26.COM.original: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/rebuild/build-output.txt: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/run-main026.exp: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/run-term026.exp: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/source-hashes.sha256: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/transcripts/f0.txt: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/transcripts/jump.txt: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/transcripts/main.txt: OK
+<project-root>/investigations/026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics/probes/transcripts/ret.txt: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/Investigation 027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics prompt.txt: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/Investigation 027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics.md: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/CALL27.ASM: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/CALL27.COM: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/CALL27.lis: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/COMMON27.INC: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/FUNC27.ASM: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/FUNC27.COM: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/FUNC27.lis: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/PARAM27.ASM: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/PARAM27.COM: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/PARAM27.lis: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/README.txt: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/REG27.ASM: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/REG27.COM: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/REG27.lis: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/STACK27.ASM: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/STACK27.COM: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/STACK27.lis: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/artifact-hashes.sha256: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/build-instructions.txt: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/build.sh: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/cases/accepted/drivea.dsk: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/cases/accepted/driveb.dsk: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/directory-listing.txt: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/emulator-version.txt: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/image-hashes.sha256: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/images-before/drivea.dsk: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/images-before/driveb.dsk: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/ledger-hash.txt: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/memory-dumps/CALL27-COM.hex: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/memory-dumps/CALL27-register-records.hex: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/observed-output.txt: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/protected-files-before.sha256: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/rebuild.sha256: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/rebuild/CALL27.COM: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/rebuild/CALL27.COM.original: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/rebuild/FUNC27.COM: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/rebuild/FUNC27.COM.original: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/rebuild/PARAM27.COM: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/rebuild/PARAM27.COM.original: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/rebuild/REG27.COM: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/rebuild/REG27.COM.original: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/rebuild/STACK27.COM: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/rebuild/STACK27.COM.original: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/rebuild/build-output.txt: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/run027.exp: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/source-hashes.sha256: OK
+<project-root>/investigations/027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics/probes/transcripts/console.txt: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/Investigation 028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract prompt.txt: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/Investigation 028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract.md: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/BIGERR28.COM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/CHECK28.ASM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/CHECK28.COM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/CHECK28.lis: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/COMMON28.INC: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/ENTRY28.ASM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/ENTRY28.COM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/ENTRY28.lis: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/ERROR28.ASM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/ERROR28.COM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/ERROR28.lis: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/LOAD28.ASM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/LOAD28.COM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/LOAD28.lis: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/MEM28.ASM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/MEM28.COM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/MEM28.lis: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/MIN28.ASM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/MIN28.COM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/MIN28.lis: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/README.txt: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/RETURN28.ASM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/RETURN28.COM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/RETURN28.lis: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/artifact-hashes.sha256: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/build-instructions.txt: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/build.sh: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/cases/main/drivea.dsk: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/cases/main/driveb.dsk: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/cases/return/drivea.dsk: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/cases/return/driveb.dsk: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/directory-listings.txt: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/emulator-version.txt: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/image-hashes.sha256: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/images-before/drivea.dsk: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/images-before/driveb.dsk: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/ledger-hash.txt: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/make-bigerr28.sh: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/memory-dumps/ENTRY28-COM.hex: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/memory-dumps/entry-capture.txt: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/observed-output.txt: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/protected-files-before.sha256: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/rebuild.sha256: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/rebuild/BIGERR28.COM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/rebuild/BIGERR28.COM.original: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/rebuild/CHECK28.COM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/rebuild/CHECK28.COM.original: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/rebuild/ENTRY28.COM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/rebuild/ENTRY28.COM.original: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/rebuild/ERROR28.COM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/rebuild/ERROR28.COM.original: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/rebuild/LOAD28.COM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/rebuild/LOAD28.COM.original: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/rebuild/MEM28.COM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/rebuild/MEM28.COM.original: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/rebuild/MIN28.COM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/rebuild/MIN28.COM.original: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/rebuild/RETURN28.COM: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/rebuild/RETURN28.COM.original: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/rebuild/build-output.txt: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/run-main028.exp: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/run-return028.exp: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/source-hashes.sha256: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/transcripts/main.txt: OK
+<project-root>/investigations/028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract/probes/transcripts/return.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/Investigation 029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract Prompt.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/Investigation 029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract.md: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/BIGMULTI.DAT: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/COMMON29.INC: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/DMA29.ASM: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/DMA29.COM: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/DMA29.lis: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/ERROR29.ASM: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/ERROR29.COM: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/ERROR29.lis: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/MATCH29.ASM: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/MATCH29.COM: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/MATCH29.lis: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/README.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/SEARCH29.ASM: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/SEARCH29.COM: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/SEARCH29.lis: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/STATE29.ASM: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/STATE29.COM: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/STATE29.lis: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/USER29.ASM: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/USER29.COM: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/USER29.lis: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/build-instructions.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/build.sh: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/cases/error/drivea.dsk: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/cases/error/driveb.dsk: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/cases/main/drivea.dsk: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/cases/main/driveb.dsk: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/cases/recreated/drivea.dsk: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/cases/recreated/driveb.dsk: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/directory-images/accepted-drivea.dsk: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/directory-images/accepted-driveb.dsk: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/directory-images/base-drivea.dsk: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/directory-images/base-driveb.dsk: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/directory-images/drivea-user0.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/directory-images/drivea-user1.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/directory-images/driveb-user0.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/directory-images/driveb-user1.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/directory-images/error-drivea.dsk: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/directory-images/error-driveb.dsk: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/dma-dumps/DMA29-128.bin: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/dma-dumps/DMA29-128.hex: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/emulator-version.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/hashes/artifact-sha256.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/hashes/artifact-verification.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/hashes/build-after.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/hashes/build-before.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/hashes/protected-before.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/hashes/protected-verification.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/hashes/rebuild-log.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/image-sha256.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/images-before/drivea.dsk: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/images-before/driveb.dsk: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/ledger-sha256-after.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/ledger-sha256-before.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/make-fixtures.sh: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/memory-dumps/DMA29-128.xxd: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/observed-output.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/rebuild-diff.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/rebuild-sha256.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/run-error029.exp: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/run-main029.exp: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/source-sha256.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/transcripts/error.txt: OK
+<project-root>/investigations/029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract/probes/transcripts/main.txt: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/Investigation 030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics.md: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/Investigation 030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics.txt: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/CLOSE30.ASM: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/CLOSE30.COM: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/CLOSE30.lis: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/CREATE30.ASM: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/CREATE30.COM: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/CREATE30.lis: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/EXTENT30.ASM: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/EXTENT30.COM: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/EXTENT30.lis: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/FAIL30.ASM: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/FAIL30.COM: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/FAIL30.lis: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/FCB30.ASM: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/FCB30.COM: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/FCB30.lis: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/GROW30.ASM: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/GROW30.COM: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/GROW30.lis: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/OPEN30.ASM: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/OPEN30.COM: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/OPEN30.lis: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/RAND013.INC: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/README.txt: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/WRITE011.INC: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/artifact-sha256.txt: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/artifact-verification.txt: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/build.sh: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/image-sha256.txt: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/images-after/drivea.dsk: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/images-after/driveb.dsk: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/images-after/drivec.dsk: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/images-after/drived.dsk: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/images-after/random-drivea.dsk: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/images-after/random-driveb.dsk: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/images-before/drivea.dsk: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/images-before/driveb.dsk: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/images-before/drivec.dsk: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/images-before/drived.dsk: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/ledger-sha256-after.txt: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/ledger-sha256-before.txt: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/observed-output.txt: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/protected-before.sha256: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/protected-verification.txt: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/rebuild-after.sha256: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/rebuild-before.sha256: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/rebuild.diff: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/rebuild.log: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/reference-reports/I008.md: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/reference-reports/I010.md: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/reference-reports/I011.md: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/reference-reports/I012.md: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/reference-reports/I013.md: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/reference-reports/I017.md: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/source-sha256.txt: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/transcripts/random-lifecycle.txt: OK
+<project-root>/investigations/030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics/probes/transcripts/sequential-lifecycle.txt: OK
+<project-root>/platform/Baseline Platform Specification.txt: OK

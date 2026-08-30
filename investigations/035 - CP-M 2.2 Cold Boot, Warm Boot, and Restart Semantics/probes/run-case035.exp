@@ -1,0 +1,37 @@
+#!/usr/bin/expect -f
+set mode [lindex $argv 0]
+set diskdir [lindex $argv 1]
+set logfile [lindex $argv 2]
+set emulator [lindex $argv 3]
+set timeout 45
+log_file -noappend $logfile
+spawn $emulator -z -d $diskdir
+expect "A>"
+if {$mode eq "cold"} {
+  send -- "COLD35\r"; expect "A>"
+  send -- "BOOT35\r"; expect "64K CP/M Vers. 2.2"; expect "A>"
+  send -- "COLD35\r"; expect "A>"
+} elseif {$mode eq "ret"} {
+  send -- "RET35\r"; expect "A>"
+  send -- "A:STATE35\r"; expect ">"
+} elseif {$mode eq "fzero"} {
+  send -- "FZERO35\r"; expect ">"
+  send -- "A:STATE35\r"; expect ">"
+} elseif {$mode eq "warm"} {
+  send -- "WARM35\r"; expect ">"
+  send -- "A:STATE35\r"; expect ">"
+} elseif {$mode eq "reset"} {
+  send -- "RESET35\r"; expect "A>"
+} elseif {$mode eq "pending"} {
+  send -- "PEND35\r"; expect "PEND35 READY"
+  send -- "Z"; expect ">"
+  send -- "\r"; expect ">"
+} elseif {$mode eq "error"} {
+  send -- "RCVR35 G\r"; expect "Bad Sector"
+  send "\003"; expect ">"
+  send -- "A:STATE35\r"; expect ">"
+} else {
+  exit 2
+}
+send "\034"
+expect eof

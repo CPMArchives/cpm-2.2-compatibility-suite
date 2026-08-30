@@ -1,0 +1,41 @@
+Investigation 025 accepted result summary
+=========================================
+
+Returning logical failures
+--------------------------
+Open missing: FF. Open same name in user 1 from user 0: FF. Wildcard Open: 03.
+Close missing: FF. Delete missing: FF. Rename missing source: FF.
+Duplicate Make: 02 (success), producing a second ONE25.DAT directory entry.
+
+Search First no match and Search Next exhaustion: FF. The DRI DMA buffer did
+not retain the A5 sentinel; it contained a directory record even on FF. The
+returned slot code, not those bytes, determines whether a match exists.
+
+Sequential Read on an empty activated file: 01, DMA unchanged. A sequential
+read through a merely formatted but unactivated FCB also returned 01 here, but
+the FCB allocation bytes became FF and the behavior is not guaranteed.
+
+Random Read record 1 beyond a one-record file: 01. Record 128 whose extent did
+not exist: 04. A random value with r2=04: 06. DMA stayed A5 for all failures.
+
+Resource exhaustion
+-------------------
+Directory full (64 entries, 178K data free): Make returned FF and Write was not
+called. The before/after images are byte-identical.
+
+Allocation full (0K data free, directory available): Make returned directory
+code 01, then sequential Write returned 02. The FCB acquired no data block and
+did not advance CR. The image changed only because successful Make created its
+empty directory entry.
+
+Fatal/nonreturning and malformed conditions
+-------------------------------------------
+After Function 28, Delete printed `Bdos Err On A: R/O` and did not return;
+Control-C warm-started. Open on unavailable C printed `Bdos Err On C: Bad
+Sector`; invalid FCB drive 17 printed `Bdos Err On Q: Select`. Both did not
+return before the automated Control-C.
+
+Changing an activated FCB's first filename byte before Close did not force a
+failure: Open returned 03 and Close returned 00; the disk image stayed unchanged
+because no metadata was dirty. This malformed behavior supplies no portable
+return or mutation contract.

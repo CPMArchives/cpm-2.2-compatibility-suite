@@ -1,0 +1,24 @@
+CHARACTER-DEVICE SOFTWARE USAGE EVIDENCE
+
+Documented named consumers
+  The CP/M 2.2 Alteration Guide says BDOS needs CONST/CONIN/CONOUT, PIP may use
+  LIST/PUNCH/READER, and DESPOOL used LISTST. These are primary documentary
+  examples of software-visible character devices beyond the console.
+
+DRI source consumers
+  OS3BDOS uses CONST/CONIN/CONOUT for console paths and dispatches Functions 3,
+  4 and 5 to READER/PUNCH/LIST. OS2CCP uses BDOS console services rather than
+  depending on private BIOS internals.
+
+Category conclusions
+  Editors and development tools rely on documented console editing/status paths.
+  Transfer utilities may use reader/punch. Printing/spooling software uses LIST
+  and may poll LISTST. Communications and terminal programs commonly need raw
+  console behavior, for which Function 6 and direct BIOS are the compatible
+  boundaries already evidenced by I004/I020/I036.
+
+Evidence limit
+  The local corpus does not quantify third-party programs or justify requiring
+  a particular serial timing, printer-ready polarity, absent-device stub, modem
+  convention, or vendor port. Those require named platform profiles.
+

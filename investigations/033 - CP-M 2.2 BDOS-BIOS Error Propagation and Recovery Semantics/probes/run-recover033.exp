@@ -1,0 +1,20 @@
+#!/usr/bin/expect -f
+set mode [lindex $argv 0]
+set diskdir [lindex $argv 1]
+set logfile [lindex $argv 2]
+set emulator [lindex $argv 3]
+set timeout 30
+log_file -noappend $logfile
+spawn $emulator -z -d $diskdir
+expect "A>"
+send -- "PHYS015 $mode\r"
+expect "Bdos Err On A: Bad Sector"
+if {$mode eq "G"} {send "\003"} else {send "x"; expect "RETURNED"}
+expect "A>"
+send -- "DIR ATTR.DAT\r"
+expect "A>"
+send -- "PHYS015 N\r"
+expect "RETURNED"
+expect "A>"
+send "\034"
+expect eof

@@ -1,0 +1,982 @@
+INVESTIGATION 020 — CP/M 2.2 BIOS Jump Table, Boot, and Character-I/O
+Semantics
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 019 is complete.
+
+The authoritative Compatibility Ledger is now:
+
+    02 Compatibility Ledger - Investigation 019.txt
+
+It incorporates findings through Investigation 019 and currently ends at
+entry 0460.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify any previous investigation report, architecture document,
+roadmap, source archive, or other pre-existing BetterCP/M file.
+
+Create Investigation 020 as a new evidence report with its own directory
+and associated probe/instrumentation artifacts.
+
+This is an EVIDENCE INVESTIGATION, not BetterCP/M implementation work.
+
+
+OBJECTIVE
+
+Determine the CP/M 2.2 BIOS interface contract outside the disk-I/O
+operations investigated in Investigation 019.
+
+Concentrate on:
+
+    BIOS jump-table organization
+    BOOT
+    WBOOT
+    CONST
+    CONIN
+    CONOUT
+    LIST
+    PUNCH
+    READER
+    LISTST
+
+and on the relationship between these BIOS services, BDOS, CCP, page zero,
+and transient programs.
+
+Investigation 019 established the disk-side BIOS contract for:
+
+    SELDSK
+    SETTRK
+    SETSEC
+    SETDMA
+    READ
+    WRITE
+    SECTRAN
+
+Do not reinvestigate those calls except where necessary to establish the
+complete BIOS jump-table organization or boot/warm-start behavior.
+
+The purpose is NOT to document one particular DRI or z80pack BIOS.
+
+The purpose is to determine the smallest CP/M 2.2 BIOS contract that a
+compatible system must reproduce while separating:
+
+    - documented CP/M 2.2 BIOS requirements;
+    - requirements imposed by DRI CCP/BDOS;
+    - behavior visible to transient programs;
+    - BIOS implementation freedom;
+    - hardware-dependent behavior;
+    - behavior observed only in the reference environment;
+    - unresolved BetterCP/M policy.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read the current Compatibility Ledger and relevant previous investigations
+before designing experiments.
+
+In particular, use:
+
+    Investigation 001
+        Transient entry environment, page zero, warm-start gateway,
+        IOBYTE, BDOS gateway, and command-entry state.
+
+    Investigation 002
+        BDOS call/return ABI.
+
+    Investigations 003-006
+        BDOS console output/input/status/buffered-input behavior.
+
+    Investigation 007
+        Disk reset/selection and warm-start-related drive state.
+
+    Investigation 015
+        Physical BIOS disk errors and BDOS error presentation.
+
+    Investigation 016
+        Console I/O and system-interface interactions.
+
+    Investigation 018
+        BDOS Reader, Punch, List, and IOBYTE semantics; logical-device
+        dispatch versus BIOS physical-device routing.
+
+    Investigation 019
+        BIOS disk interface and logical-sector semantics.
+
+Do not duplicate propositions already established by those investigations.
+
+Where Investigation 020 explains the BIOS mechanism beneath an existing
+BDOS/application-level proposition, cite the earlier finding rather than
+creating a duplicate ledger proposition unless a genuinely new,
+independently testable compatibility requirement is established.
+
+Pay particular attention to existing page-zero propositions concerning:
+
+    0000h warm-start gateway
+    0003h IOBYTE
+    0004h command-entry default drive
+    0005h BDOS gateway
+
+Investigation 020 may strengthen or clarify their evidence, but must not
+silently replace or contradict them.
+
+
+QUESTIONS TO RESOLVE
+
+
+1. BIOS JUMP-TABLE ORGANIZATION
+
+Establish the documented CP/M 2.2 BIOS jump-table contract.
+
+Determine:
+
+- where the BIOS jump table begins relative to the configured BIOS base;
+- required entry order;
+- required spacing between entries;
+- whether each entry is conventionally/necessarily a three-byte JMP;
+- which entries are mandatory in CP/M 2.2;
+- exact ordering of:
+
+      BOOT
+      WBOOT
+      CONST
+      CONIN
+      CONOUT
+      LIST
+      PUNCH
+      READER
+      HOME
+      SELDSK
+      SETTRK
+      SETSEC
+      SETDMA
+      READ
+      WRITE
+      LISTST
+      SECTRAN
+
+- whether callers may compute entry addresses from the BIOS base and ordinal;
+- whether the jump-table representation itself is therefore part of the
+  compatibility contract;
+- which portions are visible to BDOS/CCP versus ordinary applications;
+- whether BIOS implementation routines themselves may reside anywhere;
+- whether exact BIOS base address is configuration-specific.
+
+Do not confuse the required vector layout with the addresses of the routines
+to which those vectors jump.
+
+
+2. BIOS BASE DISCOVERY
+
+Determine how CP/M components discover or infer the BIOS base.
+
+Investigate the relationship among:
+
+    page-zero JMP at 0000h
+    WBOOT vector
+    BIOS jump-table base
+    BDOS base
+    page-zero JMP at 0005h
+
+Determine:
+
+- whether the operand of JMP 0000h points directly to WBOOT;
+- whether WBOOT is the second BIOS jump-table entry;
+- whether software may derive BIOS base from the page-zero vector;
+- whether BDOS or CCP relies on a fixed relative BIOS layout;
+- whether transient applications are documented as permitted to call BIOS
+  directly;
+- if so, how applications are expected to locate BIOS entries;
+- whether exact numeric BIOS addresses are ever portable.
+
+Cross-check existing ledger entry 0034 concerning exact BIOS/BDOS vector
+targets.
+
+Do not create a contradictory fixed-address requirement.
+
+
+3. BOOT — COLD START
+
+Determine the documented BOOT contract.
+
+Establish:
+
+- when BOOT is entered;
+- what machine state may be assumed on entry;
+- what BOOT must initialize;
+- relationship to hardware initialization;
+- relationship to IOBYTE initialization;
+- relationship to page-zero initialization;
+- relationship to CCP/BDOS loading or initialization;
+- relationship to default drive and user state;
+- whether BOOT returns;
+- where control ultimately passes;
+- whether interrupts must be enabled/disabled in a particular way;
+- which aspects are BIOS-specific rather than CP/M-wide.
+
+Distinguish:
+
+    machine power/reset initialization
+    BIOS cold boot
+    CP/M system initialization
+    CCP command-loop entry
+
+Do not assume that a modern virtual machine must reproduce irrelevant
+physical-hardware initialization.
+
+
+4. WBOOT — WARM START
+
+Determine the documented WBOOT contract.
+
+Establish:
+
+- how WBOOT is invoked;
+- relationship to JMP 0000h;
+- relationship to BDOS Function 0;
+- relationship to RET termination already investigated;
+- whether WBOOT reloads CCP;
+- whether WBOOT reloads BDOS;
+- whether WBOOT reloads BIOS;
+- whether these choices depend on system layout/configuration;
+- what page-zero state WBOOT restores;
+- what drive/user state it preserves or resets;
+- what DMA state is established before CCP/transient re-entry;
+- whether disk-system reset/login state changes;
+- whether WBOOT returns to its caller;
+- where control ultimately passes;
+- which observed z80pack behavior is merely implementation-specific.
+
+Cross-check Investigations 001, 007, and existing ledger propositions for
+program termination and command-entry state.
+
+Do not duplicate those propositions unless Investigation 020 establishes a
+new BIOS-level requirement.
+
+
+5. PAGE-ZERO RECONSTRUCTION
+
+Determine what responsibility BOOT/WBOOT have for constructing or restoring
+page-zero CP/M vectors/state.
+
+At minimum examine:
+
+    0000h-0002h  warm-start JMP
+    0003h        IOBYTE
+    0004h        command/default-drive byte
+    0005h-0007h  BDOS JMP
+
+Determine:
+
+- which bytes BIOS writes;
+- which bytes CCP/BDOS writes;
+- which values must be restored after warm boot;
+- whether applications may damage these locations and expect WBOOT to repair
+  them;
+- whether IOBYTE is preserved or reinitialized;
+- whether the default-drive byte is copied from BIOS/BDOS/CCP state;
+- whether exact vector targets remain configuration-specific.
+
+Where existing ledger propositions already cover the externally visible
+result, treat Investigation 020 primarily as evidence clarification.
+
+
+6. CONST — CONSOLE STATUS
+
+Determine the BIOS CONST contract.
+
+Establish:
+
+- calling convention;
+- return register;
+- exact documented ready/not-ready values;
+- whether CONST consumes input;
+- whether repeated CONST calls must leave the pending character available;
+- whether CONST blocks;
+- whether it reports physical-device state or logical-console state after
+  IOBYTE routing;
+- whether returned status is restricted to documented values or merely
+  zero/nonzero;
+- what DRI BDOS assumes about the result.
+
+Cross-check BDOS Functions 6 and 11 from Investigations 004 and 016.
+
+Do not duplicate their application-level semantics. Establish the lower-level
+BIOS requirement that permits BDOS to implement them.
+
+
+7. CONIN — CONSOLE INPUT
+
+Determine the BIOS CONIN contract.
+
+Establish:
+
+- calling convention;
+- return register;
+- whether CONIN blocks until input is available;
+- whether it performs echo;
+- whether it interprets Ctrl-C, Ctrl-S, Ctrl-P, TAB, backspace, or other
+  control characters;
+- whether it performs case conversion;
+- whether it masks/parity-strips input;
+- whether it returns the raw logical-console character;
+- relationship to IOBYTE routing;
+- relationship to prior CONST calls;
+- what DRI BDOS adds above the BIOS service.
+
+The investigation should make especially clear which familiar CP/M console
+behaviors belong to BDOS rather than BIOS.
+
+
+8. CONOUT — CONSOLE OUTPUT
+
+Determine the BIOS CONOUT contract.
+
+Establish:
+
+- calling convention;
+- register containing the output character;
+- whether BIOS receives exactly one character;
+- whether CONOUT performs TAB expansion;
+- whether it tracks columns;
+- whether it implements Ctrl-S scrolling control;
+- whether it performs printer echo;
+- whether it interprets Ctrl-P;
+- whether it transforms control characters;
+- relationship to IOBYTE routing;
+- whether the call blocks until the device accepts output;
+- what DRI BDOS adds above this primitive.
+
+Cross-check Investigations 003, 004, 005, 006, 016, and 018.
+
+Do not recreate their BDOS propositions.
+
+
+9. READER
+
+Determine the BIOS READER contract beneath BDOS Function 3.
+
+Establish:
+
+- calling convention;
+- returned character register;
+- blocking/ready semantics if documented;
+- whether EOF conventions such as Ctrl-Z are BIOS/device policy;
+- whether READER performs echo;
+- whether it performs console control processing;
+- relationship to IOBYTE routing;
+- what behavior is required when no physical reader exists;
+- what behavior remains implementation-specific.
+
+Investigation 018 already establishes the BDOS-visible Function 3 behavior.
+Do not duplicate it.
+
+
+10. PUNCH
+
+Determine the BIOS PUNCH contract beneath BDOS Function 4.
+
+Establish:
+
+- calling convention;
+- input character register;
+- whether the byte is passed without formatting;
+- whether the call waits for device readiness;
+- relationship to IOBYTE routing;
+- behavior when no punch device exists;
+- whether any return value is meaningful;
+- which details are BIOS/device-specific.
+
+Cross-check Investigation 018.
+
+
+11. LIST
+
+Determine the BIOS LIST contract beneath BDOS Function 5 and BDOS printer
+echo.
+
+Establish:
+
+- calling convention;
+- input character register;
+- whether the byte is passed without console formatting;
+- whether LIST waits for the logical list device;
+- relationship to IOBYTE routing;
+- behavior when no list device exists;
+- whether any return value is meaningful;
+- relationship between direct BDOS Function 5 and the LIST calls BDOS makes
+  while printer echo is active.
+
+Do not duplicate the already-established BDOS-level semantics.
+
+
+12. LISTST — LIST DEVICE STATUS
+
+Investigate LISTST carefully.
+
+Determine:
+
+- calling convention;
+- return register;
+- documented ready/not-ready values;
+- whether LISTST is mandatory in CP/M 2.2;
+- whether it is used by DRI BDOS;
+- which BDOS operations use it;
+- whether it is merely advisory or can block output indirectly;
+- whether it consumes or changes any device state;
+- relationship to IOBYTE routing;
+- behavior when LIST is unimplemented;
+- whether exact status values are required or only a ready/not-ready
+  distinction.
+
+If documentation, DRI source, and distributed BIOS examples differ, preserve
+that distinction explicitly.
+
+
+13. LOGICAL VERSUS PHYSICAL CHARACTER DEVICES
+
+Investigation 018 established that BDOS dispatches to logical BIOS devices and
+that BIOS interprets optional IOBYTE routing.
+
+Investigation 020 should establish the BIOS side of that boundary.
+
+Determine:
+
+- whether BIOS entry points CONIN/CONOUT/READER/PUNCH/LIST/CONST/LISTST are
+  logical-device interfaces;
+- whether the BIOS may map several logical devices to one physical device;
+- whether one logical device may be dynamically routed among several physical
+  devices;
+- whether physical device names, UARTs, ports, baud rates, terminal types,
+  printers, etc. are outside the CP/M contract;
+- whether a BIOS may implement a logical device using something other than a
+  historical physical peripheral;
+- what observable behavior must nevertheless be preserved.
+
+Do not design BetterCP/M virtual devices here. Establish only the freedom the
+CP/M interface actually permits.
+
+
+14. CHARACTER-I/O RETURN AND REGISTER CONVENTIONS
+
+For each BIOS character service determine exactly which register values are
+documented:
+
+    CONST
+    CONIN
+    CONOUT
+    LIST
+    PUNCH
+    READER
+    LISTST
+
+Determine:
+
+- required input registers;
+- required result registers;
+- whether A versus HL conventions differ from BDOS;
+- whether any other registers are documented preserved;
+- whether flags are meaningful;
+- whether residual values observed in DRI/z80pack are portable.
+
+Do not infer register-preservation requirements from a single implementation.
+
+Classify undocumented residual state as NOT GUARANTEED where a ledger
+proposition is genuinely useful and not already covered elsewhere.
+
+
+15. BIOS CHARACTER-I/O STATE AND REENTRANCY
+
+Determine whether the BIOS character interface assumes global mutable state.
+
+Consider:
+
+- IOBYTE;
+- pending hardware characters;
+- device selection;
+- terminal/printer state;
+- interrupt-driven device buffers.
+
+Determine whether CP/M documents:
+
+- reentrant BIOS character calls;
+- nested calls;
+- interrupt-safe entry;
+- concurrent callers.
+
+Do not impose modern concurrency requirements on CP/M 2.2.
+
+If no such contract exists, state that carefully without overgeneralizing
+beyond the evidence.
+
+
+16. BIOS DIRECT CALLS BY APPLICATIONS
+
+Determine whether CP/M 2.2 explicitly permits transient programs to call BIOS
+directly.
+
+If so, establish:
+
+- documented method for locating BIOS;
+- which BIOS entry points are intended to be callable;
+- what calling conventions applications may rely upon;
+- whether direct BIOS calls bypass BDOS semantics intentionally;
+- portability limitations;
+- whether BIOS calls are hardware/configuration dependent even when their
+  calling convention is standardized.
+
+This question is important for BetterCP/M compatibility because historical
+software may bypass BDOS.
+
+Do not assume that "applications should normally use BDOS" means direct BIOS
+calls are forbidden if DRI documentation explicitly provides a method.
+
+
+17. CONTROLLED BIOS CHARACTER-I/O FIXTURE
+
+Construct deterministic instrumentation, if necessary, to observe the
+boundary between BDOS and the BIOS character calls.
+
+Where practical capture:
+
+    CONST calls and results
+    CONIN calls and returned characters
+    CONOUT characters
+    READER returned characters
+    PUNCH characters
+    LIST characters
+    LISTST calls and results
+
+Use controlled input queues and output logs rather than manually timed
+keyboard interaction.
+
+The fixture should allow distinctions such as:
+
+- CONST followed by CONIN;
+- pending console character preservation;
+- raw BIOS character versus BDOS-transformed behavior;
+- TAB passed to CONOUT versus BDOS TAB expansion;
+- Ctrl-P handling above versus below BIOS;
+- direct LIST versus printer-echo LIST;
+- READER versus CONIN separation;
+- IOBYTE logical routing where practical.
+
+Preserve and delegate the real BIOS where possible.
+
+
+18. CONTROLLED BOOT/WBOOT OBSERVATION
+
+If practical without destabilizing the reference environment, instrument or
+otherwise deterministically observe cold-boot and warm-boot behavior.
+
+Record, where possible:
+
+- BIOS entry sequence;
+- page-zero contents before/after;
+- IOBYTE;
+- default drive byte;
+- BDOS vector;
+- WBOOT vector;
+- DMA state where observable;
+- selected/current drive;
+- whether CCP is reloaded;
+- whether BDOS/BIOS are reloaded;
+- final transfer of control.
+
+Do not modify the system merely to force an answer that documentation/source
+analysis already establishes.
+
+If cold boot cannot be safely instrumented with the same fixture, use source
+analysis and a separately controlled boot trace and document the limitation.
+
+
+19. WARM-BOOT DAMAGE/RESTORATION TEST
+
+If documentation indicates WBOOT reconstructs page zero, construct a
+controlled test where practical.
+
+For example, preserve original values, deliberately alter selected page-zero
+bytes that WBOOT is documented to restore, invoke warm boot, and observe the
+result.
+
+Do NOT corrupt disk/system structures unnecessarily.
+
+Do NOT test arbitrary undocumented destruction.
+
+The purpose is to distinguish a documented restoration contract from
+incidental persistence.
+
+
+20. DRI SOURCE ANALYSIS
+
+Trace DRI CCP/BDOS and distributed BIOS material sufficiently to establish:
+
+- BIOS jump-table assumptions;
+- direct calls to CONST/CONIN/CONOUT/LIST/PUNCH/READER/LISTST;
+- boot/warm-boot control flow;
+- page-zero reconstruction;
+- IOBYTE handling;
+- logical-device assumptions;
+- return-value assumptions.
+
+Do not produce a general line-by-line BIOS commentary.
+
+Analyze only what is needed to resolve Investigation 020.
+
+
+EVIDENCE DISCIPLINE
+
+Use the established evidence hierarchy and terminology inside the
+investigation report.
+
+Where useful, distinguish:
+
+    A — documented CP/M 2.2 application/BIOS interface
+    B — DRI CP/M 2.2 source behavior
+    I — incidental/reference-environment observation
+    D — unresolved BetterCP/M policy
+
+These are evidence CLASSES inside the investigation report.
+
+They are NOT Compatibility Ledger source abbreviations.
+
+Do not put bare A, B, I, or D evidence-class labels into proposed ledger
+Evidence fields.
+
+For proposed ledger entries identify actual sources such as:
+
+    I020
+    AG
+    IG
+    BDOS
+    CCP
+
+and specifically identified BIOS/distribution source where appropriate.
+
+
+PRIMARY SOURCES
+
+At minimum consult, where relevant:
+
+- Digital Research CP/M 2.2 Alteration Guide;
+- Digital Research CP/M 2.0 Interface Guide;
+- original DRI CP/M 2.2 BDOS source;
+- original DRI CP/M 2.2 CCP source;
+- relevant DRI distributed BIOS/CBIOS source and comments;
+- existing BetterCP/M Investigations 001-019;
+- current Compatibility Ledger.
+
+The Alteration Guide should be particularly important for the BIOS jump-table,
+boot, and physical/logical character-device interface.
+
+Do not treat emulator documentation as authoritative CP/M specification
+evidence.
+
+Emulator source/documentation may be used to understand the fixture and must
+be classified accordingly.
+
+
+REFERENCE-ENVIRONMENT LIMITATIONS
+
+The stock z80pack environment may have:
+
+- particular console hardware;
+- no meaningful physical READER or PUNCH;
+- LIST mapped to a convenient emulator service;
+- particular IOBYTE support;
+- particular boot-loading mechanics;
+- particular BIOS addresses;
+- particular interrupt behavior.
+
+None becomes a universal CP/M 2.2 requirement merely because it is observed.
+
+Use controlled BIOS instrumentation where necessary to expose logical
+interfaces that the host configuration otherwise hides.
+
+If a distinction cannot be tested without disproportionate modification,
+document the limitation instead.
+
+
+EXPERIMENTAL REQUIREMENTS
+
+All experiments must be deterministic and reproducible.
+
+Prefer automated harnesses and queued character input over manually timed
+interaction.
+
+Where BIOS instrumentation is necessary:
+
+- preserve the original BIOS/system image;
+- make the smallest practical test-fixture modification;
+- document every modification;
+- preserve modified source/binary;
+- preserve hashes;
+- delegate original behavior wherever practical;
+- ensure logging does not change the semantics being measured.
+
+Record raw evidence separately from interpretation.
+
+Preserve probe source and rebuilt COM binaries.
+
+Verify byte-identical rebuilds where practical.
+
+
+COMPATIBILITY CLASSIFICATION
+
+For every proposed compatibility proposition classify it as:
+
+    REQUIRED
+    POLICY PENDING
+    NOT REQUIRED
+    NOT GUARANTEED
+
+Apply these conservatively.
+
+Be particularly cautious about:
+
+- exact BIOS base address;
+- exact implementation routine addresses;
+- exact UART/port/device assignments;
+- exact terminal behavior;
+- exact boot loader mechanism;
+- exact CCP reload mechanism;
+- exact interrupt state;
+- exact residual register values;
+- exact physical device readiness timing;
+- exact BIOS-private buffers;
+- exact call counts;
+- z80pack-specific device mappings.
+
+Do not classify these as REQUIRED unless primary evidence establishes a CP/M
+compatibility requirement.
+
+
+BETTERCP/M RELEVANCE
+
+Investigation 020 is expected to define much of the remaining legacy BIOS
+surface that BetterCP/M may need to reproduce.
+
+Nevertheless, do NOT design BetterCP/M BIOS implementation in this
+investigation.
+
+Do not decide:
+
+- how HyperCP/M implements consoles;
+- how virtual terminals are multiplexed;
+- how host keyboard input is delivered;
+- how network devices map to READER/PUNCH/LIST;
+- how the VRM implements warm boot;
+- how sessions virtualize BIOS state.
+
+First establish the CP/M 2.2 contract.
+
+Where CP/M leaves implementation freedom, record that freedom explicitly.
+
+
+PROPOSED COMPATIBILITY LEDGER ADDITIONS
+
+The authoritative Ledger 019 currently ends at:
+
+    0460
+
+Therefore Investigation 020 proposals, if any, begin at:
+
+    0461
+
+Do not modify the Compatibility Ledger.
+
+Include a report section:
+
+    Proposed Compatibility Ledger additions
+
+containing only genuinely new compatibility propositions established by
+Investigation 020.
+
+Do not duplicate existing propositions merely because Investigation 020
+provides lower-level evidence.
+
+If Investigation 020 strengthens evidence for an existing entry, identify it
+separately as a proposed evidence update.
+
+If Investigation 020 shows an existing entry is wrong, incomplete, or
+overstated, identify the affected entry explicitly and propose the correction.
+Do not silently replace it.
+
+Each proposed entry should be suitable for conversion to the established
+ledger format:
+
+    NNNN. Short title
+
+        Description.
+
+        Disposition: REQUIRED / POLICY PENDING /
+                     NOT REQUIRED / NOT GUARANTEED
+
+        Evidence:    I020; AG section ...; BDOS; ...
+
+        Conformance: Independently testable statement.
+
+Use actual source references in Evidence.
+
+Do not use A/B/I/D evidence-class letters as ledger source abbreviations.
+
+
+REPORT STRUCTURE
+
+Create:
+
+    Investigation 020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO
+    Semantics.md
+
+Use the organization and evidentiary discipline of Investigations 015-019.
+
+Include at least:
+
+1. Objective and scope
+2. Method and evidence classification
+3. Documented BIOS jump-table contract
+4. BIOS-base discovery and direct-call interface
+5. BOOT findings
+6. WBOOT findings
+7. Page-zero reconstruction findings
+8. Character-device BIOS findings
+9. DRI CCP/BDOS/source findings
+10. Experimental design
+11. Experimental results
+12. Logical-versus-physical character-device conclusions
+13. Compatibility conclusions
+14. Proposed Compatibility Ledger additions (not applied)
+15. Proposed corrections/evidence updates to existing ledger entries,
+    if any
+16. Incomplete and unresolved cases
+17. Artifact and preservation audit
+18. Sources
+
+Add subsections where needed for individual BIOS calls.
+
+
+ARTIFACT DIRECTORY
+
+Create a new Investigation 020 directory and an appropriate probes/
+subdirectory.
+
+Preserve all newly created material needed to reproduce the investigation,
+including as applicable:
+
+- probe source;
+- COM binaries;
+- BIOS instrumentation source;
+- modified test-fixture BIOS/system image;
+- assembler listings;
+- deterministic harness;
+- input queues;
+- raw console transcript;
+- BIOS call trace;
+- boot/warm-boot trace;
+- page-zero before/after dumps;
+- derived/parsed observations;
+- build instructions;
+- run instructions;
+- SHA-256 records;
+- emulator/version/commit identification.
+
+Do not overwrite artifacts from previous investigations.
+
+
+PRESERVATION AUDIT
+
+Before beginning:
+
+- hash the authoritative Compatibility Ledger;
+- record the hash;
+- identify the reference emulator/version/commit;
+- hash any pre-existing system/disk images that will be copied or used;
+- record hashes of previous files if necessary to demonstrate they remain
+  untouched.
+
+At completion:
+
+- hash the authoritative Compatibility Ledger again;
+- verify byte-for-byte identity;
+- verify no previous investigation was modified;
+- verify no architecture/roadmap file was modified;
+- record hashes of all new source/binary artifacts;
+- rebuild probes/instrumentation where practical;
+- verify reproducibility;
+- preserve raw evidence separately from interpretation.
+
+If the authoritative ledger hash changes, stop and investigate rather than
+accepting the change.
+
+
+COMPLETION REPORT
+
+When Investigation 020 is complete, report succinctly:
+
+- files created;
+- number and kinds of artifacts;
+- experiments performed;
+- principal jump-table findings;
+- principal BOOT/WBOOT findings;
+- principal character-device findings;
+- principal DRI source findings;
+- important logical-versus-physical device distinctions;
+- any POLICY PENDING questions;
+- proposed corrections/evidence updates to existing ledger entries;
+- proposed new ledger-entry range;
+- authoritative ledger SHA-256 before and after;
+- confirmation that the Compatibility Ledger and all other pre-existing
+  BetterCP/M files remained unchanged;
+- primary documentation reviewed.
+
+
+IMPORTANT CONSTRAINTS
+
+Do not modify the Compatibility Ledger.
+
+Do not modify BetterCP/M implementation code.
+
+Do not modify earlier investigations.
+
+Do not modify architecture or roadmap documents.
+
+Do not create or update a project ZIP unless explicitly requested.
+
+Do not turn z80pack device assignments into CP/M requirements.
+
+Do not turn BIOS implementation addresses into compatibility requirements.
+
+Do not confuse BDOS console semantics with BIOS character primitives.
+
+Do not assume BIOS performs Ctrl-C, Ctrl-S, Ctrl-P, TAB expansion, echo,
+column tracking, or line editing unless evidence establishes that behavior
+at BIOS level.
+
+Do not assume a physical READER, PUNCH, or LIST peripheral must exist.
+
+Do not assume cold/warm boot must reproduce a historical floppy-loading
+mechanism.
+
+Do not infer reentrancy or modern concurrency requirements.
+
+Do not use A/B/I/D evidence-class letters as Compatibility Ledger source
+abbreviations.
+
+Do not duplicate existing ledger propositions merely because Investigation
+020 supplies deeper BIOS-level explanation.
+
+
+FINAL GOAL
+
+Investigation 020 should answer this question precisely:
+
+    What non-disk BIOS interface does CP/M 2.2 require, what boot and
+    warm-start state does that interface establish, and how much freedom
+    does a BIOS retain in implementing the logical character devices and
+    underlying hardware?
+
+Together with Investigation 019, the result should define the CP/M 2.2 BIOS
+boundary rigorously enough that a future BetterCP/M implementation can
+reproduce the required legacy interface without unnecessarily reproducing
+DRI's particular BIOS implementation or historical peripheral hardware.

@@ -1,0 +1,8 @@
+Run from this directory:
+
+    chmod +x build.sh run027.exp
+    ./build.sh
+
+Assembler: z80asm, Release 2.1.
+Compare resulting binaries against rebuild.sha256.
+

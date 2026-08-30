@@ -1,0 +1,113 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 18:17:47 2026	Page 1
+Source file: DPB26.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1         ORG 100H
+0100  31 1f 02         2      2         LD SP,STACK
+0103  21 74 01         3      3         LD HL,BAN
+0106  cd 1f 02         4      4         CALL PUTS
+0109  1e 00            5      5         LD E,0
+010b  0e 0e            6      6         LD C,14
+010d  cd 05 00         7      7         CALL 5
+0110  21 90 01         8      8         LD HL,LA
+0113  cd 1f 02         9      9         CALL PUTS
+0116  cd 50 01        10     10         CALL PTRS
+0119  1e 01           11     11         LD E,1
+011b  0e 0e           12     12         LD C,14
+011d  cd 05 00        13     13         CALL 5
+0120  21 93 01        14     14         LD HL,LB
+0123  cd 1f 02        15     15         CALL PUTS
+0126  cd 50 01        16     16         CALL PTRS
+0129  21 96 01        17     17         LD HL,LX
+012c  cd 1f 02        18     18         CALL PUTS
+012f  0e 27           19     19         LD C,39
+0131  11 34 12        20     20         LD DE,1234H
+0134  cd 05 00        21     21         CALL 5
+0137  cd 46 02        22     22         CALL HEXW
+013a  cd 37 02        23     23         CALL SPACE
+013d  0e 29           24     24         LD C,41
+013f  11 78 56        25     25         LD DE,5678H
+0142  cd 05 00        26     26         CALL 5
+0145  cd 46 02        27     27         CALL HEXW
+0148  cd 3c 02        28     28         CALL CRLF
+014b  0e 00           29     29         LD C,0
+014d  c3 05 00        30     30         JP 5
+0150  0e 1b           31     31 PTRS:   LD C,27
+0152  cd 05 00        32     32         CALL 5
+0155  cd 46 02        33     33         CALL HEXW
+0158  cd 37 02        34     34         CALL SPACE
+015b  0e 1f           35     35         LD C,31
+015d  cd 05 00        36     36         CALL 5
+0160  e5              37     37         PUSH HL
+0161  cd 46 02        38     38         CALL HEXW
+0164  cd 37 02        39     39         CALL SPACE
+0167  e1              40     40         POP HL
+0168  06 0f           41     41         LD B,15
+016a  7e              42     42 PLOOP:  LD A,(HL)
+016b  23              43     43         INC HL
+016c  cd 4b 02        44     44         CALL HEXB
+016f  10 f9           45     45         DJNZ PLOOP
+0171  c3 3c 02        46     46         JP CRLF
+0174  44 50 42 32     47     47 BAN:    DB 'DPB26 drive alv dpb bytes',13,10,0
+0178  36 20 64 72     47     48
+017c  69 76 65 20     47     49
+0180  61 6c 76 20     47     50
+0184  64 70 62 20     47     51
+0188  62 79 74 65     47     52
+018c  73 0d 0a 00     47     53
+0190  41 20 00        48     54 LA:     DB 'A ',0
+0193  42 20 00        49     55 LB:     DB 'B ',0
+0196  46 33 39 2f     50     56 LX:     DB 'F39/F41 ',0
+019a  46 34 31 20     50     57
+019e  00              50     58
+019f                  51     59         DS 128
+021f                  52     60 STACK:
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 18:17:47 2026	Page 2
+Source file: DPB26.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+021f  7e              53     61 PUTS:   LD A,(HL)
+0220  23              54     62         INC HL
+0221  b7              55     63         OR A
+0222  c8              56     64         RET Z
+0223  5f              57     65         LD E,A
+0224  cd 29 02        58     66         CALL PUTC
+0227  18 f6           59     67         JR PUTS
+0229  f5              60     68 PUTC:   PUSH AF
+022a  c5              61     69         PUSH BC
+022b  d5              62     70         PUSH DE
+022c  e5              63     71         PUSH HL
+022d  0e 02           64     72         LD C,2
+022f  cd 05 00        65     73         CALL 5
+0232  e1              66     74         POP HL
+0233  d1              67     75         POP DE
+0234  c1              68     76         POP BC
+0235  f1              69     77         POP AF
+0236  c9              70     78         RET
+0237  1e 20           71     79 SPACE:  LD E,' '
+0239  c3 29 02        72     80         JP PUTC
+023c  1e 0d           73     81 CRLF:   LD E,13
+023e  cd 29 02        74     82         CALL PUTC
+0241  1e 0a           75     83         LD E,10
+0243  c3 29 02        76     84         JP PUTC
+0246  7c              77     85 HEXW:   LD A,H
+0247  cd 4b 02        78     86         CALL HEXB
+024a  7d              79     87         LD A,L
+024b  f5              80     88 HEXB:   PUSH AF
+024c  0f              81     89         RRCA
+024d  0f              82     90         RRCA
+024e  0f              83     91         RRCA
+024f  0f              84     92         RRCA
+0250  cd 54 02        85     93         CALL NIB
+0253  f1              86     94         POP AF
+0254  e6 0f           87     95 NIB:    AND 0FH
+0256  c6 30           88     96         ADD A,'0'
+0258  fe 3a           89     97         CP '9'+1
+025a  38 02           90     98         JR C,NOUT
+025c  c6 07           91     99         ADD A,7
+025e  5f              92    100 NOUT:   LD E,A
+025f  c3 29 02        93    101         JP PUTC
+                      94    102
+0262                  95    103         END

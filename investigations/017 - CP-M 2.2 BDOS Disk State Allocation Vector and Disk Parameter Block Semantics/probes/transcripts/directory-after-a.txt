@@ -1,0 +1,16 @@
+     Name    Bytes   Recs  Attr     update             create
+------------ ------ ------ ---- -----------------  -----------------
+ATTR    .DAT     1K      1    
+BIG     .DAT    17K    130    
+BLOCK016.COM     1K      3    
+BUF006  .COM     2K     10    
+CLOSEME .DAT     1K      1    
+DIO004  .COM     1K      4    
+DSKFILE .DAT     1K      1    
+IN005   .COM     1K      5    
+OUT003  .COM     1K      1    
+ROFILE  .DAT     1K      1 R  
+SCRL016 .COM     1K      1    
+STATE017.COM     2K      8    
+SYS016  .COM     2K      8    
+   13 Files occupying     32K,     209K Free.

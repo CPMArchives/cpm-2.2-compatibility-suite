@@ -1,0 +1,17 @@
+field	requirement	definition
+campaign_id	required	Campaign foreign key.
+run_id	required	Unique execution identifier.
+test_id	required	Frozen parent identifier.
+case_id	required	Frozen proposition-level case identifier.
+case_version	required	Case specification version.
+oracle_id	required	Oracle foreign key.
+oracle_version	required	Oracle specification version.
+result	required	PASS, FAIL, BLOCKED, NOT_APPLICABLE, or ERROR.
+observed	required	Normalized observation plus raw artifact references.
+artifact_hashes	required	SHA-256 references for every accepted artifact.
+dependency_run_ids	required	Run IDs of prerequisite results.
+failure_class	required if non-PASS	PRODUCT, FIXTURE, ENVIRONMENT, FRAMEWORK, or UNRESOLVED.
+exit_status	required	Runner and tool exit statuses.
+started_utc	required	UTC start time.
+completed_utc	required	UTC completion time.
+reviewer	required for manual cases	Reviewer identity and decision.

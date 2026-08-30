@@ -1,0 +1,19 @@
+c749f24ecc761b255f9da3824ae4a3144fd3d485b691993e279920bc0c917c00  ./Investigation 060 - CP-M 2.2 Compatibility Engineering Gap Assessment.md
+22da9d5d6a84b1bb0935226899143299b3a93e9df4ff0fda5292e001dbd135af  ./probes/README.txt
+533cf8ffe6e8611a205c1c44313aafd675e5ff4c92e421f5e1a23f2ff8667057  ./probes/classification-summary.txt
+a29b96d1b502454b65d516e854277f924c4bc7b7bc8fc59a92af47af1b237bd5  ./probes/conformance-test-inventory.tsv
+0a9e97d33305388e182eee9159166aa87ccc994cc683248aefd0a7ba017a7065  ./probes/duplicate-ledger-audit.tsv
+c260785abf9710f872de5d31168423214448ee7308bc5510e092415319a536e8  ./probes/evidence-review-summary.tsv
+bb9c07c7c9896c3c6029de6aff255856f452784e0f8110bb406f3501990bd78f  ./probes/gap-assessment-matrix.tsv
+1aa82c5d4194bb6bf76a63a667026d3ffc476d44793cb3d30337048d97edd538  ./probes/generate-ledger-gap-audits.awk
+32a9f30f54864c10613b925ce723ec17139d92835554c5ef6dd20c348ed86c55  ./probes/ledger-sha256-after.txt
+32a9f30f54864c10613b925ce723ec17139d92835554c5ef6dd20c348ed86c55  ./probes/ledger-sha256-before.txt
+518cd166ec46e3946c247dd9ebaf29f5de4e060eaba07fcc366992c0552e5b22  ./probes/ledger-test-traceability.tsv
+2627ab8d684a8a3c946258bbc46d9a14795fdb149a7f71ce2fc3dc3aa80325c6  ./probes/policy-pending-inventory.tsv
+7b14b64cf6c62ee0aa45d11b09589bb2f8d3025df53b4eeaad6b1c9339fa02af  ./probes/protected-files-audit.txt
+c7a9a6e72420ed85c8e1c636a51f04d3ffb6acffc34aa571bc1094089ff310b0  ./probes/recommended-investigations.tsv
+64999b3b35477ee6b20edbc7e78686c5da046492068e4af340fa65b4669524e3  ./probes/release-gates.tsv
+aa413d0dca3e227aa7d7ae3f16fbcea4e639f1697c07310e5a978ca97b46fc37  ./probes/software-corpus-records.tsv
+f3e04dc970816a48be1ee9e480c98b0cbbd54e7a47245d0dbc567a9f9a19031d  ./probes/undocumented-behavior-inventory.tsv
+5f53fc53cf223d606d183c104bdf2415dc5a929f40e1eaf234c200b3877e2ccb  ./probes/validate060.sh
+2fecee759f97843d90839a80402fad0ff45d8ebe0d5ff16066ce184b600d2455  ./probes/validation-audit.txt

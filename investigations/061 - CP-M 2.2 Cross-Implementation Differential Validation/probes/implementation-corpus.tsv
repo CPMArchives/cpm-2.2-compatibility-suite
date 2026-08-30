@@ -1,0 +1,5 @@
+id	implementation	version	platform	archive_or_image	evidence	role
+DRI-CRO	Digital Research CP/M	2.2	Cromemco Z-1 64K, z80pack simulator 1.39/1.19	z80pack/cromemcosim/disks/library/cpm22.dsk	signon; image hash; full transcript	primary reference
+CDOS258	Cromemco CDOS	2.58	Cromemco Z-1 64K, same simulator/hardware	z80pack/cromemcosim/disks/library/cdos258_8.dsk	signon; image hash; full transcript	primary independent compatible family
+CDOS236	Cromemco CDOS	2.36	Cromemco Z-1 64K, same simulator/hardware	z80pack/cromemcosim/disks/library/cdos236_8.dsk	signon; screening transcript; image hash	screened boundary; excluded from CP/M 2.2 contract comparison
+

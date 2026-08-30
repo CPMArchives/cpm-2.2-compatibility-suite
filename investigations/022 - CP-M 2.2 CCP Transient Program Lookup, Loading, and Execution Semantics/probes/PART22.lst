@@ -1,0 +1,42 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sat Aug 15 20:57:14 2026	Page 1
+Source file: stage022/probes/PART22.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Short host file. CP/M stores/loads one full record; print the last byte of
+                       2      2 ; that loaded record to expose fixture padding without claiming it universal.
+                       3      3         ORG 0100H
+0100  11 36 01         4      4         LD DE,MSG
+0103  0e 09            5      5         LD C,9
+0105  cd 05 00         6      6         CALL 5
+0108  3a 7f 01         7      7         LD A,(017FH)
+010b  cd 1d 01         8      8         CALL HEX
+010e  1e 0d            9      9         LD E,13
+0110  0e 02           10     10         LD C,2
+0112  cd 05 00        11     11         CALL 5
+0115  1e 0a           12     12         LD E,10
+0117  0e 02           13     13         LD C,2
+0119  cd 05 00        14     14         CALL 5
+011c  c9              15     15         RET
+011d  f5              16     16 HEX:   PUSH AF
+011e  0f              17     17         RRCA
+011f  0f              18     18         RRCA
+0120  0f              19     19         RRCA
+0121  0f              20     20         RRCA
+0122  cd 26 01        21     21         CALL NIB
+0125  f1              22     22         POP AF
+0126  e6 0f           23     23 NIB:   AND 0FH
+0128  c6 30           24     24         ADD A,'0'
+012a  fe 3a           25     25         CP '9'+1
+012c  38 02           26     26         JR C,OUT
+012e  c6 07           27     27         ADD A,7
+0130  5f              28     28 OUT:   LD E,A
+0131  0e 02           29     29         LD C,2
+0133  c3 05 00        30     30         JP 5
+0136  50 41 52 54     31     31 MSG:   DB 'PART22 byte at 017F=$'
+013a  32 32 20 62     31     32
+013e  79 74 65 20     31     33
+0142  61 74 20 30     31     34
+0146  31 37 46 3d     31     35
+014a  24              31     36
+014b                  32     37         END

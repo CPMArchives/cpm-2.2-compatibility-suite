@@ -1,0 +1,115 @@
+Investigation 042 observed output
+=================================
+
+Environment
+-----------
+z80pack cpmsim Release 1.39; 64K CP/M 2.2; Z80 CBIOS V1.2.
+Every run began from restored reference images with deterministic fixtures and
+no manually typed input. Complete sessions are under transcripts/.
+
+1. DRI assembler/load/transient workflow
+Purpose: Exercise the common development path from source file to executable.
+Procedure: Run ASM B:HELLO42, LOAD B:HELLO42, then B:HELLO42.
+Observed: ASM 2.0 completed at 0114h; LOAD reported 0100h-0113h, wrote one
+record; the resulting transient printed "HELLO42 OK" and returned to CCP.
+Conclusion: The software relied on CCP command parsing and explicit-drive
+lookup, the 0100h COM origin, default FCB/tail preparation, BDOS file services,
+CALL 0005h, and the supplied return/warm-start environment. These are already
+documented REQUIRED interfaces.
+
+2. DRI PIP/STAT/DUMP file workflow
+Purpose: Exercise file parsing, copying, enumeration, sizing, and sequential read.
+Procedure: Copy the source with PIP, query it with STAT, and dump it with DUMP.
+Observed: COPY42.ASM was created on B; STAT reported two records/1K; DUMP showed
+the exact CRLF source bytes, Ctrl-Z at 0090h, and record padding. COPY42.ASM and
+the later SUB42.ASM copy were byte-identical.
+Conclusion: FCB parsing, explicit-drive behavior, search, DMA, sequential I/O,
+and 128-byte record semantics are practical dependencies already covered by the
+ledger. Text tools interpret CR/LF and 1Ah, while BDOS remains byte-transparent.
+
+3. DRI ED text-file workflow
+Purpose: Exercise buffered console input, text editing, file creation, and close.
+Procedure: Start ED B:EDIT42.TXT, insert ALPHA42, terminate insertion with Ctrl-Z,
+exit with E, and dump the result.
+Observed: ED reported NEW FILE; EDIT42.TXT contained ALPHA42 CR LF followed by
+1Ah through the remainder of its 128-byte record. ED left a zero-length BAK entry
+for this new-file case in the reference implementation.
+Conclusion: Console editing, file lifecycle, 128-byte records, CR/LF, and 1Ah
+text conventions are ecosystem-visible. The empty BAK implementation artifact
+is not promoted to an operating-system requirement.
+
+4. Missing-file failures
+Purpose: Verify ordinary tool failures do not require invented input or data.
+Procedure: Run ASM B:MISSING and attempt a PIP copy from B:MISSING.TXT.
+Observed: ASM printed NO SOURCE FILE PRESENT; PIP printed NO FILE. PIP left a
+zero-length NOFILE.$$$ temporary directory entry in this DRI run.
+Conclusion: Applications rely on documented BDOS failure results and recover to
+CCP. Exact utility wording and leftover temporary-file policy are NOT REQUIRED.
+
+5. DDT page-zero and restart use
+Purpose: Exercise an unusual but historically important debugger path.
+Procedure: Run DDT, dump 0000h-0007h, then execute G0.
+Observed: DDT displayed valid JMP WBOOT and JMP BDOS bytes, and G0 returned to a
+usable A> prompt.
+Conclusion: Debuggers rely on documented page-zero visibility and programmed
+restart. Exact DDT/SID private state is not an OS contract.
+
+6. SUBMIT/XSUB command lifecycle
+Purpose: Exercise DRI batch command acquisition and BDOS gateway interposition.
+Procedure: SUBMIT RUN42 on A. The file invokes XSUB, IN42, supplies BATCH42 as
+IN42's Function-10 input, then runs STAT, PIP, DUMP, and HELLO42. The harness
+waits for the final HELLO42 marker.
+Observed: CCP automatically executed the command stream across transient
+returns. XSUB supplied `BATCH42` to IN42 without interactive input, producing
+`count=07 data=BATCH42`; PIP created SUB42.ASM; the final transient printed the
+marker; A:$$$.SUB was gone at completion.
+Conclusion: DRI-compatible submitted-command execution and cleanup are a
+historically supported CCP ecosystem behavior. XSUB additionally depends on the
+writable/chained gateway class established by I041.
+
+7. Independent-vendor and development-tool startup
+Purpose: Confirm representative executables can be found, loaded at the standard
+entry environment, and reach their own command interfaces.
+Procedure: In isolated fresh emulator sessions start M80, L80, MAC, RMAC,
+Z80ASM, SLRNK, WM, SDIR, SID, and ZSID; stop the emulator after capture.
+Observed: Microsoft L80 identified itself and reached '*'; M80 reached '*'; DRI
+MAC/RMAC reported their missing-source result; SLR Z80ASM and SLRNK identified
+themselves and reached '%'; MicroPro WordMaster identified itself and returned
+NO FILE NAME; SDIR enumerated the controlled disk; SID/ZSID reached '#'.
+Conclusion: Standard CCP loading, 0100h entry, page-zero environment, console,
+and file services support software from multiple vendors. Startup alone does not
+prove every feature or make terminal-specific behavior universal.
+
+8. Executable pattern screening
+Purpose: Find direct evidence leads across the preserved executable corpus.
+Procedure: Scan 19 named COM files for exact byte sequences corresponding to
+CALL/JP 0005h, JP/CALL 0000h, and loads from 0006h/0001h. Treat matches as leads,
+because operands may occur in data.
+Observed: 17/19 contained literal CALL 0005h, 10/19 contained JP 0000h, 12/19
+contained LD HL,(0006h), and 3/19 contained LD HL,(0001h). DRI source confirms
+the public-gateway and memory-ceiling uses; Microsoft M80/L80 and MicroPro WM
+also contained the 0006h load pattern.
+Conclusion: Independent software strongly reinforces public gateway, restart,
+and configured-memory-ceiling compatibility. The screen does not justify private
+entry points or a claim about unmatched executables.
+
+Controlled matrix
+-----------------
+Documented API: ASM/LOAD, ED, PIP, STAT, DUMP and HELLO42.
+Common undocumented/de facto: CRLF/1Ah text files and utility temporary names.
+Direct system access: DDT page zero and XSUB gateway interposition.
+Unusual/historical: SUBMIT/XSUB, debugger restart, Microsoft/MicroPro/SLR tools.
+Failure: missing ASM input and missing PIP source.
+
+Disk results
+------------
+Drive A and B changed only inside disposable case images. Expected changes were
+assembler/listing/COM output, PIP copies, ED output/backup entry, failed-PIP
+temporary entry, and the creation/consumption of A:$$$.SUB. Exact hashes are in
+transcripts/images-before.sha256 and images-after.sha256.
+
+Coverage limitations
+--------------------
+No compiler, database package, communications package, or game with adequate
+provenance and deterministic fixtures was present in the controlled corpus.
+No compatibility claim for those categories is made from an unperformed test.

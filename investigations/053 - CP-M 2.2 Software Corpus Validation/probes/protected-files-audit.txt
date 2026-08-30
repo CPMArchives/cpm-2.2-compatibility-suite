@@ -1,0 +1,10 @@
+INVESTIGATION 053 PROTECTED-FILES AUDIT
+
+The SHA-256 manifest of every pre-existing file under
+<project-root>, excluding the new Investigation 053 directory,
+was generated before installation and regenerated after installation.
+
+Result: byte-identical manifests; no existing BetterCP/M file changed.
+
+The authoritative ledger hash before and after was:
+f47a0d01ab3163faf8ca85cd018b8916969f6c5087758071a1e1159bfcef9e94

@@ -1,0 +1,54 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set timeout 60
+log_file -noappend $logfile
+spawn cpmsim -z -d $diskdir
+expect "A>"
+
+# ASM and LOAD: explicit-drive source, generated object/COM, and execution.
+send "ASM B:HELLO42\r"
+expect "A>"
+send "LOAD B:HELLO42\r"
+expect "A>"
+send "B:HELLO42\r"
+expect "A>"
+
+# PIP and STAT: file copy/search plus a drive-allocation query.
+send "PIP B:COPY47.ASM=B:HELLO42.ASM\r"
+expect "A>"
+send "STAT B:COPY47.ASM\r"
+expect "A>"
+send "STAT B:\r"
+expect "A>"
+
+# ED: buffered console input, one-record text file, and durable close.
+send "ED B:EDIT47.TXT\r"
+expect "*"
+send "I\rALPHA47\r\032"
+expect "*"
+send "E\r"
+expect "A>"
+send "STAT B:EDIT47.TXT\r"
+expect "A>"
+
+# Error paths: missing ASM input and missing PIP source.
+send "ASM B:MISSING\r"
+expect "A>"
+send "PIP B:NOFILE.TXT=B:MISSING.TXT\r"
+expect "A>"
+
+# DDT: inspect page zero and return through restart address 0000h.
+send "DDT\r"
+expect -- "-"
+send "D0,7\r"
+expect -- "-"
+send "G0\r"
+expect "A>"
+
+# SUBMIT invokes XSUB; XSUB supplies console input to IN42 and the job continues.
+send "SUBMIT RUN42\r"
+expect "HELLO42 OK"
+expect "A>"
+send "\034"
+expect eof

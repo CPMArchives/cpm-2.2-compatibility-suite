@@ -1,0 +1,25 @@
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 09:25:21 2026	Page 1
+Source file: SWITCH39.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Investigation 039: set CON=CRT encoding and warm restart.
+                       2      2         ORG 0100H
+0100  1e 01            3      3         LD E,01H
+0102  0e 08            4      4         LD C,8
+0104  cd 05 00         5      5         CALL 0005H
+0107  11 14 01         6      6         LD DE,MSG
+010a  0e 09            7      7         LD C,9
+010c  cd 05 00         8      8         CALL 0005H
+010f  0e 00            9      9         LD C,0
+0111  c3 05 00        10     10         JP 0005H
+0114  53 57 49 54     11     11 MSG:    DB 'SWITCH39 SET IOBYTE 01 THEN WBOOT',13,10,'$'
+0118  43 48 33 39     11     12
+011c  20 53 45 54     11     13
+0120  20 49 4f 42     11     14
+0124  59 54 45 20     11     15
+0128  30 31 20 54     11     16
+012c  48 45 4e 20     11     17
+0130  57 42 4f 4f     11     18
+0134  54 0d 0a 24     11     19
+0138                  12     20         END

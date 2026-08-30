@@ -1,0 +1,45 @@
+CREATE30
+ Purpose: creation lifecycle. Procedure: Make NEW.DAT; search; write; search;
+ Close; search; reopen/read. Observation: Make produced visible RC=0 entry;
+ pre-Close directory stayed RC=0; Close exposed RC=1; reopen read marker A.
+ Conclusion: Make activates an empty FCB; Close commits final working metadata.
+
+GROW30
+ Purpose: growth. Procedure: write 1, 3, 128 and 129 records.
+ Observation: CR/RC/allocation grew; record 128 prepared EX=1/CR=0; record 129
+ made extent 1 RC=1. Conclusion: sequential growth crosses extents automatically.
+
+EXTENT30
+ Purpose: extent lifecycle. Procedure: repeat boundary on normal and one-slot
+ directory. Observation: full extent persisted; next write returned 01 when a
+ new extent slot was unavailable. Conclusion: completed records remain valid;
+ failed extension adds no record.
+
+FCB30
+ Purpose: sequential/random FCB state. Procedure: random overwrite, append,
+ sparse extension, record-128 extension, size and reopen checks.
+ Observation: random writes set EX/S2/CR/RC/allocation for addressed records,
+ leave r0-r2 unchanged, and require Close; computed reopened size reflected
+ highest virtual record. Conclusion: public position/length fields are usable
+ as documented; private flags and exact allocation ordering are not.
+
+CLOSE30
+ Purpose: commit behavior. Procedure: compare search before/after Close and
+ deliberately omit Close for NOCLOSE.DAT. Observation: working FCB led directory
+ metadata before Close; unclosed file remained zero-length after restart.
+ Conclusion: successful writes do not replace required Close of final extent.
+
+OPEN30
+ Purpose: reconstruction. Procedure: Close NEW/MULTI/BIG then reopen/read.
+ Observation: Open reconstructed extent-zero working allocation/RC; sequential
+ access continued across persisted extents. Conclusion: applications may rely
+ on reopened content/length, not literal private FCB bytes from the writer.
+
+FAIL30
+ Purpose: failure transitions. Procedure: directory-full Make, allocation-full
+ first write, and next-extent creation with no directory slot.
+ Observation: Make FF on directory full; empty Make succeeded on data-full but
+ first write returned 02; record 128 succeeded and later record 129 returned 01
+ when no extent entry could be created. Conclusion: failures are operation-
+ local; exact 01/02 distinctions remain policy-sensitive where manuals promise
+ only nonzero failure.

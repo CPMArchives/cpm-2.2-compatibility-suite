@@ -1,0 +1,78 @@
+Investigation 015 accepted observations
+Date: 14 August 2026
+
+Environment
+-----------
+DRI CP/M 2.2, z80pack cpmsim/CBIOS 1.39, IBM-3740 image, and an
+investigation-local cpmsim build with one-shot physical fault injection.
+Port 18 value 1 fails the next physical FDC read with status 5; value 2 fails
+the next physical FDC write with status 6. The fault is disarmed immediately.
+The injected operation performs no host read/write or DMA transfer.
+
+Every mode began from a new copy of the same base image:
+9d07cd7d4954cdfff268ce7698b3faf393c25a1b4785de81ffdfbcf5f8fc5d77
+
+Cases
+-----
+N  normal sequential read control
+A  sequential read, next physical read fails, handler response x
+B  random read, next physical read fails, handler response x
+C  sequential write, next physical write fails, handler response x
+D  random write, next physical write fails, handler response x
+E  Make, next physical directory write fails, handler response x
+F  dirty-FCB Close, next physical directory write fails, handler response x
+G  sequential read physical failure, handler response control-C
+H  sequential write physical failure, handler response control-C
+I  logical sequential EOF control, no physical fault
+J  logical random unwritten-record control, no physical fault
+
+Results
+-------
+N returned 00 and DMA changed from the sentinel to ATTR.DAT marker 41.
+
+A printed "Bdos Err On A: Bad Sector". After x, Function 20 returned 00,
+advanced CR from 00 to 01, but DMA remained EE (no record was transferred).
+
+B printed the same diagnostic. After x, Function 33 returned 00; DMA remained
+EE. Random position remained record 0.
+
+C printed the diagnostic. After x, Function 21 returned 00 and advanced CR
+from 00 to 01, but the disk image remained byte-identical.
+
+D printed the diagnostic. After x, Function 34 returned 00, but the disk image
+remained byte-identical.
+
+E printed the diagnostic. After x, Function 22 returned directory code 03 and
+activated the in-memory FCB, but NEW015.DAT did not exist in the post-run
+directory and the image remained byte-identical.
+
+F printed the diagnostic. After x, Function 16 returned directory code 02,
+but the requested RC change was not persisted and the image remained
+byte-identical.
+
+G/H printed the diagnostic; control-C caused a warm boot to A>. Neither call
+printed RETURNED. Both images remained byte-identical.
+
+I returned 01 for sequential EOF with DMA still EE and no diagnostic.
+J returned 01 for an unwritten random record with DMA still EE and no
+diagnostic. These are normal BDOS logical return-code failures, unlike A-H.
+
+All eleven after images are byte-identical to their respective before images.
+This atomicity is a property of the one-shot pre-transfer injector, not a
+general claim that real physical write failures cannot partially alter media.
+
+Raw evidence
+------------
+cases/<mode>/ contains console.txt, before.sha256, after.sha256, and
+directory.txt. images-after/ contains each complete post-run image.
+
+Hashes
+------
+PHYS015.ASM  5d21b7fe1144a29789893d39fd1f56a55b04caaf174dff7ad23d723972bb3e5c
+PHYS015.COM  fd4f4d92f42dbed18f9e8ecaa6680f6661ee9ba03f4f1f45bad596073daa099a
+base image   9d07cd7d4954cdfff268ce7698b3faf393c25a1b4785de81ffdfbcf5f8fc5d77
+fault cpmsim 55c26df111af31e99cecdeeffd0a774ea71c6e0555d618e074e9ef954b303461
+simio.c      ccbe1bf06f5a36e62598f6de08e9851c9a17afd97bf81edfbb57221d9e8a0119
+
+The escape/color diagnostics after the final A> are cpmsim termination output,
+not CP/M BDOS output.

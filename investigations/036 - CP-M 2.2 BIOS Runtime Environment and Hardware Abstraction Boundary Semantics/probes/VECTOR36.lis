@@ -1,0 +1,51 @@
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:01:41 2026	Page 1
+Source file: VECTOR36.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Investigation 036 public-vector discovery snapshot.
+                       2      2         ORG 0100H
+0100  11 47 01         3      3         LD DE,MSG
+0103  0e 09            4      4         LD C,9
+0105  cd 05 00         5      5         CALL 5
+0108  21 00 00         6      6         LD HL,0
+010b  06 08            7      7         LD B,8
+010d  7e               8      8 LOOP:   LD A,(HL)
+010e  23               9      9         INC HL
+010f  e5              10     10         PUSH HL
+0110  c5              11     11         PUSH BC
+0111  cd 2e 01        12     12         CALL HEX
+0114  1e 20           13     13         LD E,' '
+0116  0e 02           14     14         LD C,2
+0118  cd 05 00        15     15         CALL 5
+011b  c1              16     16         POP BC
+011c  e1              17     17         POP HL
+011d  10 ee           18     18         DJNZ LOOP
+011f  1e 0d           19     19         LD E,13
+0121  0e 02           20     20         LD C,2
+0123  cd 05 00        21     21         CALL 5
+0126  1e 0a           22     22         LD E,10
+0128  0e 02           23     23         LD C,2
+012a  cd 05 00        24     24         CALL 5
+012d  c9              25     25         RET
+012e  f5              26     26 HEX:    PUSH AF
+012f  0f              27     27         RRCA
+0130  0f              28     28         RRCA
+0131  0f              29     29         RRCA
+0132  0f              30     30         RRCA
+0133  cd 37 01        31     31         CALL NIB
+0136  f1              32     32         POP AF
+0137  e6 0f           33     33 NIB:    AND 0FH
+0139  c6 30           34     34         ADD A,'0'
+013b  fe 3a           35     35         CP '9'+1
+013d  38 02           36     36         JR C,OUT
+013f  c6 07           37     37         ADD A,7
+0141  5f              38     38 OUT:    LD E,A
+0142  0e 02           39     39         LD C,2
+0144  c3 05 00        40     40         JP 5
+0147  56 45 43 54     41     41 MSG:    DB 'VECTOR36 PZ00-07: $'
+014b  4f 52 33 36     41     42
+014f  20 50 5a 30     41     43
+0153  30 2d 30 37     41     44
+0157  3a 20 24        41     45
+015a                  42     46         END

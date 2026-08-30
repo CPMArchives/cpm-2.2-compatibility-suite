@@ -1,0 +1,5 @@
+Purpose: valid/invalid USER and subsequent namespace behavior.
+Procedure: USER 1, DIR/TYPE SAME; USER 0, TYPE SAME; USER 16.
+Observed: commands inherited BDOS users and distinct content; USER 16 printed
+16? and retained a usable prompt.
+Conclusion: DRI resident USER accepts 0-15 and directly changes BDOS Function 32 state.

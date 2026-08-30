@@ -1,0 +1,276 @@
+Investigation 054 — CP/M 2.2 Undocumented Behavior Validation Prompt
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 053 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation 053.
+
+Create Investigation 054 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports or artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Determine which undocumented or de facto CP/M 2.2 behaviors should be
+considered part of the practical compatibility contract.
+
+Previous investigations established:
+
+- documented CP/M interfaces;
+- Digital Research implementation behavior;
+- utility compatibility;
+- development tool compatibility;
+- application compatibility;
+- communications compatibility;
+- hardware compatibility boundaries;
+- software corpus validation.
+
+Investigation 054 examines undocumented behavior discovered during the
+compatibility investigation process.
+
+Determine:
+
+- which undocumented behaviors have sufficient evidence to become
+  compatibility requirements;
+- which behaviors are historical implementation details;
+- which behaviors should remain unspecified.
+
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+- documented CP/M 2.2 behavior;
+- Digital Research implementation behavior;
+- common CP/M programming practices;
+- historically significant software dependencies.
+
+Do not assume undocumented behavior is required without evidence.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Review completed investigations through Investigation 053.
+
+Pay particular attention to:
+
+Investigation 041:
+    Direct System Access and Undocumented Application Interface
+    Compatibility Semantics.
+
+Investigation 042:
+    Common Software Compatibility Assumptions.
+
+Investigation 045:
+    Cross-Layer Compatibility Boundary Review.
+
+Investigation 046:
+    Compatibility Boundary Closure and Remaining Gap Analysis.
+
+Investigation 053:
+    Software Corpus Validation.
+
+
+SCOPE
+
+Investigate:
+
+- undocumented behaviors discovered by previous investigations;
+- de facto standards;
+- common software dependencies;
+- repeated implementation assumptions;
+- unresolved compatibility questions.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- BetterCP/M architecture;
+- new undocumented features;
+- implementation preferences;
+- behaviors with no compatibility evidence.
+
+
+INVESTIGATION QUESTIONS
+
+
+1. UNDOCUMENTED BEHAVIOR INVENTORY
+
+Identify undocumented behaviors discovered through:
+
+- source analysis;
+- software testing;
+- reference implementation testing;
+- ecosystem analysis.
+
+
+2. EVIDENCE REVIEW
+
+For each behavior determine:
+
+- source of evidence;
+- frequency of occurrence;
+- software dependency;
+- compatibility impact.
+
+
+3. SOFTWARE DEPENDENCY
+
+Determine:
+
+- whether existing software depends on the behavior;
+- whether the dependency is widespread;
+- whether the behavior is observable.
+
+
+4. COMPATIBILITY CLASSIFICATION
+
+Classify each behavior as:
+
+- required compatibility behavior;
+- policy pending;
+- not required;
+- not guaranteed.
+
+
+5. IMPLEMENTATION VERSUS CONTRACT
+
+Determine:
+
+- whether the behavior is part of the CP/M compatibility contract;
+- whether it is merely an implementation characteristic;
+- whether it should be documented as an exception.
+
+
+6. EXPERIMENTAL REQUIREMENTS
+
+Create validation tests for undocumented behaviors requiring further
+evidence.
+
+Each test must include:
+
+- behavior tested;
+- purpose;
+- procedure;
+- observed behavior;
+- compatibility conclusion.
+
+
+7. CONTROLLED TEST MATRIX
+
+Include:
+
+- documented behavior;
+- undocumented behavior;
+- common behavior;
+- rare behavior;
+- boundary cases.
+
+
+EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+    documented behavior.
+
+B:
+    Digital Research implementation behavior.
+
+I:
+    experimental observation.
+
+D:
+    unresolved policy.
+
+
+Ledger evidence must identify:
+
+I054
+UNDOCUMENTED
+COMPATIBILITY
+BEHAVIOR
+subsystem
+IG
+AG
+
+
+COMPATIBILITY CLASSIFICATION
+
+Classify findings:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Do not require:
+
+- undocumented behavior without evidence;
+- private implementation details;
+- behavior invisible to applications.
+
+
+LEDGER REVIEW
+
+Review affected Compatibility Ledger entries.
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+Do not modify the ledger directly.
+
+
+REPORT STRUCTURE
+
+Create:
+
+Investigation 054 - CP/M 2.2 Undocumented Behavior Validation.md
+
+Include:
+
+1. Objective and scope
+2. Compatibility standard
+3. Relationship to previous investigations
+4. Undocumented behavior inventory
+5. Evidence analysis
+6. Software dependency analysis
+7. Experimental results
+8. Compatibility classification
+9. Compatibility conclusions
+10. Proposed ledger additions
+11. Existing-entry updates
+12. Open questions
+13. Conformance implications
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M architecture.
+
+Do not assume undocumented behavior is required.
+
+Determine the CP/M 2.2 undocumented behavior compatibility contract
+only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

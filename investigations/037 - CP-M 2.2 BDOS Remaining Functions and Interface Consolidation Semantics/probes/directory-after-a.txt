@@ -1,0 +1,17 @@
+0:
+-rwxrwxrwx    1663 Jan 01 1970  bdos37.com
+-rw-rw-rw-   16640 Jan 01 1970  big130.dat
+-rw-rw-rw-   16512 Jan 01 1970  cross.dat
+-rwxrwxrwx     369 Jan 01 1970  dma37.com
+-rw-rw-rw-       0 Jan 01 1970  empty.dat
+-rwxrwxrwx     571 Jan 01 1970  error37.com
+-rw-rw-rw- 8388608 Jan 01 1970  maxrec.dat
+-rw-rw-rw-     256 Jan 01 1970  one.dat
+-rw-rw-rw-      16 Jan 01 1970  one25.dat
+-rw-rw-rw-      16 Jan 01 1970  one25.dat
+-rwxrwxrwx    1660 Jan 01 1970  rand013.com
+-rw-rw-rw-   16256 Jan 01 1970  rec127.dat
+-rw-rw-rw-   16384 Jan 01 1970  rec128.dat
+-rwxrwxrwx     347 Jan 01 1970  reg37.com
+-rw-rw-rw-    1408 Jan 01 1970  sparse.dat
+-rwxrwxrwx     581 Jan 01 1970  state37.com

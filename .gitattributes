@@ -1,0 +1,5 @@
+suite/runtime-payload/*.DAT binary
+suite/build/*.COM binary
+suite/archive/dev-versions/**/*.COM binary
+suite/disk-images/**/*.dmk binary
+suite/disk-images/**/*.dsk binary

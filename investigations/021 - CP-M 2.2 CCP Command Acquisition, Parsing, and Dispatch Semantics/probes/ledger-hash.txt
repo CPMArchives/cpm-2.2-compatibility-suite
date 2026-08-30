@@ -1,0 +1,2 @@
+Before and after Investigation 021 artifact creation:
+e204f30943280ac181d844e3a48c83dd02d1d9918f5aecbee3b2d494faf5cdea  <project-root>/compatibility/02 Compatibility Ledger - Investigation 020.txt

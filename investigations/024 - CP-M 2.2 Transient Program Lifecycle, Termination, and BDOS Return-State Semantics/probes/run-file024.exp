@@ -1,0 +1,15 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set mode [lindex $argv 2]
+set timeout 60
+log_file -noappend $logfile
+spawn cpmsim -z -d $diskdir
+expect "A>"
+send -- "FILE24 $mode\r"
+expect -re {[AB]>}
+send -- "CHECK24 $mode\r"
+expect -re {[AB]>}
+send "\034"
+expect eof
+

@@ -1,0 +1,270 @@
+Investigation 042 — CP/M 2.2 Common Software Compatibility Assumptions
+Prompt
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 041 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation
+041.
+
+Create Investigation 042 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports or artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+OBJECTIVE
+
+Determine the compatibility assumptions made by common CP/M 2.2 software
+beyond the documented operating-system interfaces.
+
+Previous investigations established:
+
+-   documented CP/M interfaces;
+-   BDOS behavior;
+-   BIOS behavior;
+-   disk structure behavior;
+-   direct system access behavior.
+
+Investigation 042 determines which undocumented or de facto assumptions
+were sufficiently widespread within the CP/M software ecosystem to
+become compatibility requirements.
+
+Investigate:
+
+-   common application assumptions;
+-   utility assumptions;
+-   development tool assumptions;
+-   software interaction patterns;
+-   expectations about CP/M runtime behavior.
+
+Determine:
+
+-   which software assumptions are compatibility requirements;
+-   which assumptions are implementation-specific;
+-   which behaviors require further investigation.
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+-   documented CP/M 2.2 behavior;
+-   Digital Research implementation behavior;
+-   common CP/M programming practices;
+-   historically significant software dependencies.
+
+The objective is compatibility with the practical CP/M software
+ecosystem, not only the published specification.
+
+Do not assume undocumented behavior is required without evidence.
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Investigation 034: CP/M 2.2 Memory Layout, System Area, and Transient
+Program Boundary Semantics.
+
+Investigation 036: CP/M 2.2 BIOS Runtime Environment and Hardware
+Abstraction Boundary Semantics.
+
+Investigation 037: CP/M 2.2 BDOS Remaining Functions and Interface
+Consolidation Semantics.
+
+Investigation 040: CP/M 2.2 Disk Format, Drive Geometry, and Direct
+Structure Compatibility Semantics.
+
+Investigation 041: CP/M 2.2 Direct System Access and Undocumented
+Application Interface Compatibility Semantics.
+
+SCOPE
+
+Investigate:
+
+-   common CP/M software categories;
+-   repeated programming assumptions;
+-   undocumented conventions;
+-   ecosystem-wide expectations;
+-   compatibility requirements revealed by software behavior.
+
+NON-GOALS
+
+Do not investigate:
+
+-   BetterCP/M architecture;
+-   implementation design;
+-   individual software ports;
+-   modern compatibility layers;
+-   software features unrelated to CP/M compatibility.
+
+INVESTIGATION QUESTIONS
+
+1.  SOFTWARE ECOSYSTEM CATEGORIES
+
+Determine compatibility assumptions made by:
+
+-   assemblers;
+-   compilers;
+-   editors;
+-   database software;
+-   communications programs;
+-   disk utilities;
+-   system utilities;
+-   games and applications.
+
+2.  COMMON RUNTIME ASSUMPTIONS
+
+Determine whether software commonly assumes:
+
+-   memory layout;
+-   page-zero contents;
+-   BDOS behavior;
+-   BIOS availability;
+-   CCP behavior;
+-   disk organization;
+-   device behavior.
+
+3.  UNDOCUMENTED CONVENTIONS
+
+Determine whether undocumented conventions became practical
+compatibility requirements.
+
+Investigate:
+
+-   repeated use by independent software;
+-   treatment as standard practice;
+-   support by replacement systems;
+-   reliance by widely used programs.
+
+4.  SOFTWARE DEPENDENCY EVIDENCE
+
+Determine how compatibility dependencies can be demonstrated.
+
+Use evidence from:
+
+-   source code;
+-   documentation;
+-   executable analysis;
+-   reference-system testing;
+-   historical usage.
+
+5.  REPRESENTATIVE SOFTWARE TESTING
+
+Create deterministic compatibility tests using representative software
+where practical.
+
+Record:
+
+-   software tested;
+-   CP/M behavior observed;
+-   BetterCP/M implications;
+-   compatibility conclusions.
+
+6.  CONTROLLED TEST MATRIX
+
+Include:
+
+-   documented API usage;
+-   common undocumented usage;
+-   direct system access;
+-   unusual but historically relevant usage;
+-   failure cases where appropriate.
+
+EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A: documented behavior.
+
+B: Digital Research implementation behavior.
+
+I: experimental observation.
+
+D: unresolved policy.
+
+Ledger evidence must identify:
+
+I042 SOFTWARE ECOSYSTEM COMPATIBILITY subsystem IG AG
+
+COMPATIBILITY CLASSIFICATION
+
+Classify findings:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+Do not require:
+
+-   behavior with no evidence of software dependency;
+-   private implementation details;
+-   isolated accidental behavior.
+
+LEDGER REVIEW
+
+Review affected Compatibility Ledger entries.
+
+Determine:
+
+-   evidence strengthening;
+-   corrections;
+-   duplicate avoidance.
+
+Do not modify the ledger directly.
+
+REPORT STRUCTURE
+
+Create:
+
+Investigation 042 - CP/M 2.2 Common Software Compatibility
+Assumptions.md
+
+Include:
+
+1.  Objective and scope
+2.  Compatibility standard
+3.  Relationship to previous investigations
+4.  Software ecosystem categories
+5.  Documentation findings
+6.  Source findings
+7.  Software dependency findings
+8.  Undocumented convention analysis
+9.  Representative software testing
+10. Experimental results
+11. Compatibility conclusions
+12. Proposed ledger additions
+13. Existing-entry updates
+14. Open questions
+15. Conformance implications
+
+FINAL REVIEW
+
+Before completing the investigation, verify:
+
+-   software assumptions are supported by evidence;
+-   documented behavior is distinguished from ecosystem behavior;
+-   implementation details are separated from compatibility
+    requirements;
+-   isolated behavior is not promoted without evidence;
+-   compatibility conclusions are classified.
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M architecture.
+
+Do not assume undocumented behavior is required.
+
+Determine the CP/M 2.2 common software compatibility contract only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

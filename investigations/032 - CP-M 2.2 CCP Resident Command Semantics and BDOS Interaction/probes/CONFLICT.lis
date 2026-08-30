@@ -1,0 +1,18 @@
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 21:38:55 2026	Page 1
+Source file: CONFLICT.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1  ORG 100H
+0100  11 0d 01         2      2  LD DE,MSG
+0103  0e 09            3      3  LD C,9
+0105  cd 05 00         4      4  CALL 5
+0108  0e 00            5      5  LD C,0
+010a  c3 05 00         6      6  JP 5
+010d  54 52 41 4e      7      7 MSG: DB 'TRANSIENT-CONFLICT-RAN$'
+0111  53 49 45 4e      7      8
+0115  54 2d 43 4f      7      9
+0119  4e 46 4c 49      7     10
+011d  43 54 2d 52      7     11
+0121  41 4e 24         7     12
+0124                   8     13  END

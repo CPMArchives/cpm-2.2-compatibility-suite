@@ -1,0 +1,16 @@
+I059/I062 traceability audit
+============================
+
+Authoritative I061 ledger: 652 proposition lines, 622 unique identifiers.
+I059 traceability map:      652 rows, 622 unique identifiers.
+Rows with no primary test:  0.
+Unique primary test IDs referenced by propositions: 51.
+I059 inventory test IDs: 62.
+The remaining 11 are supplemental interface/ecosystem definitions rather than
+primary proposition mappings.
+
+Syntactic mapping is complete. This pilot shows that syntactic coverage is not
+the same as executable validation: several identifiers aggregate multiple
+cases, dispositions, fixtures or profile choices without a single versioned
+runner and machine-checkable oracle.
+

@@ -1,0 +1,6 @@
+inventory rows: 21
+controlled tests: 7
+rebuilds byte-identical: 11
+I041/I043 image pairs unchanged: 4
+required transcript markers: present
+validation: PASS

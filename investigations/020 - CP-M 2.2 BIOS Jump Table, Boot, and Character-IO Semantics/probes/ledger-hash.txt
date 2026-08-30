@@ -1,0 +1,2 @@
+Authoritative ledger before and after Investigation 020 artifact creation:
+666a537e444aca74d99f801c5c87f9f7027a5a9a1ba18105c1dd7ed34c7b13f8  <project-root>/compatibility/02 Compatibility Ledger - Investigation 019.txt

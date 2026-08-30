@@ -1,0 +1,71 @@
+Investigation 005 raw observed output
+=====================================
+
+Record format:
+
+  returned-byte  CONOUT-count  first-eight-CONOUT-bytes
+  LIST-count     BIOS-CONIN-call-count
+
+Bytes beyond CONOUT-count are stale capture storage and are not evidence.
+
+Printer echo initially inactive
+-------------------------------
+
+A>IN005
+
+IN005 ret conlen con[8] listlen conincalls
+A    41 01 41 FF FF FF FF FF FF FF 00 01
+TAB  09 08 20 20 20 20 20 20 20 20 00 01
+CR   0D 01 0D 20 20 20 20 20 20 20 00 01
+LF   0A 01 0A 20 20 20 20 20 20 20 00 01
+BS   08 01 08 20 20 20 20 20 20 20 00 01
+C-A  01 00 08 20 20 20 20 20 20 20 00 01
+C-PQ 10 01 51 20 20 20 20 20 20 20 00 01
+PEND status 01 5A 01 5A 20 20 20 20 20 20 20 00 01
+
+Interpretation:
+
+  A returned 41h and echoed one 41h byte.
+  TAB returned 09h and echoed eight spaces from known column zero.
+  CR, LF, and backspace returned and echoed unchanged.
+  Ctrl-A returned 01h and emitted no echo.
+  Ctrl-P returned 10h and emitted no echo. The following formatted Q emitted
+  only to CONOUT, so function 1 did not toggle printer echo.
+  Function 11 returned 01h after consuming scripted Z into DRI pending state;
+  function 1 then returned and echoed Z with the total BIOS CONIN count still
+  one, proving it consumed the retained byte without a second BIOS input.
+
+Printer echo active before program entry
+----------------------------------------
+
+Ctrl-P was entered at the CCP prompt, using the already-established DRI
+buffered-input mechanism, before invoking IN005.
+
+A>IN005
+
+IN005 ret conlen con[8] listlen conincalls
+A    41 01 41 FF FF FF FF FF FF FF 01 01
+TAB  09 08 20 20 20 20 20 20 20 20 08 01
+CR   0D 01 0D 20 20 20 20 20 20 20 01 01
+LF   0A 01 0A 20 20 20 20 20 20 20 01 01
+BS   08 01 08 20 20 20 20 20 20 20 01 01
+C-A  01 00 08 20 20 20 20 20 20 20 00 01
+C-PQ 10 01 51 20 20 20 20 20 20 20 01 01
+PEND status 01 5A 01 5A 20 20 20 20 20 20 20 01 01
+
+Interpretation:
+
+  Every eligible echoed byte was also sent to LIST after formatting. TAB
+  produced eight LIST calls for its eight expanded spaces. Non-echoed Ctrl-A
+  and Ctrl-P produced no LIST call. The Q following Ctrl-P was still copied to
+  LIST, consistent with function 1 leaving the pre-existing echo state active
+  rather than toggling it.
+
+Rejected development runs
+-------------------------
+
+Two development runs exposed probe-reporting defects: one allowed a diagnostic
+BDOS call to clobber the record pointer; the next cleared the scripted input
+byte before the call. Their output was rejected, the instrumentation was fixed,
+and neither run contributes evidence. The final source and binary correspond to
+the two valid outputs preserved above.

@@ -1,0 +1,71 @@
+spawn ./cromemcosim -M1 -R
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+Cromemco Z-1 Simulation Release 1.19
+Copyright (C) 2014-2025 by Udo Munk & 2021-2022 by David McNaughton
+
+CPU speed is 4 MHz, CPU executes undocumented instructions
+
+Web server builtin, but disabled
+
+RAM 0000H - FFFFH
+ROM C000H - DFFFH rdos0308.hex
+Power-on jump address at C000H
+MMU has 7 additional RAM banks of 64 KB
+
+FDC Banked ROM enabled
+
+DISK MAP: [./disks/disk.map]
+A:DSK:='drivea.dsk'
+[0;33mW (10642) diskmanager: Failed to stat disk image: driveb.dsk, error: 2[0m
+[0;33mW (10647) diskmanager: B:DSK: Image file 'driveb.dsk' is invalid[0m
+[0;33mW (10653) diskmanager: Failed to stat disk image: drivec.dsk, error: 2[0m
+[0;33mW (10655) diskmanager: C:DSK: Image file 'drivec.dsk' is invalid[0m
+[0;33mW (10660) diskmanager: Failed to stat disk image: drived.dsk, error: 2[0m
+[0;33mW (10662) diskmanager: D:DSK: Image file 'drived.dsk' is invalid[0m
+Loader statistics for file ./roms/rdos0308.hex:
+START : C000H
+END   : DFFFH
+PC    : C000H
+LOADED: 2000H (8192)
+
+
+telnet console listening on port 4010
+telnet console listening on port 4011
+
+TU-ART DEVICE MAP:
+TUART0.deviceA = WEBTTY STDIO  
+TUART1.deviceA = SCKTSRV1 WEBTTY2  
+TUART1.deviceB = SCKTSRV2 WEBTTY3  
+
+HARD DISK MAP: [./disks]
+HD0: OFFLINE - NO FILE 'hd0.hdd'
+HD1: OFFLINE - NO FILE 'hd1.hdd'
+HD2: OFFLINE - NO FILE 'hd2.hdd'
+
+
+Preparing to boot, ESC to abort
+
+Standby
+
+
+64k CP/M version 2.2
+
+A>BASE051
+BASE051: public BDOS control
+VERSION=22 PASS
+
+A>
+
+User Interrupt at 0xfcd2
+I/O ran for 11 ms, waited for 0 ms
+CPU executed 18202702 t-states in 5194 ms
+Clock frequency 3.50 MHz

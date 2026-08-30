@@ -1,0 +1,11 @@
+check	expected	observed	result
+ledger identity	Ledger 072 eb16466fdbff8fb2bc07bd02a07198b8426fb6452be3dd1f256cbff4af0547d3	named with exact hash in standard, policy, and conformance specification	PASS
+proposition identity	627 unique contiguous IDs 0001-0627	ledger unchanged; case map covers 627	PASS
+dispositions	458 REQUIRED; 116 NOT GUARANTEED; 53 NOT REQUIRED; 0 POLICY PENDING	identical totals stated in standard/policy and parsed from ledger	PASS
+release classifications	430 generic REQUIRED; 28 PROFILE REQUIRED; 3 OPTIONAL; 116 NOT GUARANTEED; 50 OUTSIDE SCOPE	identical in policy/standard and I071 matrix	PASS
+test identity	62 IDs version 1.0.0	62 unique; release table byte-identical	PASS
+case/oracle identity	627 cases and 627 oracles version 1.0.0	627 unique cases; copied I071 tables byte-identical	PASS
+profile coverage	28 PROFILE REQUIRED plus 3 OPTIONAL mapped exactly once	31 unique cases across 17 registry profiles	PASS
+profile inheritance	profiles add and cannot waive CPM22-BASE	all named registry rows inherit CPM22-BASE; documents state additive rule	PASS
+first-RC applicability	baseline included; named profiles defined but unselected by default	CPM22-BASE INCLUDED; 17 named profiles AVAILABLE	PASS
+terminology	REQUIRED, PROFILE REQUIRED, OPTIONAL, NOT GUARANTEED, OUTSIDE SCOPE	policy, standard, conformance, registry synchronized	PASS

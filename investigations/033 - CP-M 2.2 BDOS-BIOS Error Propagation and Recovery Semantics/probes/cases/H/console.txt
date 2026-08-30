@@ -1,0 +1,30 @@
+spawn <local-workspace>/g-p-6a682f002be881918281554d644daf48/staging-investigation-015/probes/emulator-src/cpmsim/cpmsim -z -d /private/tmp/inv015-runs/H
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>PHYS015 H
+CASE H
+BEFORE 01 00 00 43 4C 4F 53 45 4D 45 20 44 41 54 00 00 80 01 17 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 53
+ARM WRITE
+
+Bdos Err On A: Bad Sector
+A>[0;31mE (5155) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 5 ms, waited for 0 ms
+CPU executed 552547 t-states in 0 ms
+Clock frequency 1072.90 MHz

@@ -1,0 +1,5 @@
+      PROGRAM HELLO
+      WRITE (1,100)
+  100 FORMAT (' F80-64 PASS')
+      STOP
+      END

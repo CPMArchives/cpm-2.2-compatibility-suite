@@ -1,0 +1,78 @@
+INVESTIGATION 054 VALIDATION RECORDS
+
+Common environment
+Fresh restored z80pack cpmsim disk images, 64K CP/M 2.2 Z80 CBIOS. All
+application input was scripted. Source and binaries came from preserved I041-
+I043 artifacts and were rebuilt before execution.
+
+T054-01 — Documented control and public vectors
+Behavior: Public page-zero/BDOS/BIOS interface contrasted with incidental targets.
+Purpose: Establish the documented control side of the matrix.
+Procedure: Run VECTOR41, ZERO41, BDOS41 and BIOS41 from a restored image.
+Observed: 0000h and 0005h were valid JMPs; Function 12 returned 0022h; the BIOS
+base was derived as FA00h and all 17 entries were JMPs; direct documented BIOS
+character fixtures returned their controlled values.
+Conclusion: Public gateways, meanings and derived vector layout are REQUIRED;
+FA00h, EC06h and handler targets are configuration data, not requirements.
+
+T054-02 — Private BDOS target bypass
+Behavior: Call the current word behind the 0005h gateway as a routine.
+Purpose: Determine whether the observed private target is a portable gateway.
+Procedure: DIRECT41 called the current target, then directly called SELDSK with
+invalid C=FFh in the isolated failure session.
+Observed: The private target happened to return 0022h; invalid SELDSK returned
+HL=0000h. No recovery state was claimed.
+Conclusion: Observation confirms this DRI build only. Direct-target equivalence
+and invalid-direct-call aftermath remain NOT GUARANTEED (ledger 0619).
+
+T054-03 — Reversible public-gateway interposition
+Behavior: Writable page-zero gateway redirected through a wrapper.
+Purpose: Validate the class of access used by XSUB without freezing a target.
+Procedure: MOD41 saved the 0005h JMP target, installed a wrapper, invoked Function
+12 through 0005h, chained the saved target, then restored the gateway.
+Observed: Wrapper count 01, HL=0022h, followed by successful later BIOS41 use.
+Conclusion: Reversible interposition is externally viable in the strict flat-
+memory profile; wrapper layout and target address are not required.
+
+T054-04 — SUBMIT/XSUB de facto protocol
+Behavior: A:$$$.SUB consumption and XSUB Function-10 delivery.
+Purpose: Retest the strongest undocumented ecosystem dependency.
+Procedure: The controlled utility workflow invoked SUBMIT RUN42; XSUB preceded
+IN42 and a known BATCH42 record; later commands copied/dumped a file and ran a
+unique HELLO42 completion marker.
+Observed: IN42 reported count 07/data BATCH42, `(xsub active)` appeared, later
+commands executed in order, and HELLO42 OK completed the stream.
+Conclusion: Entries 0620-0621 remain REQUIRED in the strict CP/M 2.2 profile.
+
+T054-05 — Writable/executable self-modifying TPA
+Behavior: A transient modifies an application-owned byte then executes/observes it.
+Purpose: Validate flat-memory execution used by historical tools.
+Procedure: EDGE43 wrote A5h then 5Ah at its controlled patch location and reported
+the value; related lifecycle probes ran between repeated EDGE43 executions.
+Observed: `OLD/TEST PATCH` included `00 A5 5A`; Function 12 still returned 0022h.
+Conclusion: Application-owned TPA is writable and executable in the strict profile;
+ledger 0622 remains REQUIRED. System-owned memory safety is not implied.
+
+T054-06 — Exact entry and private state
+Behavior: Numeric SP/return/private bytes observed in a configured build.
+Purpose: Ensure repeatability does not turn residue into contract.
+Procedure: Run EDGE43 repeatedly across RET-to-0000h, Function 0, and overwritten-
+CCP/WBOOT recovery cases.
+Observed: The same configured values recurred (`ENTRYSP EBA9`, `RET EB5F`, private
+bytes 02F5/02F5), and every recovery returned to another runnable command.
+Conclusion: The recovery/lifecycle effects are required where separately specified;
+the exact numeric stack, return address and private bytes remain NOT REQUIRED or
+NOT GUARANTEED.
+
+T054-07 — Boundary loader control
+Behavior: Configuration-dependent maximum accepted COM image.
+Purpose: Check that a repeatable implementation boundary is not universalized.
+Procedure: Run preserved MAXOK43 and one-record-larger MAXBAD43 fixtures.
+Observed: MAXOK43 executed; MAXBAD43 produced BAD LOAD.
+Conclusion: Correct configured loader-bound enforcement is required, but this
+build's exact numeric ceiling and wording are NOT REQUIRED universal constants.
+
+Harness note
+After final scripted markers, some runners close console input and cpmsim reports
+that it cannot read console input before entering its monitor. That is harness
+shutdown and is not classified as CP/M behavior.

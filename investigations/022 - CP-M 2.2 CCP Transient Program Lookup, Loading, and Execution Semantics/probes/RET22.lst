@@ -1,0 +1,19 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sat Aug 15 20:55:25 2026	Page 1
+Source file: RET22.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1         ORG 0100H
+0100  11 09 01         2      2         LD DE,MSG
+0103  0e 09            3      3         LD C,9
+0105  cd 05 00         4      4         CALL 5
+0108  c9               5      5         RET
+0109  0d 0a 52 45      6      6 MSG:   DB 13,10,'RET22 terminating by RET',13,10,'$'
+010d  54 32 32 20      6      7
+0111  74 65 72 6d      6      8
+0115  69 6e 61 74      6      9
+0119  69 6e 67 20      6     10
+011d  62 79 20 52      6     11
+0121  45 54 0d 0a      6     12
+0125  24               6     13
+0126                   7     14         END

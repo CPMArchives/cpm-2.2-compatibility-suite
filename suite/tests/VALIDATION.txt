@@ -1,0 +1,120 @@
+PASS	FILETEST.COM assembled with z80asm 2.1
+PASS	binary size 1980 bytes
+PASS	ledger 0171 on absent BTMISS.DAT under Z80 mode
+PASS	ledger 0171 on absent BTMISS.DAT under Intel 8080 mode
+PASS	deliberate BTMISS.DAT presence produced FAIL C002 and observed 00h
+PASS	/LIST reports one implemented and 37 specified cases
+PASS	all five implemented selector forms produced the same PASS under Z80 and 8080 modes
+PASS	console reporting requires no BDOS Make/Write/Close service
+PASS	ECOTEST 0.1.0-dev2 assembled with period-style programmer commentary
+PASS	CPUTEST 0.1.0-dev2 assembled with period-style programmer commentary
+PASS	ECOTEST /H, /LIST, /ALL and /0513 under Z80 mode
+PASS	ECOTEST /H, /LIST, /ALL and /0513 under Intel 8080 mode
+PASS	CPUTEST /H, /LIST, /ALL and /0624 under Z80 mode
+PASS	CPUTEST /H, /LIST, /ALL and /0624 under Intel 8080 mode
+PASS	ECOTEST 0513 returned its OPEN/READ/EOF signature in both modes
+PASS	CPUTEST 0623 and 0624 returned their processor signatures in both modes
+PASS	FILETEST 0.1.0-dev28 assembled with period-style programmer commentary
+PASS	FILETEST dev27/dev28 binaries differ only at five embedded version digits
+PASS	FILETEST /H and /ALL returned to CCP under Z80 mode
+PASS	FILETEST /H and /ALL returned to CCP under Intel 8080 mode
+PASS	FILETEST /ALL produced identical 64 pass, 43 fail, 0 error, 23 observation totals in both modes
+PASS	FILETEST and RANDTEST dev33 assembled with ZSM4/LINK with zero errors
+PASS	FILETEST dev33 is 45696 bytes and RANDTEST dev33 is 35328 bytes; both fit below a C400h BDOS
+PASS	RANDTEST /H, /INFO, and /GROUP:LIST returned under Z80 mode
+PASS	RANDTEST rejected FILETEST item 0156 and FILETEST rejected RANDTEST item 0317
+PASS	CONSTEST 0.1.0-dev13 assembled with period-style programmer commentary
+PASS	CONSTEST dev12/dev13 binaries differ only at two embedded version digits
+PASS	CONSTEST line-buffer and IOBYTE checks completed under Z80 mode
+PASS	CONSTEST line-buffer and IOBYTE checks completed under Intel 8080 mode
+PASS	CONSTEST absent READER and alternate-route checks remained honestly untested in both modes
+PASS	DIRTEST 0.1.0-dev10 assembled with period-style programmer commentary
+PASS	DIRTEST returning-card deck completed under Z80 mode: 57 pass, 7 fail, 0 error, 15 observations
+PASS	DIRTEST returning-card deck completed under Intel 8080 mode with identical totals
+PASS	DIRTEST /0567 remained UNTESTED before CCP USER 1 and passed afterward in both modes
+PASS	CCPTEST 0.1.0-dev15 assembled with period-style programmer commentary
+PASS	CCPTEST /SAFE, /ALL, help, list, manual cards and selected probes passed under Z80 mode
+PASS	CCPTEST regression produced the same 12-pass SAFE and 21-pass/9-observation ALL totals under Intel 8080 mode
+PASS	SCRATCH 0.1.0-dev4 assembled with period-style programmer commentary
+PASS	SCRATCH non-destructive help, profile list and build information returned under Z80 and Intel 8080 modes
+PASS	BDOSTEST 1.0.0-dev10 assembled with period-style programmer commentary
+PASS	BDOSTEST fixture-complete /SAFE returned 56 pass, 0 fail under Z80 and Intel 8080 modes
+PASS	BDOSTEST fixture-complete /ALL returned 70 pass, 0 fail, 14 observations in both modes
+PASS	BDOSTEST /LIST and dev10 help returned to the CCP in both modes
+PASS	ENTRYTST 0.1.0-dev10 assembled with period-style programmer commentary
+PASS	ENTRYTST /SAFE returned 25 pass and /ALL returned 41 pass, 16 observations under Z80 and Intel 8080 modes
+PASS	ENTRYTST selected FCB, command-tail, Function-zero, RET and WBOOT procedures returned as expected in both modes
+PASS	ERRTEST 0.1.0-dev8 assembled with expanded period-style programmer commentary
+PASS	ERRTEST /SAFE and /ALL returned 5 pass, 0 fail, 12 observed and 26 not-run under Z80 and Intel 8080 modes
+PASS	ERRTEST grouped /LIST reconciled to all 43 catalog items in both modes
+PASS	BDOSTEST dev11, CCPTEST dev16, CONSTEST dev14, DIRTEST dev11, DISKTEST dev37, ENTRYTST dev11 and FILETEST dev29 assembled with compact one-character status/class rows
+PASS	all seven converted utilities displayed the P/F/-/O and R/N/S/X legends under Z80 and Intel 8080 modes
+PASS	noninteractive aggregate or safe selectors returned compact ITEM/S/C/OBSERVED rows in both processor modes
+PASS	CONSTEST selected OUTSIDE SCOPE row returned compact -/S classification in both processor modes
+PASS	CPUTEST 0.1.0-dev3 assembled with finalized exact command parser and grouped dispatcher
+PASS	CPUTEST dev5 complete command matrix passed under Z80 and Intel 8080 modes
+PASS	CPUTEST /LIST functional memberships reconcile 2 AUTOMATIC + 1 OBSERVATION + 2 EXCLUSIONS = 5 catalog items
+PASS	CPUTEST /GROUP:REQUIRED, /GROUP:OBSERVATION, /GROUP:MANUAL and every functional group returned the declared membership
+PASS	CPUTEST /NNNN:REPORT expanded evidence; retired /NNNN /REPORT and malformed option prefixes were rejected
+PASS	CPUTEST dev4 help option fields and GROUP continuation align at a fixed description column within 80 columns
+PASS	CPUTEST dev5 indents every /LIST item two spaces beneath its functional group heading
+PASS	ECOTEST 0.1.0-dev4 assembled with the finalized exact command parser and grouped dispatcher
+PASS	ECOTEST dev4 complete command matrix passed under Z80 and Intel 8080 modes
+PASS	ECOTEST /LIST memberships reconcile 1 AUTOMATIC + 4 MANUAL + 3 OBSERVATION = 8 catalog items
+PASS	ECOTEST /GROUP:REQUIRED, /GROUP:OBSERVATION, /GROUP:MANUAL and /GROUP:AUTOMATIC returned the declared membership
+PASS	ECOTEST /NNNN:REPORT expanded instructions; retired /NNNN /REPORT and malformed option prefixes were rejected
+PASS	ERRTEST 0.1.0-dev10 assembled with the finalized exact command parser and grouped dispatcher
+PASS	ERRTEST dev10 complete command matrix passed under Z80 and Intel 8080 modes
+PASS	ERRTEST /LIST memberships reconcile 5 AUTOMATIC + 2 MEDIA + 6 PHYSICAL + 5 INTERACTIVE + 10 PROFILE + 12 OBSERVATION + 3 EXCLUSIONS = 43 items
+PASS	ERRTEST universal REQUIRED, OBSERVATION and list-only MANUAL groups returned their declared memberships
+PASS	ERRTEST /NNNN:REPORT expanded procedures; retired /NNNN /REPORT and malformed option prefixes were rejected
+PASS	BDOSTEST 1.0.0-dev13 assembled with the finalized exact command parser and grouped dispatcher
+PASS	BDOSTEST /LIST memberships reconcile 17 GATEWAY + 24 DRIVE + 20 DIRECTORY + 9 IDENTITY + 8 STATE + 8 CONTRACT = 86 items
+PASS	BDOSTEST universal REQUIRED, OBSERVATION and list-only MANUAL groups returned their declared memberships
+PASS	BDOSTEST fixture-complete /SAFE returned 56 pass and /ALL returned 70 pass plus 14 observations under Z80 and Intel 8080 modes
+PASS	BDOSTEST /NNNN:REPORT expanded the record identity; retired /NNNN /REPORT and malformed option prefixes were rejected
+PASS	z80pack disposable-disk preparation includes empty BDSA.TMP and BDSB.TMP directory-search witnesses
+PASS	BIOSTEST 0.1.0-dev30 assembled with the finalized exact command parser and grouped dispatcher
+PASS	BIOSTEST /LIST memberships reconcile 13 ALLOCATION + 7 DEVICES + 15 DISK + 4 BOOT + 6 CHARACTER + 1 PROCESSOR = 46 items
+PASS	BIOSTEST universal REQUIRED, OBSERVATION and list-only MANUAL groups returned their declared memberships
+PASS	BIOSTEST /SAFE and the complete non-destructive command matrix returned 5 pass under Z80 and Intel 8080 modes
+PASS	BIOSTEST /NNNN:REPORT expanded returning evidence; retired /NNNN /REPORT and malformed option prefixes were rejected
+PASS	CCPTEST 0.1.0-dev18 assembled with the finalized exact command parser and grouped dispatcher
+PASS	CCPTEST /LIST memberships reconcile 11 ENTRY + 17 COMMAND + 19 LOADER + 4 MEMORY + 6 FILES + 2 SUBMIT = 59 items
+PASS	CCPTEST universal REQUIRED, OBSERVATION and list-only MANUAL groups returned their declared memberships
+PASS	CCPTEST /SAFE returned 12 pass; /ALL returned 21 pass and 9 observations under Z80 and Intel 8080 modes
+PASS	CCPTEST /NNNN:REPORT expanded evidence; retired /NNNN /REPORT and malformed option prefixes were rejected
+PASS	CONSTEST 0.1.0-dev16 assembled with the finalized exact command parser and grouped dispatcher
+PASS	CONSTEST /LIST memberships reconcile 24 FORMATTED + 16 DIRECT + 15 INPUT + 25 BUFFERED + 7 DEVICES = 87 items
+PASS	CONSTEST universal REQUIRED, OBSERVATION and list-only MANUAL groups returned their declared memberships
+PASS	CONSTEST complete noninteractive matrix returned 15 pass and 3 observations under Z80 and Intel 8080 modes
+PASS	CONSTEST /NNNN:REPORT expanded evidence; /VERBOSE, /NNNN /REPORT and malformed option prefixes were rejected
+PASS	DIRTEST 0.1.0-dev13 assembled with the finalized exact command parser and grouped dispatcher
+PASS	DIRTEST /LIST memberships reconcile 11 SEARCH + 11 DELETE + 18 RENAME + 14 ATTRIBUTES + 9 ENUMERATION + 9 USERS = 72 items
+PASS	DIRTEST universal REQUIRED, OBSERVATION and list-only MANUAL groups returned their declared memberships
+PASS	DIRTEST fixture-complete /SAFE returned 49 pass; /ALL returned 64 pass plus 15 observations, 3 manual rows and 5 OUTSIDE SCOPE rows under Z80 and Intel 8080 modes
+PASS	DIRTEST /NNNN:REPORT expanded evidence; retired /NNNN /REPORT and malformed option prefixes were rejected
+PASS	DISKTEST 0.1.0-dev41 assembled with the finalized exact command parser, grouped dispatcher, and truthful aggregate failure summary
+PASS	DISKTEST /LIST memberships reconcile 1 STATE + 7 ALLOC + 12 PROTECT = 20 items
+PASS	DISKTEST universal REQUIRED, OBSERVATION and list-only MANUAL groups returned their declared memberships
+PASS	DISKTEST /SAFE returned 7 pass; full-scratch /ALL returned 11 pass plus 1 observation under Z80 and Intel 8080 modes
+PASS	DISKTEST /NNNN:REPORT expanded evidence; retired /NNNN /REPORT and malformed option prefixes were rejected
+PASS	DISKTEST all 20 numeric selectors dispatched correctly in both CPU modes; Q bypassed each terminal row before scratch-disk access
+PASS	ENTRYTST 0.1.0-dev13 assembled with the finalized exact command parser and grouped dispatcher
+PASS	ENTRYTST /LIST memberships reconcile 22 ENTRY + 6 TERMINATION + 10 LOADER + 8 BIOS + 4 FUNCTION40 + 9 DEVICES = 59 items
+PASS	ENTRYTST universal REQUIRED, OBSERVATION and list-only MANUAL groups returned their declared memberships
+PASS	ENTRYTST /SAFE returned 25 pass; /ALL returned 41 pass including 16 observations under Z80 and Intel 8080 modes
+PASS	ENTRYTST /NNNN:REPORT expanded returning, outside-scope and manual evidence; retired /NNNN /REPORT and malformed option prefixes were rejected
+PASS	FILETEST 0.1.0-dev35 and RANDTEST 0.1.0-dev35 assembled and linked with zero ZSM4 errors
+PASS	Canonical BT*.DAT fixtures were regenerated with deterministic record markers and installed in the maintained runtime image
+PASS	FILETEST /GROUP:FN:15 and /FN:15 selected the same 28 cases and returned 28 pass, 0 fail with primary and cross-drive fixtures under z80pack Z80 mode
+PASS	FILETEST /GROUP:FN:15 without the C: cross-drive fixture returned 26 pass, 0 fail and correctly classified items 0169 and 0242 as not-run
+PASS	ENTRYTST 0.1.0-dev15 ZSM4/LINK build begins directly at 0100h; /SAFE returned 25 pass and /ALL returned 41 pass, 0 fail and 16 observations under z80pack Z80 mode
+PASS	All thirteen ZSM4/LINK builds omit a source ORG 0100h so LINK supplies the single CP/M transient load origin without a 256-byte gap
+PASS	BIOSTEST 0.1.0-dev31 appends the item numbers of every failed row after the summary; an injected 0469 mismatch produced "Failed items: 0469"
+PASS	BIOSTEST 0.1.0-dev32 reports the DPB AL0/AL1 bytes and live ALV[0/1] bytes used by controlled item 0426 while preserving the oracle return value
+PASS	All eleven ledger utilities assemble with suite-wide aggregate failure-selector reporting; nonzero aggregate failures append "Failed items: NNNN ..." and zero-failure reports omit the line
+PASS	Runtime smoke under z80pack confirmed omission after CPUTEST /ALL with 0 failures, one-selector output after ECOTEST /ALL, and ordered multi-selector output "Failed items: 0404 0406 0582" after ERRTEST /ALL
+PASS	CONSTEST 0.1.0-dev18 separates Function 6 item 0081 immediate-return confirmation from item 0082 A=00 no-key confirmation and gives explicit Y/N criteria
+PASS	Bundled CRUNCH 2.4 (SHA-256 f29121a2b38b7f49d1b1c00efc8e35cae8793d1acdf9be9e63c64e5f1e48f0b0) regenerated all thirteen MZC sources without an external tool path
+PASS	Maintained source DMK contains CRUNCH.COM, UNCR.COM, ZSM4.COM, LINK.COM, BUILD.SUB, README.TXT, and all thirteen current MZC sources; verified round trip leaves 506K free

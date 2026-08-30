@@ -1,0 +1,257 @@
+014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics	PROT014.COM
+014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics	README.txt
+014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics	observed-output.txt
+015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics	PHYS015.COM
+015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics	README.txt
+015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics	observed-output.txt
+016 - CP-M 2.2 BDOS Console IO and System Interface Semantics	BLOCK016.COM
+016 - CP-M 2.2 BDOS Console IO and System Interface Semantics	BUF006.COM
+016 - CP-M 2.2 BDOS Console IO and System Interface Semantics	DIO004.COM
+016 - CP-M 2.2 BDOS Console IO and System Interface Semantics	IN005.COM
+016 - CP-M 2.2 BDOS Console IO and System Interface Semantics	OUT003.COM
+016 - CP-M 2.2 BDOS Console IO and System Interface Semantics	README.txt
+016 - CP-M 2.2 BDOS Console IO and System Interface Semantics	SCRL016.COM
+016 - CP-M 2.2 BDOS Console IO and System Interface Semantics	SYS016.COM
+016 - CP-M 2.2 BDOS Console IO and System Interface Semantics	observed-output.txt
+017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics	README.txt
+017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics	STATE017.COM
+017 - CP-M 2.2 BDOS Disk State Allocation Vector and Disk Parameter Block Semantics	observed-output.txt
+018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics	CHAR018.COM
+018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics	README.txt
+018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics	observed-output.txt
+019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics	BIOS019.COM
+019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics	README.txt
+019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector Semantics	observed-output.txt
+020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics	BIOS020.COM
+020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics	PZERO20.COM
+020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics	README.txt
+020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics	WBOOT20.COM
+020 - CP-M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics	observed-output.txt
+021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics	MARK21.COM
+021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics	PARSE21.COM
+021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics	README.txt
+021 - CP-M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics	observed-output.txt
+022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics	BOUND.COM
+022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics	F0TERM22.COM
+022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics	J0TERM22.COM
+022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics	LOAD22.COM
+022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics	MARK-A0.COM
+022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics	MARK-A1.COM
+022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics	MARK-B0.COM
+022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics	MARK-B1.COM
+022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics	MAXOK.COM
+022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics	MINRET22.COM
+022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics	PART22.COM
+022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics	README.txt
+022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics	RET22.COM
+022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics	STATE22.COM
+022 - CP-M 2.2 CCP Transient Program Lookup, Loading, and Execution Semantics	observed-output.txt
+023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics	BIG23.COM
+023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics	ENTRY23.COM
+023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics	README.txt
+023 - CP-M 2.2 CCP Transient Entry Environment, Command Tail, and Default FCB Semantics	observed-output.txt
+024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics	BAD24.COM
+024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics	BADSP24.COM
+024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics	BDOS024.COM
+024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics	CHECK24.COM
+024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics	CONSOLE24.COM
+024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics	FILE24.COM
+024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics	JUMP24.COM
+024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics	OBS24.COM
+024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics	README.txt
+024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics	STATE24.COM
+024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics	TERM24.COM
+024 - CP-M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-State Semantics	observed-output.txt
+025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior	DISK25.COM
+025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior	FCB25.COM
+025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior	FILEERR25.COM
+025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior	OPEN25.COM
+025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior	READ25.COM
+025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior	README.txt
+025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior	SEARCH25.COM
+025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior	WRITE25.COM
+025 - CP-M 2.2 BDOS File Operation Error Semantics and Application-Visible Failure Behavior	observed-output.txt
+026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics	CHECK26.COM
+026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics	DPB26.COM
+026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics	PROTECT26.COM
+026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics	README.txt
+026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics	RESET26.COM
+026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics	STATE26.COM
+026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics	TERMSTATE26.COM
+026 - CP-M 2.2 BDOS System State Functions and Application-Visible Environment Semantics	observed-output.txt
+027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics	CALL27.COM
+027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics	FUNC27.COM
+027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics	PARAM27.COM
+027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics	README.txt
+027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics	REG27.COM
+027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics	STACK27.COM
+027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics	observed-output.txt
+028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract	BIGERR28.COM
+028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract	CHECK28.COM
+028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract	ENTRY28.COM
+028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract	ERROR28.COM
+028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract	LOAD28.COM
+028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract	MEM28.COM
+028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract	MIN28.COM
+028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract	README.txt
+028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract	RETURN28.COM
+028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract	observed-output.txt
+029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract	DMA29.COM
+029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract	ERROR29.COM
+029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract	MATCH29.COM
+029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract	README.txt
+029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract	SEARCH29.COM
+029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract	STATE29.COM
+029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract	USER29.COM
+029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract	observed-output.txt
+030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics	CLOSE30.COM
+030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics	CREATE30.COM
+030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics	EXTENT30.COM
+030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics	FAIL30.COM
+030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics	FCB30.COM
+030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics	GROW30.COM
+030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics	OPEN30.COM
+030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics	README.txt
+030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics	observed-output.txt
+031 - CP-M 2.2 BDOS User Area, File Visibility, and Directory Namespace Semantics	CREATE31.COM
+031 - CP-M 2.2 BDOS User Area, File Visibility, and Directory Namespace Semantics	DELETE31.COM
+031 - CP-M 2.2 BDOS User Area, File Visibility, and Directory Namespace Semantics	OPEN31.COM
+031 - CP-M 2.2 BDOS User Area, File Visibility, and Directory Namespace Semantics	README.txt
+031 - CP-M 2.2 BDOS User Area, File Visibility, and Directory Namespace Semantics	RENAME31.COM
+031 - CP-M 2.2 BDOS User Area, File Visibility, and Directory Namespace Semantics	SEARCH31.COM
+031 - CP-M 2.2 BDOS User Area, File Visibility, and Directory Namespace Semantics	USER31.COM
+031 - CP-M 2.2 BDOS User Area, File Visibility, and Directory Namespace Semantics	VIS31.COM
+031 - CP-M 2.2 BDOS User Area, File Visibility, and Directory Namespace Semantics	observed-output.txt
+032 - CP-M 2.2 CCP Resident Command Semantics and BDOS Interaction	CONFLICT.COM
+032 - CP-M 2.2 CCP Resident Command Semantics and BDOS Interaction	README.txt
+032 - CP-M 2.2 CCP Resident Command Semantics and BDOS Interaction	observed-output.txt
+033 - CP-M 2.2 BDOS-BIOS Error Propagation and Recovery Semantics	CCPERR33.COM
+033 - CP-M 2.2 BDOS-BIOS Error Propagation and Recovery Semantics	DIRERR33.COM
+033 - CP-M 2.2 BDOS-BIOS Error Propagation and Recovery Semantics	PHYS015.COM
+033 - CP-M 2.2 BDOS-BIOS Error Propagation and Recovery Semantics	READERR33.COM
+033 - CP-M 2.2 BDOS-BIOS Error Propagation and Recovery Semantics	README.txt
+033 - CP-M 2.2 BDOS-BIOS Error Propagation and Recovery Semantics	RECOVER33.COM
+033 - CP-M 2.2 BDOS-BIOS Error Propagation and Recovery Semantics	WRITEERR33.COM
+033 - CP-M 2.2 BDOS-BIOS Error Propagation and Recovery Semantics	observed-output.txt
+034 - CP-M 2.2 Memory Layout, System Area, and Transient Program Boundary Semantics	LARGE34.COM
+034 - CP-M 2.2 Memory Layout, System Area, and Transient Program Boundary Semantics	LARGEOK.COM
+034 - CP-M 2.2 Memory Layout, System Area, and Transient Program Boundary Semantics	LOAD34.COM
+034 - CP-M 2.2 Memory Layout, System Area, and Transient Program Boundary Semantics	MEM34.COM
+034 - CP-M 2.2 Memory Layout, System Area, and Transient Program Boundary Semantics	OVERLAY34.COM
+034 - CP-M 2.2 Memory Layout, System Area, and Transient Program Boundary Semantics	OVR34.COM
+034 - CP-M 2.2 Memory Layout, System Area, and Transient Program Boundary Semantics	README.txt
+034 - CP-M 2.2 Memory Layout, System Area, and Transient Program Boundary Semantics	STACK34.COM
+034 - CP-M 2.2 Memory Layout, System Area, and Transient Program Boundary Semantics	TOOLARGE.COM
+034 - CP-M 2.2 Memory Layout, System Area, and Transient Program Boundary Semantics	VECTOR34.COM
+034 - CP-M 2.2 Memory Layout, System Area, and Transient Program Boundary Semantics	ZERO34.COM
+034 - CP-M 2.2 Memory Layout, System Area, and Transient Program Boundary Semantics	observed-output.txt
+035 - CP-M 2.2 Cold Boot, Warm Boot, and Restart Semantics	BOOT35.COM
+035 - CP-M 2.2 Cold Boot, Warm Boot, and Restart Semantics	COLD35.COM
+035 - CP-M 2.2 Cold Boot, Warm Boot, and Restart Semantics	FZERO35.COM
+035 - CP-M 2.2 Cold Boot, Warm Boot, and Restart Semantics	PEND35.COM
+035 - CP-M 2.2 Cold Boot, Warm Boot, and Restart Semantics	README.txt
+035 - CP-M 2.2 Cold Boot, Warm Boot, and Restart Semantics	RECOVER35.COM
+035 - CP-M 2.2 Cold Boot, Warm Boot, and Restart Semantics	RESET35.COM
+035 - CP-M 2.2 Cold Boot, Warm Boot, and Restart Semantics	RET35.COM
+035 - CP-M 2.2 Cold Boot, Warm Boot, and Restart Semantics	STATE35.COM
+035 - CP-M 2.2 Cold Boot, Warm Boot, and Restart Semantics	WARM35.COM
+035 - CP-M 2.2 Cold Boot, Warm Boot, and Restart Semantics	observed-output.txt
+036 - CP-M 2.2 BIOS Runtime Environment and Hardware Abstraction Boundary Semantics	BIOS36.COM
+036 - CP-M 2.2 BIOS Runtime Environment and Hardware Abstraction Boundary Semantics	CON36.COM
+036 - CP-M 2.2 BIOS Runtime Environment and Hardware Abstraction Boundary Semantics	DISK36.COM
+036 - CP-M 2.2 BIOS Runtime Environment and Hardware Abstraction Boundary Semantics	ERROR36.COM
+036 - CP-M 2.2 BIOS Runtime Environment and Hardware Abstraction Boundary Semantics	README.txt
+036 - CP-M 2.2 BIOS Runtime Environment and Hardware Abstraction Boundary Semantics	VECTOR36.COM
+036 - CP-M 2.2 BIOS Runtime Environment and Hardware Abstraction Boundary Semantics	observed-output.txt
+037 - CP-M 2.2 BDOS Remaining Functions and Interface Consolidation Semantics	BDOS37.COM
+037 - CP-M 2.2 BDOS Remaining Functions and Interface Consolidation Semantics	DMA37.COM
+037 - CP-M 2.2 BDOS Remaining Functions and Interface Consolidation Semantics	ERROR37.COM
+037 - CP-M 2.2 BDOS Remaining Functions and Interface Consolidation Semantics	README.txt
+037 - CP-M 2.2 BDOS Remaining Functions and Interface Consolidation Semantics	REGISTER37.COM
+037 - CP-M 2.2 BDOS Remaining Functions and Interface Consolidation Semantics	STATE37.COM
+037 - CP-M 2.2 BDOS Remaining Functions and Interface Consolidation Semantics	observed-output.txt
+038 - CP-M 2.2 Character Device Runtime Semantics	BLOCK38.COM
+038 - CP-M 2.2 Character Device Runtime Semantics	CHAR38.COM
+038 - CP-M 2.2 Character Device Runtime Semantics	ERROR38.COM
+038 - CP-M 2.2 Character Device Runtime Semantics	IOBYTE38.COM
+038 - CP-M 2.2 Character Device Runtime Semantics	README.txt
+038 - CP-M 2.2 Character Device Runtime Semantics	STATUS38.COM
+038 - CP-M 2.2 Character Device Runtime Semantics	observed-output.txt
+039 - CP-M 2.2 IOBYTE and Runtime Device Assignment Semantics	BDOS39.COM
+039 - CP-M 2.2 IOBYTE and Runtime Device Assignment Semantics	BIOS39.COM
+039 - CP-M 2.2 IOBYTE and Runtime Device Assignment Semantics	DEVICE39.COM
+039 - CP-M 2.2 IOBYTE and Runtime Device Assignment Semantics	IOBYTE39.COM
+039 - CP-M 2.2 IOBYTE and Runtime Device Assignment Semantics	README.txt
+039 - CP-M 2.2 IOBYTE and Runtime Device Assignment Semantics	STAT39.COM
+039 - CP-M 2.2 IOBYTE and Runtime Device Assignment Semantics	SWITCH39.COM
+039 - CP-M 2.2 IOBYTE and Runtime Device Assignment Semantics	observed-output.txt
+040 - CP-M 2.2 Disk Format, Drive Geometry, and Direct Structure Compatibility Semantics	BIOS040.COM
+040 - CP-M 2.2 Disk Format, Drive Geometry, and Direct Structure Compatibility Semantics	DPB040.COM
+040 - CP-M 2.2 Disk Format, Drive Geometry, and Direct Structure Compatibility Semantics	README.txt
+040 - CP-M 2.2 Disk Format, Drive Geometry, and Direct Structure Compatibility Semantics	observed-output.txt
+041 - CP-M 2.2 Direct System Access and Undocumented Application Interface Compatibility Semantics	BDOS41.COM
+041 - CP-M 2.2 Direct System Access and Undocumented Application Interface Compatibility Semantics	BIOS41.COM
+041 - CP-M 2.2 Direct System Access and Undocumented Application Interface Compatibility Semantics	DIRECT41.COM
+041 - CP-M 2.2 Direct System Access and Undocumented Application Interface Compatibility Semantics	MOD41.COM
+041 - CP-M 2.2 Direct System Access and Undocumented Application Interface Compatibility Semantics	README.txt
+041 - CP-M 2.2 Direct System Access and Undocumented Application Interface Compatibility Semantics	VECTOR41.COM
+041 - CP-M 2.2 Direct System Access and Undocumented Application Interface Compatibility Semantics	ZERO41.COM
+041 - CP-M 2.2 Direct System Access and Undocumented Application Interface Compatibility Semantics	observed-output.txt
+042 - CP-M 2.2 Common Software Compatibility Assumptions	IN42.COM
+042 - CP-M 2.2 Common Software Compatibility Assumptions	README.txt
+042 - CP-M 2.2 Common Software Compatibility Assumptions	observed-output.txt
+043 - CP-M 2.2 Memory and Execution Edge Case Compatibility Semantics	EDGE43.COM
+043 - CP-M 2.2 Memory and Execution Edge Case Compatibility Semantics	FN043.COM
+043 - CP-M 2.2 Memory and Execution Edge Case Compatibility Semantics	LARGE43.COM
+043 - CP-M 2.2 Memory and Execution Edge Case Compatibility Semantics	MAXBAD43.COM
+043 - CP-M 2.2 Memory and Execution Edge Case Compatibility Semantics	MAXOK43.COM
+043 - CP-M 2.2 Memory and Execution Edge Case Compatibility Semantics	OVER43.COM
+043 - CP-M 2.2 Memory and Execution Edge Case Compatibility Semantics	README.txt
+043 - CP-M 2.2 Memory and Execution Edge Case Compatibility Semantics	ZRET43.COM
+043 - CP-M 2.2 Memory and Execution Edge Case Compatibility Semantics	observed-output.txt
+044 - CP-M 2.2 Failure, Recovery, and Boundary Condition Compatibility Semantics	FAIL44.COM
+044 - CP-M 2.2 Failure, Recovery, and Boundary Condition Compatibility Semantics	README.txt
+044 - CP-M 2.2 Failure, Recovery, and Boundary Condition Compatibility Semantics	observed-output.txt
+045 - CP-M 2.2 Cross-Layer Compatibility Boundary Review	CROSS45.COM
+045 - CP-M 2.2 Cross-Layer Compatibility Boundary Review	README.txt
+045 - CP-M 2.2 Cross-Layer Compatibility Boundary Review	observed-output.txt
+046 - CP-M 2.2 Compatibility Boundary Closure and Remaining Gap Analysis	GAP46.COM
+046 - CP-M 2.2 Compatibility Boundary Closure and Remaining Gap Analysis	README.txt
+046 - CP-M 2.2 Compatibility Boundary Closure and Remaining Gap Analysis	observed-output.txt
+047 - CP-M 2.2 Standard Utility Compatibility Survey	IN42.COM
+047 - CP-M 2.2 Standard Utility Compatibility Survey	IN42.rebuilt.COM
+047 - CP-M 2.2 Standard Utility Compatibility Survey	README.txt
+047 - CP-M 2.2 Standard Utility Compatibility Survey	observed-output.txt
+048 - CP-M 2.2 Development Toolchain Compatibility Survey	README.txt
+048 - CP-M 2.2 Development Toolchain Compatibility Survey	observed-output.txt
+049 - CP-M 2.2 Application Compatibility Survey	AD.COM
+049 - CP-M 2.2 Application Compatibility Survey	MBASIC.COM
+049 - CP-M 2.2 Application Compatibility Survey	README.txt
+049 - CP-M 2.2 Application Compatibility Survey	WS.COM
+049 - CP-M 2.2 Application Compatibility Survey	observed-output.txt
+049 - CP-M 2.2 Application Compatibility Survey	run-adventure.expect
+049 - CP-M 2.2 Application Compatibility Survey	run-wordstar-full.expect
+049 - CP-M 2.2 Application Compatibility Survey	run-wordstar.expect
+049 - CP-M 2.2 Application Compatibility Survey	run-wumpus.expect
+050 - CP-M 2.2 Communications Software Compatibility Survey	KERMIT.COM
+050 - CP-M 2.2 Communications Software Compatibility Survey	QTERM.COM
+050 - CP-M 2.2 Communications Software Compatibility Survey	README.txt
+050 - CP-M 2.2 Communications Software Compatibility Survey	RZ.COM
+050 - CP-M 2.2 Communications Software Compatibility Survey	SZ.COM
+050 - CP-M 2.2 Communications Software Compatibility Survey	XMODEM.COM
+050 - CP-M 2.2 Communications Software Compatibility Survey	observed-output.txt
+050 - CP-M 2.2 Communications Software Compatibility Survey	run-kermit-capabilities.expect
+050 - CP-M 2.2 Communications Software Compatibility Survey	run-kermit-connect.expect
+050 - CP-M 2.2 Communications Software Compatibility Survey	run-kermit-files.expect
+050 - CP-M 2.2 Communications Software Compatibility Survey	run-kermit-nopeer.expect
+050 - CP-M 2.2 Communications Software Compatibility Survey	run-kermit-startup.expect
+050 - CP-M 2.2 Communications Software Compatibility Survey	run-qterm-profile.expect
+050 - CP-M 2.2 Communications Software Compatibility Survey	run-xmodem-interface.expect
+051 - CP-M 2.2 Hardware-Dependent Software Compatibility Survey	BASE051.COM
+051 - CP-M 2.2 Hardware-Dependent Software Compatibility Survey	README.txt
+051 - CP-M 2.2 Hardware-Dependent Software Compatibility Survey	observed-output.txt
+051 - CP-M 2.2 Hardware-Dependent Software Compatibility Survey	run-base-control.expect
+051 - CP-M 2.2 Hardware-Dependent Software Compatibility Survey	run-kscope-unsupported-port.expect
+051 - CP-M 2.2 Hardware-Dependent Software Compatibility Survey	run-prommer-startup.expect
+051 - CP-M 2.2 Hardware-Dependent Software Compatibility Survey	run-qterm-unsupported-port.expect
+051 - CP-M 2.2 Hardware-Dependent Software Compatibility Survey	run-viopen-profile-mismatch.expect

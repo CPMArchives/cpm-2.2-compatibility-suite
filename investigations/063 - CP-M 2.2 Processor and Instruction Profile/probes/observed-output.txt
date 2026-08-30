@@ -1,0 +1,23 @@
+Investigation 063 observed results
+
+T01/T02/T03: The same DRI CP/M 2.2 disk booted in cpmsim Intel 8080 and Z80
+modes. DRI STAT completed in both. CPU8080.COM printed CPU8080 PASS in both.
+
+T04/T05: CPUZ80.COM printed CPUZ80 PASS in Z80 mode. In Intel 8080 mode the
+same bytes did not print PASS or return to CCP; the emulator stopped after an
+interpreted HALT path at 0049h. This is an incompatibility observation, not a
+claim that all non-Z80 processors must halt identically.
+
+T06/T07: CB 30h produced the checked SLL result with undocumented execution
+enabled. With the trap option, the same opcode stopped at 0105h. No historical
+software dependency was established, so neither result is promoted.
+
+T08: TIMING63.COM printed TIMING63 DONE at both configured 2 MHz and 4 MHz.
+The emulator reported measured rates of approximately 1.64 and 3.33 MHz in
+the accepted run. Program-visible semantics matched; elapsed execution did
+not. Exact host scheduling and achieved frequency are not evidence of CP/M
+requirements.
+
+All inputs were scripted. Each case began from a recreated disk copy. The
+tests wrote no CP/M files after staging. Full transcripts and records are
+preserved under probes/transcripts and processor-profile-records.tsv.

@@ -1,0 +1,24 @@
+Z80/8080-Macro-Assembler  Release 2.1	Wed Aug 19 13:26:58 2026	Page 1
+Source file: TIMING63.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Investigation 063: semantic control under different configured CPU rates.
+                       2      2         org     0100h
+0005  =                3      3 bdos    equ     0005h
+0100  06 05            4      4 start:  ld      b,5
+0102  21 ff ff         5      5 outer:  ld      hl,0ffffh
+0105  2b               6      6 inner:  dec     hl
+0106  7c               7      7         ld      a,h
+0107  b5               8      8         or      l
+0108  20 fb            9      9         jr      nz,inner
+010a  10 f6           10     10         djnz    outer
+010c  11 17 01        11     11         ld      de,done
+010f  0e 09           12     12         ld      c,9
+0111  cd 05 00        13     13         call    bdos
+0114  c3 00 00        14     14         jp      0000h
+0117  54 49 4d 49     15     15 done:   db      'TIMING63 DONE$'
+011b  4e 47 36 33     15     16
+011f  20 44 4f 4e     15     17
+0123  45 24           15     18
+0125                  16     19         end

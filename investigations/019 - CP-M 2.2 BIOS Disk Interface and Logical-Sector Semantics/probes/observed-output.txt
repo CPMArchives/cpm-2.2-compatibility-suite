@@ -1,0 +1,35 @@
+Investigation 019 accepted observations
+========================================
+
+Raw evidence is transcripts/console.txt. Each trace row is decoded in README.
+
+Cases captured: Search First, sequential read, Make, first and second
+sequential writes, Close, random read, random write, Delete, and direct
+identity/nonidentity SECTRAN chains.
+
+All successful READ/WRITE calls returned 00. DRI produced WRITE types:
+- Make, Close, Delete directory updates: 01.
+- first record written to a newly allocated block: 02.
+- next sequential record in allocated storage: 00.
+- random update of an allocated record: 00.
+
+Every disk transfer was preceded by persistent setup state. Traces show
+SECTRAN input, its result passed to SETSEC, SETDMA selection of either BDOS's
+directory buffer (FC30 in this build) or application DMA, then READ/WRITE.
+BDOS supplied track values already including DPB OFF=2; the first observed
+directory track was 2.
+
+The controlled XLT table mapped zero-based logical index 2 to SETSEC value 10.
+A direct read at that translated value produced bytes distinct from the
+reference BIOS's result for the same logical input with a null pointer. The
+null-pointer result on this configured BIOS is incidental: its SECTRAN routine
+assumes its configured non-null XLT. The documented identity requirement
+applies to a BIOS configuration whose DPH XLT is null.
+
+The reference DPB is the Investigation 017 geometry: SPT 26, 1 KiB allocation
+blocks, DSM 242, DRM 63, AL0=C0, CKS 16, OFF 2. Those values and all numeric
+addresses are configuration-specific.
+
+Drive B was byte-identical. Drive A changed only through the controlled
+Make/Write/Close/random-update/Delete lifecycle; BIOS019.DAT is absent from
+the final logical directory.

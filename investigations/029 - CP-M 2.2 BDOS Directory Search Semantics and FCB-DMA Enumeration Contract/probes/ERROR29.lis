@@ -1,0 +1,139 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:27:49 2026	Page 1
+Source file: ERROR29.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1  ORG 100H
+0100  31 20 02         2      2  LD SP,STACK
+0103  af               3      3  XOR A
+0104  cd 63 02         4      4  CALL SEL
+0107  cd 69 02         5      5  CALL SETDMA
+010a  21 2e 01         6      6  LD HL,BAN
+010d  cd 20 02         7      7  CALL PUTS
+0110  11 58 01         8      8  LD DE,MISS
+0113  0e 11            9      9  LD C,17
+0115  cd 05 00        10     10  CALL 5
+0118  cd 71 02        11     11  CALL REPORT
+011b  0e 12           12     12  LD C,18
+011d  cd 05 00        13     13  CALL 5
+0120  cd 71 02        14     14  CALL REPORT
+0123  11 7c 01        15     15  LD DE,BADDRV
+0126  0e 11           16     16  LD C,17
+0128  cd 05 00        17     17  CALL 5
+012b  c3 5e 02        18     18  JP EXIT
+012e  45 52 52 4f     19     19 BAN: DB 'ERROR29 no-match/end then invalid drive',13,10,0
+0132  52 32 39 20     19     20
+0136  6e 6f 2d 6d     19     21
+013a  61 74 63 68     19     22
+013e  2f 65 6e 64     19     23
+0142  20 74 68 65     19     24
+0146  6e 20 69 6e     19     25
+014a  76 61 6c 69     19     26
+014e  64 20 64 72     19     27
+0152  69 76 65 0d     19     28
+0156  0a 00           19     29
+0158  00 4e 4f 46     20     30 MISS: DB 0,'NOFILE29TXT',0,0,0,0
+015c  49 4c 45 32     20     31
+0160  39 54 58 54     20     32
+0164  00 00 00 00     20     33
+0168                  21     34  DS 20
+017c  11 41 4c 50     22     35 BADDRV: DB 17,'ALPHA   TXT',0,0,0,0
+0180  48 41 20 20     22     36
+0184  20 54 58 54     22     37
+0188  00 00 00 00     22     38
+018c                  23     39  DS 20
+01a0                  24     40  DS 128
+0220                  25     41 STACK:
+0220  7e              26     42 PUTS: LD A,(HL)
+0221  23              27     43  INC HL
+0222  b7              28     44  OR A
+0223  c8              29     45  RET Z
+0224  5f              30     46  LD E,A
+0225  cd 2a 02        31     47  CALL PUTC
+0228  18 f6           32     48  JR PUTS
+022a  f5              33     49 PUTC: PUSH AF
+022b  c5              34     50  PUSH BC
+022c  d5              35     51  PUSH DE
+022d  e5              36     52  PUSH HL
+022e  0e 02           37     53  LD C,2
+0230  cd 05 00        38     54  CALL 5
+0233  e1              39     55  POP HL
+0234  d1              40     56  POP DE
+0235  c1              41     57  POP BC
+0236  f1              42     58  POP AF
+0237  c9              43     59  RET
+0238  1e 20           44     60 SPACE: LD E,' '
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:27:49 2026	Page 2
+Source file: ERROR29.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+023a  c3 2a 02        45     61  JP PUTC
+023d  1e 0d           46     62 CRLF: LD E,13
+023f  cd 2a 02        47     63  CALL PUTC
+0242  1e 0a           48     64  LD E,10
+0244  c3 2a 02        49     65  JP PUTC
+0247  f5              50     66 HEXB: PUSH AF
+0248  0f              51     67  RRCA
+0249  0f              52     68  RRCA
+024a  0f              53     69  RRCA
+024b  0f              54     70  RRCA
+024c  cd 50 02        55     71  CALL NIB
+024f  f1              56     72  POP AF
+0250  e6 0f           57     73 NIB: AND 0FH
+0252  c6 30           58     74  ADD A,'0'
+0254  fe 3a           59     75  CP '9'+1
+0256  38 02           60     76  JR C,NOUT
+0258  c6 07           61     77  ADD A,7
+025a  5f              62     78 NOUT: LD E,A
+025b  c3 2a 02        63     79  JP PUTC
+025e  0e 00           64     80 EXIT: LD C,0
+0260  c3 05 00        65     81  JP 5
+0263  5f              66     82 SEL: LD E,A
+0264  0e 0e           67     83  LD C,14
+0266  c3 05 00        68     84  JP 5
+0269  11 cb 02        69     85 SETDMA: LD DE,DMA
+026c  0e 1a           70     86  LD C,26
+026e  c3 05 00        71     87  JP 5
+0271  32 ba 02        72     88 REPORT: LD (RC),A
+0274  fe ff           73     89  CP 0FFH
+0276  28 14           74     90  JR Z,RPRINT
+0278  6f              75     91  LD L,A
+0279  26 00           76     92  LD H,0
+027b  29              77     93  ADD HL,HL
+027c  29              78     94  ADD HL,HL
+027d  29              79     95  ADD HL,HL
+027e  29              80     96  ADD HL,HL
+027f  29              81     97  ADD HL,HL
+0280  11 cb 02        82     98  LD DE,DMA
+0283  19              83     99  ADD HL,DE
+0284  11 bb 02        84    100  LD DE,SNAP
+0287  01 10 00        85    101  LD BC,16
+028a  ed b0           86    102  LDIR
+028c                  87    103 RPRINT:
+028c  21 ae 02        88    104  LD HL,LABEL
+028f  cd 20 02        89    105  CALL PUTS
+0292  3a ba 02        90    106  LD A,(RC)
+0295  cd 47 02        91    107  CALL HEXB
+0298  fe ff           92    108  CP 0FFH
+029a  28 0f           93    109  JR Z,RDONE
+029c  cd 38 02        94    110  CALL SPACE
+029f  21 bb 02        95    111  LD HL,SNAP
+02a2  06 10           96    112  LD B,16
+02a4  7e              97    113 RBYTE: LD A,(HL)
+02a5  23              98    114  INC HL
+02a6  cd 47 02        99    115  CALL HEXB
+02a9  10 f9          100    116  DJNZ RBYTE
+02ab  c3 3d 02       101    117 RDONE: JP CRLF
+02ae  72 63 2f 65    102    118 LABEL: DB 'rc/entry16 ',0
+02b2  6e 74 72 79    102    119
+02b6  31 36 20 00    102    120
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:27:49 2026	Page 3
+Source file: ERROR29.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+02ba  00             103    121 RC: DB 0
+02bb                 104    122 SNAP: DS 16,0
+02cb                 105    123 DMA: DS 128,0A5H
+034b                 106    124  END

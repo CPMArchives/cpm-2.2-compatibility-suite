@@ -1,0 +1,63 @@
+CP/M 2.2 BDOS FUNCTION COVERAGE AUDIT
+
+Status key: FULL = application-visible contract characterized; POLICY = behavior
+observed but requirement remains an explicit policy decision; I037 = gap closed
+by this investigation.
+
+Fn  Name                              Status   Principal investigations
+00  System Reset                     FULL     I002 I024 I027 I035
+01  Console Input                    FULL     I016 I027
+02  Console Output                   FULL     I016 I027
+03  Reader Input                     FULL     I018 I027
+04  Punch Output                     FULL     I018 I027
+05  List Output                      FULL     I018 I027
+06  Direct Console I/O               FULL     I016 I027
+07  Get IOBYTE                       FULL     I018 I027
+08  Set IOBYTE                       FULL     I018 I027
+09  Print String                     FULL     I016 I027
+10  Read Console Buffer              FULL     I016 I027
+11  Get Console Status               FULL     I016 I027
+12  Return Version                   FULL     I016 I026 I027
+13  Reset Disk System                FULL     I007 I026 I035
+14  Select Disk                      FULL     I007 I026
+15  Open File                        FULL     I008 I025 I030
+16  Close File                       FULL     I008 I011 I025 I030
+17  Search First                     FULL     I009 I025 I029
+18  Search Next                      FULL     I009 I025 I029
+19  Delete File                      FULL     I012 I025
+20  Read Sequential                  FULL     I010 I025 I030
+21  Write Sequential                 FULL     I011 I025 I030
+22  Make File                        FULL     I011 I025 I030
+23  Rename File                      FULL     I012 I025
+24  Return Login Vector              FULL     I007 I026
+25  Return Current Disk              FULL     I007 I026 I027
+26  Set DMA Address                  FULL     I009 I016 I026 I027
+27  Return Allocation Vector         FULL     I017 I026
+28  Write Protect Disk               FULL     I014 I026
+29  Return Read-Only Vector          FULL     I007 I014 I026
+30  Set File Attributes              FULL     I014 I025
+31  Get Disk Parameters              FULL     I017 I026
+32  Get/Set User Code                FULL     I016 I026 I027 I031
+33  Read Random                      FULL     I013 I025 I030
+34  Write Random                     FULL     I013 I025 I030
+35  Compute File Size                FULL     I013 I016 I030
+36  Set Random Record                FULL     I013 I030
+37  DRI Reset Drive                  POLICY   I017 I026; undocumented in IG
+38  Reserved DRI zero-result stub    FULL     I026 I027; no CP/M service contract
+39  Reserved DRI zero-result stub    FULL     I026 I027; not Get BIOS in CP/M 2.2
+40  Write Random with Zero Fill      I037     I013/I026 identity; I037 allocation,
+                                              zero-fill, boundary and failure
+
+Selectors 41-255 are outside the strict CP/M 2.2 table and return zero under
+the established I002/I027 contract. Extension-mode consumption remains a policy
+choice; it is not a missing CP/M 2.2 function.
+
+Remaining focused evidence gaps after I037:
+  - policy, not mechanism: whether undocumented Function 37 is mandatory;
+  - policy: extension-mode use of selectors 41-255;
+  - Function 40 under file/disk write protection was recommended by I014 and
+    was not isolated here; ordinary Function 40 error codes share the random-
+    write family, but a protection-specific fixture remains useful;
+  - quantitative ecosystem frequency for undocumented conventions remains
+    unsupported by the local corpus.
+

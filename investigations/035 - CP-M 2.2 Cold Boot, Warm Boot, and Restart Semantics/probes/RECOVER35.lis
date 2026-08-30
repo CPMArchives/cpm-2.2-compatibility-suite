@@ -1,0 +1,461 @@
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 07:17:02 2026	Page 1
+Source file: RECOVER35.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Investigation 015 controlled physical disk-error probe
+                       2      2 ; Custom emulator port 18: OUT 1 fails next physical read, OUT 2 next write.
+                       3      3 	ORG 0100H
+0100                   4      4 START:
+0100  31 d5 05         5      5 	LD SP,STACKTOP
+0103  3a 80 00         6      6 	LD A,(0080H)
+0106  b7               7      7 	OR A
+0107  28 41            8      8 	JR Z,MODE_N
+0109  3a 82 00         9      9 	LD A,(0082H)
+010c  e6 5f           10     10 	AND 05FH
+010e  fe 41           11     11 	CP 'A'
+0110  ca 66 01        12     12 	JP Z,MODE_A
+0113  fe 42           13     13 	CP 'B'
+0115  ca bc 01        14     14 	JP Z,MODE_B
+0118  fe 43           15     15 	CP 'C'
+011a  ca eb 01        16     16 	JP Z,MODE_C
+011d  fe 44           17     17 	CP 'D'
+011f  ca 14 02        18     18 	JP Z,MODE_D
+0122  fe 45           19     19 	CP 'E'
+0124  ca 43 02        20     20 	JP Z,MODE_E
+0127  fe 46           21     21 	CP 'F'
+0129  ca 63 02        22     22 	JP Z,MODE_F
+012c  fe 47           23     23 	CP 'G'
+012e  ca 6e 01        24     24 	JP Z,MODE_G
+0131  fe 48           25     25 	CP 'H'
+0133  ca ef 01        26     26 	JP Z,MODE_H
+0136  fe 49           27     27 	CP 'I'
+0138  ca 90 02        28     28 	JP Z,MODE_I
+013b  fe 4a           29     29 	CP 'J'
+013d  ca b1 02        30     30 	JP Z,MODE_J
+0140  fe 4b           31     31 	CP 'K'
+0142  ca d9 02        32     32 	JP Z,MODE_K
+0145  fe 4c           33     33 	CP 'L'
+0147  ca fe 02        34     34 	JP Z,MODE_L
+                      35     35
+                      36     36 ; Normal sequential-read control, no injected fault.
+014a                  37     37 MODE_N:
+014a  3e 4e           38     38 	LD A,'N'
+014c  cd b0 03        39     39 	CALL CASEHEAD
+014f  21 ff 03        40     40 	LD HL,FREAD
+0152  cd 34 03        41     41 	CALL OPENFCB
+0155  3e ee           42     42 	LD A,0EEH
+0157  cd 5e 03        43     43 	CALL FILLBUF
+015a  0e 14           44     44 	LD C,20
+015c  cd 41 03        45     45 	CALL CALLFCB
+015f  11 4d 04        46     46 	LD DE,LRETURNED
+0162  cd 70 03        47     47 	CALL REPORT
+0165  c9              48     48 	RET
+                      49     49
+                      50     50 ; A/G: sequential physical read failure. G receives ^C at handler.
+0166                  51     51 MODE_A:
+0166  af              52     52 	XOR A
+0167  32 bb 01        53     53 	LD (I035G),A
+016a  3e 41           54     54 	LD A,'A'
+016c  18 07           55     55 	JR SEQREADFAIL
+016e                  56     56 MODE_G:
+016e  3e 01           57     57 	LD A,1
+0170  32 bb 01        58     58 	LD (I035G),A
+0173  3e 47           59     59 	LD A,'G'
+0175                  60     60 SEQREADFAIL:
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 07:17:02 2026	Page 2
+Source file: RECOVER35.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0175  cd b0 03        61     61 	CALL CASEHEAD
+0178  21 ff 03        62     62 	LD HL,FREAD
+017b  cd 34 03        63     63 	CALL OPENFCB
+017e  3a bb 01        64     64 	LD A,(I035G)
+0181  b7              65     65 	OR A
+0182  28 1d           66     66 	JR Z,I035READY
+0184  1e 01           67     67 	LD E,1
+0186  0e 0e           68     68 	LD C,14
+0188  cd 05 00        69     69 	CALL 0005H
+018b  1e 07           70     70 	LD E,7
+018d  0e 20           71     71 	LD C,32
+018f  cd 05 00        72     72 	CALL 0005H
+0192  3e 40           73     73 	LD A,40H
+0194  32 03 00        74     74 	LD (0003H),A
+0197  3e 71           75     75 	LD A,71H
+0199  32 04 00        76     76 	LD (0004H),A
+019c  3e a5           77     77 	LD A,0A5H
+019e  32 00 d0        78     78 	LD (0D000H),A
+01a1                  79     79 I035READY:
+01a1  3e ee           80     80 	LD A,0EEH
+01a3  cd 5e 03        81     81 	CALL FILLBUF
+01a6  11 45 04        82     82 	LD DE,LBEFORE
+01a9  cd 70 03        83     83 	CALL REPORT
+01ac  cd 1e 03        84     84 	CALL ARMREAD
+01af  0e 14           85     85 	LD C,20
+01b1  cd 41 03        86     86 	CALL CALLFCB
+01b4  11 4d 04        87     87 	LD DE,LRETURNED
+01b7  cd 70 03        88     88 	CALL REPORT
+01ba  c9              89     89 	RET
+                      90     90
+01bb  00              91     91 I035G: DB 0
+                      92     92
+                      93     93 ; B: random physical read failure at record zero.
+01bc                  94     94 MODE_B:
+01bc  3e 42           95     95 	LD A,'B'
+01be  cd b0 03        96     96 	CALL CASEHEAD
+01c1  21 ff 03        97     97 	LD HL,FREAD
+01c4  cd 34 03        98     98 	CALL OPENFCB
+01c7  af              99     99 	XOR A
+01c8  32 92 04       100    100 	LD (FCB+33),A
+01cb  32 93 04       101    101 	LD (FCB+34),A
+01ce  32 94 04       102    102 	LD (FCB+35),A
+01d1  3e ee          103    103 	LD A,0EEH
+01d3  cd 5e 03       104    104 	CALL FILLBUF
+01d6  11 45 04       105    105 	LD DE,LBEFORE
+01d9  cd 70 03       106    106 	CALL REPORT
+01dc  cd 1e 03       107    107 	CALL ARMREAD
+01df  0e 21          108    108 	LD C,33
+01e1  cd 41 03       109    109 	CALL CALLFCB
+01e4  11 4d 04       110    110 	LD DE,LRETURNED
+01e7  cd 70 03       111    111 	CALL REPORT
+01ea  c9             112    112 	RET
+                     113    113
+                     114    114 ; C/H: sequential physical write failure. H receives ^C at handler.
+01eb                 115    115 MODE_C:
+01eb  3e 43          116    116 	LD A,'C'
+01ed  18 02          117    117 	JR SEQWRITEFAIL
+01ef                 118    118 MODE_H:
+01ef  3e 48          119    119 	LD A,'H'
+01f1                 120    120 SEQWRITEFAIL:
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 07:17:02 2026	Page 3
+Source file: RECOVER35.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+01f1  cd b0 03       121    121 	CALL CASEHEAD
+01f4  21 0f 04       122    122 	LD HL,FWRITE
+01f7  cd 34 03       123    123 	CALL OPENFCB
+01fa  3e 53          124    124 	LD A,'S'
+01fc  cd 5e 03       125    125 	CALL FILLBUF
+01ff  11 45 04       126    126 	LD DE,LBEFORE
+0202  cd 70 03       127    127 	CALL REPORT
+0205  cd 29 03       128    128 	CALL ARMWRITE
+0208  0e 15          129    129 	LD C,21
+020a  cd 41 03       130    130 	CALL CALLFCB
+020d  11 4d 04       131    131 	LD DE,LRETURNED
+0210  cd 70 03       132    132 	CALL REPORT
+0213  c9             133    133 	RET
+                     134    134
+                     135    135 ; D: random physical write failure at allocated record zero.
+0214                 136    136 MODE_D:
+0214  3e 44          137    137 	LD A,'D'
+0216  cd b0 03       138    138 	CALL CASEHEAD
+0219  21 0f 04       139    139 	LD HL,FWRITE
+021c  cd 34 03       140    140 	CALL OPENFCB
+021f  af             141    141 	XOR A
+0220  32 92 04       142    142 	LD (FCB+33),A
+0223  32 93 04       143    143 	LD (FCB+34),A
+0226  32 94 04       144    144 	LD (FCB+35),A
+0229  3e 52          145    145 	LD A,'R'
+022b  cd 5e 03       146    146 	CALL FILLBUF
+022e  11 45 04       147    147 	LD DE,LBEFORE
+0231  cd 70 03       148    148 	CALL REPORT
+0234  cd 29 03       149    149 	CALL ARMWRITE
+0237  0e 22          150    150 	LD C,34
+0239  cd 41 03       151    151 	CALL CALLFCB
+023c  11 4d 04       152    152 	LD DE,LRETURNED
+023f  cd 70 03       153    153 	CALL REPORT
+0242  c9             154    154 	RET
+                     155    155
+                     156    156 ; E: physical directory-write failure during Make.
+0243                 157    157 MODE_E:
+0243  3e 45          158    158 	LD A,'E'
+0245  cd b0 03       159    159 	CALL CASEHEAD
+0248  21 2f 04       160    160 	LD HL,FNEW
+024b  cd 4b 03       161    161 	CALL LOADFCB
+024e  11 45 04       162    162 	LD DE,LBEFORE
+0251  cd 70 03       163    163 	CALL REPORT
+0254  cd 29 03       164    164 	CALL ARMWRITE
+0257  0e 16          165    165 	LD C,22
+0259  cd 41 03       166    166 	CALL CALLFCB
+025c  11 4d 04       167    167 	LD DE,LRETURNED
+025f  cd 70 03       168    168 	CALL REPORT
+0262  c9             169    169 	RET
+                     170    170
+                     171    171 ; F: physical directory-write failure during Close. Open an existing file,
+                     172    172 ; make its activated FCB dirty without a preceding disk write, and request a
+                     173    173 ; changed RC so an uninjected Close would rewrite the directory entry.
+0263                 174    174 MODE_F:
+0263  3e 46          175    175 	LD A,'F'
+0265  cd b0 03       176    176 	CALL CASEHEAD
+0268  21 1f 04       177    177 	LD HL,FCLOSE
+026b  cd 34 03       178    178 	CALL OPENFCB
+026e  3a 7f 04       179    179 	LD A,(FCB+14)
+0271  e6 7f          180    180 	AND 07FH
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 07:17:02 2026	Page 4
+Source file: RECOVER35.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0273  32 7f 04       181    181 	LD (FCB+14),A
+0276  3e 02          182    182 	LD A,2
+0278  32 80 04       183    183 	LD (FCB+15),A
+027b  11 45 04       184    184 	LD DE,LBEFORE
+027e  cd 70 03       185    185 	CALL REPORT
+0281  cd 29 03       186    186 	CALL ARMWRITE
+0284  0e 10          187    187 	LD C,16
+0286  cd 41 03       188    188 	CALL CALLFCB
+0289  11 4d 04       189    189 	LD DE,LRETURNED
+028c  cd 70 03       190    190 	CALL REPORT
+028f  c9             191    191 	RET
+                     192    192
+                     193    193 ; I/J: documented logical missing-data controls. These do not arm a physical
+                     194    194 ; fault and distinguish ordinary BDOS return codes from Bad Sector.
+0290                 195    195 MODE_I:
+0290  3e 49          196    196 	LD A,'I'
+0292  cd b0 03       197    197 	CALL CASEHEAD
+0295  21 ff 03       198    198 	LD HL,FREAD
+0298  cd 34 03       199    199 	CALL OPENFCB
+029b  3e 01          200    200 	LD A,1
+029d  32 91 04       201    201 	LD (FCB+32),A
+02a0  3e ee          202    202 	LD A,0EEH
+02a2  cd 5e 03       203    203 	CALL FILLBUF
+02a5  0e 14          204    204 	LD C,20
+02a7  cd 41 03       205    205 	CALL CALLFCB
+02aa  11 4d 04       206    206 	LD DE,LRETURNED
+02ad  cd 70 03       207    207 	CALL REPORT
+02b0  c9             208    208 	RET
+02b1                 209    209 MODE_J:
+02b1  3e 4a          210    210 	LD A,'J'
+02b3  cd b0 03       211    211 	CALL CASEHEAD
+02b6  21 ff 03       212    212 	LD HL,FREAD
+02b9  cd 34 03       213    213 	CALL OPENFCB
+02bc  3e 01          214    214 	LD A,1
+02be  32 92 04       215    215 	LD (FCB+33),A
+02c1  af             216    216 	XOR A
+02c2  32 93 04       217    217 	LD (FCB+34),A
+02c5  32 94 04       218    218 	LD (FCB+35),A
+02c8  3e ee          219    219 	LD A,0EEH
+02ca  cd 5e 03       220    220 	CALL FILLBUF
+02cd  0e 21          221    221 	LD C,33
+02cf  cd 41 03       222    222 	CALL CALLFCB
+02d2  11 4d 04       223    223 	LD DE,LRETURNED
+02d5  cd 70 03       224    224 	CALL REPORT
+02d8  c9             225    225 	RET
+                     226    226
+                     227    227 ; K: physical directory read failure during Search First.
+02d9                 228    228 MODE_K:
+02d9  3e 4b          229    229 	LD A,'K'
+02db  cd b0 03       230    230 	CALL CASEHEAD
+02de  21 ff 03       231    231 	LD HL,FREAD
+02e1  cd 4b 03       232    232 	CALL LOADFCB
+02e4  3e ee          233    233 	LD A,0EEH
+02e6  cd 5e 03       234    234 	CALL FILLBUF
+02e9  11 45 04       235    235 	LD DE,LBEFORE
+02ec  cd 70 03       236    236 	CALL REPORT
+02ef  cd 1e 03       237    237 	CALL ARMREAD
+02f2  0e 11          238    238 	LD C,17
+02f4  cd 41 03       239    239 	CALL CALLFCB
+02f7  11 4d 04       240    240 	LD DE,LRETURNED
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 07:17:02 2026	Page 5
+Source file: RECOVER35.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+02fa  cd 70 03       241    241 	CALL REPORT
+02fd  c9             242    242 	RET
+                     243    243
+                     244    244 ; L: physical directory write failure during Delete.
+02fe                 245    245 MODE_L:
+02fe  3e 4c          246    246 	LD A,'L'
+0300  cd b0 03       247    247 	CALL CASEHEAD
+0303  21 ff 03       248    248 	LD HL,FREAD
+0306  cd 4b 03       249    249 	CALL LOADFCB
+0309  11 45 04       250    250 	LD DE,LBEFORE
+030c  cd 70 03       251    251 	CALL REPORT
+030f  cd 29 03       252    252 	CALL ARMWRITE
+0312  0e 13          253    253 	LD C,19
+0314  cd 41 03       254    254 	CALL CALLFCB
+0317  11 4d 04       255    255 	LD DE,LRETURNED
+031a  cd 70 03       256    256 	CALL REPORT
+031d  c9             257    257 	RET
+                     258    258
+031e                 259    259 ARMREAD:
+031e  11 57 04       260    260 	LD DE,LARMREAD
+0321  cd c3 03       261    261 	CALL PUTS9
+0324  3e 01          262    262 	LD A,1
+0326  d3 12          263    263 	OUT (18),A
+0328  c9             264    264 	RET
+0329                 265    265 ARMWRITE:
+0329  11 62 04       266    266 	LD DE,LARMWRITE
+032c  cd c3 03       267    267 	CALL PUTS9
+032f  3e 02          268    268 	LD A,2
+0331  d3 12          269    269 	OUT (18),A
+0333  c9             270    270 	RET
+                     271    271
+0334                 272    272 OPENFCB:
+0334  cd 4b 03       273    273 	CALL LOADFCB
+0337  0e 0f          274    274 	LD C,15
+0339  cd 41 03       275    275 	CALL CALLFCB
+033c  af             276    276 	XOR A
+033d  32 91 04       277    277 	LD (FCB+32),A
+0340  c9             278    278 	RET
+0341                 279    279 CALLFCB:
+0341  11 71 04       280    280 	LD DE,FCB
+0344  cd 05 00       281    281 	CALL 0005H
+0347  32 6e 04       282    282 	LD (RESULT),A
+034a  c9             283    283 	RET
+034b                 284    284 LOADFCB:
+034b  11 71 04       285    285 	LD DE,FCB
+034e  01 10 00       286    286 	LD BC,16
+0351  ed b0          287    287 	LDIR
+0353  af             288    288 	XOR A
+0354  21 81 04       289    289 	LD HL,FCB+16
+0357  06 14          290    290 	LD B,20
+0359  77             291    291 LF0:	LD (HL),A
+035a  23             292    292 	INC HL
+035b  10 fc          293    293 	DJNZ LF0
+035d  c9             294    294 	RET
+035e                 295    295 FILLBUF:
+035e  21 95 04       296    296 	LD HL,BUF
+0361  06 80          297    297 	LD B,128
+0363  77             298    298 FB0:	LD (HL),A
+0364  23             299    299 	INC HL
+0365  10 fc          300    300 	DJNZ FB0
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 07:17:02 2026	Page 6
+Source file: RECOVER35.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0367  11 95 04       301    301 	LD DE,BUF
+036a  0e 1a          302    302 	LD C,26
+036c  cd 05 00       303    303 	CALL 0005H
+036f  c9             304    304 	RET
+                     305    305
+0370                 306    306 REPORT:
+0370  d5             307    307 	PUSH DE
+0371  0e 19          308    308 	LD C,25
+0373  cd 05 00       309    309 	CALL 0005H
+0376  32 6f 04       310    310 	LD (CURDISK),A
+0379  e1             311    311 	POP HL
+037a  cd c9 03       312    312 	CALL PUTS
+037d  3a 6e 04       313    313 	LD A,(RESULT)
+0380  cd e9 03       314    314 	CALL HEXBYTE
+0383  3e 20          315    315 	LD A,' '
+0385  cd d2 03       316    316 	CALL PUTC
+0388  3a 6f 04       317    317 	LD A,(CURDISK)
+038b  cd e9 03       318    318 	CALL HEXBYTE
+038e  3e 20          319    319 	LD A,' '
+0390  cd d2 03       320    320 	CALL PUTC
+0393  21 71 04       321    321 	LD HL,FCB
+0396  06 24          322    322 	LD B,36
+0398  7e             323    323 RD0:	LD A,(HL)
+0399  23             324    324 	INC HL
+039a  e5             325    325 	PUSH HL
+039b  cd e9 03       326    326 	CALL HEXBYTE
+039e  3e 20          327    327 	LD A,' '
+03a0  cd d2 03       328    328 	CALL PUTC
+03a3  e1             329    329 	POP HL
+03a4  10 f2          330    330 	DJNZ RD0
+03a6  3a 95 04       331    331 	LD A,(BUF)
+03a9  cd e9 03       332    332 	CALL HEXBYTE
+03ac  cd df 03       333    333 	CALL CRLF
+03af  c9             334    334 	RET
+03b0                 335    335 CASEHEAD:
+03b0  32 70 04       336    336 	LD (CASECHAR),A
+03b3  11 3f 04       337    337 	LD DE,LCASE
+03b6  cd c3 03       338    338 	CALL PUTS9
+03b9  3a 70 04       339    339 	LD A,(CASECHAR)
+03bc  cd d2 03       340    340 	CALL PUTC
+03bf  cd df 03       341    341 	CALL CRLF
+03c2  c9             342    342 	RET
+03c3                 343    343 PUTS9:
+03c3  0e 09          344    344 	LD C,9
+03c5  cd 05 00       345    345 	CALL 0005H
+03c8  c9             346    346 	RET
+03c9  7e             347    347 PUTS:	LD A,(HL)
+03ca  23             348    348 	INC HL
+03cb  b7             349    349 	OR A
+03cc  c8             350    350 	RET Z
+03cd  cd d2 03       351    351 	CALL PUTC
+03d0  18 f7          352    352 	JR PUTS
+03d2                 353    353 PUTC:
+03d2  c5             354    354 	PUSH BC
+03d3  d5             355    355 	PUSH DE
+03d4  e5             356    356 	PUSH HL
+03d5  5f             357    357 	LD E,A
+03d6  0e 02          358    358 	LD C,2
+03d8  cd 05 00       359    359 	CALL 0005H
+03db  e1             360    360 	POP HL
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 07:17:02 2026	Page 7
+Source file: RECOVER35.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+03dc  d1             361    361 	POP DE
+03dd  c1             362    362 	POP BC
+03de  c9             363    363 	RET
+03df                 364    364 CRLF:
+03df  3e 0d          365    365 	LD A,13
+03e1  cd d2 03       366    366 	CALL PUTC
+03e4  3e 0a          367    367 	LD A,10
+03e6  c3 d2 03       368    368 	JP PUTC
+03e9                 369    369 HEXBYTE:
+03e9  f5             370    370 	PUSH AF
+03ea  0f             371    371 	RRCA
+03eb  0f             372    372 	RRCA
+03ec  0f             373    373 	RRCA
+03ed  0f             374    374 	RRCA
+03ee  cd f2 03       375    375 	CALL NIBBLE
+03f1  f1             376    376 	POP AF
+03f2                 377    377 NIBBLE:
+03f2  e6 0f          378    378 	AND 0FH
+03f4  c6 30          379    379 	ADD A,'0'
+03f6  fe 3a          380    380 	CP '9'+1
+03f8  38 02          381    381 	JR C,NOUT
+03fa  c6 07          382    382 	ADD A,7
+03fc  c3 d2 03       383    383 NOUT:	JP PUTC
+                     384    384
+03ff  00 41 54 54    385    385 FREAD: DB 0,'ATTR    ','DAT',0,0,0,0
+0403  52 20 20 20    385    386
+0407  20 44 41 54    385    387
+040b  00 00 00 00    385    388
+040f  00 43 4c 4f    386    389 FWRITE: DB 0,'CLOSEME ','DAT',0,0,0,0
+0413  53 45 4d 45    386    390
+0417  20 44 41 54    386    391
+041b  00 00 00 00    386    392
+041f  00 44 53 4b    387    393 FCLOSE: DB 0,'DSKFILE ','DAT',0,0,0,0
+0423  46 49 4c 45    387    394
+0427  20 44 41 54    387    395
+042b  00 00 00 00    387    396
+042f  00 4e 45 57    388    397 FNEW: DB 0,'NEW015  ','DAT',0,0,0,0
+0433  30 31 35 20    388    398
+0437  20 44 41 54    388    399
+043b  00 00 00 00    388    400
+043f  43 41 53 45    389    401 LCASE: DB 'CASE $'
+0443  20 24          389    402
+0445  42 45 46 4f    390    403 LBEFORE: DB 'BEFORE ',0
+0449  52 45 20 00    390    404
+044d  52 45 54 55    391    405 LRETURNED: DB 'RETURNED ',0
+0451  52 4e 45 44    391    406
+0455  20 00          391    407
+0457  41 52 4d 20    392    408 LARMREAD: DB 'ARM READ',13,10,'$'
+045b  52 45 41 44    392    409
+045f  0d 0a 24       392    410
+0462  41 52 4d 20    393    411 LARMWRITE: DB 'ARM WRITE',13,10,'$'
+0466  57 52 49 54    393    412
+046a  45 0d 0a 24    393    413
+046e  00             394    414 RESULT: DB 0
+046f  00             395    415 CURDISK: DB 0
+0470  00             396    416 CASECHAR: DB 0
+0471                 397    417 FCB: DS 36,0
+0495                 398    418 BUF: DS 128,0
+0515                 399    419 	DS 192
+05d5                 400    420 STACKTOP:
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 07:17:02 2026	Page 8
+Source file: RECOVER35.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+05d5                 401    421 	END START

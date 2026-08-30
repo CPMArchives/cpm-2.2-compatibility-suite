@@ -1,0 +1,34 @@
+spawn cpmsim -z -d <local-workspace>/g-p-6a682f002be881918281554d644daf48/stage045/probes/cases/normal
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>CROSS45
+CROSS45 CROSS-LAYER MATRIX
+WBOOT/BDOS TARGET=FA03/EC06
+VERSION DRIVE USER=00220000
+ALT-DMA SEARCH RC/ENTRY=0100ATTR    DAT
+A:ATTR USER1/USER0 RC, CURRENT DRIVE=FF0101
+DIRECT BIOS CONST=00
+RESET DRIVE/USER=0000
+CROSS45 COMPLETE
+
+A>[0;31mE (7244) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 13 ms, waited for 0 ms
+CPU executed 784411 t-states in 0 ms
+Clock frequency 856.34 MHz

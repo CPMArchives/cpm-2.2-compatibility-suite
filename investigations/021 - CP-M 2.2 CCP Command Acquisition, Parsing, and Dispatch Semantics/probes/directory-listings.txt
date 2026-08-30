@@ -1,0 +1,42 @@
+Accepted fixture and after-run directory listing (identical)
+============================================================
+
+A user 0:
+attr.dat
+big.dat
+bios019.com
+block016.com
+buf006.com
+char018.com
+closeme.dat
+dio004.com
+dir.com
+dskfile.dat
+in005.com
+out003.com
+parse21.com
+rofile.dat
+save.com
+scrl016.com
+state017.com
+sys016.com
+type.com
+
+A user 1:
+dir.com
+
+B user 0:
+attr.dat
+big.dat
+block016.com
+buf006.com
+closeme.dat
+dio004.com
+dir.com
+dskfile.dat
+in005.com
+out003.com
+parse21.com
+rofile.dat
+scroll01
+sys016.com

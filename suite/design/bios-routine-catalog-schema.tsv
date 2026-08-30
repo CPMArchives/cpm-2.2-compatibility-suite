@@ -1,0 +1,23 @@
+field	requirement	definition
+routine_id	required	Stable suite-owned BIOS routine identifier.
+entry_name	required	Public BIOS entry-point name.
+jump_table_slot	required	Public jump-table position or explicit non-table classification.
+template_symbol	required	Symbol used by the fill-in BIOS template.
+purpose	required	Concise routine responsibility.
+input_contract	required	Defined input registers and memory.
+output_contract	required	Defined outputs and return behavior.
+permitted_side_effects	required	Allowed externally visible side effects.
+register_contract	required	Required preservation and explicitly unspecified registers.
+configuration_symbols	required	Configuration values consumed, or NONE.
+prerequisite_routines	required	Exact routine IDs required for isolated execution, or NONE.
+bringup_stage	required	Ordered hardware-development stage.
+ledger_entries	required	Zero-padded ledger entries, or NONE with rationale.
+case_ids	required	Frozen case IDs, or NONE with rationale.
+oracle_versions	required	Frozen oracle versions corresponding to case_ids.
+selectors	required	Canonical /NNNN, /BIOS:name, and /GROUP:name selectors.
+safety_class	required	Suite safety classification.
+fixture_device	required	Required fixture/device, or NONE.
+validation_mode	required	AUTOMATED, INTERACTIVE, HARNESS_ASSISTED, or MANUAL_REVIEW.
+implementation_state	required	STUB, IMPLEMENTED_UNVERIFIED, or VERIFIED.
+troubleshooting_topics	required	Non-normative diagnostic topics, or NONE.
+catalog_version	required	Schema/catalog version embedded in generated or validated outputs.

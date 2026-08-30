@@ -1,0 +1,56 @@
+Z80/8080-Macro-Assembler  Release 2.1	Wed Aug 19 13:26:58 2026	Page 1
+Source file: CPUZ80.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Investigation 063: documented Z80-extension probe.
+                       2      2         org     0100h
+0005  =                3      3 bdos    equ     0005h
+                       4      4
+0100  31 94 01         5      5 start:  ld      sp,stack
+0103  dd 21 52 01      6      6         ld      ix,word1
+0107  fd 21 54 01      7      7         ld      iy,word2
+010b  dd 7e 01         8      8         ld      a,(ix+1)
+010e  fe 22            9      9         cp      22h
+0110  20 35           10     10         jr      nz,fail
+0112  fd 7e 00        11     11         ld      a,(iy+0)
+0115  fe 33           12     12         cp      33h
+0117  20 2e           13     13         jr      nz,fail
+0119  01 02 01        14     14         ld      bc,0102h
+011c  d9              15     15         exx
+011d  01 04 03        16     16         ld      bc,0304h
+0120  d9              17     17         exx
+0121  78              18     18         ld      a,b
+0122  fe 01           19     19         cp      01h
+0124  20 21           20     20         jr      nz,fail
+0126  06 02           21     21         ld      b,2
+0128  10 fe           22     22 loop:   djnz    loop
+012a  3e 01           23     23         ld      a,01h
+012c  cb 47           24     24         bit     0,a
+012e  28 17           25     25         jr      z,fail
+0130  21 56 01        26     26         ld      hl,src
+0133  11 59 01        27     27         ld      de,dst
+0136  01 03 00        28     28         ld      bc,3
+0139  ed b0           29     29         ldir
+013b  3a 5b 01        30     30         ld      a,(dst+2)
+013e  fe c3           31     31         cp      0c3h
+0140  20 05           32     32         jr      nz,fail
+0142  11 5c 01        33     33         ld      de,passmsg
+0145  18 03           34     34         jr      print
+0147  11 68 01        35     35 fail:   ld      de,failmsg
+014a  0e 09           36     36 print:  ld      c,9
+014c  cd 05 00        37     37         call    bdos
+014f  c3 00 00        38     38         jp      0000h
+0152  11 22           39     39 word1:  db      11h,22h
+0154  33 44           40     40 word2:  db      33h,44h
+0156  a1 b2 c3        41     41 src:    db      0a1h,0b2h,0c3h
+0159                  42     42 dst:    ds      3
+015c  43 50 55 5a     43     43 passmsg:db      'CPUZ80 PASS$'
+0160  38 30 20 50     43     44
+0164  41 53 53 24     43     45
+0168  43 50 55 5a     44     46 failmsg:db      'CPUZ80 FAIL$'
+016c  38 30 20 46     44     47
+0170  41 49 4c 24     44     48
+0174                  45     49         ds      32
+0194                  46     50 stack:
+0194                  47     51         end

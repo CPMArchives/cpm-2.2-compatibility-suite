@@ -1,0 +1,6 @@
+canonical_id	I063_provisional_id	title	disposition	scope	reason
+0623	0766	Intel 8080-compatible binary execution baseline	REQUIRED	Generic CP/M binary baseline	CP/M and portable 8080 transients require documented 8080 execution; I063 T01-T03
+0624	0767	Declared processor-profile instruction semantics	REQUIRED	Selected processor profile plus inherited generic requirements	A profile claim must implement its documented CPU state and may add but not waive generic CP/M; I063/I067
+0625	0768	Z80 extensions outside a generic CP/M claim	NOT REQUIRED	Generic claim without Z80 profile	Z80-only features are profile additions, not universal CP/M requirements
+0626	0769	Undocumented processor behavior	NOT GUARANTEED	Generic and profiles that do not explicitly promise it	I063 demonstrated permitted execute/trap variation and no generic dependency
+0627	0770	Processor timing and interrupt topology	NOT REQUIRED	Generic CP/M baseline	Clock, cycles, wait states, refresh and interrupt topology belong to named machine profiles

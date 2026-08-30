@@ -1,0 +1,182 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:35:30 2026	Page 1
+Source file: READ25.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Sequential EOF, unopened read, and random logical failures.
+                       2      2         ORG 100H
+0100  11 ea 02         3      3         LD DE,DMA
+0103  0e 1a            4      4         LD C,26
+0105  cd 05 00         5      5         CALL 5
+0108  11 7e 02         6      6         LD DE,EMPTY
+010b  0e 0f            7      7         LD C,15
+010d  cd 05 00         8      8         CALL 5
+0110  cd bb 01         9      9         CALL FILL
+0113  11 7e 02        10     10         LD DE,EMPTY
+0116  0e 14           11     11         LD C,20
+0118  cd 05 00        12     12         CALL 5
+011b  11 fe 01        13     13         LD DE,L_EOF
+011e  cd 92 01        14     14         CALL SHOWE
+0121  cd bb 01        15     15         CALL FILL
+0124  11 a2 02        16     16         LD DE,UNOPEN
+0127  0e 14           17     17         LD C,20
+0129  cd 05 00        18     18         CALL 5
+012c  11 18 02        19     19         LD DE,L_UNOPEN
+012f  cd 97 01        20     20         CALL SHOWU
+0132  11 c6 02        21     21         LD DE,ONE
+0135  0e 0f           22     22         LD C,15
+0137  cd 05 00        23     23         CALL 5
+013a  3e 01           24     24         LD A,1
+013c  32 e7 02        25     25         LD (ONE+33),A
+013f  af              26     26         XOR A
+0140  32 e8 02        27     27         LD (ONE+34),A
+0143  32 e9 02        28     28         LD (ONE+35),A
+0146  cd bb 01        29     29         CALL FILL
+0149  11 c6 02        30     30         LD DE,ONE
+014c  0e 21           31     31         LD C,33
+014e  cd 05 00        32     32         CALL 5
+0151  11 31 02        33     33         LD DE,L_R1
+0154  cd 9c 01        34     34         CALL SHOWO
+0157  3e 80           35     35         LD A,128
+0159  32 e7 02        36     36         LD (ONE+33),A
+015c  af              37     37         XOR A
+015d  32 e8 02        38     38         LD (ONE+34),A
+0160  32 e9 02        39     39         LD (ONE+35),A
+0163  cd bb 01        40     40         CALL FILL
+0166  11 c6 02        41     41         LD DE,ONE
+0169  0e 21           42     42         LD C,33
+016b  cd 05 00        43     43         CALL 5
+016e  11 49 02        44     44         LD DE,L_R128
+0171  cd 9c 01        45     45         CALL SHOWO
+0174  af              46     46         XOR A
+0175  32 e7 02        47     47         LD (ONE+33),A
+0178  32 e8 02        48     48         LD (ONE+34),A
+017b  3e 04           49     49         LD A,4
+017d  32 e9 02        50     50         LD (ONE+35),A
+0180  cd bb 01        51     51         CALL FILL
+0183  11 c6 02        52     52         LD DE,ONE
+0186  0e 21           53     53         LD C,33
+0188  cd 05 00        54     54         CALL 5
+018b  11 63 02        55     55         LD DE,L_RBAD
+018e  cd 9c 01        56     56         CALL SHOWO
+0191  c9              57     57         RET
+0192  21 7e 02        58     58 SHOWE:  LD HL,EMPTY
+0195  18 08           59     59         JR SHOW
+0197  21 a2 02        60     60 SHOWU:  LD HL,UNOPEN
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:35:30 2026	Page 2
+Source file: READ25.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+019a  18 03           61     61         JR SHOW
+019c  21 c6 02        62     62 SHOWO:  LD HL,ONE
+019f  e5              63     63 SHOW:   PUSH HL
+01a0  f5              64     64         PUSH AF
+01a1  0e 09           65     65         LD C,9
+01a3  cd 05 00        66     66         CALL 5
+01a6  f1              67     67         POP AF
+01a7  cd e2 01        68     68         CALL HEX
+01aa  d1              69     69         POP DE
+01ab  01 24 00        70     70         LD BC,36
+01ae  cd c6 01        71     71         CALL DUMP0
+01b1  11 ea 02        72     72         LD DE,DMA
+01b4  01 10 00        73     73         LD BC,16
+01b7  cd d5 01        74     74         CALL DUMP
+01ba  c9              75     75         RET
+01bb  21 ea 02        76     76 FILL:   LD HL,DMA
+01be  06 80           77     77         LD B,128
+01c0  36 a5           78     78 F0:     LD (HL),0A5H
+01c2  23              79     79         INC HL
+01c3  10 fb           80     80         DJNZ F0
+01c5  c9              81     81         RET
+01c6  1a              82     82 DUMP0:  LD A,(DE)
+01c7  c5              83     83         PUSH BC
+01c8  d5              84     84         PUSH DE
+01c9  cd e2 01        85     85         CALL HEX
+01cc  d1              86     86         POP DE
+01cd  c1              87     87         POP BC
+01ce  13              88     88         INC DE
+01cf  0b              89     89         DEC BC
+01d0  78              90     90         LD A,B
+01d1  b1              91     91         OR C
+01d2  20 f2           92     92         JR NZ,DUMP0
+01d4  c9              93     93         RET
+01d5  cd c6 01        94     94 DUMP:   CALL DUMP0
+01d8  1e 0d           95     95         LD E,13
+01da  cd f6 01        96     96         CALL OUT
+01dd  1e 0a           97     97         LD E,10
+01df  c3 f6 01        98     98         JP OUT
+01e2  f5              99     99 HEX:    PUSH AF
+01e3  0f             100    100         RRCA
+01e4  0f             101    101         RRCA
+01e5  0f             102    102         RRCA
+01e6  0f             103    103         RRCA
+01e7  cd eb 01       104    104         CALL NIB
+01ea  f1             105    105         POP AF
+01eb  e6 0f          106    106 NIB:    AND 0FH
+01ed  c6 30          107    107         ADD A,'0'
+01ef  fe 3a          108    108         CP '9'+1
+01f1  38 02          109    109         JR C,HOUT
+01f3  c6 07          110    110         ADD A,7
+01f5  5f             111    111 HOUT:   LD E,A
+01f6  c5             112    112 OUT:    PUSH BC
+01f7  0e 02          113    113         LD C,2
+01f9  cd 05 00       114    114         CALL 5
+01fc  c1             115    115         POP BC
+01fd  c9             116    116         RET
+01fe  53 45 51 2d    117    117 L_EOF:  DB 'SEQ-EMPTY-EOF RC/FCB/DMA=','$'
+0202  45 4d 50 54    117    118
+0206  59 2d 45 4f    117    119
+020a  46 20 52 43    117    120
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:35:30 2026	Page 3
+Source file: READ25.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+020e  2f 46 43 42    117    121
+0212  2f 44 4d 41    117    122
+0216  3d 24          117    123
+0218  53 45 51 2d    118    124 L_UNOPEN:DB 'SEQ-UNOPENED RC/FCB/DMA=','$'
+021c  55 4e 4f 50    118    125
+0220  45 4e 45 44    118    126
+0224  20 52 43 2f    118    127
+0228  46 43 42 2f    118    128
+022c  44 4d 41 3d    118    129
+0230  24             118    130
+0231  52 41 4e 44    119    131 L_R1:   DB 'RANDOM-REC1 RC/FCB/DMA=','$'
+0235  4f 4d 2d 52    119    132
+0239  45 43 31 20    119    133
+023d  52 43 2f 46    119    134
+0241  43 42 2f 44    119    135
+0245  4d 41 3d 24    119    136
+0249  52 41 4e 44    120    137 L_R128: DB 'RANDOM-REC128 RC/FCB/DMA=','$'
+024d  4f 4d 2d 52    120    138
+0251  45 43 31 32    120    139
+0255  38 20 52 43    120    140
+0259  2f 46 43 42    120    141
+025d  2f 44 4d 41    120    142
+0261  3d 24          120    143
+0263  52 41 4e 44    121    144 L_RBAD: DB 'RANDOM-INVALID RC/FCB/DMA=','$'
+0267  4f 4d 2d 49    121    145
+026b  4e 56 41 4c    121    146
+026f  49 44 20 52    121    147
+0273  43 2f 46 43    121    148
+0277  42 2f 44 4d    121    149
+027b  41 3d 24       121    150
+027e  00 45 4d 50    122    151 EMPTY:  DB 0,'EMPTY25 ','DAT',0,0,0,0
+0282  54 59 32 35    122    152
+0286  20 44 41 54    122    153
+028a  00 00 00 00    122    154
+028e                 123    155         DS 20
+02a2  00 4f 4e 45    124    156 UNOPEN: DB 0,'ONE25   ','DAT',0,0,0,0
+02a6  32 35 20 20    124    157
+02aa  20 44 41 54    124    158
+02ae  00 00 00 00    124    159
+02b2                 125    160         DS 20
+02c6  00 4f 4e 45    126    161 ONE:    DB 0,'ONE25   ','DAT',0,0,0,0
+02ca  32 35 20 20    126    162
+02ce  20 44 41 54    126    163
+02d2  00 00 00 00    126    164
+02d6                 127    165         DS 20
+02ea                 128    166 DMA:    DS 128
+036a                 129    167         END

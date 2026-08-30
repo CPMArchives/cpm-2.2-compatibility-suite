@@ -1,0 +1,688 @@
+Investigation 035 — CP/M 2.2 Cold Boot, Warm Boot, and Restart Semantics Prompt
+
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 034 is complete.
+
+The authoritative Compatibility Ledger currently incorporates findings
+through Investigation 034.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports, architecture documents,
+roadmaps, specifications, or other existing BetterCP/M files.
+
+Create Investigation 035 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Define the CP/M 2.2 cold boot, warm boot, and restart compatibility
+contract.
+
+Previous investigations established:
+
+- BIOS interface behavior;
+- BDOS interface behavior;
+- CCP execution;
+- transient program lifecycle;
+- memory layout;
+- system memory ownership;
+- error recovery boundaries.
+
+
+Investigation 035 determines the behavior of CP/M system transitions.
+
+Investigate:
+
+- cold boot;
+- warm boot;
+- CCP restart;
+- system initialization;
+- state preservation;
+- state reset.
+
+
+Determine:
+
+- what events cause restart;
+- what components participate;
+- what state survives;
+- what state is reinitialized;
+- what applications may assume.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read and incorporate:
+
+
+Investigation 020:
+
+    CP/M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics.
+
+
+Investigation 024:
+
+    Transient Program Lifecycle, Termination, and BDOS Return-State
+    Semantics.
+
+
+Investigation 026:
+
+    BDOS System State Functions and Application-Visible Environment
+    Semantics.
+
+
+Investigation 028:
+
+    CCP Transient Execution Handoff and Loader State Contract.
+
+
+Investigation 033:
+
+    BDOS/BIOS Error Propagation and Recovery Semantics.
+
+
+Investigation 034:
+
+    Memory Layout, System Area, and Transient Program Boundary
+    Semantics.
+
+
+Do not duplicate previous investigations.
+
+Focus on system restart transitions and preserved state.
+
+
+SCOPE
+
+Investigate:
+
+- cold boot sequence;
+- warm boot sequence;
+- BIOS boot entry points;
+- CCP restart;
+- BDOS reset behavior;
+- disk state after restart;
+- console state after restart;
+- memory state after restart;
+- application-visible effects.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- hardware-specific boot ROMs;
+- manufacturer-specific loaders;
+- BetterCP/M boot architecture;
+- CP/M 3 startup extensions;
+- MP/M startup behavior.
+
+
+Do not require:
+
+- exact hardware initialization;
+- undocumented BIOS internals;
+- private CCP implementation details.
+
+
+KEY QUESTIONS
+
+
+1. COLD BOOT SEMANTICS
+
+Determine the CP/M 2.2 cold boot contract.
+
+Investigate:
+
+- BIOS cold boot entry;
+- system loading;
+- memory initialization;
+- disk initialization;
+- CCP availability;
+- initial BDOS state.
+
+
+Determine:
+
+- what components participate;
+- what state exists afterward;
+- what applications observe.
+
+
+2. WARM BOOT SEMANTICS
+
+Determine the CP/M 2.2 warm boot contract.
+
+Investigate:
+
+- BIOS warm boot entry;
+- CCP reload behavior;
+- BDOS state;
+- disk state;
+- memory state.
+
+
+Determine:
+
+- what is preserved;
+- what is reset;
+- what applications observe.
+
+
+3. BOOT ENTRY POINTS
+
+Determine the purpose and behavior of:
+
+- cold boot entry;
+- warm boot entry;
+- BIOS jump table entries;
+- CCP restart path.
+
+
+Determine:
+
+- which entry points are compatibility-visible;
+- which are implementation-specific.
+
+
+4. TRANSIENT PROGRAM TERMINATION
+
+Determine the relationship between program termination and restart.
+
+Investigate:
+
+- normal termination;
+- BDOS function 0;
+- return to CCP;
+- warm boot invocation.
+
+
+Cross-reference:
+
+Investigation 024.
+
+5. BDOS RESET FUNCTION
+
+Determine the behavior of BDOS reset operations.
+
+Investigate:
+
+- disk reset;
+- drive selection reset;
+- allocation state reset;
+- internal BDOS state.
+
+
+Determine:
+
+- what state is cleared;
+- what state is preserved;
+- what applications observe.
+
+
+Cross-reference:
+
+Investigation 007.
+
+Investigation 026.
+
+
+6. DISK STATE AFTER RESTART
+
+Determine disk-related state transitions.
+
+Investigate:
+
+- current drive;
+- logged-in drives;
+- directory state;
+- allocation vectors;
+- disk parameter state.
+
+
+Determine:
+
+- what is reinitialized;
+- what survives;
+- when disks are revalidated.
+
+
+Cross-reference:
+
+Investigation 017.
+
+
+7. MEMORY STATE AFTER RESTART
+
+Determine memory behavior during restart.
+
+Investigate:
+
+- CCP reload;
+- BDOS preservation;
+- BIOS preservation;
+- TPA contents;
+- zero page contents.
+
+
+Determine:
+
+- what memory is overwritten;
+- what memory survives;
+- what applications may assume.
+
+
+Cross-reference:
+
+Investigation 034.
+
+
+8. CONSOLE STATE AFTER RESTART
+
+Determine console behavior during restart.
+
+Investigate:
+
+- console device state;
+- pending input;
+- output state;
+- IOBYTE state.
+
+
+Determine:
+
+- what is preserved;
+- what is reset;
+- what applications observe.
+
+
+Cross-reference:
+
+Investigation 018.
+
+Investigation 020.
+
+
+9. DRIVE AND USER STATE AFTER RESTART
+
+Determine behavior of:
+
+- current drive;
+- current user area;
+- file search state;
+- FCB state.
+
+
+Investigate:
+
+- warm boot after transient execution;
+- warm boot after error;
+- CCP restart.
+
+
+Determine:
+
+- what state survives;
+- what state is reinitialized.
+
+
+Cross-reference:
+
+Investigation 031.
+
+Investigation 033.
+
+
+10. ERROR-INDUCED RESTART
+
+Determine restart behavior after failures.
+
+Investigate:
+
+- disk errors;
+- BDOS errors;
+- CCP failures;
+- transient program failures.
+
+
+Determine:
+
+- when restart occurs;
+- who initiates restart;
+- resulting system state.
+
+
+Cross-reference:
+
+Investigation 033.
+
+
+11. APPLICATION ASSUMPTIONS
+
+Determine which assumptions are valid:
+
+- warm boot restores CCP;
+- warm boot preserves memory;
+- warm boot resets disks;
+- cold boot initializes all state;
+- transient programs can rely on restart behavior.
+
+
+Classify each assumption.
+
+
+12. DRI SOURCE ANALYSIS
+
+Review available source material for:
+
+- BIOS cold boot;
+- BIOS warm boot;
+- CCP restart;
+- BDOS reset handling;
+- system initialization;
+- memory restoration.
+
+
+Extract:
+
+- compatibility-relevant behavior;
+- implementation-specific behavior.
+
+
+Do not produce:
+
+- source walkthroughs;
+- bootloader implementation guides.
+
+
+13. EXPERIMENTAL PROGRAMS
+
+Create deterministic probes:
+
+
+BOOT35:
+
+    Observe boot state.
+
+
+WARM35:
+
+    Observe warm boot behavior.
+
+
+COLD35:
+
+    Observe cold boot behavior.
+
+
+STATE35:
+
+    Observe preserved and reset state.
+
+
+RECOVER35:
+
+    Observe restart after failure.
+
+
+Each probe must include:
+
+- purpose;
+- procedure;
+- observed behavior;
+- compatibility conclusion.
+
+
+14. CONTROLLED TEST MATRIX
+
+Include:
+
+
+COLD BOOT
+
+- initial startup;
+- disk initialization;
+- CCP availability.
+
+
+WARM BOOT
+
+- normal termination;
+- BDOS restart;
+- error restart.
+
+
+MEMORY
+
+- zero page;
+- CCP;
+- BDOS;
+- TPA.
+
+
+DISK STATE
+
+- current drive;
+- user area;
+- allocation state.
+
+
+CONSOLE
+
+- pending input;
+- output state;
+- device state.
+
+
+FAILURE
+
+- disk error;
+- program failure;
+- restart recovery.
+
+16. EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+
+    documented behavior.
+
+B:
+
+    DRI implementation behavior.
+
+I:
+
+    experimental observation.
+
+D:
+
+    unresolved policy.
+
+
+These labels are internal investigation classifications only.
+
+
+Ledger evidence must use:
+
+    I035
+    BIOS
+    BDOS
+    CCP
+    MEMORY
+    IG
+    AG
+
+
+17. COMPATIBILITY CLASSIFICATION
+
+Classify each conclusion:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Do not require:
+
+- exact BIOS implementation;
+- exact boot loader behavior;
+- undocumented hardware initialization;
+- private memory initialization routines.
+
+
+18. EXISTING LEDGER REVIEW
+
+Review affected Compatibility Ledger entries:
+
+- BIOS boot behavior;
+- warm boot behavior;
+- cold boot behavior;
+- BDOS reset behavior;
+- CCP restart behavior;
+- transient program termination;
+- memory state behavior;
+- disk state behavior.
+
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+
+The current Compatibility Ledger ends after Investigation 034.
+
+Determine the next available ledger entry number.
+
+Do not modify the Compatibility Ledger.
+
+
+19. PROPOSED LEDGER ADDITIONS
+
+Include:
+
+Proposed Compatibility Ledger additions
+
+and:
+
+Proposed existing-entry updates.
+
+
+Each entry must contain:
+
+
+NNNN. Title
+
+    Description.
+
+    Disposition:
+
+    Evidence:
+
+    Conformance:
+
+
+20. REPORT STRUCTURE
+
+Create:
+
+Investigation 035 - CP/M 2.2 Cold Boot, Warm Boot, and Restart
+Semantics.md
+
+
+Include:
+
+
+1. Objective and scope
+
+2. Relationship to previous investigations
+
+3. Documentation findings
+
+4. BIOS source findings
+
+5. CCP source findings
+
+6. Cold boot semantics
+
+7. Warm boot semantics
+
+8. Boot entry points
+
+9. BDOS reset behavior
+
+10. Disk state transitions
+
+11. Memory state transitions
+
+12. Console state transitions
+
+13. Drive and user state transitions
+
+14. Error-induced restart behavior
+
+15. Experimental results
+
+16. Compatibility conclusions
+
+17. Proposed ledger additions
+
+18. Existing-entry updates
+
+19. Open questions
+
+20. Conformance implications
+
+
+21. FINAL REVIEW
+
+Verify that the investigation determines:
+
+- the CP/M 2.2 cold boot contract;
+- the CP/M 2.2 warm boot contract;
+- restart triggers;
+- preserved state;
+- reset state;
+- application-visible behavior.
+
+
+Ensure conclusions distinguish:
+
+- documented behavior;
+- BIOS implementation behavior;
+- BDOS implementation behavior;
+- CCP implementation behavior;
+- experimental observations;
+- unresolved policy.
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M boot architecture.
+
+Do not replace CP/M restart semantics with modern operating-system
+startup models.
+
+Determine the CP/M 2.2 cold boot, warm boot, and restart compatibility
+contract only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

@@ -1,0 +1,114 @@
+spawn cpmsim -z -d /tmp/inv021-main
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>
+A> 
+A>   
+A>      
+        ?
+
+A>       
+        ?
+
+A>dir
+A: BLOCK016 COM : ATTR     DAT : BIG      DAT : ROFILE   DAT
+A: CLOSEME  DAT : DSKFILE  DAT : BUF006   COM : DIO004   COM
+A: IN005    COM : OUT003   COM : SYS016   COM : SCRL016  COM
+A: STATE017 COM : CHAR018  COM : BIOS019  COM : PARSE21  COM
+A: DIR      COM : TYPE     COM : SAVE     COM
+A>DiR
+A: BLOCK016 COM : ATTR     DAT : BIG      DAT : ROFILE   DAT
+A: CLOSEME  DAT : DSKFILE  DAT : BUF006   COM : DIO004   COM
+A: IN005    COM : OUT003   COM : SYS016   COM : SCRL016  COM
+A: STATE017 COM : CHAR018  COM : BIOS019  COM : PARSE21  COM
+A: DIR      COM : TYPE     COM : SAVE     COM
+A>   DIR
+A: BLOCK016 COM : ATTR     DAT : BIG      DAT : ROFILE   DAT
+A: CLOSEME  DAT : DSKFILE  DAT : BUF006   COM : DIO004   COM
+A: IN005    COM : OUT003   COM : SYS016   COM : SCRL016  COM
+A: STATE017 COM : CHAR018  COM : BIOS019  COM : PARSE21  COM
+A: DIR      COM : TYPE     COM : SAVE     COM
+A>DIR    NOEXIST.*
+NO FILE
+A>A:
+A>B:
+B>A:
+A>B:DIR
+
+*** TRANSIENT MARK21 EXECUTED ***
+
+A>B:NOEXIST
+B:NOEXIST?
+
+A>DIR
+A: BLOCK016 COM : ATTR     DAT : BIG      DAT : ROFILE   DAT
+A: CLOSEME  DAT : DSKFILE  DAT : BUF006   COM : DIO004   COM
+A: IN005    COM : OUT003   COM : SYS016   COM : SCRL016  COM
+A: STATE017 COM : CHAR018  COM : BIOS019  COM : PARSE21  COM
+A: DIR      COM : TYPE     COM : SAVE     COM
+A>DIR.COM
+A: BLOCK016 COM : ATTR     DAT : BIG      DAT : ROFILE   DAT
+A: CLOSEME  DAT : DSKFILE  DAT : BUF006   COM : DIO004   COM
+A: IN005    COM : OUT003   COM : SYS016   COM : SCRL016  COM
+A: STATE017 COM : CHAR018  COM : BIOS019  COM : PARSE21  COM
+A: DIR      COM : TYPE     COM : SAVE     COM
+A>TYPE.COM
+?
+
+A>DI
+DI?
+
+A>DIRX
+DIRX?
+
+A>NOEXIST
+NOEXIST?
+
+A>FOO.TXT
+FOO.TXT?
+
+A>:FOO
+A>AA:
+AA:?
+
+A>FOO:BAR
+FOO:BAR?
+
+A>FOO;BAR
+FOO;BAR?
+
+A>PARSE21 one two
+PARSE21 DRIVE=00
+FCB1 00-0F: 00 4F 4E 45 20 20 20 20 20 20 20 20 00 00 00 03 
+FCB2 00-0F: 00 54 57 4F 20 20 20 20 20 20 20 20 00 00 00 00 
+TAIL COUNT/BYTES: 08 20 4F 4E 45 20 54 57 4F 
+
+A>parse21   a:b *.com
+PARSE21 DRIVE=00
+FCB1 00-0F: 01 42 20 20 20 20 20 20 20 20 20 20 00 00 00 03 
+FCB2 00-0F: 00 3F 3F 3F 3F 3F 3F 3F 3F 43 4F 4D 00 00 00 00 
+TAIL COUNT/BYTES: 0C 20 20 20 41 3A 42 20 2A 2E 43 4F 4D 
+
+A>XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX?
+
+A>
+User Interrupt at 0xfbbe
+I/O ran for 38 ms, waited for 0 ms
+CPU executed 5083708 t-states in 3 ms
+Clock frequency 1676.13 MHz

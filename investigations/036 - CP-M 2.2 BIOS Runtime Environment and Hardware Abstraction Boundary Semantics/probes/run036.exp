@@ -1,0 +1,28 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set emulator [lindex $argv 2]
+set mode [lindex $argv 3]
+set timeout 40
+log_file -noappend $logfile
+spawn $emulator -z -d $diskdir
+expect "A>"
+if {$mode eq "core"} {
+  send "BIOS36\r"
+  expect "A>"
+  send "CON36\r"
+  expect "A>"
+  send "VECTOR36\r"
+  expect "A>"
+  send "DISK36\r"
+  expect "A>"
+} else {
+  send "ERROR36 A\r"
+  expect "Bdos Err On A: Bad Sector"
+  send "\r"
+  expect "RETURNED"
+  expect "A>"
+}
+send "\034"
+expect eof
+

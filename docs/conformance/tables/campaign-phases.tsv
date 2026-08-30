@@ -1,0 +1,8 @@
+phase	purpose	entry_gate	exit_gate
+0-manifest	Freeze candidate, ledger, claim, profiles, environment, fixtures, runners, inventories and oracles.	All hashes resolve and pristine fixtures verify.	Immutable signed/content-addressed campaign manifest exists.
+1-foundation	Processor baseline, transient entry, memory gateways and BDOS call foundation.	Phase 0 PASS.	All applicable foundation cases PASS.
+2-interface	Console, system state, BIOS, memory and device interfaces.	Required phase-1 dependencies PASS.	All applicable interface cases PASS or independent results retained with explicit BLOCKED dependencies.
+3-storage	Directory, FCB, read/write, allocation and persistence.	BDOS call, DMA and BIOS disk prerequisites PASS.	All applicable storage cases PASS.
+4-command-failure	CCP, lifecycle, fault, error presentation and recovery.	Healthy corresponding narrow paths PASS.	All applicable command/failure cases PASS.
+5-ecosystem-profile	Utilities, applications, communications and hardware profiles.	All mapped narrow prerequisites PASS.	Selected supplemental/profile claims PASS.
+6-review	Recompute aggregation, verify artifacts, adjudicate manual cases and issue certificate/report.	Execution complete.	Independent audit reproduces every classification and claim.

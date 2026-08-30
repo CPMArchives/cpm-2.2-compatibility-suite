@@ -1,0 +1,43 @@
+BETTERCP/M COMPATIBILITY PROFILE REGISTRY
+Version 1.0-rc1
+
+1. Authority
+
+This registry assigns stable public identifiers to the exact profile and
+optional-feature applicability labels already present in Compatibility
+Ledger 072 and the I071 case matrix. It does not create, expand, merge, or
+weaken a compatibility proposition.
+
+2. Release status
+
+INCLUDED means the generic standard always includes the profile's inherited
+requirements. AVAILABLE means the profile is defined and may be selected in
+a future implementation claim, but is not automatically claimed or enabled.
+No BetterCP/M implementation or certification is claimed by this registry.
+
+CPM22-BASE is INCLUDED. Every named fidelity, CCP, device, hardware, and
+optional profile is AVAILABLE and unselected by default in this specification
+release candidate. A product release must publish its selected profile IDs
+and pass all mapped PROFILE REQUIRED cases. Optional profiles remain outside
+baseline certification unless explicitly claimed.
+
+3. Inheritance
+
+Every named profile inherits CPM22-BASE. Profiles add requirements and may
+not waive a generic REQUIRED proposition. Selecting more than one profile
+activates the union of their cases. A conflict is a release-definition error
+and cannot be resolved by silently weakening the baseline.
+
+4. Registry and case mapping
+
+The normative registry is `Compatibility Profile Registry 1.0-rc1.tsv`.
+The normative 31-case mapping is `profile-case-map.tsv`: 28 PROFILE REQUIRED
+cases and three OPTIONAL cases, each mapped exactly once. The exact ledger
+applicability label is retained in both files to make the mapping auditable.
+
+5. Outside scope
+
+NOT GUARANTEED and OUTSIDE SCOPE cases are not turned into profiles by this
+registry. Undocumented wildcard Rename remains outside the compatibility
+claim. Machine/application endorsements require separately declared profiles
+and evidence; they are not implied by CPM22-BASE.

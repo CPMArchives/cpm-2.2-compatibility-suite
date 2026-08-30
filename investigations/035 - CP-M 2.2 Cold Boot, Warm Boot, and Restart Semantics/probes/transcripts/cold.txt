@@ -1,0 +1,34 @@
+spawn cpmsim -z -d /private/tmp/i035-runs/cold
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>COLD35
+COLD35 DRIVE USER LOGIN RO IOBYTE PZ4 PZ0 PZ5 M50 TD000 CCP ALV DPB CST SRC DMA80 DMA800 SP 00 00 0001 0000 00 00 03C3 06C3 00 3D C3 FCB0 FA8D 00 01 00 A5 EBA9
+
+A>BOOT35
+BOOT35 ENTER DIRECT BIOS BOOT AFTER MUTATION
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>COLD35
+COLD35 DRIVE USER LOGIN RO IOBYTE PZ4 PZ0 PZ5 M50 TD000 CCP ALV DPB CST SRC DMA80 DMA800 SP 00 00 0001 0000 00 00 03C3 06C3 5A A5 C3 FCB0 FA8D 00 01 00 A5 EBA9
+
+A>[0;31mE (5794) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 6 ms, waited for 0 ms
+CPU executed 1511297 t-states in 1 ms
+Clock frequency 1475.87 MHz

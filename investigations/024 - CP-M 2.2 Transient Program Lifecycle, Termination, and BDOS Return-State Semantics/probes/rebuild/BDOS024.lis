@@ -1,0 +1,18 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:10:35 2026	Page 1
+Source file: BDOS024.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Immediate BDOS Function 0 termination.
+                       2      2         ORG 100H
+0100  11 0d 01         3      3         LD DE,MSG
+0103  0e 09            4      4         LD C,9
+0105  cd 05 00         5      5         CALL 5
+0108  0e 00            6      6         LD C,0
+010a  c3 05 00         7      7         JP 5
+010d  42 44 4f 53      8      8 MSG:    DB 'BDOS024 BEFORE F0',13,10,'$'
+0111  30 32 34 20      8      9
+0115  42 45 46 4f      8     10
+0119  52 45 20 46      8     11
+011d  30 0d 0a 24      8     12
+0121                   9     13         END

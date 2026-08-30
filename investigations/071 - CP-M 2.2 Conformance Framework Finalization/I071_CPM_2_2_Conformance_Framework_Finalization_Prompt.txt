@@ -1,0 +1,260 @@
+Investigation 071 — CP/M 2.2 Conformance Framework Finalization Prompt
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 070 is complete.
+
+The authoritative Compatibility Ledger incorporates findings through the
+controlled ledger update following Investigation 070.
+
+Create Investigation 071 as a new evidence report with its own directory
+and preserved artifacts.
+
+Do not modify the Compatibility Ledger directly. Do not modify previous
+investigation reports or artifacts.
+
+This is a compatibility certification framework investigation only.
+
+Do not implement BetterCP/M changes.
+
+OBJECTIVE
+
+Finalize the CP/M 2.2 compatibility conformance framework so that it
+becomes a reproducible certification and validation system.
+
+Previous investigations established:
+
+-   the observable CP/M 2.2 compatibility boundary;
+-   the canonical Compatibility Ledger;
+-   BetterCP/M compatibility commitments;
+-   compatibility profiles;
+-   validation requirements;
+-   preliminary conformance tests.
+
+Investigation 071 converts the conformance framework from a design into
+a normative test system.
+
+Determine:
+
+-   final test identifiers;
+-   exact pass/fail criteria;
+-   oracle behavior;
+-   evidence requirements;
+-   campaign structure;
+-   certification rules.
+
+COMPATIBILITY STANDARD
+
+Evaluate conformance against:
+
+-   the canonical Compatibility Ledger;
+-   resolved policy commitments from Investigation 070;
+-   documented compatibility requirements;
+-   defined compatibility profiles.
+
+The purpose is to determine whether an implementation satisfies the
+published compatibility contract.
+
+Do not redesign CP/M compatibility. Do not implement BetterCP/M.
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Review completed investigations through Investigation 070.
+
+Pay particular attention to:
+
+Investigation 052: CP/M 2.2 Compatibility Regression Test Specification.
+
+Investigation 059: CP/M 2.2 Compatibility Conformance Test Suite Design.
+
+Investigation 062: CP/M 2.2 Compatibility Conformance Pilot Execution.
+
+Investigation 069: CP/M 2.2 Compatibility Ledger Integrity Resolution.
+
+Investigation 070: CP/M 2.2 Policy Pending Resolution.
+
+SCOPE
+
+Investigate:
+
+-   conformance test inventory;
+-   test identifiers;
+-   expected results;
+-   oracle definitions;
+-   evidence requirements;
+-   campaign manifests;
+-   certification levels.
+
+NON-GOALS
+
+Do not investigate:
+
+-   BetterCP/M implementation;
+-   new compatibility requirements;
+-   architecture design;
+-   historical behavior outside the compatibility contract.
+
+INVESTIGATION QUESTIONS
+
+1.  TEST INVENTORY FREEZE
+
+Determine:
+
+-   final conformance test list;
+-   stable test identifiers;
+-   relationship to compatibility propositions.
+
+2.  REQUIREMENT TRACEABILITY
+
+Determine:
+
+-   how requirements map to tests;
+-   profile-specific validation needs;
+-   requirements needing manual validation.
+
+3.  ORACLE DEFINITIONS
+
+Define:
+
+-   expected behavior;
+-   acceptable variation;
+-   failure conditions;
+-   profile-dependent results.
+
+4.  CAMPAIGN STRUCTURE
+
+Determine:
+
+-   test ordering;
+-   dependencies;
+-   environment requirements;
+-   reproducibility requirements.
+
+5.  EVIDENCE MODEL
+
+Determine:
+
+-   required artifacts;
+-   transcripts;
+-   binaries;
+-   disk images;
+-   hashes;
+-   environment records.
+
+6.  CERTIFICATION LEVELS
+
+Determine:
+
+-   baseline compatibility certification;
+-   profile certification;
+-   optional compatibility claims;
+-   unsupported claims.
+
+7.  FAILURE HANDLING
+
+Determine:
+
+-   failure classification;
+-   partial conformance reporting;
+-   exception handling.
+
+8.  EXPERIMENTAL REQUIREMENTS
+
+Create a conformance framework matrix.
+
+Each item must include:
+
+-   test identifier;
+-   compatibility requirement;
+-   oracle;
+-   evidence requirement;
+-   pass/fail rule;
+-   certification impact.
+
+EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A: documented behavior.
+
+B: Digital Research implementation behavior.
+
+I: experimental observation.
+
+D: unresolved policy.
+
+Ledger evidence must identify:
+
+I071 CONFORMANCE FRAMEWORK FINALIZATION subsystem IG AG
+
+COMPATIBILITY CLASSIFICATION
+
+Classify findings as:
+
+REQUIRED
+
+PROFILE REQUIRED
+
+OPTIONAL
+
+NOT GUARANTEED
+
+OUTSIDE SCOPE
+
+LEDGER REVIEW
+
+Review affected Compatibility Ledger entries.
+
+Determine:
+
+-   test traceability;
+-   missing validation coverage;
+-   recommended updates.
+
+Do not modify the canonical ledger directly.
+
+REPORT STRUCTURE
+
+Create:
+
+Investigation 071 - CP/M 2.2 Conformance Framework Finalization.md
+
+Include:
+
+1.  Objective and scope
+2.  Relationship to previous investigations
+3.  Conformance inventory
+4.  Test identifier freeze
+5.  Requirement traceability
+6.  Oracle definitions
+7.  Campaign structure
+8.  Evidence requirements
+9.  Certification model
+10. Failure handling
+11. Recommended conformance updates
+12. Existing-entry impacts
+13. Open questions
+14. Release implications
+
+FINAL REVIEW
+
+Before completing the investigation, verify:
+
+-   tests map to compatibility commitments;
+-   oracles are explicit;
+-   certification is reproducible;
+-   evidence requirements are clear;
+-   remaining uncertainty is documented.
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not alter the compatibility contract.
+
+Do not modify the canonical ledger directly.
+
+Define the CP/M 2.2 compatibility conformance framework only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

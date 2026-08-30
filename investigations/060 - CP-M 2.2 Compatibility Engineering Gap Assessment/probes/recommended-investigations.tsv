@@ -1,0 +1,8 @@
+priority	proposed_subject	gap_ids	minimum_evidence	baseline_blocker	profile_or_claim_affected
+1	Cross-implementation differential validation	G060-04,G060-16,G060-17	Run selected public, NOT GUARANTEED and policy probes on at least two materially independent CP/M-compatible implementations	Yes for high-confidence portability claim	Baseline/strict confidence
+2	Conformance pilot execution and decision audit	G060-20,G060-21,G060-22	Complete result set for reference CP/M and one independent/new implementation using I059 schema	Yes for normative conformance release	All claims
+3	Processor and instruction compatibility profile	G060-07	Documented processor baseline plus corpus scan and controlled instruction/flags/timing cases	Yes for broad ecosystem claim	Processor profile
+4	Expanded application/compiler corpus	G060-12,G060-13	Rights-cleared deterministic compiler, spreadsheet, database, business, BBS and printer workflows	No narrow baseline; yes broad ecosystem endorsement	Corpus endorsement
+5	Paired communications and receive-failure validation	G060-14	Controlled peer send/receive, binary/text hashes, cancel, carrier loss and storage failure	No baseline	Communications profile
+6	Late/natural physical fault and partial-mutation validation	G060-09,G060-10	Failure after selected transfer counts across read/write/Make/Close/Delete/Rename with before/after images	Only for strong physical-error profile	Error/storage profile
+7	Matching hardware-profile validation	G060-06,G060-15	Faithful IMSAI/Dazzler/controller/peripheral fixtures and successful named-profile observations	No baseline	Named hardware profiles

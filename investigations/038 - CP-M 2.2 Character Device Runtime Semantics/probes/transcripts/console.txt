@@ -1,0 +1,92 @@
+spawn cpmsim -z -d /private/tmp/i038-runs
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>CHAR38
+
+CHAR018 stat rdr pend rdrcnt io0 get0 loc1 get1 locrest punchio dma80 dmaalt plen llen conlen
+01 C1 5A 01 00 00 A5 A5 00 A5 A5 5A 06 05 08 
+PUNCH len/bytes 06 41 09 10 80 09 51 
+LIST len/bytes 05 41 09 10 80 09 
+CON len/bytes 08 41 20 20 20 20 20 20 20 
+
+A>STATUS38
+BIOS020 PZ00-07: C3 03 FA 00 00 C3 06 EC 
+BIOS BASE: FA00
+VECTORS index opcode target:
+00 C3 FB3E
+01 C3 FB51
+02 C3 FBBC
+03 C3 FBBF
+04 C3 FBC2
+05 C3 FBC6
+06 C3 FBCD
+07 C3 FBD1
+08 C3 FBD4
+09 C3 FBD9
+0A C3 FC05
+0B C3 FC09
+0C C3 FC1E
+0D C3 FC25
+0E C3 FC29
+0F C3 FBCA
+10 C3 FC0D
+DIRECT CONST0 CONST1 CONIN READER LISTST0 LISTST1 OUTN: 00 FF 41 52 00 FF 06 
+OUTPUT PAIRS device-byte: 43 09 4C 10 50 1A 
+
+A>IOBYTE38
+
+CHAR018 stat rdr pend rdrcnt io0 get0 loc1 get1 locrest punchio dma80 dmaalt plen llen conlen
+01 C1 5A 01 00 00 A5 A5 00 A5 A5 5A 06 05 08 
+PUNCH len/bytes 06 41 09 10 80 09 51 
+LIST len/bytes 05 41 09 10 80 09 
+CON len/bytes 08 41 20 20 20 20 20 20 20 
+
+A>BLOCK38 E
+
+EMPTY 11,6FF,6FE: 00 00 00
+
+A>BLOCK38 6
+
+PEND6 first,second: 5A 00 00
+
+A>BLOCK38 F
+
+PEND6FE first,second: 00 00 00
+
+A>BLOCK38 O
+
+RAW-BEGIN[A	$B]RAW-END
+
+A>ERROR38
+
+CHAR018 stat rdr pend rdrcnt io0 get0 loc1 get1 locrest punchio dma80 dmaalt plen llen conlen
+01 C1 5A 01 00 00 A5 A5 00 A5 A5 5A 06 05 08 
+PUNCH len/bytes 06 41 09 10 80 09 51 
+LIST len/bytes 05 41 09 10 80 09 
+CON len/bytes 08 41 20 20 20 20 20 20 20 
+
+A>BLOCK38 S
+
+PEND11 first,second,6FF: 01 01 00
+
+A>Z[0;31mE (13408) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 22 ms, waited for 0 ms
+CPU executed 2881797 t-states in 1 ms
+Clock frequency 1567.89 MHz

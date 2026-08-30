@@ -1,0 +1,56 @@
+spawn /tmp/i061-z80pack/cromemcosim/cromemcosim -M1 -R
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+Cromemco Z-1 Simulation Release 1.19
+Copyright (C) 2014-2025 by Udo Munk & 2021-2022 by David McNaughton
+
+CPU speed is 4 MHz, CPU executes undocumented instructions
+
+Web server builtin, but disabled
+
+RAM 0000H - FFFFH
+ROM C000H - DFFFH rdos0308.hex
+Power-on jump address at C000H
+MMU has 7 additional RAM banks of 64 KB
+
+FDC Banked ROM enabled
+
+DISK MAP: [./disks/disk.map]
+A:DSK:='drivea.dsk'
+[0;33mW (19057) diskmanager: Failed to stat disk image: driveb.dsk, error: 2[0m
+[0;33mW (19062) diskmanager: B:DSK: Image file 'driveb.dsk' is invalid[0m
+[0;33mW (19075) diskmanager: Failed to stat disk image: drivec.dsk, error: 2[0m
+[0;33mW (19076) diskmanager: C:DSK: Image file 'drivec.dsk' is invalid[0m
+[0;33mW (19080) diskmanager: Failed to stat disk image: drived.dsk, error: 2[0m
+[0;33mW (19082) diskmanager: D:DSK: Image file 'drived.dsk' is invalid[0m
+Loader statistics for file ./roms/rdos0308.hex:
+START : C000H
+END   : DFFFH
+PC    : C000H
+LOADED: 2000H (8192)
+
+
+[0;31mE (19386) net: can't bind server socket[0m
+send: spawn id exp6 not open
+    while executing
+"send -- "$command\r""
+    ("foreach" body line 2)
+    invoked from within
+"foreach command {
+    "VECTOR41"
+    "ZERO41 ALPHA.TXT BETA.BIN"
+    "STATE61"
+    "EDGE43"
+    "BIOS41"
+    "PIP COPY61.TXT=SRC61.TXT"
+    "DIR *.*"
+..."
+    (file "stage061/probes/run061.exp" line 20)

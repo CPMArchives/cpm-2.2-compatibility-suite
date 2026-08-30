@@ -1,0 +1,4 @@
+z80pack cpmsim Release 1.39
+z80pack Git commit: 91fd28eb04e675c2127df88ed3f40675e15282e2
+Guest: 64K CP/M 2.2, Z80 CBIOS V1.2 for Z80SIM
+Host harness: /usr/bin/expect, deterministic command queue

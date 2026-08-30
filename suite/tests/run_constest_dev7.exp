@@ -1,0 +1,42 @@
+#!/usr/bin/expect -f
+# SPDX-License-Identifier: GPL-2.0-or-later
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set cpu [lindex $argv 2]
+if {$cpu eq ""} { set cpu "-z" }
+set timeout 60
+log_file -noappend $logfile
+source [file join [file dirname [info script]] cpmsim-path.exp]
+spawn $cpmsim $cpu -d $diskdir
+expect "A>"
+send -- "B:\r"
+expect "B>"
+send -- "CONSTEST /ALL\r"
+expect "0051  UNTESTED"
+expect "OUT OF SCOPE"
+expect "Not tested; outside executable scope"
+for {set n 0} {$n < 15} {incr n} {
+    expect "Do OBSERVED and EXPECTED match? (Y/N; no Enter) "
+    send -- "Y"
+}
+expect "0122  ----"
+expect "Run item individually; interactive setup required"
+expect "Summary: 15 pass, 0 fail, 0 error, 3 observations"
+expect "B>"
+foreach item {0089 0090 0105 0130 0421} {
+    send -- "CONSTEST /$item\r"
+    expect "$item  UNTESTED"
+    expect "OUT OF SCOPE"
+    expect "Not tested; outside executable scope"
+    expect "Summary: 0 pass, 0 fail, 0 error, 0 observations"
+    expect "B>"
+}
+send -- "CONSTEST /LIST\r"
+expect "0051  Observed BDOS return flags"
+expect "0446  Active IOBYTE routing policy"
+expect "B>"
+send -- "CONSTEST /H\r"
+expect "CONSTEST 0.1.0-dev12"
+expect "B>"
+send "\034"
+expect eof

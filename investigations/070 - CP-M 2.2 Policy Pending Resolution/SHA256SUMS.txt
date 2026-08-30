@@ -1,0 +1,17 @@
+ffd4534610e3a18161fd864c3281319787cdc8fc72bac9c4529885c8676a4ae1  ./Investigation 070 - CP-M 2.2 Policy Pending Resolution prompt.txt
+b6716b31e55808d047d63157151d7f2df2b753bc610ade742d769e76d2f964d4  ./Investigation 070 - CP-M 2.2 Policy Pending Resolution.md
+4e21c850bdbcf442e3a08611c64e0569e4e622a548250f66873657ecf4360946  ./completion-audit.txt
+582eec29f5289e44e5434740cb3352b23be2a72aaceec43b5c6393fa08c1c7e3  ./hashes/ledger-after.sha256
+582eec29f5289e44e5434740cb3352b23be2a72aaceec43b5c6393fa08c1c7e3  ./hashes/ledger-before.sha256
+6e1de47dd6c40590a82cf9a12a021b6d006b6f5bdb8457403b5af7b894a8f32f  ./hashes/manuals-reviewed.sha256
+fec4a831433068c684310a9088fe20a77bdbbfdec37ecc55c58ab1b32e0a1308  ./hashes/protected-after.sha256
+fec4a831433068c684310a9088fe20a77bdbbfdec37ecc55c58ab1b32e0a1308  ./hashes/protected-before.sha256
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./hashes/protected.diff
+94ebba17aff297d8aae206b82092921c5af1d2f0f9a3bf20dd8c5f54cdbdbaaa  ./hashes/reports-reviewed.sha256
+1d4ffe74d59326c0064a6d950103f02a6a02dd8136d744af67eee5d7f8dbfc7f  ./probes/generate-ledger-actions.py
+58bde6fe734ed73d8b43b51fbe62f0832da8ce645e4b6f8f4a246831f9816a11  ./probes/matrix-validation.txt
+a048047c674777bb94ab57ffc5efc140b4dec9e69428819a54cdfa6053bb0c68  ./probes/policy-resolution-matrix.tsv
+4dd92c141a242bdac49248c9ff1926dcece0d6908aa319e423282eeb033b6ee5  ./probes/profile-boundaries.txt
+0d69ba51a63975205d4eb07dc0092c636d842ec36a5f180d43aa4fe4469c3fd9  ./probes/recommended-ledger-actions.tsv
+a09ee5494bdaf51cdc76174f858f5d570a7fdaf82cee0bbf2b2000c1e96baff5  ./probes/recommended-ledger-treatment.txt
+9d399f79584a0d338e888aa771901b4feeebcb24a5d7d265716e8d9d0a1a48fd  ./probes/validate-policy-matrix.py

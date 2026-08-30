@@ -1,0 +1,65 @@
+spawn cpmsim -z -d <local-workspace>/g-p-6a682f002be881918281554d644daf48/stage054/work/041/probes/case
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>VECTOR41
+VECTOR41 PZ00-07: C3 03 FA 00 00 C3 06 EC 
+
+A>ZERO41
+ZERO41 before 0000-07 005C-5F 0080-83 
+C3 03 FA 00 00 C3 06 EC 00 20 20 20 00 00 18 EE 
+ZERO41 after-fn12 
+C3 03 FA 00 00 C3 06 EC 00 20 20 20 00 00 18 EE 
+ZERO41 fn12-HL 0022
+
+A>BDOS41
+BDOS41 
+0CA7EBA7EB4422B200B2A12200F6E55713AA8EAD48BE5ACF6C07A7EBA7EB44A534003412A500F6E55713AA8EAD48BE5ACF6C18A7EBA7EB4401780078560100F6E55713AA8EAD48BE5ACF6C1AA7EBA7EB4400800002F90000F6E55713AA8EAD48BE5ACF6C29A7EBA7EB44002900BC9A0000F6E55713AA8EAD48BE5ACF6C
+
+A>MOD41
+MOD41 wrapper-count resultHL 01 0022
+
+A>BIOS41
+BIOS41 PZ00-07: C3 03 FA 00 00 C3 06 EC 
+BIOS BASE: FA00
+VECTORS index opcode target:
+00 C3 FB3E
+01 C3 FB51
+02 C3 FBBC
+03 C3 FBBF
+04 C3 FBC2
+05 C3 FBC6
+06 C3 FBCD
+07 C3 FBD1
+08 C3 FBD4
+09 C3 FBD9
+0A C3 FC05
+0B C3 FC09
+0C C3 FC1E
+0D C3 FC25
+0E C3 FC29
+0F C3 FBCA
+10 C3 FC0D
+DIRECT CONST0 CONST1 CONIN READER LISTST0 LISTST1 OUTN: 00 FF 41 52 00 FF 06 
+OUTPUT PAIRS device-byte: 43 09 4C 10 50 1A 
+
+A>[0;31mE (15346) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 35 ms, waited for 0 ms
+CPU executed 2393970 t-states in 2 ms
+Clock frequency 884.68 MHz

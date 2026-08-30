@@ -1,0 +1,58 @@
+ledger=<project-root>/compatibility/02 Compatibility Ledger - Investigation 069.txt
+sha256=40d5e514a698bbabdfe8c7d926cea39b9962e17d83b25f2a2915ea4882014097
+entries=627 range=0001-0627
+classifications=NOT GUARANTEED:105, NOT REQUIRED:49, POLICY PENDING:49, REQUIRED:424
+duplicate_ids=none
+gaps=none
+missing_classification=0
+exact_duplicate_propositions=0
+policy_pending_entries:
+0012	Second default FCB at 006Ch
+0016	Default FCB unopened control fields
+0019	Leading blank in command tail
+0020	Uppercase command-tail representation
+0021	NUL after counted command tail
+0069	Exact logical-column update rules
+0070	LF resets DRI logical column
+0071	CR does not reset DRI logical column
+0072	Pending-key buffering during formatted output
+0073	Ctrl-C behavior after output pause
+0086	Exact function 11 ready result
+0087	Function 11 pending-byte retention
+0088	DRI function 6 ignores retained pending byte
+0103	Function-1 Ctrl-P printer-echo state change
+0104	Function 1 consumes function-11-retained input
+0125	Function 10 Ctrl-P exclusion and printer-echo toggle
+0126	Function 10 post-Ctrl-P echo state
+0127	Function 10 seven-bit input masking
+0128	Function 10 exact correction-display bytes
+0129	Function 10 noninitial Ctrl-C behavior
+0154	Unavailable-drive presentation
+0155	Function 13 user-number preservation
+0183	Investigation 008 finding
+0233	Exact EOF code
+0246	Physical read-error presentation
+0276	Exact write failure codes
+0283	Physical write-error presentation
+0309	Wildcard Rename
+0314	Delete/Rename physical errors
+0346	Allocation-full exact code
+0354	Physical random-I/O errors
+0385	Fatal presentation
+0387	Exact diagnostic text
+0389	Automatic media-change protection
+0411	Exact Bad Sector text
+0412	Accepted ignore characters
+0413	Structured physical-error extension
+0435	Function 37 compatibility status
+0446	Active IOBYTE routing policy
+0472	LISTST result policy
+0476	CCP prompt presentation freedom
+0478	DRI CCP command capacity
+0480	TAB is not CCP SPACE
+0490	Exact DRI command-error presentation
+0506	Default FCB operand assignment
+0508	Tail capacity is bounded by CCP input acquisition
+0512	Post-termination drive and user policy
+0523	Function 37 state-effect profile scope
+0580	Exact resident output presentation

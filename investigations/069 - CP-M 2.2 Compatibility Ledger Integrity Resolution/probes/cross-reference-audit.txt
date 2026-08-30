@@ -1,0 +1,25 @@
+Investigation 069 cross-reference audit
+=======================================
+
+Explicit ledger entry references found:
+  entry 0006       resolves
+  entry 0178       resolves
+  entries 0248-0277 all resolve
+  entry/entries 0435 resolves
+  entries 0620     resolves
+
+Numbered sequence:
+  0001 through 0627 contiguous; no gaps; no duplicates.
+
+Investigation source catalogue:
+  I001 through I069 contiguous; no duplicate catalogue identifiers.
+
+Function 37:
+  0435 is the canonical compatibility-status proposition.
+  0523 is an explicit conditional profile-scope cross-reference.
+  Both remain POLICY PENDING for Investigation 070 resolution.
+
+Processor proposals:
+  Provisional I063 report labels 0766-0770 are mapped to canonical ledger
+  identifiers 0623-0627.  No output-ledger reference points to nonexistent
+  0766-0770 identifiers.

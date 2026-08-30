@@ -1,0 +1,746 @@
+Investigation 032 — CP/M 2.2 CCP Resident Command Semantics and BDOS Interaction Prompt
+
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 031 is complete.
+
+The authoritative Compatibility Ledger currently incorporates findings
+through Investigation 031.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports, architecture documents,
+roadmaps, specifications, or other existing BetterCP/M files.
+
+Create Investigation 032 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Define the CP/M 2.2 CCP resident command compatibility contract.
+
+Previous investigations established:
+
+- CCP command acquisition;
+- command parsing;
+- transient program lookup;
+- transient loading;
+- transient entry environment;
+- transient lifecycle;
+- BDOS interaction;
+- user area behavior;
+- file namespace behavior.
+
+
+Investigation 032 determines the behavior of CCP commands that are
+implemented within the resident CCP rather than as transient programs.
+
+Investigate:
+
+- resident command recognition;
+- command argument handling;
+- CCP interaction with BDOS;
+- command output behavior;
+- command error behavior;
+- command state changes.
+
+
+Resident commands include:
+
+- DIR;
+- ERA;
+- REN;
+- SAVE;
+- TYPE;
+- USER.
+
+
+Determine:
+
+- what applications and users observe;
+- what behavior is compatibility relevant;
+- what behavior is CCP implementation detail.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read and incorporate:
+
+
+Investigation 021:
+
+    CCP Command Acquisition, Parsing, and Dispatch Semantics.
+
+
+Investigation 022:
+
+    CCP Transient Program Lookup, Loading, and Execution Semantics.
+
+
+Investigation 023:
+
+    CCP Transient Entry Environment, Command Tail, and Default FCB
+    Semantics.
+
+
+Investigation 024:
+
+    Transient Program Lifecycle, Termination, and BDOS Return-State
+    Semantics.
+
+
+Investigation 026:
+
+    BDOS System State Functions and Application-Visible Environment
+    Semantics.
+
+
+Investigation 029:
+
+    Directory Search Semantics and FCB-DMA Enumeration Contract.
+
+
+Investigation 031:
+
+    User Area, File Visibility, and Directory Namespace Semantics.
+
+
+Do not duplicate previous investigations.
+
+Focus on CCP resident command behavior and BDOS interaction.
+
+
+SCOPE
+
+Investigate:
+
+- resident command recognition;
+- command syntax;
+- command parsing after recognition;
+- FCB construction;
+- BDOS calls made by commands;
+- command output;
+- command errors;
+- command state changes;
+- interaction with drives and user areas.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- transient programs with equivalent names;
+- external utilities;
+- CCP loading behavior;
+- CCP memory layout;
+- BetterCP/M command design;
+- CP/M 3 CCP extensions.
+
+
+Do not assume:
+
+- resident commands behave like transient programs;
+- command syntax is identical across CP/M versions;
+- output text is irrelevant.
+
+
+KEY QUESTIONS
+
+
+1. RESIDENT COMMAND DISPATCH
+
+Determine:
+
+- how CCP identifies resident commands;
+- precedence between resident commands and transient programs;
+- behavior when names conflict;
+- command recognition rules.
+
+
+Investigate:
+
+- DIR.COM or DIR command conflict;
+- SAVE command handling;
+- USER command handling.
+
+
+2. COMMAND PARSING
+
+Determine:
+
+- argument syntax;
+- whitespace handling;
+- delimiter handling;
+- invalid argument behavior;
+- wildcard parsing.
+
+
+Compare:
+
+- command line input;
+- generated FCBs;
+- BDOS operations.
+
+
+3. DIR COMMAND
+
+Determine:
+
+- directory listing behavior;
+- default drive behavior;
+- user area behavior;
+- wildcard behavior;
+- output formatting;
+- error behavior.
+
+
+Investigate:
+
+- DIR;
+- DIR filename;
+- DIR wildcard;
+- DIR on empty results;
+- DIR across user areas.
+
+
+Cross-reference:
+
+Investigation 029.
+
+
+4. ERA COMMAND
+
+Determine:
+
+- deletion behavior;
+- wildcard handling;
+- confirmation behavior if present;
+- error reporting;
+- user area interaction.
+
+
+Investigate:
+
+- deleting one file;
+- deleting multiple files;
+- deleting nonexistent files;
+- deleting files in other user areas.
+
+
+Cross-reference:
+
+Investigation 012.
+
+Investigation 031.
+
+
+5. REN COMMAND
+
+Determine:
+
+- rename syntax;
+- source and destination handling;
+- wildcard restrictions;
+- error behavior;
+- user area interaction.
+
+
+Investigate:
+
+- normal rename;
+- duplicate destination;
+- nonexistent source;
+- rename across user areas.
+
+
+Cross-reference:
+
+Investigation 012.
+
+Investigation 031.
+
+
+6. SAVE COMMAND
+
+Determine:
+
+- syntax;
+- memory range handling;
+- file creation behavior;
+- default FCB behavior;
+- error handling.
+
+
+Investigate:
+
+- valid SAVE;
+- invalid size;
+- existing filename;
+- disk full.
+
+
+Cross-reference:
+
+Investigation 011.
+
+Investigation 030.
+
+
+7. TYPE COMMAND
+
+Determine:
+
+- file display behavior;
+- text handling;
+- EOF behavior;
+- control characters;
+- errors.
+
+
+Investigate:
+
+- normal text file;
+- empty file;
+- binary data;
+- nonexistent file.
+
+
+Cross-reference:
+
+Investigation 010.
+
+Investigation 031.
+
+8. USER COMMAND
+
+Determine:
+
+- USER command syntax;
+- user number parsing;
+- valid range;
+- error behavior;
+- interaction with CCP state;
+- interaction with BDOS state.
+
+
+Investigate:
+
+- USER with valid user number;
+- USER with invalid user number;
+- USER followed by file operations;
+- USER followed by transient execution.
+
+
+Cross-reference:
+
+Investigation 026.
+
+Investigation 031.
+
+
+9. RESIDENT COMMAND BDOS INTERACTION
+
+Determine how resident commands use BDOS services.
+
+Investigate:
+
+- FCB construction;
+- DMA usage;
+- BDOS function calls;
+- returned errors;
+- command output based on BDOS results.
+
+
+Determine:
+
+- which BDOS behaviors are exposed through CCP;
+- which behaviors are CCP-specific.
+
+
+10. DRIVE AND USER AREA INTERACTION
+
+Determine resident command behavior with:
+
+- explicit drive prefixes;
+- current drive;
+- current user area;
+- files on other drives;
+- files in other user areas.
+
+
+Cross-reference:
+
+Investigation 007.
+
+Investigation 017.
+
+Investigation 031.
+
+
+11. COMMAND ERROR BEHAVIOR
+
+Determine:
+
+- invalid syntax handling;
+- missing files;
+- duplicate files;
+- invalid parameters;
+- disk errors;
+- BDOS errors.
+
+
+Determine:
+
+- displayed messages;
+- return behavior;
+- CCP state after errors.
+
+
+12. COMMAND OUTPUT SEMANTICS
+
+Determine application-visible output behavior.
+
+Investigate:
+
+- formatting;
+- spacing;
+- filenames;
+- drive labels;
+- user information;
+- error messages.
+
+
+Determine:
+
+- compatibility-relevant output;
+- implementation-specific formatting.
+
+
+13. CCP SOURCE ANALYSIS
+
+Review available source material for:
+
+- resident command dispatch;
+- command implementations;
+- FCB construction;
+- BDOS interaction;
+- output routines.
+
+
+Extract:
+
+- compatibility-relevant behavior;
+- implementation behavior affecting compatibility.
+
+
+Do not produce:
+
+- source walkthroughs;
+- CCP implementation tutorials.
+
+
+14. EXPERIMENTAL PROGRAMS
+
+Create deterministic tests:
+
+DISK32:
+
+    DIR behavior.
+
+ERA32:
+
+    ERA behavior.
+
+REN32:
+
+    REN behavior.
+
+SAVE32:
+
+    SAVE behavior.
+
+TYPE32:
+
+    TYPE behavior.
+
+USER32:
+
+    USER behavior.
+
+PARSE32:
+
+    Resident command parsing behavior.
+
+
+Each test must include:
+
+- purpose;
+- procedure;
+- observed behavior;
+- compatibility conclusion.
+
+
+15. CONTROLLED TEST MATRIX
+
+Include:
+
+
+COMMAND RECOGNITION
+
+- resident command;
+- transient program with same name;
+- unknown command.
+
+
+DIR
+
+- normal listing;
+- wildcard;
+- no matches;
+- multiple files;
+- different user areas.
+
+
+ERA
+
+- single file;
+- wildcard;
+- nonexistent file;
+- protected file.
+
+
+REN
+
+- normal rename;
+- destination exists;
+- nonexistent source.
+
+
+SAVE
+
+- valid save;
+- invalid size;
+- disk full.
+
+
+TYPE
+
+- text file;
+- empty file;
+- binary data;
+- nonexistent file.
+
+
+USER
+
+- valid user number;
+- invalid user number;
+- file operation after change.
+
+
+ERRORS
+
+- invalid syntax;
+- BDOS failure;
+- disk failure.
+
+16. EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+
+    documented behavior.
+
+B:
+
+    DRI implementation behavior.
+
+I:
+
+    experimental observation.
+
+D:
+
+    unresolved policy.
+
+
+These labels are internal investigation classifications only.
+
+
+Ledger evidence must use:
+
+    I032
+    CCP
+    BDOS
+    IG
+    AG
+
+
+17. COMPATIBILITY CLASSIFICATION
+
+Classify each conclusion:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Do not require:
+
+- exact CCP implementation;
+- private CCP memory layout;
+- undocumented output formatting;
+- behavior invisible to users or applications.
+
+
+18. EXISTING LEDGER REVIEW
+
+Review affected Compatibility Ledger entries:
+
+- CCP parsing;
+- CCP dispatch;
+- transient execution;
+- command tail handling;
+- FCB construction;
+- BDOS file operations;
+- user area behavior;
+- directory behavior.
+
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+
+The current Compatibility Ledger ends after Investigation 031.
+
+Determine the next available ledger entry number.
+
+Do not modify the Compatibility Ledger.
+
+
+19. PROPOSED LEDGER ADDITIONS
+
+Include:
+
+Proposed Compatibility Ledger additions
+
+and:
+
+Proposed existing-entry updates.
+
+
+Each entry must contain:
+
+
+NNNN. Title
+
+    Description.
+
+    Disposition:
+
+    Evidence:
+
+    Conformance:
+
+
+20. REPORT STRUCTURE
+
+Create:
+
+Investigation 032 - CP/M 2.2 CCP Resident Command Semantics and
+BDOS Interaction.md
+
+
+Include:
+
+
+1. Objective and scope
+
+2. Relationship to previous investigations
+
+3. Documentation findings
+
+4. CCP source findings
+
+5. Resident command dispatch
+
+6. Command parsing behavior
+
+7. DIR command behavior
+
+8. ERA command behavior
+
+9. REN command behavior
+
+10. SAVE command behavior
+
+11. TYPE command behavior
+
+12. USER command behavior
+
+13. BDOS interaction
+
+14. Error behavior
+
+15. Output behavior
+
+16. Experimental results
+
+17. Compatibility conclusions
+
+18. Proposed ledger additions
+
+19. Existing-entry updates
+
+20. Open questions
+
+21. Conformance implications
+
+
+21. FINAL REVIEW
+
+Verify that the investigation determines:
+
+- which commands are resident CCP commands;
+- how commands are recognized;
+- how command arguments are interpreted;
+- how commands construct BDOS requests;
+- how commands handle BDOS results;
+- what output behavior is compatibility relevant;
+- what user-visible behavior applications may rely upon.
+
+
+Ensure conclusions distinguish:
+
+- documented behavior;
+- CCP implementation behavior;
+- experimental observations;
+- unresolved policy.
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M command behavior.
+
+Do not replace CCP semantics with modern shell behavior.
+
+Determine the CP/M 2.2 CCP resident command compatibility contract only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

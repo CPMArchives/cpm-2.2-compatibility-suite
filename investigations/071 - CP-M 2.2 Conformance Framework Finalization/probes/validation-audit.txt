@@ -1,0 +1,18 @@
+INVESTIGATION 071 FRAMEWORK VALIDATION AUDIT
+
+Ledger source: <project-root>/compatibility/02 Compatibility Ledger - Investigation 070.txt
+Ledger SHA-256: c835279df858edc752b1393a3bcc3238671885138e1fa4a8df8fc44b518c9dfa
+Canonical entries: 627 (0001-0627 contiguous and unique)
+Frozen parent tests: 62 (unique: 62)
+Normative proposition cases: 627
+Ledger entries mapped exactly once: 627
+Oracle identifiers unique: 627
+Case identifiers unique: 627
+Classification counts: {"NOT GUARANTEED": 116, "OPTIONAL": 3, "OUTSIDE SCOPE": 50, "PROFILE REQUIRED": 28, "REQUIRED": 430}
+Parent identifiers with primary proposition cases: 50
+Supplemental-only parent identifiers: APP-001, APP-002, APP-003, BDOS-FILE-012, COMM-001, COMM-003, COMM-004, HW-001, HW-002, UTIL-002, UTIL-003, UTIL-004
+Unknown parent identifiers: none
+Blank oracles: 0
+POLICY PENDING cases: 0
+
+RESULT: PASS

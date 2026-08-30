@@ -1,0 +1,535 @@
+INVESTIGATION 024 — CP/M 2.2 Transient Program Lifecycle, Termination,
+and BDOS Return-State Semantics
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 023 is complete.
+
+The authoritative Compatibility Ledger currently incorporates findings
+through Investigation 023.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports, architecture documents,
+roadmaps, specifications, or other existing BetterCP/M files.
+
+Create Investigation 024 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+This is an evidence investigation only.
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Establish the externally visible lifecycle contract of a CP/M 2.2 transient
+program after it begins execution.
+
+Investigation 022 established:
+- transient lookup;
+- COM loading;
+- DMA restoration;
+- CALL 0100h transfer.
+
+Investigation 023 established:
+- transient entry memory;
+- command tail;
+- default FCBs;
+- page-zero entry state;
+- entry return environment.
+
+Investigation 024 begins after the transient program receives control.
+
+Determine:
+
+- how transient programs normally return control to CCP;
+- how different termination paths behave;
+- what state CCP/BDOS preserves or restores;
+- what state applications may rely upon after termination;
+- which termination behaviors are CP/M compatibility requirements;
+- which are DRI implementation details.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read and incorporate:
+
+Investigation 001:
+    Initial transient entry and termination observations.
+
+Investigation 002:
+    Warm boot and BDOS transition behavior.
+
+Investigation 007:
+    Drive and user state.
+
+Investigation 020:
+    WBOOT and page-zero reconstruction.
+
+Investigation 021:
+    CCP command dispatch.
+
+Investigation 022:
+    CALL 0100h, RET cleanup path, termination convergence.
+
+Investigation 023:
+    Entry return environment.
+
+Do not duplicate these investigations.
+
+Strengthen existing propositions where appropriate.
+
+Identify corrections only where new evidence requires them.
+
+
+SCOPE
+
+Investigate transient lifecycle events:
+
+- normal RET termination;
+- BDOS Function 0 termination;
+- JMP 0000h termination;
+- warm boot behavior;
+- abnormal BDOS failures where visible;
+- termination after changing drive/user state;
+- termination after changing DMA;
+- termination after modifying page zero;
+- termination after opening files;
+- termination after using console and disk services.
+
+The investigation concerns the boundary between:
+
+    transient program
+            |
+            v
+    CCP / BDOS / BIOS environment
+
+
+NON-GOALS
+
+Do not investigate:
+
+- application-specific behavior;
+- language runtime conventions;
+- compiler-generated termination code;
+- CP/M 3 or MP/M behavior;
+- BetterCP/M implementation design;
+- multitasking;
+- memory protection.
+
+Do not assume that a behavior is required simply because common programs
+perform it.
+
+
+KEY QUESTIONS
+
+
+1. RET TERMINATION
+
+Determine the exact CP/M 2.2 RET termination contract.
+
+Establish:
+
+- where CCP places the return address;
+- what state RET restores;
+- whether RET requires a valid stack;
+- whether CCP regains control without WBOOT;
+- drive/user state after RET;
+- DMA state after RET.
+
+Distinguish:
+
+    application-visible behavior
+
+from:
+
+    private CCP stack organization.
+
+
+2. BDOS FUNCTION 0 TERMINATION
+
+Determine:
+
+- how Function 0 terminates a transient;
+- whether CCP is reloaded;
+- whether BIOS WBOOT occurs;
+- what state is preserved;
+- what state is reconstructed.
+
+Compare with RET.
+
+
+3. JMP 0000H TERMINATION
+
+Determine:
+
+- what happens when a transient jumps to address 0000h;
+- whether the warm-start vector is invoked;
+- whether CCP is restored;
+- whether user/drive state changes;
+- whether disk state changes.
+
+Compare with RET and Function 0.
+
+
+4. TERMINATION STATE COMPARISON
+
+Create a matrix:
+
+                RET
+                BDOS 0
+                JMP 0000h
+
+For each record:
+
+- CCP return path;
+- WBOOT involvement;
+- page-zero state;
+- drive/user state;
+- DMA state;
+- open-file state;
+- console state;
+- observable differences.
+
+
+5. DRIVE AND USER STATE
+
+A transient may change:
+
+- current drive;
+- current user area.
+
+Determine:
+
+- what survives RET;
+- what survives Function 0;
+- what survives JMP 0000h;
+- what CCP restores;
+- what BDOS preserves.
+
+Cross-check Investigation 007 and 023.
+
+
+6. DMA STATE
+
+A transient may change DMA through BDOS Function 26.
+
+Determine:
+
+- DMA state after RET;
+- DMA state after Function 0;
+- DMA state after JMP 0000h;
+- whether CCP restores 0080h;
+- whether applications may rely on restored DMA.
+
+Do not duplicate I023 initial DMA findings.
+
+
+7. PAGE ZERO MODIFICATION
+
+Determine what happens if a transient modifies:
+
+- 0000h;
+- 0003h;
+- 0004h;
+- 0005h.
+
+Establish:
+
+- whether CCP overwrites these on return;
+- whether WBOOT reconstructs them;
+- whether RET differs from warm restart.
+
+
+8. FILE AND DISK STATE
+
+Determine visible effects of termination after:
+
+- opening files;
+- writing files;
+- leaving FCBs modified;
+- changing DMA.
+
+Do not investigate BDOS file semantics themselves.
+
+Only determine lifecycle cleanup behavior.
+
+
+9. CONSOLE STATE
+
+Determine whether termination restores:
+
+- console echo state;
+- output mode;
+- LIST state;
+- IOBYTE routing.
+
+Cross-check Investigation 018.
+
+
+10. ERROR AND ABNORMAL PATHS
+
+Investigate visible behavior for:
+
+- invalid BDOS calls;
+- invalid termination state;
+- stack corruption where safely testable.
+
+Do not intentionally corrupt the emulator or host environment.
+
+The goal is observable CP/M behavior, not crash testing.
+
+
+11. CCP SOURCE ANALYSIS
+
+Review DRI CCP source to determine:
+
+- RET return path;
+- Function 0 handling;
+- warm-start handling;
+- saved state assumptions.
+
+Do not produce a source commentary.
+
+Extract only compatibility-relevant behavior.
+
+
+12. EXPERIMENTAL PROGRAMS
+
+Create deterministic probes:
+
+TERM24:
+    Exercises RET termination.
+
+BDOS024:
+    Exercises Function 0.
+
+JUMP24:
+    Exercises JMP 0000h.
+
+STATE24:
+    Modifies drive/user/DMA/page-zero state and records results.
+
+FILE24:
+    Tests termination after file operations.
+
+CONSOLE24:
+    Tests termination after console-state changes.
+
+
+13. CONTROLLED TEST MATRIX
+
+Include:
+
+- clean program start;
+- RET immediately;
+- Function 0 immediately;
+- JMP 0000h immediately;
+- change drive then RET;
+- change user then RET;
+- change DMA then RET;
+- modify page zero then RET;
+- modify state then Function 0;
+- modify state then JMP 0000h.
+
+
+14. EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+    documented CP/M behavior.
+
+B:
+    DRI implementation behavior.
+
+I:
+    experimental observation.
+
+D:
+    unresolved policy.
+
+These labels are for the investigation report only.
+
+They are not ledger source abbreviations.
+
+Ledger evidence must use:
+
+    I024
+    CCP
+    BDOS
+    IG
+    AG
+
+and similar.
+
+
+15. COMPATIBILITY CLASSIFICATION
+
+For every conclusion classify:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Be conservative.
+
+Do not require:
+
+- exact CCP internal addresses;
+- exact stack layout;
+- exact reload sequence;
+- undocumented cleanup.
+
+
+16. EXISTING LEDGER REVIEW
+
+Review affected entries from:
+
+0001-0034
+0475-0508
+
+Determine:
+
+- evidence strengthening;
+- wording corrections;
+- disposition changes;
+- duplicates to avoid.
+
+Do not silently modify the ledger.
+
+
+17. PROPOSED LEDGER ADDITIONS
+
+The authoritative ledger currently ends after Investigation 023.
+
+New entries begin at:
+
+0509
+
+Do not modify the Compatibility Ledger.
+
+Include:
+
+Proposed Compatibility Ledger additions
+
+and:
+
+Proposed existing-entry updates.
+
+
+Each proposed entry must contain:
+
+NNNN. Title
+
+    Description.
+
+    Disposition:
+
+    Evidence:
+
+    Conformance:
+
+
+18. REPORT STRUCTURE
+
+Create:
+
+Investigation 024 - CP/M 2.2 Transient Program Lifecycle,
+Termination, and BDOS Return-State Semantics.md
+
+
+Include:
+
+1. Objective and scope
+2. Method and evidence classification
+3. Relationship to earlier investigations
+4. Documentation findings
+5. CCP source findings
+6. Termination mechanisms
+7. State preservation results
+8. Experimental results
+9. Compatibility conclusions
+10. Proposed ledger additions
+11. Existing-entry updates
+12. Open questions
+13. Artifact preservation audit
+14. Sources
+
+
+19. ARTIFACT REQUIREMENTS
+
+Create:
+
+Investigation 024/
+
+with:
+
+probes/
+
+Preserve:
+
+- assembly sources;
+- COM binaries;
+- listings;
+- harness scripts;
+- transcripts;
+- disk images;
+- memory dumps;
+- directory listings;
+- build instructions;
+- SHA-256 manifests.
+
+Verify deterministic rebuilds.
+
+
+20. PRESERVATION AUDIT
+
+Before investigation:
+
+- hash current ledger;
+- record emulator version;
+- hash fixture images.
+
+After investigation:
+
+- verify ledger unchanged;
+- verify previous investigations unchanged;
+- verify architecture documents unchanged;
+- hash new artifacts.
+
+
+21. COMPLETION REPORT
+
+When complete report:
+
+- files created;
+- artifact count;
+- experiments performed;
+- principal lifecycle findings;
+- termination comparison;
+- unresolved questions;
+- proposed ledger range;
+- ledger hash before/after;
+- confirmation no protected files changed;
+- documentation reviewed.
+
+
+FINAL GOAL
+
+Determine the CP/M 2.2 transient lifecycle contract:
+
+    After a program begins execution,
+    how does it return control,
+    what state survives,
+    what state is restored,
+    and what behavior must a compatible implementation provide?
+
+The result should define the application-visible lifecycle boundary
+without requiring BetterCP/M to reproduce every internal DRI CCP/BDOS
+implementation detail.

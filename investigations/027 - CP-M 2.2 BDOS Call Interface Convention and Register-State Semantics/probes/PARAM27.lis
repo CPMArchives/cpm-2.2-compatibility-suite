@@ -1,0 +1,117 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 18:39:29 2026	Page 1
+Source file: PARAM27.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1         ORG 100H
+0100  31 29 02         2      2         LD SP,STACK
+0103  21 4f 01         3      3         LD HL,BAN
+0106  cd 29 02         4      4         CALL PUTS
+0109  21 84 01         5      5         LD HL,USERS
+010c  06 04            6      6         LD B,4
+010e  5e               7      7 ULOOP:  LD E,(HL)
+010f  23               8      8         INC HL
+0110  e5               9      9         PUSH HL
+0111  c5              10     10         PUSH BC
+0112  d5              11     11         PUSH DE
+0113  7b              12     12         LD A,E
+0114  cd 55 02        13     13         CALL HEXB
+0117  cd 41 02        14     14         CALL SPACE
+011a  d1              15     15         POP DE
+011b  0e 20           16     16         LD C,32
+011d  cd 05 00        17     17         CALL 5
+0120  1e ff           18     18         LD E,0FFH
+0122  0e 20           19     19         LD C,32
+0124  cd 05 00        20     20         CALL 5
+0127  cd 55 02        21     21         CALL HEXB
+012a  cd 46 02        22     22         CALL CRLF
+012d  c1              23     23         POP BC
+012e  e1              24     24         POP HL
+012f  10 dd           25     25         DJNZ ULOOP
+0131  1e 00           26     26         LD E,0
+0133  0e 20           27     27         LD C,32
+0135  cd 05 00        28     28         CALL 5
+0138  21 68 01        29     29         LD HL,LFCB
+013b  cd 29 02        30     30         CALL PUTS
+013e  11 88 01        31     31         LD DE,BADFCB
+0141  0e 0f           32     32         LD C,15
+0143  cd 05 00        33     33         CALL 5
+0146  cd 55 02        34     34         CALL HEXB
+0149  cd 46 02        35     35         CALL CRLF
+014c  c3 6c 02        36     36         JP EXIT
+014f  50 41 52 41     37     37 BAN:    DB 'PARAM27 set/query user',13,10,0
+0153  4d 32 37 20     37     38
+0157  73 65 74 2f     37     39
+015b  71 75 65 72     37     40
+015f  79 20 75 73     37     41
+0163  65 72 0d 0a     37     42
+0167  00              37     43
+0168  6d 61 6c 66     38     44 LFCB:   DB 'malformed/unactivated Open ',0
+016c  6f 72 6d 65     38     45
+0170  64 2f 75 6e     38     46
+0174  61 63 74 69     38     47
+0178  76 61 74 65     38     48
+017c  64 20 4f 70     38     49
+0180  65 6e 20 00     38     50
+0184  00 1f 20 fe     39     51 USERS:  DB 0,31,32,254
+0188  00 42 41 44     40     52 BADFCB: DB 0,'BAD?    ???',0FFH,0FFH,0FFH,0FFH,0FFH,0FFH,0FFH,0FFH,0FFH,0FFH,0FFH,0FFH,0FFH,0FFH,0FFH,0FFH,0FFH,0FFH,0FFH,0FFH,0
+018c  3f 20 20 20     40     53
+0190  20 3f 3f 3f     40     54
+0194  ff ff ff ff     40     55
+0198  ff ff ff ff     40     56
+019c  ff ff ff ff     40     57
+01a0  ff ff ff ff     40     58
+01a4  ff ff ff ff     40     59
+01a8  00              40     60
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 18:39:29 2026	Page 2
+Source file: PARAM27.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+01a9                  41     61         DS 128
+0229                  42     62 STACK:
+0229  7e              43     63 PUTS:   LD A,(HL)
+022a  23              44     64         INC HL
+022b  b7              45     65         OR A
+022c  c8              46     66         RET Z
+022d  5f              47     67         LD E,A
+022e  cd 33 02        48     68         CALL PUTC
+0231  18 f6           49     69         JR PUTS
+0233  f5              50     70 PUTC:   PUSH AF
+0234  c5              51     71         PUSH BC
+0235  d5              52     72         PUSH DE
+0236  e5              53     73         PUSH HL
+0237  0e 02           54     74         LD C,2
+0239  cd 05 00        55     75         CALL 5
+023c  e1              56     76         POP HL
+023d  d1              57     77         POP DE
+023e  c1              58     78         POP BC
+023f  f1              59     79         POP AF
+0240  c9              60     80         RET
+0241  1e 20           61     81 SPACE:  LD E,' '
+0243  c3 33 02        62     82         JP PUTC
+0246  1e 0d           63     83 CRLF:   LD E,13
+0248  cd 33 02        64     84         CALL PUTC
+024b  1e 0a           65     85         LD E,10
+024d  c3 33 02        66     86         JP PUTC
+0250  7c              67     87 HEXW:   LD A,H
+0251  cd 55 02        68     88         CALL HEXB
+0254  7d              69     89         LD A,L
+0255  f5              70     90 HEXB:   PUSH AF
+0256  0f              71     91         RRCA
+0257  0f              72     92         RRCA
+0258  0f              73     93         RRCA
+0259  0f              74     94         RRCA
+025a  cd 5e 02        75     95         CALL NIB
+025d  f1              76     96         POP AF
+025e  e6 0f           77     97 NIB:    AND 0FH
+0260  c6 30           78     98         ADD A,'0'
+0262  fe 3a           79     99         CP '9'+1
+0264  38 02           80    100         JR C,NOUT
+0266  c6 07           81    101         ADD A,7
+0268  5f              82    102 NOUT:   LD E,A
+0269  c3 33 02        83    103         JP PUTC
+026c  0e 00           84    104 EXIT:   LD C,0
+026e  c3 05 00        85    105         JP 5
+                      86    106
+0271                  87    107         END

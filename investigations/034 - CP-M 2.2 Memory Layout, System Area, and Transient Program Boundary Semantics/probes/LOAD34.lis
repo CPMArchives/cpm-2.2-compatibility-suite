@@ -1,0 +1,120 @@
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 06:51:15 2026	Page 1
+Source file: LOAD34.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1  ORG 0100H
+0100  ed 73 a2 01      2      2  LD (ENTSP),SP
+0104  3a 00 01         3      3  LD A,(0100H)
+0107  32 a4 01         4      4  LD (B0100),A
+010a  3a 80 01         5      5  LD A,(0180H)
+010d  32 a5 01         6      6  LD (B0180),A
+0110  3a 00 02         7      7  LD A,(0200H)
+0113  32 a6 01         8      8  LD (B0200),A
+0116  3a 80 e3         9      9  LD A,(0E380H)
+0119  32 a7 01        10     10  LD (BE380),A
+011c  3a 00 e4        11     11  LD A,(0E400H)
+011f  32 a8 01        12     12  LD (BE400),A
+0122  31 29 02        13     13  LD SP,STACK
+0125  21 6d 01        14     14  LD HL,MSG
+0128  cd 29 02        15     15  CALL PUTS
+012b  2a a2 01        16     16  LD HL,(ENTSP)
+012e  cd 67 02        17     17  CALL HEXW
+0131  cd 41 02        18     18  CALL SPACE
+0134  21 7a 01        19     19  LD HL,COMEND-0100H
+0137  cd 67 02        20     20  CALL HEXW
+013a  cd 41 02        21     21  CALL SPACE
+013d  3a a4 01        22     22  LD A,(B0100)
+0140  cd 50 02        23     23  CALL HEXB
+0143  cd 41 02        24     24  CALL SPACE
+0146  3a a5 01        25     25  LD A,(B0180)
+0149  cd 50 02        26     26  CALL HEXB
+014c  cd 41 02        27     27  CALL SPACE
+014f  3a a6 01        28     28  LD A,(B0200)
+0152  cd 50 02        29     29  CALL HEXB
+0155  cd 41 02        30     30  CALL SPACE
+0158  3a a7 01        31     31  LD A,(BE380)
+015b  cd 50 02        32     32  CALL HEXB
+015e  cd 41 02        33     33  CALL SPACE
+0161  3a a8 01        34     34  LD A,(BE400)
+0164  cd 50 02        35     35  CALL HEXB
+0167  cd 46 02        36     36  CALL CRLF
+016a  c3 75 02        37     37  JP EXIT0
+016d  4c 4f 41 44     38     38 MSG: DB 'LOAD34 SP IMAGE_BYTES B0100 B0180 B0200 BE380 BE400 ',0
+0171  33 34 20 53     38     39
+0175  50 20 49 4d     38     40
+0179  41 47 45 5f     38     41
+017d  42 59 54 45     38     42
+0181  53 20 42 30     38     43
+0185  31 30 30 20     38     44
+0189  42 30 31 38     38     45
+018d  30 20 42 30     38     46
+0191  32 30 30 20     38     47
+0195  42 45 33 38     38     48
+0199  30 20 42 45     38     49
+019d  34 30 30 20     38     50
+01a1  00              38     51
+01a2  00 00           39     52 ENTSP: DW 0
+01a4  00              40     53 B0100: DB 0
+01a5  00              41     54 B0180: DB 0
+01a6  00              42     55 B0200: DB 0
+01a7  00              43     56 BE380: DB 0
+01a8  00              44     57 BE400: DB 0
+01a9                  45     58  DS 128
+0229                  46     59 STACK:
+0229  7e              47     60 PUTS: LD A,(HL)
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 06:51:15 2026	Page 2
+Source file: LOAD34.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+022a  23              48     61  INC HL
+022b  b7              49     62  OR A
+022c  c8              50     63  RET Z
+022d  5f              51     64  LD E,A
+022e  cd 33 02        52     65  CALL PUTC
+0231  18 f6           53     66  JR PUTS
+0233  f5              54     67 PUTC: PUSH AF
+0234  c5              55     68  PUSH BC
+0235  d5              56     69  PUSH DE
+0236  e5              57     70  PUSH HL
+0237  0e 02           58     71  LD C,2
+0239  cd 05 00        59     72  CALL 0005H
+023c  e1              60     73  POP HL
+023d  d1              61     74  POP DE
+023e  c1              62     75  POP BC
+023f  f1              63     76  POP AF
+0240  c9              64     77  RET
+0241  1e 20           65     78 SPACE: LD E,' '
+0243  c3 33 02        66     79  JP PUTC
+0246  1e 0d           67     80 CRLF: LD E,13
+0248  cd 33 02        68     81  CALL PUTC
+024b  1e 0a           69     82  LD E,10
+024d  c3 33 02        70     83  JP PUTC
+0250  f5              71     84 HEXB: PUSH AF
+0251  0f              72     85  RRCA
+0252  0f              73     86  RRCA
+0253  0f              74     87  RRCA
+0254  0f              75     88  RRCA
+0255  cd 59 02        76     89  CALL NIB
+0258  f1              77     90  POP AF
+0259  e6 0f           78     91 NIB: AND 0FH
+025b  c6 30           79     92  ADD A,'0'
+025d  fe 3a           80     93  CP '9'+1
+025f  38 02           81     94  JR C,NOUT
+0261  c6 07           82     95  ADD A,7
+0263  5f              83     96 NOUT: LD E,A
+0264  c3 33 02        84     97  JP PUTC
+0267  7c              85     98 HEXW: LD A,H
+0268  cd 50 02        86     99  CALL HEXB
+026b  7d              87    100  LD A,L
+026c  c3 50 02        88    101  JP HEXB
+026f  11 74 02        89    102 CALLHL: LD DE,CALLBACK
+0272  d5              90    103  PUSH DE
+0273  e9              91    104  JP (HL)
+0274  c9              92    105 CALLBACK: RET
+0275  0e 00           93    106 EXIT0: LD C,0
+0277  c3 05 00        94    107  JP 0005H
+                      95    108
+027a                  96    109 COMEND:
+027a                  97    110  END

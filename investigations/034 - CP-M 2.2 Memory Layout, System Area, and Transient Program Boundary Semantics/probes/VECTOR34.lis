@@ -1,0 +1,148 @@
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 06:51:15 2026	Page 1
+Source file: VECTOR34.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1  ORG 0100H
+0100  ed 73 e3 01      2      2  LD (ENTSP),SP
+0104  21 00 00         3      3  LD HL,0000H
+0107  11 ee 01         4      4  LD DE,VECBYTES
+010a  01 08 00         5      5  LD BC,8
+010d  ed b0            6      6  LDIR
+010f  2a 01 00         7      7  LD HL,(0001H)
+0112  22 e5 01         8      8  LD (WBOOT),HL
+0115  11 03 00         9      9  LD DE,3
+0118  b7              10     10  OR A
+0119  ed 52           11     11  SBC HL,DE
+011b  22 e7 01        12     12  LD (BIOSBASE),HL
+011e  11 06 00        13     13  LD DE,6
+0121  19              14     14  ADD HL,DE
+0122  22 e9 01        15     15  LD (CONSTENT),HL
+0125  cd bc 02        16     16  CALL CALLHL
+0128  32 ed 01        17     17  LD (CONSTA),A
+012b  0e 0c           18     18  LD C,12
+012d  cd 05 00        19     19  CALL 0005H
+0130  22 eb 01        20     20  LD (VERSION),HL
+0133  31 76 02        21     21  LD SP,STACK
+0136  21 8d 01        22     22  LD HL,MSG
+0139  cd 76 02        23     23  CALL PUTS
+013c  2a e5 01        24     24  LD HL,(WBOOT)
+013f  cd b4 02        25     25  CALL HEXW
+0142  cd 8e 02        26     26  CALL SPACE
+0145  2a e7 01        27     27  LD HL,(BIOSBASE)
+0148  cd b4 02        28     28  CALL HEXW
+014b  cd 8e 02        29     29  CALL SPACE
+014e  2a e9 01        30     30  LD HL,(CONSTENT)
+0151  cd b4 02        31     31  CALL HEXW
+0154  cd 8e 02        32     32  CALL SPACE
+0157  3a ed 01        33     33  LD A,(CONSTA)
+015a  cd 9d 02        34     34  CALL HEXB
+015d  cd 8e 02        35     35  CALL SPACE
+0160  2a 06 00        36     36  LD HL,(0006H)
+0163  cd b4 02        37     37  CALL HEXW
+0166  cd 8e 02        38     38  CALL SPACE
+0169  2a eb 01        39     39  LD HL,(VERSION)
+016c  cd b4 02        40     40  CALL HEXW
+016f  cd 93 02        41     41  CALL CRLF
+0172  21 cf 01        42     42  LD HL,VMSG
+0175  cd 76 02        43     43  CALL PUTS
+0178  21 ee 01        44     44  LD HL,VECBYTES
+017b  06 08           45     45  LD B,8
+017d  7e              46     46 VLP: LD A,(HL)
+017e  23              47     47  INC HL
+017f  cd 9d 02        48     48  CALL HEXB
+0182  cd 8e 02        49     49  CALL SPACE
+0185  10 f6           50     50  DJNZ VLP
+0187  cd 93 02        51     51  CALL CRLF
+018a  c3 c2 02        52     52  JP EXIT0
+018d  56 45 43 54     53     53 MSG: DB 'VECTOR34 WBOOT BIOS_BASE CONST_ENTRY CONST_A BDOS_TARGET VERSION ',0
+0191  4f 52 33 34     53     54
+0195  20 57 42 4f     53     55
+0199  4f 54 20 42     53     56
+019d  49 4f 53 5f     53     57
+01a1  42 41 53 45     53     58
+01a5  20 43 4f 4e     53     59
+01a9  53 54 5f 45     53     60
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 06:51:15 2026	Page 2
+Source file: VECTOR34.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+01ad  4e 54 52 59     53     61
+01b1  20 43 4f 4e     53     62
+01b5  53 54 5f 41     53     63
+01b9  20 42 44 4f     53     64
+01bd  53 5f 54 41     53     65
+01c1  52 47 45 54     53     66
+01c5  20 56 45 52     53     67
+01c9  53 49 4f 4e     53     68
+01cd  20 00           53     69
+01cf  50 41 47 45     54     70 VMSG: DB 'PAGEZERO_0000_0007 ',0
+01d3  5a 45 52 4f     54     71
+01d7  5f 30 30 30     54     72
+01db  30 5f 30 30     54     73
+01df  30 37 20 00     54     74
+01e3  00 00           55     75 ENTSP: DW 0
+01e5  00 00           56     76 WBOOT: DW 0
+01e7  00 00           57     77 BIOSBASE: DW 0
+01e9  00 00           58     78 CONSTENT: DW 0
+01eb  00 00           59     79 VERSION: DW 0
+01ed  00              60     80 CONSTA: DB 0
+01ee                  61     81 VECBYTES: DS 8
+01f6                  62     82  DS 128
+0276                  63     83 STACK:
+0276  7e              64     84 PUTS: LD A,(HL)
+0277  23              65     85  INC HL
+0278  b7              66     86  OR A
+0279  c8              67     87  RET Z
+027a  5f              68     88  LD E,A
+027b  cd 80 02        69     89  CALL PUTC
+027e  18 f6           70     90  JR PUTS
+0280  f5              71     91 PUTC: PUSH AF
+0281  c5              72     92  PUSH BC
+0282  d5              73     93  PUSH DE
+0283  e5              74     94  PUSH HL
+0284  0e 02           75     95  LD C,2
+0286  cd 05 00        76     96  CALL 0005H
+0289  e1              77     97  POP HL
+028a  d1              78     98  POP DE
+028b  c1              79     99  POP BC
+028c  f1              80    100  POP AF
+028d  c9              81    101  RET
+028e  1e 20           82    102 SPACE: LD E,' '
+0290  c3 80 02        83    103  JP PUTC
+0293  1e 0d           84    104 CRLF: LD E,13
+0295  cd 80 02        85    105  CALL PUTC
+0298  1e 0a           86    106  LD E,10
+029a  c3 80 02        87    107  JP PUTC
+029d  f5              88    108 HEXB: PUSH AF
+029e  0f              89    109  RRCA
+029f  0f              90    110  RRCA
+02a0  0f              91    111  RRCA
+02a1  0f              92    112  RRCA
+02a2  cd a6 02        93    113  CALL NIB
+02a5  f1              94    114  POP AF
+02a6  e6 0f           95    115 NIB: AND 0FH
+02a8  c6 30           96    116  ADD A,'0'
+02aa  fe 3a           97    117  CP '9'+1
+02ac  38 02           98    118  JR C,NOUT
+02ae  c6 07           99    119  ADD A,7
+02b0  5f             100    120 NOUT: LD E,A
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 06:51:15 2026	Page 3
+Source file: VECTOR34.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+02b1  c3 80 02       101    121  JP PUTC
+02b4  7c             102    122 HEXW: LD A,H
+02b5  cd 9d 02       103    123  CALL HEXB
+02b8  7d             104    124  LD A,L
+02b9  c3 9d 02       105    125  JP HEXB
+02bc  11 c1 02       106    126 CALLHL: LD DE,CALLBACK
+02bf  d5             107    127  PUSH DE
+02c0  e9             108    128  JP (HL)
+02c1  c9             109    129 CALLBACK: RET
+02c2  0e 00          110    130 EXIT0: LD C,0
+02c4  c3 05 00       111    131  JP 0005H
+                     112    132
+02c7                 113    133  END

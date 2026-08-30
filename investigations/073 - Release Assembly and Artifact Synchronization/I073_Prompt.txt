@@ -1,0 +1,82 @@
+Investigation 073 Prompt
+
+Title
+
+Release Assembly and Artifact Synchronization
+
+Purpose
+
+Investigation 073 continues from I072, which established that the CP/M
+compatibility boundary, proposition ledger, evidence chain, and
+conformance framework are stable.
+
+I073 is not a compatibility investigation. It must not reopen CP/M
+behavior research, alter proposition dispositions, renumber ledger
+entries, or modify the compatibility contract.
+
+The purpose of I073 is to assemble the release artifacts required to
+transition the frozen specification set into a coherent release package.
+
+Scope
+
+I073 shall examine:
+
+1.  Release documentation assembly
+
+-   Confirm required release documents exist.
+-   Confirm document naming, versioning, and cross-references.
+-   Identify missing publication artifacts.
+
+2.  Conformance package preparation
+
+-   Verify that the frozen conformance framework can be published.
+-   Identify required conformance documentation, test descriptions, and
+    implementation guidance.
+
+3.  Registry and manifest synchronization
+
+-   Confirm that release manifests accurately describe included
+    artifacts.
+-   Confirm that identifiers and references are synchronized across
+    documents.
+
+4.  Historical integrity
+
+-   Preserve the frozen compatibility ledger.
+-   Do not modify proposition blocks.
+-   Do not alter evidence or dispositions except through a separately
+    authorized investigation.
+
+Non-Goals
+
+I073 shall not:
+
+-   introduce new CP/M compatibility propositions;
+-   reopen previous investigations;
+-   change compatibility decisions;
+-   revise the ledger structure;
+-   redefine conformance requirements;
+-   redesign architecture.
+
+Any discovered issue requiring those actions must be recorded as a
+future investigation item.
+
+Required Outputs
+
+I073 shall produce:
+
+-   a release assembly assessment;
+-   an artifact inventory;
+-   identification of missing release components;
+-   verification of document synchronization;
+-   any required follow-up investigations.
+
+Completion Criteria
+
+I073 is complete when:
+
+-   the release package contents are identified;
+-   all required artifacts have owners or creation plans;
+-   the frozen compatibility record remains unchanged;
+-   remaining work is limited to release engineering and publication
+    tasks.

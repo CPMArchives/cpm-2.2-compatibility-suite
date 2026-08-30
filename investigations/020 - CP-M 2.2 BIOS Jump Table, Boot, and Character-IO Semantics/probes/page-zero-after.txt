@@ -1,0 +1,4 @@
+PZERO20 after WBOOT and CCP:   C3 03 FA 00 00 C3 06 EC
+
+Both deliberately erased C3h gateway opcodes were present again. The exact
+operands are reference-configuration observations, not portable constants.

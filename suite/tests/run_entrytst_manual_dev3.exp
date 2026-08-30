@@ -1,0 +1,32 @@
+#!/usr/bin/expect -f
+# SPDX-License-Identifier: GPL-2.0-or-later
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set cpu [lindex $argv 2]
+if {$cpu eq ""} { set cpu "-z" }
+set timeout 60
+log_file -noappend $logfile
+source [file join [file dirname [info script]] cpmsim-path.exp]
+spawn $cpmsim $cpu -d $diskdir
+expect "A>"
+send -- "B:\r"
+expect "B>"
+send -- "ENTRYTST /0012 SECOND.BIN\r"
+expect "ACTUAL FCB2 name.type: SECOND  .BIN"
+expect "B>"
+set cases {
+  0509 "SUCCESS: every command returns a usable CCP prompt."
+  0590 "UNAVAILABLE: no snapshot or overlay helper is installed."
+  0593 "ENTRYTST cannot continue across the reset."
+  0600 "Restore the original scratch image after the test."
+  0606 "UNAVAILABLE: required character devices cannot be observed."
+  0607 "UNAVAILABLE: the profile exposes no distinct endpoints."
+  0612 "Restore the original assignment. UNAVAILABLE if STAT is absent."
+}
+foreach {item evidence} $cases {
+  send -- "ENTRYTST /$item\r"
+  expect -exact $evidence
+  expect "B>"
+}
+send "\034"
+expect eof

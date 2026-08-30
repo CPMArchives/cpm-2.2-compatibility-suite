@@ -1,0 +1,29 @@
+     Name    Bytes   Recs  Attr     update             create
+------------ ------ ------ ---- -----------------  -----------------
+BASIC   .COM    19K    152    
+BATCH   .COM     3K     18    
+BIOS41  .COM     1K      6    
+BYE     .COM     1K      1    
+CDOS    .COM    14K    107    
+CDOSGEN .COM    33K    260    
+CLS     .COM     1K      1    
+COPY61  .TXT     1K      0    
+DUMP    .COM     4K     28    
+EDGE43  .COM     1K      4    
+EDIT    .COM     7K     56    
+INIT271 .COM    11K     88    
+INIT282 .COM    12K     94    
+PIP     .COM     8K     58    
+R       .COM     1K      4    
+RDOS    .COM     5K     34    
+SRC61   .TXT     1K      0    
+STAT    .COM     9K     72    
+STATE61 .COM     1K      2    
+VECTOR41.COM     1K      0    
+W       .COM     1K      4    
+WM      .COM    11K     82    
+WM      .HLP     3K     23    
+WRTSYS  .COM     2K      9    
+XFER    .COM     8K     59    
+ZERO41  .COM     1K      1    
+   26 Files occupying    160K,      81K Free.

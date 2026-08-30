@@ -1,0 +1,14 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set emulator [lindex $argv 2]
+set timeout 60
+log_file -noappend $logfile
+spawn $emulator -z -d $diskdir
+expect "A>"
+foreach cmd {"MEM34" "ZERO34" "VECTOR34" "STACK34" "LOAD34" "LARGEOK" "TOOLARGE" "OVR34" "MEM34" "ZERO34"} {
+  send -- "$cmd\r"
+  expect "A>"
+}
+send "\034"
+expect eof

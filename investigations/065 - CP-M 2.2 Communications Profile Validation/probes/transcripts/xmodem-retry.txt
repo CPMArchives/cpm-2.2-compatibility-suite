@@ -1,0 +1,74 @@
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+IMSAI 8080 Simulation Release 1.19
+Copyright (C) 2008-2025 by Udo Munk & 2018-2021 by David McNaughton
+
+CPU speed is 2 MHz, CPU executes undocumented instructions
+SIO 1A running at 9600 baud
+SIO 1B running at 1200 baud
+SIO 2A running at 9600 baud
+SIO 2B running at 2400 baud
+
+Web server builtin, but disabled
+
+RAM 0000H - FFFFH
+ROM D800H - DFFFH mpu-a-rom.hex
+Power-on jump address at D800H
+MPU-B Banked ROM/RAM enabled
+MMU has 7 additional RAM banks of 48 KB
+
+Loader statistics for file work/roms/mpu-a-rom.hex:
+START : D800H
+END   : DF7FH
+PC    : D800H
+LOADED: 0780H (1920)
+
+DISK MAP: [work/disks/disk.map]
+A:DSK:='drivea.dsk'
+B:DSK:='driveb.dsk'
+[0;33mW (5950) diskmanager: Failed to stat disk image: drivec.dsk, error: 2[0m
+[0;33mW (5974) diskmanager: C:DSK: Image file 'drivec.dsk' is invalid[0m
+[0;33mW (5979) diskmanager: Failed to stat disk image: drived.dsk, error: 2[0m
+[0;33mW (5981) diskmanager: D:DSK: Image file 'drived.dsk' is invalid[0m
+
+SIO PORT MAP:
+SIO1.portA = WEBTTY STDIO  
+SIO1.portB = VIOKBD  
+SIO2.portA = WEBPTR SCKTSRV  
+SIO2.portB = MODEM  
+54K CP/M 2.2 VERS B03
+
+
+A>; put your boot commands into profile.sub
+A>stat
+A: R/W, Space: 8k
+
+
+A>b:
+B>qt-imsai
+QTERM  V4.3e
+(C) Copyright  DPG  1991 - All rights reserved
+Version for IMSAI 8080 - VT 100
+Escape character is ^^
+
+
+Enter modem channel A or B: a
+
+Mode? x payld65.txt
+[2J[1;1H[1;31HXmodem File Transfer[6;11HPacket:[6;27H0[8;11HPacket Errors:  0[10;11HTotal Errors:   0[4;11HSending:[12;11HSent:[12;35Hout of   1K    [12;27H0K    [4;27HB0:PAYLD65.TXT              [15;11HNon-ACK: 0x15                                     [8;27H1[10;27H1[8;27H0     [6;27H1[17;11HTransfer complete
+
+[24;1H
+B>
+
+User Interrupt at 0xd446
+I/O ran for 141 ms, waited for 0 ms
+CPU executed 26427795 t-states in 17768 ms
+Clock frequency 1.48 MHz

@@ -1,0 +1,33 @@
+spawn cpmsim -z -d /private/tmp/inv014-runs/K
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>PROT014 K
+CASE K
+VECTOR 0000
+AFTER28
+VECTOR 0001
+AFTER13
+VECTOR 0000
+CURRENT 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+A>[0;31mE (5726) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 5 ms, waited for 0 ms
+CPU executed 700403 t-states in 0 ms
+Clock frequency 1082.53 MHz

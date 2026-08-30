@@ -1,0 +1,38 @@
+INVESTIGATION 036 COMPLETION AUDIT
+
+Project state
+  Authoritative ledger:
+    compatibility/02 Compatibility Ledger - Investigation 035.txt
+  Baseline/current SHA-256:
+    056d9d33d67207471e55da90adaa2dd81702a4b37a13ceb3c76d39350decc5ac
+  Last ledger entry: 0597
+  Ledger writes by Investigation 036: none
+
+Protected tree
+  2,019 pre-existing files recorded in protected-before.sha256.
+  Verification differences: none.
+
+Build verification
+  BIOS36.COM: byte-identical rebuild
+  CON36.COM: byte-identical rebuild
+  DISK36.COM: byte-identical rebuild
+  VECTOR36.COM: byte-identical rebuild
+  ERROR36.COM: byte-identical rebuild
+  Fault emulator SHA-256:
+    55c26df111af31e99cecdeeffd0a774ea71c6e0555d618e074e9ef954b303461
+
+Experiment verification
+  Deterministic console harness: PASS
+  Normal direct/vector/disk matrix: PASS
+  Injected physical-read error/ignore matrix: PASS
+  Error A and B after-images equal before-images: PASS
+  Core B after-image equals before-image: PASS
+  Core A differs as expected from controlled file create/write/delete activity.
+
+Artifacts
+  Report sections 1-22: present
+  Five required named ASM and COM probes: present
+  README, observed output, full transcripts, images, emulator, references,
+  source evidence note, and hash manifests: present
+  ZIP archives: none
+

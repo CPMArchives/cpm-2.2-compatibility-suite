@@ -1,0 +1,39 @@
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 07:17:02 2026	Page 1
+Source file: BOOT35.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1  ORG 0100H
+0100  11 2f 01         2      2  LD DE,MSG
+0103  0e 09            3      3  LD C,9
+0105  cd 05 00         4      4  CALL 0005H
+0108  1e 01            5      5  LD E,1
+010a  0e 0e            6      6  LD C,14
+010c  cd 05 00         7      7  CALL 0005H
+010f  1e 07            8      8  LD E,7
+0111  0e 20            9      9  LD C,32
+0113  cd 05 00        10     10  CALL 0005H
+0116  3e 40           11     11  LD A,40H
+0118  32 03 00        12     12  LD (0003H),A
+011b  3e 5a           13     13  LD A,05AH
+011d  32 50 00        14     14  LD (0050H),A
+0120  3e a5           15     15  LD A,0A5H
+0122  32 00 d0        16     16  LD (0D000H),A
+0125  2a 01 00        17     17  LD HL,(0001H)
+0128  11 03 00        18     18  LD DE,3
+012b  b7              19     19  OR A
+012c  ed 52           20     20  SBC HL,DE
+012e  e9              21     21  JP (HL)
+012f  42 4f 4f 54     22     22 MSG: DB 'BOOT35 ENTER DIRECT BIOS BOOT AFTER MUTATION',13,10,'$'
+0133  33 35 20 45     22     23
+0137  4e 54 45 52     22     24
+013b  20 44 49 52     22     25
+013f  45 43 54 20     22     26
+0143  42 49 4f 53     22     27
+0147  20 42 4f 4f     22     28
+014b  54 20 41 46     22     29
+014f  54 45 52 20     22     30
+0153  4d 55 54 41     22     31
+0157  54 49 4f 4e     22     32
+015b  0d 0a 24        22     33
+015e                  23     34  END

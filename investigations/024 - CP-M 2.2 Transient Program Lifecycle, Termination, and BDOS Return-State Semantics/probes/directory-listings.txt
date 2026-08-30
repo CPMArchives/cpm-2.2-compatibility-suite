@@ -1,0 +1,23 @@
+Investigation 024 fixture additions (cpmtools ibm-3740)
+=======================================================
+
+Both drives, users 0 and 1:
+
+  BAD24.COM
+  BADSP24.COM
+  BDOS024.COM
+  CHECK24.COM
+  CONS24.COM        (CONSOLE24.COM installed under CP/M 8.3 name)
+  FILE24.COM
+  JUMP24.COM
+  OBS24.COM         (Investigation 023 ENTRY23 observer)
+  STATE24.COM
+  TERM24.COM
+
+The accepted drive-A listing contained 51 files, occupied 187K, and had 54K
+free. Existing Investigation 023 and earlier fixture content was retained.
+
+FILE case results created ROPEN24.DAT, FOPEN24.DAT, or JOPEN24.DAT on drive A.
+Each directory entry reopened successfully but reported no readable record
+because Close had intentionally been omitted.
+

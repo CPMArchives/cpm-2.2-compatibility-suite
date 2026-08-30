@@ -1,0 +1,11 @@
+Ledger baseline
+61f231cb13d457b9c2e5b3a682f3fd78688cb5a47d977997b1eb3fda50f7b81a  <project-root>/compatibility/02 Compatibility Ledger - Investigation 061.txt
+Source images
+b1b3245029a19948ec04dff915595c3369a9f2d0f6bd028e8883ab7f2a53c5b2  <local-home>/z80pack/cromemcosim/disks/library/cpm22.dsk
+7ad2d79c859f28e5deee787a2e0d6f3aef24d62b1d65a64a307afc9d88acf754  <local-home>/z80pack/cromemcosim/disks/library/cdos258_8.dsk
+I059 conformance specification
+a29b96d1b502454b65d516e854277f924c4bc7b7bc8fc59a92af47af1b237bd5  <project-root>/investigations/059 - CP-M 2.2 Compatibility Conformance Test Suite Design/probes/proposed-conformance-test-inventory.tsv
+863e3b51d16c30799092bbfaf50c9fb0e4720f42d4765f6071f1520f4b338905  <project-root>/investigations/059 - CP-M 2.2 Compatibility Conformance Test Suite Design/probes/result-record-schema.tsv
+78a4ec36167b1511c5aa985438a0702b9b8951a009205b19ea387f120816ff21  <project-root>/investigations/059 - CP-M 2.2 Compatibility Conformance Test Suite Design/probes/pass-fail-rules.tsv
+518cd166ec46e3946c247dd9ebaf29f5de4e060eaba07fcc366992c0552e5b22  <project-root>/investigations/059 - CP-M 2.2 Compatibility Conformance Test Suite Design/probes/ledger-test-traceability.tsv
+z80pack git 91fd28eb04e675c2127df88ed3f40675e15282e2

@@ -1,0 +1,563 @@
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:27:29 2026	Page 1
+Source file: BDOS37.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Investigation 037 Function 40 zero-fill consolidation probe.
+                       2      2 	ORG 0100H
+0100                   3      3 START:
+0100  31 7f 07         4      4 	LD SP,STACKTOP
+0103  11 98 04         5      5 	LD DE,HEADER
+0106  0e 09            6      6 	LD C,9
+0108  cd 05 00         7      7 	CALL 0005H
+                       8      8
+                       9      9 	; Function 36 maps current EX/S2/CR to r0/r1/r2; no disk activation.
+010b  21 18 04        10     10 	LD HL,FONE
+010e  cd 69 03        11     11 	CALL LOADFCB
+0111  af              12     12 	XOR A
+0112  cd fd 02        13     13 	CALL SETPOS
+0115  11 c1 04        14     14 	LD DE,LSR0
+0118  cd 08 03        15     15 	CALL F36REPORT
+011b  3e 01           16     16 	LD A,1
+011d  cd fd 02        17     17 	CALL SETPOS
+0120  11 ca 04        18     18 	LD DE,LSR1
+0123  cd 08 03        19     19 	CALL F36REPORT
+0126  3e 7f           20     20 	LD A,127
+0128  cd fd 02        21     21 	CALL SETPOS
+012b  11 d3 04        22     22 	LD DE,LSR127
+012e  cd 08 03        23     23 	CALL F36REPORT
+0131  3e 80           24     24 	LD A,128
+0133  cd fd 02        25     25 	CALL SETPOS
+0136  11 de 04        26     26 	LD DE,LSR128A
+0139  cd 08 03        27     27 	CALL F36REPORT
+013c  3e 01           28     28 	LD A,1
+013e  32 47 06        29     29 	LD (FCB+12),A
+0141  af              30     30 	XOR A
+0142  32 5b 06        31     31 	LD (FCB+32),A
+0145  11 eb 04        32     32 	LD DE,LSR128B
+0148  cd 08 03        33     33 	CALL F36REPORT
+014b  3e 7f           34     34 	LD A,127
+014d  32 5b 06        35     35 	LD (FCB+32),A
+0150  11 f6 04        36     36 	LD DE,LSR255
+0153  cd 08 03        37     37 	CALL F36REPORT
+0156  3e 02           38     38 	LD A,2
+0158  32 47 06        39     39 	LD (FCB+12),A
+015b  af              40     40 	XOR A
+015c  32 5b 06        41     41 	LD (FCB+32),A
+015f  11 01 05        42     42 	LD DE,LSR256
+0162  cd 08 03        43     43 	CALL F36REPORT
+0165  3e 1f           44     44 	LD A,31
+0167  32 47 06        45     45 	LD (FCB+12),A
+016a  3e 0f           46     46 	LD A,15
+016c  32 49 06        47     47 	LD (FCB+14),A
+016f  3e 7f           48     48 	LD A,127
+0171  32 5b 06        49     49 	LD (FCB+32),A
+0174  11 0c 05        50     50 	LD DE,LSRMAX
+0177  cd 08 03        51     51 	CALL F36REPORT
+                      52     52
+                      53     53 	; File-size shapes.
+017a  21 08 04        54     54 	LD HL,FEMPTY
+017d  11 19 05        55     55 	LD DE,LSZEMPTY
+0180  cd 12 03        56     56 	CALL SIZEREPORT
+0183  21 18 04        57     57 	LD HL,FONE
+0186  11 25 05        58     58 	LD DE,LSZONE
+0189  cd 12 03        59     59 	CALL SIZEREPORT
+018c  21 28 04        60     60 	LD HL,F127
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:27:29 2026	Page 2
+Source file: BDOS37.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+018f  11 2f 05        61     61 	LD DE,LSZ127
+0192  cd 12 03        62     62 	CALL SIZEREPORT
+0195  21 38 04        63     63 	LD HL,F128
+0198  11 39 05        64     64 	LD DE,LSZ128
+019b  cd 12 03        65     65 	CALL SIZEREPORT
+019e  21 48 04        66     66 	LD HL,FBIG
+01a1  11 43 05        67     67 	LD DE,LSZ130
+01a4  cd 12 03        68     68 	CALL SIZEREPORT
+                      69     69
+                      70     70 	; Random reads: first, middle, final, EOF, missing extent, empty.
+01a7  21 48 04        71     71 	LD HL,FBIG
+01aa  cd 4d 03        72     72 	CALL OPENFCB
+01ad  21 00 00        73     73 	LD HL,0
+01b0  3e 00           74     74 	LD A,0
+01b2  cd 46 03        75     75 	CALL SETRR
+01b5  11 4d 05        76     76 	LD DE,LRD0
+01b8  cd 1f 03        77     77 	CALL READREPORT
+01bb  21 40 00        78     78 	LD HL,64
+01be  3e 00           79     79 	LD A,0
+01c0  cd 46 03        80     80 	CALL SETRR
+01c3  11 55 05        81     81 	LD DE,LRD64
+01c6  cd 1f 03        82     82 	CALL READREPORT
+01c9  21 81 00        83     83 	LD HL,129
+01cc  3e 00           84     84 	LD A,0
+01ce  cd 46 03        85     85 	CALL SETRR
+01d1  11 5e 05        86     86 	LD DE,LRD129
+01d4  cd 1f 03        87     87 	CALL READREPORT
+01d7  21 82 00        88     88 	LD HL,130
+01da  3e 00           89     89 	LD A,0
+01dc  cd 46 03        90     90 	CALL SETRR
+01df  11 68 05        91     91 	LD DE,LRDEOF
+01e2  cd 1f 03        92     92 	CALL READREPORT
+01e5  21 00 01        93     93 	LD HL,256
+01e8  3e 00           94     94 	LD A,0
+01ea  cd 46 03        95     95 	CALL SETRR
+01ed  11 75 05        96     96 	LD DE,LRDHOLE
+01f0  cd 1f 03        97     97 	CALL READREPORT
+01f3  21 08 04        98     98 	LD HL,FEMPTY
+01f6  cd 4d 03        99     99 	CALL OPENFCB
+01f9  21 00 00       100    100 	LD HL,0
+01fc  3e 00          101    101 	LD A,0
+01fe  cd 46 03       102    102 	CALL SETRR
+0201  11 84 05       103    103 	LD DE,LRDEMPTY
+0204  cd 1f 03       104    104 	CALL READREPORT
+                     105    105
+                     106    106 	; Overwrite and append one record to existing file.
+0207  21 18 04       107    107 	LD HL,FONE
+020a  cd 4d 03       108    108 	CALL OPENFCB
+020d  3e 57          109    109 	LD A,'W'
+020f  cd 7c 03       110    110 	CALL FILLBUF
+0212  21 00 00       111    111 	LD HL,0
+0215  3e 00          112    112 	LD A,0
+0217  cd 46 03       113    113 	CALL SETRR
+021a  11 90 05       114    114 	LD DE,LWROVER
+021d  cd 3c 03       115    115 	CALL WRITEREPORT
+0220  3e 41          116    116 	LD A,'A'
+0222  cd 7c 03       117    117 	CALL FILLBUF
+0225  21 01 00       118    118 	LD HL,1
+0228  3e 00          119    119 	LD A,0
+022a  cd 46 03       120    120 	CALL SETRR
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:27:29 2026	Page 3
+Source file: BDOS37.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+022d  11 9d 05       121    121 	LD DE,LWRAPP
+0230  cd 3c 03       122    122 	CALL WRITEREPORT
+0233  0e 10          123    123 	LD C,16
+0235  cd 5f 03       124    124 	CALL CALLFCB
+                     125    125
+                     126    126 	; Sparse record 10, close, size=11, hole read=1, record10 succeeds.
+0238  21 58 04       127    127 	LD HL,FSPARSE
+023b  cd 56 03       128    128 	CALL MAKEFCB
+023e  3e 53          129    129 	LD A,'S'
+0240  cd 7c 03       130    130 	CALL FILLBUF
+0243  21 0a 00       131    131 	LD HL,10
+0246  3e 00          132    132 	LD A,0
+0248  cd 46 03       133    133 	CALL SETRR
+024b  11 ac 05       134    134 	LD DE,LWR10
+024e  cd 3c 03       135    135 	CALL WRITEREPORT
+0251  0e 10          136    136 	LD C,16
+0253  cd 5f 03       137    137 	CALL CALLFCB
+0256  21 58 04       138    138 	LD HL,FSPARSE
+0259  11 bc 05       139    139 	LD DE,LSZ11
+025c  cd 12 03       140    140 	CALL SIZEREPORT
+025f  21 58 04       141    141 	LD HL,FSPARSE
+0262  cd 4d 03       142    142 	CALL OPENFCB
+0265  21 09 00       143    143 	LD HL,9
+0268  3e 00          144    144 	LD A,0
+026a  cd 46 03       145    145 	CALL SETRR
+026d  11 cb 05       146    146 	LD DE,LRDSPHOLE
+0270  cd 1f 03       147    147 	CALL READREPORT
+0273  21 0a 00       148    148 	LD HL,10
+0276  3e 00          149    149 	LD A,0
+0278  cd 46 03       150    150 	CALL SETRR
+027b  11 d9 05       151    151 	LD DE,LRDSP10
+027e  cd 1f 03       152    152 	CALL READREPORT
+                     153    153
+                     154    154 	; New extent via random write at record 128.
+0281  21 68 04       155    155 	LD HL,FCROSS
+0284  cd 56 03       156    156 	CALL MAKEFCB
+0287  3e 58          157    157 	LD A,'X'
+0289  cd 7c 03       158    158 	CALL FILLBUF
+028c  21 80 00       159    159 	LD HL,128
+028f  3e 00          160    160 	LD A,0
+0291  cd 46 03       161    161 	CALL SETRR
+0294  11 e8 05       162    162 	LD DE,LWR128
+0297  cd 3c 03       163    163 	CALL WRITEREPORT
+029a  0e 10          164    164 	LD C,16
+029c  cd 5f 03       165    165 	CALL CALLFCB
+029f  21 68 04       166    166 	LD HL,FCROSS
+02a2  11 f3 05       167    167 	LD DE,LSZ129
+02a5  cd 12 03       168    168 	CALL SIZEREPORT
+                     169    169
+                     170    170 	; Highest supported record, virtual size 65536.
+02a8  21 78 04       171    171 	LD HL,FMAX
+02ab  cd 56 03       172    172 	CALL MAKEFCB
+02ae  3e 4d          173    173 	LD A,'M'
+02b0  cd 7c 03       174    174 	CALL FILLBUF
+02b3  21 ff ff       175    175 	LD HL,0FFFFH
+02b6  3e 00          176    176 	LD A,0
+02b8  cd 46 03       177    177 	CALL SETRR
+02bb  11 02 06       178    178 	LD DE,LWRMAX
+02be  cd 3c 03       179    179 	CALL WRITEREPORT
+02c1  0e 10          180    180 	LD C,16
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:27:29 2026	Page 4
+Source file: BDOS37.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+02c3  cd 5f 03       181    181 	CALL CALLFCB
+02c6  21 78 04       182    182 	LD HL,FMAX
+02c9  11 0f 06       183    183 	LD DE,LSZMAX
+02cc  cd 12 03       184    184 	CALL SIZEREPORT
+                     185    185
+                     186    186 	; r2 nonzero overflow and allocation-full random write on B.
+02cf  21 18 04       187    187 	LD HL,FONE
+02d2  cd 4d 03       188    188 	CALL OPENFCB
+02d5  21 00 00       189    189 	LD HL,0
+02d8  3e 01          190    190 	LD A,1
+02da  cd 46 03       191    191 	CALL SETRR
+02dd  11 1b 06       192    192 	LD DE,LRDOVER
+02e0  cd 1f 03       193    193 	CALL READREPORT
+02e3  21 88 04       194    194 	LD HL,FBFULL
+02e6  cd 56 03       195    195 	CALL MAKEFCB
+02e9  3e 46          196    196 	LD A,'F'
+02eb  cd 7c 03       197    197 	CALL FILLBUF
+02ee  21 00 00       198    198 	LD HL,0
+02f1  3e 00          199    199 	LD A,0
+02f3  cd 46 03       200    200 	CALL SETRR
+02f6  11 29 06       201    201 	LD DE,LWRFULL
+02f9  cd 3c 03       202    202 	CALL WRITEREPORT
+02fc  c9             203    203 	RET
+                     204    204
+02fd                 205    205 SETPOS:
+02fd  32 5b 06       206    206 	LD (FCB+32),A
+0300  af             207    207 	XOR A
+0301  32 47 06       208    208 	LD (FCB+12),A
+0304  32 49 06       209    209 	LD (FCB+14),A
+0307  c9             210    210 	RET
+0308                 211    211 F36REPORT:
+0308  d5             212    212 	PUSH DE
+0309  0e 24          213    213 	LD C,36
+030b  cd 5f 03       214    214 	CALL CALLFCB
+030e  d1             215    215 	POP DE
+030f  c3 91 03       216    216 	JP REPORT
+0312                 217    217 SIZEREPORT:
+0312  d5             218    218 	PUSH DE
+0313  cd 69 03       219    219 	CALL LOADFCB
+0316  0e 23          220    220 	LD C,35
+0318  cd 5f 03       221    221 	CALL CALLFCB
+031b  d1             222    222 	POP DE
+031c  c3 91 03       223    223 	JP REPORT
+031f                 224    224 READREPORT:
+031f  d5             225    225 	PUSH DE
+0320  21 5f 06       226    226 	LD HL,BUF
+0323  06 80          227    227 	LD B,128
+0325  3e ee          228    228 	LD A,0EEH
+0327  77             229    229 RRFILL: LD (HL),A
+0328  23             230    230 	INC HL
+0329  10 fc          231    231 	DJNZ RRFILL
+032b  11 5f 06       232    232 	LD DE,BUF
+032e  0e 1a          233    233 	LD C,26
+0330  cd 05 00       234    234 	CALL 0005H
+0333  0e 21          235    235 	LD C,33
+0335  cd 5f 03       236    236 	CALL CALLFCB
+0338  d1             237    237 	POP DE
+0339  c3 91 03       238    238 	JP REPORT
+033c                 239    239 WRITEREPORT:
+033c  d5             240    240 	PUSH DE
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:27:29 2026	Page 5
+Source file: BDOS37.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+033d  0e 28          241    241 	LD C,40
+033f  cd 5f 03       242    242 	CALL CALLFCB
+0342  d1             243    243 	POP DE
+0343  c3 91 03       244    244 	JP REPORT
+                     245    245
+0346                 246    246 SETRR:
+0346  22 5c 06       247    247 	LD (FCB+33),HL
+0349  32 5e 06       248    248 	LD (FCB+35),A
+034c  c9             249    249 	RET
+034d                 250    250 OPENFCB:
+034d  cd 69 03       251    251 	CALL LOADFCB
+0350  0e 0f          252    252 	LD C,15
+0352  cd 5f 03       253    253 	CALL CALLFCB
+0355  c9             254    254 	RET
+0356                 255    255 MAKEFCB:
+0356  cd 69 03       256    256 	CALL LOADFCB
+0359  0e 16          257    257 	LD C,22
+035b  cd 5f 03       258    258 	CALL CALLFCB
+035e  c9             259    259 	RET
+035f                 260    260 CALLFCB:
+035f  11 3b 06       261    261 	LD DE,FCB
+0362  cd 05 00       262    262 	CALL 0005H
+0365  32 39 06       263    263 	LD (RESULT),A
+0368  c9             264    264 	RET
+0369                 265    265 LOADFCB:
+0369  11 3b 06       266    266 	LD DE,FCB
+036c  01 10 00       267    267 	LD BC,16
+036f  ed b0          268    268 	LDIR
+0371  af             269    269 	XOR A
+0372  21 4b 06       270    270 	LD HL,FCB+16
+0375  06 14          271    271 	LD B,20
+0377  77             272    272 LF0: LD (HL),A
+0378  23             273    273 	INC HL
+0379  10 fc          274    274 	DJNZ LF0
+037b  c9             275    275 	RET
+037c                 276    276 FILLBUF:
+037c  21 5f 06       277    277 	LD HL,BUF
+037f  77             278    278 	LD (HL),A
+0380  23             279    279 	INC HL
+0381  06 7f          280    280 	LD B,127
+0383  af             281    281 	XOR A
+0384  77             282    282 FF0: LD (HL),A
+0385  23             283    283 	INC HL
+0386  10 fc          284    284 	DJNZ FF0
+0388  11 5f 06       285    285 	LD DE,BUF
+038b  0e 1a          286    286 	LD C,26
+038d  cd 05 00       287    287 	CALL 0005H
+0390  c9             288    288 	RET
+                     289    289
+0391                 290    290 REPORT:
+0391  d5             291    291 	PUSH DE
+0392  0e 19          292    292 	LD C,25
+0394  cd 05 00       293    293 	CALL 0005H
+0397  32 3a 06       294    294 	LD (CURDISK),A
+039a  e1             295    295 	POP HL
+039b  cd dd 03       296    296 	CALL PUTS
+039e  3a 39 06       297    297 	LD A,(RESULT)
+03a1  cd f1 03       298    298 	CALL HEXBYTE
+03a4  1e 20          299    299 	LD E,' '
+03a6  cd d1 03       300    300 	CALL PUTC
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:27:29 2026	Page 6
+Source file: BDOS37.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+03a9  3a 3a 06       301    301 	LD A,(CURDISK)
+03ac  cd f1 03       302    302 	CALL HEXBYTE
+03af  1e 20          303    303 	LD E,' '
+03b1  cd d1 03       304    304 	CALL PUTC
+03b4  21 3b 06       305    305 	LD HL,FCB
+03b7  06 24          306    306 	LD B,36
+03b9  7e             307    307 RP0: LD A,(HL)
+03ba  23             308    308 	INC HL
+03bb  e5             309    309 	PUSH HL
+03bc  cd f1 03       310    310 	CALL HEXBYTE
+03bf  1e 20          311    311 	LD E,' '
+03c1  cd d1 03       312    312 	CALL PUTC
+03c4  e1             313    313 	POP HL
+03c5  10 f2          314    314 	DJNZ RP0
+03c7  3a 5f 06       315    315 	LD A,(BUF)
+03ca  cd f1 03       316    316 	CALL HEXBYTE
+03cd  cd e7 03       317    317 	CALL CRLF
+03d0  c9             318    318 	RET
+03d1                 319    319 PUTC:
+03d1  c5             320    320 	PUSH BC
+03d2  d5             321    321 	PUSH DE
+03d3  e5             322    322 	PUSH HL
+03d4  0e 02          323    323 	LD C,2
+03d6  cd 05 00       324    324 	CALL 0005H
+03d9  e1             325    325 	POP HL
+03da  d1             326    326 	POP DE
+03db  c1             327    327 	POP BC
+03dc  c9             328    328 	RET
+03dd  7e             329    329 PUTS: LD A,(HL)
+03de  23             330    330 	INC HL
+03df  b7             331    331 	OR A
+03e0  c8             332    332 	RET Z
+03e1  5f             333    333 	LD E,A
+03e2  cd d1 03       334    334 	CALL PUTC
+03e5  18 f6          335    335 	JR PUTS
+03e7  1e 0d          336    336 CRLF: LD E,13
+03e9  cd d1 03       337    337 	CALL PUTC
+03ec  1e 0a          338    338 	LD E,10
+03ee  c3 d1 03       339    339 	JP PUTC
+03f1                 340    340 HEXBYTE:
+03f1  f5             341    341 	PUSH AF
+03f2  0f             342    342 	RRCA
+03f3  0f             343    343 	RRCA
+03f4  0f             344    344 	RRCA
+03f5  0f             345    345 	RRCA
+03f6  cd fa 03       346    346 	CALL NIBBLE
+03f9  f1             347    347 	POP AF
+03fa                 348    348 NIBBLE:
+03fa  e6 0f          349    349 	AND 0FH
+03fc  c6 30          350    350 	ADD A,'0'
+03fe  fe 3a          351    351 	CP '9'+1
+0400  38 02          352    352 	JR C,NOUT
+0402  c6 07          353    353 	ADD A,7
+0404  5f             354    354 NOUT: LD E,A
+0405  c3 d1 03       355    355 	JP PUTC
+                     356    356
+0408  00 45 4d 50    357    357 FEMPTY: DB 0,'EMPTY   ','DAT',0,0,0,0
+040c  54 59 20 20    357    358
+0410  20 44 41 54    357    359
+0414  00 00 00 00    357    360
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:27:29 2026	Page 7
+Source file: BDOS37.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0418  00 4f 4e 45    358    361 FONE: DB 0,'ONE     ','DAT',0,0,0,0
+041c  20 20 20 20    358    362
+0420  20 44 41 54    358    363
+0424  00 00 00 00    358    364
+0428  00 52 45 43    359    365 F127: DB 0,'REC127  ','DAT',0,0,0,0
+042c  31 32 37 20    359    366
+0430  20 44 41 54    359    367
+0434  00 00 00 00    359    368
+0438  00 52 45 43    360    369 F128: DB 0,'REC128  ','DAT',0,0,0,0
+043c  31 32 38 20    360    370
+0440  20 44 41 54    360    371
+0444  00 00 00 00    360    372
+0448  00 42 49 47    361    373 FBIG: DB 0,'BIG130  ','DAT',0,0,0,0
+044c  31 33 30 20    361    374
+0450  20 44 41 54    361    375
+0454  00 00 00 00    361    376
+0458  00 53 50 41    362    377 FSPARSE: DB 0,'SPARSE  ','DAT',0,0,0,0
+045c  52 53 45 20    362    378
+0460  20 44 41 54    362    379
+0464  00 00 00 00    362    380
+0468  00 43 52 4f    363    381 FCROSS: DB 0,'CROSS   ','DAT',0,0,0,0
+046c  53 53 20 20    363    382
+0470  20 44 41 54    363    383
+0474  00 00 00 00    363    384
+0478  00 4d 41 58    364    385 FMAX: DB 0,'MAXREC  ','DAT',0,0,0,0
+047c  52 45 43 20    364    386
+0480  20 44 41 54    364    387
+0484  00 00 00 00    364    388
+0488  02 46 55 4c    365    389 FBFULL: DB 2,'FULLWR  ','DAT',0,0,0,0
+048c  4c 57 52 20    365    390
+0490  20 44 41 54    365    391
+0494  00 00 00 00    365    392
+                     366    393
+0498  42 44 4f 53    367    394 HEADER: DB 'BDOS37 F40 result current fcb[36] dma0',13,10,'$'
+049c  33 37 20 46    367    395
+04a0  34 30 20 72    367    396
+04a4  65 73 75 6c    367    397
+04a8  74 20 63 75    367    398
+04ac  72 72 65 6e    367    399
+04b0  74 20 66 63    367    400
+04b4  62 5b 33 36    367    401
+04b8  5d 20 64 6d    367    402
+04bc  61 30 0d 0a    367    403
+04c0  24             367    404
+04c1  53 45 54 52    368    405 LSR0: DB 'SETRR-0 ',0
+04c5  52 2d 30 20    368    406
+04c9  00             368    407
+04ca  53 45 54 52    369    408 LSR1: DB 'SETRR-1 ',0
+04ce  52 2d 31 20    369    409
+04d2  00             369    410
+04d3  53 45 54 52    370    411 LSR127: DB 'SETRR-127 ',0
+04d7  52 2d 31 32    370    412
+04db  37 20 00       370    413
+04de  53 45 54 52    371    414 LSR128A: DB 'SETRR-CR128 ',0
+04e2  52 2d 43 52    371    415
+04e6  31 32 38 20    371    416
+04ea  00             371    417
+04eb  53 45 54 52    372    418 LSR128B: DB 'SETRR-EX1 ',0
+04ef  52 2d 45 58    372    419
+04f3  31 20 00       372    420
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:27:29 2026	Page 8
+Source file: BDOS37.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+04f6  53 45 54 52    373    421 LSR255: DB 'SETRR-255 ',0
+04fa  52 2d 32 35    373    422
+04fe  35 20 00       373    423
+0501  53 45 54 52    374    424 LSR256: DB 'SETRR-256 ',0
+0505  52 2d 32 35    374    425
+0509  36 20 00       374    426
+050c  53 45 54 52    375    427 LSRMAX: DB 'SETRR-65535 ',0
+0510  52 2d 36 35    375    428
+0514  35 33 35 20    375    429
+0518  00             375    430
+0519  53 49 5a 45    376    431 LSZEMPTY: DB 'SIZE-EMPTY ',0
+051d  2d 45 4d 50    376    432
+0521  54 59 20 00    376    433
+0525  53 49 5a 45    377    434 LSZONE: DB 'SIZE-ONE ',0
+0529  2d 4f 4e 45    377    435
+052d  20 00          377    436
+052f  53 49 5a 45    378    437 LSZ127: DB 'SIZE-127 ',0
+0533  2d 31 32 37    378    438
+0537  20 00          378    439
+0539  53 49 5a 45    379    440 LSZ128: DB 'SIZE-128 ',0
+053d  2d 31 32 38    379    441
+0541  20 00          379    442
+0543  53 49 5a 45    380    443 LSZ130: DB 'SIZE-130 ',0
+0547  2d 31 33 30    380    444
+054b  20 00          380    445
+054d  52 45 41 44    381    446 LRD0: DB 'READ-0 ',0
+0551  2d 30 20 00    381    447
+0555  52 45 41 44    382    448 LRD64: DB 'READ-64 ',0
+0559  2d 36 34 20    382    449
+055d  00             382    450
+055e  52 45 41 44    383    451 LRD129: DB 'READ-129 ',0
+0562  2d 31 32 39    383    452
+0566  20 00          383    453
+0568  52 45 41 44    384    454 LRDEOF: DB 'READ-EOF130 ',0
+056c  2d 45 4f 46    384    455
+0570  31 33 30 20    384    456
+0574  00             384    457
+0575  52 45 41 44    385    458 LRDHOLE: DB 'READ-NOEXT256 ',0
+0579  2d 4e 4f 45    385    459
+057d  58 54 32 35    385    460
+0581  36 20 00       385    461
+0584  52 45 41 44    386    462 LRDEMPTY: DB 'READ-EMPTY ',0
+0588  2d 45 4d 50    386    463
+058c  54 59 20 00    386    464
+0590  57 52 49 54    387    465 LWROVER: DB 'WRITE-OVER0 ',0
+0594  45 2d 4f 56    387    466
+0598  45 52 30 20    387    467
+059c  00             387    468
+059d  57 52 49 54    388    469 LWRAPP: DB 'WRITE-APPEND1 ',0
+05a1  45 2d 41 50    388    470
+05a5  50 45 4e 44    388    471
+05a9  31 20 00       388    472
+05ac  57 52 49 54    389    473 LWR10: DB 'WRITE-SPARSE10 ',0
+05b0  45 2d 53 50    389    474
+05b4  41 52 53 45    389    475
+05b8  31 30 20 00    389    476
+05bc  53 49 5a 45    390    477 LSZ11: DB 'SIZE-SPARSE11 ',0
+05c0  2d 53 50 41    390    478
+05c4  52 53 45 31    390    479
+05c8  31 20 00       390    480
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:27:29 2026	Page 9
+Source file: BDOS37.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+05cb  52 45 41 44    391    481 LRDSPHOLE: DB 'READ-SPARSE9 ',0
+05cf  2d 53 50 41    391    482
+05d3  52 53 45 39    391    483
+05d7  20 00          391    484
+05d9  52 45 41 44    392    485 LRDSP10: DB 'READ-SPARSE10 ',0
+05dd  2d 53 50 41    392    486
+05e1  52 53 45 31    392    487
+05e5  30 20 00       392    488
+05e8  57 52 49 54    393    489 LWR128: DB 'WRITE-128 ',0
+05ec  45 2d 31 32    393    490
+05f0  38 20 00       393    491
+05f3  53 49 5a 45    394    492 LSZ129: DB 'SIZE-CROSS129 ',0
+05f7  2d 43 52 4f    394    493
+05fb  53 53 31 32    394    494
+05ff  39 20 00       394    495
+0602  57 52 49 54    395    496 LWRMAX: DB 'WRITE-65535 ',0
+0606  45 2d 36 35    395    497
+060a  35 33 35 20    395    498
+060e  00             395    499
+060f  53 49 5a 45    396    500 LSZMAX: DB 'SIZE-65536 ',0
+0613  2d 36 35 35    396    501
+0617  33 36 20 00    396    502
+061b  52 45 41 44    397    503 LRDOVER: DB 'READ-R2-OVER ',0
+061f  2d 52 32 2d    397    504
+0623  4f 56 45 52    397    505
+0627  20 00          397    506
+0629  57 52 49 54    398    507 LWRFULL: DB 'WRITE-DISKFULL ',0
+062d  45 2d 44 49    398    508
+0631  53 4b 46 55    398    509
+0635  4c 4c 20 00    398    510
+                     399    511
+0639  00             400    512 RESULT: DB 0
+063a  00             401    513 CURDISK: DB 0
+063b                 402    514 FCB: DS 36,0
+065f                 403    515 BUF: DS 128,0
+06df                 404    516 	DS 160
+077f                 405    517 STACKTOP:
+077f                 406    518 	END START

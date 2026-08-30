@@ -1,0 +1,26 @@
+0:
+-rw-rw-rw-      58 Jan 01 1970  console2
+-rwxrwxrwx   57984 Jan 01 1970  largeok.com
+-rwxrwxrwx     378 Jan 01 1970  load34.com
+-rwxrwxrwx     433 Jan 01 1970  mem34.com
+-rwxrwxrwx     351 Jan 01 1970  ovr34.com
+-rwxrwxrwx     346 Jan 01 1970  stack34.com
+-rwxrwxrwx   58112 Jan 01 1970  toolarge.com
+-rwxrwxrwx     455 Jan 01 1970  vector34.com
+-rwxrwxrwx     913 Jan 01 1970  zero34.com
+
+1:
+-rwxrwxrwx      77 Jan 01 1970  bad24.com
+-rwxrwxrwx      38 Jan 01 1970  badsp24.com
+-rwxrwxrwx      33 Jan 01 1970  bdos024.com
+-rwxrwxrwx     310 Jan 01 1970  check24.com
+-rwxrwxrwx      58 Jan 01 1970  cons24.com
+-rw-rw-rw-      58 Jan 01 1970  console2
+-rw-rw-rw-      30 Jan 01 1970  dmachk.dat
+-rwxrwxrwx     963 Jan 01 1970  entry23.com
+-rwxrwxrwx     315 Jan 01 1970  file24.com
+-rwxrwxrwx      30 Jan 01 1970  jump24.com
+-rwxrwxrwx     963 Jan 01 1970  obs24.com
+-rwxrwxrwx     129 Jan 01 1970  state24.com
+-rwxrwxrwx      29 Jan 01 1970  term24.com
+-rwxrwxrwx      30 Jan 01 1970  who22.com

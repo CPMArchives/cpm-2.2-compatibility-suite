@@ -1,0 +1,23 @@
+COMMUNICATIONS CORPUS INVENTORY
+
+Executed
+  QTERM 4.3e, IMSAI 8080 / VT100 patch
+    Origin: z80pack imsaisim communications disk
+    Binary: contained in images-before/communications.dsk
+    Source/docs: probes/source/qt-imsai.asm, qterm.doc
+    Profile: Z80, IMSAI SIO-2 direct ports
+    Evidence: T01-T06
+
+  Investigation 065 XMODEM checksum peer
+    Origin: probes/peer065.py
+    Profile: host Unix socket paired with IMSAI SIO2A
+    Evidence: T02-T03
+
+Reviewed, not executed anew
+  Generic CP/M-80 Kermit 4.11 (I050/I053)
+  XMODEM 2.7 (I050)
+
+Not tested
+  BBS/server software, dial/answer modem workflows, physical serial hardware,
+  cross-emulator transfers, noisy-line transfer, receive disk full, and
+  interrupt-driven serial software.

@@ -1,0 +1,9 @@
+software_or_class	assumption_crossing_boundary	personality_obligation	external_or_profile_obligation	result
+DRI utilities and toolchains	CCP, page zero, BDOS, FCB/DMA, memory and termination	all CP/M-visible semantics remain in personality claim	storage/console mechanism may be delegated	explained by boundary
+SUBMIT/XSUB	CCP stream, writable gateways and Function 10	strict personality presents interoperable stream/interposition	underlying storage/console may be delegated	explained by strict boundary
+WordStar 3.00	console profile plus create/write/close/search/read	personality presents BDOS/file and selected terminal semantics	terminal transport/configuration profile	explained by declared profile
+BASIC-80/Wumpus	console, files, interrupt and return	personality presents CP/M runtime/lifecycle	CPU/terminal mechanisms may be delegated	explained by boundary
+Adventure A02	large transient and multi-file reads	personality presents TPA and BDOS file surface	storage backing may be delegated	explained by boundary
+Generic Kermit	logical devices, files, command lifecycle	personality presents CP/M logical/file surface	peer/serial endpoint is communications profile	explained; successful peer transfer still gap
+IMSAI QTERM	direct IN 23h	baseline personality loads program but promises no absent port	IMSAI hardware profile must provide port	expected mismatch outside baseline
+KSCOPE	Dazzler OUT 0Eh	baseline personality loads program but promises no absent display	Dazzler hardware profile must provide device	expected mismatch outside baseline

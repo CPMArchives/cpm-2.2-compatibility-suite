@@ -1,0 +1,22 @@
+Downloaded 2026-08-19 for Investigation 064.
+
+Turbo Pascal files:
+https://raw.githubusercontent.com/skx/cpm-dist/master/P/TURBO.COM
+https://raw.githubusercontent.com/skx/cpm-dist/master/P/TURBO.OVR
+https://raw.githubusercontent.com/skx/cpm-dist/master/P/TURBO.MSG
+
+FORTRAN-80 files:
+https://deramp.com/downloads/microsoft/CPM%20Software/FORTRAN-80%20(F80%20v3.44)/F80.COM
+https://deramp.com/downloads/microsoft/CPM%20Software/FORTRAN-80%20(F80%20v3.44)/M80.COM
+https://deramp.com/downloads/microsoft/CPM%20Software/FORTRAN-80%20(F80%20v3.44)/L80.COM
+https://deramp.com/downloads/microsoft/CPM%20Software/FORTRAN-80%20(F80%20v3.44)/FORLIB.REL
+
+Discovery/catalog sources:
+https://github.com/antirez/ZOT/blob/master/cpm-software/download.sh
+https://oldcomputers.dyndns.org/public/pub/archiv/maslin/masl-dsk/images-97/cpmprog/index.html
+https://www.retroarchive.org/cpm/dbase/dbase.htm
+https://mirrors.archeobits.com/bbs/software.bbsdocumentary.com/expanded.html
+
+The oldcomputers direct-download attempts returned HTML authentication pages;
+these were rejected and removed. RetroArchive retrieval failed. No unavailable
+candidate is represented as executed evidence.

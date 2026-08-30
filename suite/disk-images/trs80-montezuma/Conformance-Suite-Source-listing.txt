@@ -1,0 +1,25 @@
+0:
+bdostest.mzc   20096
+biostest.mzc   37888
+build.sub        128
+ccptest.mzc    24192
+constest.mzc   32768
+copying.txt    18432
+cputest.mzc     7936
+crunch.com      5888
+dirtest.mzc    26880
+disktest.mzc   19712
+ecotest.mzc     8448
+entrytst.mzc   18560
+errtest.mzc    13952
+filetest.mzc   51456
+link.com       15616
+notice.txt       896
+randtest.mzc   46208
+readme.txt      1792
+scratch.mzc     7808
+uncr.com        6400
+zsm4.com       22400
+
+21 files, occupying 396K of 876K total capacity
+480K remain

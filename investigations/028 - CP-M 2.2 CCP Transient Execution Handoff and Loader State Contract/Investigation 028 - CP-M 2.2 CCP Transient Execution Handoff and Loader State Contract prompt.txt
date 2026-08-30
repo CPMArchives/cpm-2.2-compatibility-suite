@@ -1,0 +1,453 @@
+INVESTIGATION 028 — CP/M 2.2 CCP Transient Execution Handoff and Loader State Contract
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 027 is complete.
+
+The authoritative Compatibility Ledger currently incorporates findings
+through Investigation 027.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports, architecture documents,
+roadmaps, specifications, or other existing BetterCP/M files.
+
+Create Investigation 028 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+This is an evidence investigation only.
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Define the CP/M 2.2 CCP transient execution handoff contract.
+
+Previous investigations established:
+
+- CCP command parsing and dispatch;
+- transient lookup;
+- COM loading;
+- entry environment;
+- termination behavior;
+- BDOS calling convention.
+
+Investigation 028 examines the boundary between:
+
+    CCP
+      |
+      v
+    transient program
+      |
+      v
+    BDOS
+
+The goal is to determine:
+
+- what CCP prepares before CALL 0100h;
+- what state is handed to the transient;
+- what state CCP expects back;
+- which loader behaviors are compatibility requirements;
+- which are DRI implementation details.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read and incorporate:
+
+Investigation 021:
+    CCP command acquisition and dispatch.
+
+Investigation 022:
+    Transient loading and CALL 0100h entry.
+
+Investigation 023:
+    Command tail, default FCBs, entry environment.
+
+Investigation 024:
+    Termination and return-state semantics.
+
+Investigation 026:
+    BDOS system-state functions.
+
+Investigation 027:
+    BDOS ABI.
+
+Do not duplicate these investigations.
+
+Focus on the handoff boundary between CCP and transient execution.
+
+
+SCOPE
+
+Investigate:
+
+- CCP transient preparation;
+- COM file loading sequence;
+- memory clearing/loading behavior;
+- DMA preparation before execution;
+- default FCB preparation timing;
+- page-zero preparation timing;
+- BDOS availability at transient entry;
+- CCP assumptions before and after CALL 0100h.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- individual BDOS function behavior;
+- file-system semantics;
+- BIOS disk implementation;
+- CP/M 3/MP/M;
+- compiler/runtime startup conventions.
+
+Do not require DRI internal CCP organization.
+
+
+KEY QUESTIONS
+
+
+1. TRANSIENT LOAD SEQUENCE
+
+Determine:
+
+- order of:
+    - command recognition;
+    - file open;
+    - memory preparation;
+    - COM loading;
+    - page-zero setup;
+    - CALL 0100h.
+
+Determine which ordering is externally visible.
+
+
+2. MEMORY PREPARATION
+
+Determine:
+
+- whether CCP clears the transient area;
+- whether unused COM space is preserved;
+- whether stack area is initialized;
+- whether memory above loaded COM is defined.
+
+Classify application-visible guarantees.
+
+
+3. PAGE-ZERO HANDOFF
+
+Determine:
+
+- when page zero is prepared;
+- which fields are guaranteed;
+- whether CCP prepares all fields before loading;
+- whether transient execution can modify them before use.
+
+Cross-check I023.
+
+
+4. DEFAULT FCB TIMING
+
+Determine:
+
+- when FCB1/FCB2 are created;
+- whether they are prepared before or after command tail copying;
+- whether transient modifications affect CCP return.
+
+Cross-check I023.
+
+
+5. DMA PREPARATION
+
+Determine:
+
+- DMA state immediately before CALL 0100h;
+- relationship between command tail at 0080h and DMA;
+- whether DMA restoration occurs before every transient.
+
+Cross-check I022/I023/I024.
+
+
+6. BDOS AVAILABILITY
+
+Determine:
+
+At CALL 0100h:
+
+- is BDOS fully initialized;
+- are BDOS state variables valid;
+- can the transient immediately call BDOS.
+
+Cross-check I027.
+
+
+7. CCP RETURN ASSUMPTIONS
+
+Determine:
+
+After RET:
+
+- what CCP expects;
+- what state CCP reads;
+- what state CCP reconstructs.
+
+Cross-check I024.
+
+
+8. TRANSIENT MEMORY LIMITS
+
+Determine:
+
+- how CCP determines available transient memory;
+- whether COM files can detect the boundary;
+- relationship with BDOS vector at 0005h.
+
+Cross-check I027.
+
+
+9. ERROR PATHS
+
+Determine:
+
+- missing COM file;
+- failed open;
+- oversized COM file;
+- invalid load conditions.
+
+Determine:
+
+- returned to CCP;
+- diagnostic path;
+- state cleanup.
+
+
+10. DRI SOURCE ANALYSIS
+
+Review CCP source for:
+
+- load routine;
+- preparation order;
+- CALL 0100h;
+- return path.
+
+Extract compatibility-relevant behavior only.
+
+
+11. EXPERIMENTAL PROGRAMS
+
+Create deterministic probes:
+
+LOAD28:
+    Observe transient loading state.
+
+MEM28:
+    Examine initialized/uninitialized memory.
+
+ENTRY28:
+    Capture complete entry environment.
+
+RETURN28:
+    Capture CCP behavior after RET.
+
+ERROR28:
+    Exercise loader failure cases.
+
+
+12. CONTROLLED TEST MATRIX
+
+Include:
+
+- minimal COM file;
+- COM file larger than available memory;
+- COM file that inspects page zero;
+- COM file that changes DMA;
+- COM file that changes drive/user;
+- COM file that returns immediately;
+- COM file that modifies memory before RET.
+
+
+13. EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+    documented behavior.
+
+B:
+    DRI implementation behavior.
+
+I:
+    experimental observation.
+
+D:
+    unresolved policy.
+
+These are investigation labels only.
+
+Ledger evidence must use:
+
+    I028
+    CCP
+    BDOS
+    IG
+    AG
+
+
+14. COMPATIBILITY CLASSIFICATION
+
+Classify each conclusion:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Do not require:
+
+- exact CCP addresses;
+- exact loading algorithm;
+- private CCP variables;
+- internal memory clearing routines.
+
+
+15. EXISTING LEDGER REVIEW
+
+Review:
+
+0001-0034
+0475-0512
+0518-0533
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+
+16. PROPOSED LEDGER ADDITIONS
+
+The current ledger ends after Investigation 027.
+
+Begin proposed entries at:
+
+0534
+
+Do not modify the Compatibility Ledger.
+
+Include:
+
+Proposed Compatibility Ledger additions
+
+and:
+
+Proposed existing-entry updates.
+
+
+Each entry must contain:
+
+NNNN. Title
+
+    Description.
+
+    Disposition:
+
+    Evidence:
+
+    Conformance:
+
+
+17. REPORT STRUCTURE
+
+Create:
+
+Investigation 028 - CP/M 2.2 CCP Transient Execution Handoff and Loader State Contract.md
+
+
+Include:
+
+1. Objective and scope
+2. Relationship to previous investigations
+3. Documentation findings
+4. CCP source findings
+5. Loader sequence
+6. Entry handoff state
+7. Error paths
+8. Experimental results
+9. Compatibility conclusions
+10. Proposed ledger additions
+11. Existing-entry updates
+12. Open questions
+13. Artifact preservation audit
+14. Sources
+
+
+18. ARTIFACT REQUIREMENTS
+
+Create:
+
+Investigation 028/
+
+with:
+
+probes/
+
+Preserve:
+
+- source;
+- binaries;
+- listings;
+- harnesses;
+- transcripts;
+- memory dumps;
+- disk images;
+- build instructions;
+- SHA-256 manifests.
+
+
+19. PRESERVATION AUDIT
+
+Before investigation:
+
+- hash current ledger;
+- record emulator version;
+- hash fixture images.
+
+After investigation:
+
+- verify ledger unchanged;
+- verify previous investigations unchanged;
+- verify protected files unchanged;
+- hash new artifacts.
+
+
+20. COMPLETION REPORT
+
+When complete report:
+
+- files created;
+- artifact count;
+- experiments performed;
+- principal findings;
+- proposed ledger range;
+- ledger hash before/after;
+- confirmation no protected files changed;
+- documentation reviewed.
+
+
+FINAL GOAL
+
+Define the CP/M 2.2 CCP-to-transient execution boundary:
+
+When CCP launches a transient program,
+what environment must exist,
+what state must be prepared,
+and what assumptions may the transient safely make?
+
+The result should complete the compatibility model of the CP/M transient lifecycle
+without requiring BetterCP/M to reproduce DRI-private CCP implementation details.

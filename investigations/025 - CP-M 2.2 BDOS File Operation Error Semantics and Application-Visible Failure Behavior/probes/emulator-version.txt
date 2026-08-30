@@ -1,0 +1,5 @@
+z80pack cpmsim Release 1.39 (copyright banner 1987-2025)
+Guest: 64K CP/M Vers. 2.2, Z80 CBIOS V1.2 for Z80SIM
+Executable SHA-256: 30374c2df2f44118d2b36a8bfef651a9f2d0ee9b9ddd0039c044b9f06df4708d
+Repository commit: 91fd28eb04e675c2127df88ed3f40675e15282e2
+

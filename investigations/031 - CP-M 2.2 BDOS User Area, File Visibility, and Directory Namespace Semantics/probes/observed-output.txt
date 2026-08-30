@@ -1,0 +1,35 @@
+USER31
+ Procedure: query/set/query/restore Function 32 state and run operations after
+ changes. Observation: initial user 0; set 7 returned/query 7; E=32 is modulo
+ 32 by the documented contract; restored 0. Conclusion: user is live BDOS
+ state, observed/set with Function 32, independent of FCB bytes.
+
+VIS31 / OPEN31
+ Procedure: place target identities in different users, change Function 32,
+ Search/Open/read. Observation: user-0 operation did not see U1FILE; user 1
+ did. Identical 8.3 names in different user bytes remained distinct.
+ Conclusion: ordinary lookup is current-user scoped; no fallback is implied.
+
+SEARCH31
+ Procedure: exact/wildcard First/Next under ordinary drive fields and special
+ dr='?'. Observation: ordinary results carried current user byte only; dr='?'
+ exposed entries from multiple users in the 128-byte DMA records.
+ Conclusion: ordinary enumeration is scoped; documented complete-directory
+ mode is the explicit cross-user exception.
+
+CREATE31
+ Procedure: Make/write/Close in selected user and recreate a deleted identity.
+ Observation: the resulting directory entry carried the current user byte;
+ same 8.3 identity in another user did not conflict.
+ Conclusion: Make implicitly uses current user; FCB has no ordinary user field.
+
+RENAME31
+ Procedure: rename exact and wildcard identities, including explicit drive.
+ Observation: matching entries retained their user byte; other-user entries
+ were not targets. Conclusion: Rename is current-user/current namespace and
+ cannot express cross-user movement.
+
+DELETE31
+ Procedure: delete U1FILE first as user 0, then user 1; exact/wildcard cases.
+ Observation: user 0 returned FF; user 1 returned success. Wildcards affected
+ current-user matches only. Conclusion: Delete does not cross user areas.

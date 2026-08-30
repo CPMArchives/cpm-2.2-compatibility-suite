@@ -1,0 +1,15 @@
+Investigation 049 completion audit
+==================================
+
+Report structure: exactly 16 required numbered sections.
+Required report, probes, transcripts, disk fixtures, inventories, and hashes: present.
+Controlled application tests: WordStar normal and full-disk paths, Wumpus, Adventure.
+WordStar normal repeat after-images: byte-identical.
+Wumpus no-save application disk: byte-identical before/after.
+Adventure no-save application disk: byte-identical before/after.
+Mosteksim rebuild: byte-identical.
+Incomplete categories and unperformed paths: explicitly marked.
+Unsupported experimental claims: none identified.
+Compatibility Ledger: unchanged at SHA-256 a1119d87b2a2723cec18cb983aeda3987381bca5cd6f67ac4e3d15397e380301.
+Existing BetterCP/M files outside the new Investigation 049 directory: byte-identical before/after.
+ZIP archives created: none.

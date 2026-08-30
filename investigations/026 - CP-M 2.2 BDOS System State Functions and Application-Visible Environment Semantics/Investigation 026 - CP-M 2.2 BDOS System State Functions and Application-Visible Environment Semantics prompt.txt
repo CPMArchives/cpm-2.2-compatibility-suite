@@ -1,0 +1,482 @@
+INVESTIGATION 026 — CP/M 2.2 BDOS System State Functions and
+Application-Visible Environment Semantics
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 025 is complete.
+
+The authoritative Compatibility Ledger currently incorporates findings
+through Investigation 025.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports, architecture documents,
+roadmaps, specifications, or other existing BetterCP/M files.
+
+Create Investigation 026 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+This is an evidence investigation only.
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Establish the application-visible CP/M 2.2 BDOS system-state contract.
+
+Previous investigations have characterized:
+
+- CCP command processing;
+- transient entry;
+- termination;
+- file operation success and failure;
+- allocation vectors;
+- disk parameter blocks;
+- BIOS interfaces.
+
+Investigation 026 determines how applications observe and manipulate
+global CP/M environment state through BDOS functions.
+
+The goal is to define:
+
+- what state BDOS owns;
+- what state BIOS owns;
+- what state survives calls;
+- what state survives termination;
+- what applications may rely upon;
+- what is implementation-specific.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read and incorporate:
+
+Investigation 007:
+    Drive and user state.
+
+Investigation 017:
+    Allocation vector and DPB semantics.
+
+Investigation 018:
+    Character devices and IOBYTE.
+
+Investigation 019:
+    BIOS disk boundary.
+
+Investigation 020:
+    BIOS boot and page-zero behavior.
+
+Investigation 024:
+    Termination and preserved state.
+
+Investigation 025:
+    Failure semantics.
+
+Do not duplicate earlier investigations.
+
+Strengthen existing propositions only where new evidence requires it.
+
+
+SCOPE
+
+Investigate BDOS functions:
+
+Function 14:
+    Select Disk
+
+Function 25:
+    Return Current Disk
+
+Function 26:
+    Set DMA Address
+
+Function 27:
+    Get Allocation Vector Address
+
+Function 31:
+    Get Disk Parameter Block Address
+
+Function 32:
+    Get/Set User Code
+
+Function 37:
+    Reset Drive
+
+Function 39:
+    Get BIOS
+
+Function 40:
+    Write Protect Disk
+
+Function 41:
+    Get/Set File Attributes (if present in reference system)
+
+Also investigate:
+
+- relationship between BDOS-maintained state and BIOS state;
+- state changes visible to transient programs;
+- persistence across termination.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- internal BDOS memory layout unless externally visible;
+- BIOS implementation details already covered by I019/I020;
+- CP/M 3 extensions;
+- MP/M;
+- BetterCP/M policy decisions.
+
+Do not require behavior merely because DRI implements it internally.
+
+
+KEY QUESTIONS
+
+
+1. CURRENT DRIVE STATE
+
+Determine:
+
+- how Function 25 reports current drive;
+- how Function 14 changes current drive;
+- whether invalid selections return or terminate;
+- relationship between BDOS and BIOS drive state.
+
+
+2. USER AREA STATE
+
+Determine:
+
+- Function 32 behavior;
+- current user representation;
+- persistence after termination;
+- relationship with CCP prompt state.
+
+
+3. DMA STATE
+
+Determine:
+
+- exact semantics of Function 26;
+- whether DMA is simply a pointer or has additional state;
+- persistence across BDOS calls;
+- persistence across termination mechanisms.
+
+Cross-check I024.
+
+
+4. ALLOCATION VECTOR EXPOSURE
+
+Determine:
+
+- Function 27 return semantics;
+- whether pointer changes with drive selection;
+- relationship with Function 31 and DPB.
+
+Do not duplicate I017 allocation mapping work.
+
+
+5. DISK PARAMETER BLOCK EXPOSURE
+
+Determine:
+
+- Function 31 result;
+- DPB ownership;
+- whether applications may modify returned data;
+- whether DPBs differ between drives.
+
+
+6. DRIVE RESET SEMANTICS
+
+Determine Function 37 behavior:
+
+- affected drives;
+- login state;
+- read-only state;
+- current drive effects;
+- ALV/DPB effects.
+
+Cross-check I017.
+
+
+7. WRITE PROTECTION
+
+Determine:
+
+- Function 28/40 behavior;
+- whether protection is BDOS state or BIOS policy;
+- persistence;
+- visible effects on later operations.
+
+Cross-check I014 and I025.
+
+
+8. SYSTEM STATE AFTER TERMINATION
+
+Create comparison:
+
+Before termination:
+    drive
+    user
+    DMA
+    login state
+    read-only state
+
+After:
+
+    RET
+    BDOS Function 0
+    JMP 0000h
+
+
+9. APPLICATION ASSUMPTIONS
+
+Determine which assumptions are safe:
+
+Examples:
+
+- "DMA remains unchanged after any call"
+- "current drive remains constant"
+- "user area survives termination"
+- "ALV pointer remains valid"
+- "DPB contents are immutable"
+
+
+10. DRI SOURCE ANALYSIS
+
+Review BDOS source for:
+
+- state variables;
+- drive/user storage;
+- reset behavior;
+- pointer-return functions.
+
+Extract compatibility-relevant behavior only.
+
+
+11. EXPERIMENTAL PROGRAMS
+
+Create deterministic probes:
+
+STATE26:
+    Drive/user/DMA state.
+
+DPB26:
+    DPB and ALV pointers.
+
+RESET26:
+    Function 37 behavior.
+
+PROTECT26:
+    Write protection.
+
+TERMSTATE26:
+    State before and after termination.
+
+
+12. CONTROLLED TEST MATRIX
+
+Include:
+
+- switch drives;
+- switch users;
+- set DMA;
+- query DMA effects through operations;
+- reset inactive drive;
+- reset current drive;
+- enable write protection;
+- terminate by RET;
+- terminate by warm boot.
+
+
+13. EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+    documented behavior.
+
+B:
+    DRI implementation behavior.
+
+I:
+    experimental observation.
+
+D:
+    unresolved policy.
+
+These labels are internal investigation classifications only.
+
+Ledger evidence must use:
+
+    I026
+    BDOS
+    CCP
+    IG
+    AG
+
+
+14. COMPATIBILITY CLASSIFICATION
+
+Classify each conclusion:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Be conservative.
+
+Do not require:
+
+- DRI internal variable placement;
+- exact pointer values;
+- undocumented persistence;
+- BIOS-private behavior.
+
+
+15. EXISTING LEDGER REVIEW
+
+Review affected entries:
+
+0001-0034
+0190-0247
+0424-0435
+0509-0517
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- disposition changes;
+- duplicate avoidance.
+
+
+16. PROPOSED LEDGER ADDITIONS
+
+The current ledger ends after Investigation 025.
+
+Begin proposed entries at:
+
+0518
+
+Do not modify the Compatibility Ledger.
+
+Include:
+
+Proposed Compatibility Ledger additions
+
+and:
+
+Proposed existing-entry updates.
+
+
+Each entry must contain:
+
+NNNN. Title
+
+    Description.
+
+    Disposition:
+
+    Evidence:
+
+    Conformance:
+
+
+17. REPORT STRUCTURE
+
+Create:
+
+Investigation 026 - CP/M 2.2 BDOS System State Functions and
+Application-Visible Environment Semantics.md
+
+
+Include:
+
+1. Objective and scope
+2. Relationship to previous investigations
+3. Documentation findings
+4. BDOS source findings
+5. Function-by-function analysis
+6. Experimental methodology
+7. Results
+8. Compatibility conclusions
+9. Proposed ledger additions
+10. Existing-entry updates
+11. Open questions
+12. Artifact preservation audit
+13. Sources
+
+
+18. ARTIFACT REQUIREMENTS
+
+Create:
+
+Investigation 026/
+
+with:
+
+probes/
+
+Preserve:
+
+- assembly source;
+- binaries;
+- listings;
+- harnesses;
+- transcripts;
+- disk images;
+- directory listings;
+- build instructions;
+- SHA-256 manifests.
+
+
+19. PRESERVATION AUDIT
+
+Before investigation:
+
+- hash current ledger;
+- record emulator version;
+- hash fixture images.
+
+After investigation:
+
+- verify ledger unchanged;
+- verify prior investigations unchanged;
+- verify protected files unchanged;
+- hash new artifacts.
+
+
+20. COMPLETION REPORT
+
+When complete report:
+
+- files created;
+- artifact count;
+- experiments performed;
+- principal findings;
+- proposed ledger range;
+- ledger hash before/after;
+- confirmation no protected files changed;
+- documentation reviewed.
+
+
+FINAL GOAL
+
+Define the CP/M 2.2 application-visible system-state contract:
+
+What environment state can a transient program inspect,
+change, preserve, or rely upon?
+
+The result should separate:
+
+- BDOS-managed state;
+- BIOS-managed state;
+- DRI implementation behavior;
+- BetterCP/M policy decisions.

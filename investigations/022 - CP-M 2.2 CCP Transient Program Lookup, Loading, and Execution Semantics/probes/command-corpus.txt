@@ -1,0 +1,28 @@
+Investigation 022 accepted deterministic command corpus
+=======================================================
+
+Main lookup/load run (run-lookup-load.exp):
+
+  LOAD22
+  MINRET22
+  PART22
+  MAXOK
+  BOUND
+  WHO22
+  USER 1
+  WHO22
+  ONLY0
+  B:WHO22
+  USER 0
+  B:WHO22
+  NOFILE22
+
+Return-path runs (run-return-path.exp), each from a fresh copied image pair:
+
+  B:
+  USER 1
+  RET22 | F0TERM22 | J0TERM22
+  STATE22 AFTER-<terminator>
+
+The Expect harnesses wait for prompts and provide every command; no manually
+timed input is part of the evidence.

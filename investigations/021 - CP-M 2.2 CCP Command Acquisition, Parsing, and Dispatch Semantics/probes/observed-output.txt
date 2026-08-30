@@ -1,0 +1,56 @@
+Investigation 021 accepted observations - 15 August 2026
+========================================================
+
+Environment: z80pack cpmsim 1.39, commit
+91fd28eb04e675c2127df88ed3f40675e15282e2; 64K DRI CP/M 2.2; Z80 CBIOS 1.2.
+
+Acquisition and whitespace
+--------------------------
+- CR only, one SPACE, and several SPACEs each produced another A> prompt with
+  no error.
+- TAB-only and SPACE/TAB/SPACE were not empty: the common parser printed the
+  offending control input followed by `?` and resumed at A>.
+- Multiple leading SPACEs before DIR were ignored.
+- Lowercase `dir` and mixed-case `DiR` dispatched resident DIR; the console
+  echo preserved typed case while CCP processing normalized it.
+- A 127-byte X command was accepted and then reported with `?`.
+
+Drive forms
+-----------
+- A: while on A was a no-op prompt transition.
+- B: changed the following prompt to B>; A: changed it back to A>.
+- B:DIR did not dispatch resident DIR. It temporarily loaded B:DIR.COM,
+  printed the MARK21 marker, then returned to A>.
+- B:NOEXIST printed `B:NOEXIST?` and returned to A>.
+- Q: entered `Bdos Err On Q: Select`; deterministic `x` caused warm restart
+  and A>.
+- :FOO was treated as an empty command; AA:, FOO:BAR, and FOO;BAR reached
+  generic error handling with their token followed by `?`.
+
+Recognition and precedence
+--------------------------
+- Exact built-in DIR won over A:DIR.COM and printed the directory.
+- DIR.COM also selected resident DIR; explicit `.COM` did not force transient.
+- TYPE.COM selected the resident TYPE recognition path, then failed its
+  operand processing with `?`; MARK21 did not execute.
+- DI and DIRX were not abbreviations and failed as transient names.
+- FOO.TXT was rejected; the normal transient command position takes a primary
+  name and CCP supplies COM internally.
+- The DRI source table contains exactly DIR, ERA, TYPE, SAVE, REN, USER.
+
+Transient-entry observations
+----------------------------
+`PARSE21 one two` produced uppercase FCB names ONE/TWO and tail bytes
+`20 4F 4E 45 20 54 57 4F` (" ONE TWO").
+
+`parse21   a:b *.com` produced FCB1 drive 1/name B, FCB2 wildcard name/type
+????????.COM, and tail `20 20 20 41 3A 42 20 2A 2E 43 4F 4D`.
+
+This strengthens the DRI-CCP evidence for I001 but does not, by itself,
+convert every source-specific I001 policy choice into a universal contract.
+
+Preservation
+------------
+Fixture and after hashes are identical for both drives. No command in the
+accepted matrix changed either disk after installation of the controlled COM
+files.

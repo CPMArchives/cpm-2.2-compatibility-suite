@@ -1,0 +1,17 @@
+Investigation 070A accepted environment
+======================================
+
+Host date: 2026-08-19
+Emulator: z80pack cpmsim Release 1.39 (1987-2025 banner)
+CPU mode: Z80, unlimited speed, undocumented instructions enabled
+Guest: 64K DRI CP/M 2.2
+BIOS: Z80 CBIOS V1.2 for Z80SIM
+Disk profile: IBM-3740 via cpmtools
+Assembler: Z80/8080 Macro Assembler Release 2.1
+Harness: expect, deterministic scripted input
+
+The normal/logical paths use cpmsim.
+Physical paths use the preserved isolated instrumented cpmsim under
+probes/reference-instrumentation/emulator-src/cpmsim/cpmsim.
+
+Full emulator banners are preserved in each raw console transcript.

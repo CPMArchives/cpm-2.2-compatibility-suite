@@ -1,0 +1,21 @@
+F073-02 PACKAGE ASSEMBLY AUDIT
+
+Release ID: bettercpm-cpm22-standard-1.0-rc1
+Package files: 23
+Authoritative manifest payload rows: 21
+Full package SHA-256 entries (excluding self): 22
+Publication index entries: 14
+Copied normative artifacts: 16 byte-identical
+Package hash-manifest SHA-256: 96c117c4844293202ce936c671412e9a01f1e52be4b9d366907bcba88dd76740
+Release manifest SHA-256: a173598e2269f16d37973423d8c0e72cbdec101bf92da27c0b303bc8e8efcc77
+Ledger 072 SHA-256: eb16466fdbff8fb2bc07bd02a07198b8426fb6452be3dd1f256cbff4af0547d3
+Manifest paths/hashes validate: yes
+Publication paths resolve inside package: yes
+Supersession relationships explicit: yes
+Draft artifacts presented as normative: no
+Compatibility semantics changed: no
+Ledger modified: no
+
+RESULT: PASS
+FINAL CONCLUSION: package complete and internally consistent as a release
+candidate specification artifact; no implementation certification claimed.

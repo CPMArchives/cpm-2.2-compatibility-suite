@@ -1,0 +1,52 @@
+#!/usr/bin/expect -f
+set case [lindex $argv 0]
+set diskdir [lindex $argv 1]
+set logfile [lindex $argv 2]
+set timeout 20
+log_user 1
+log_file -noappend $logfile
+spawn cpmsim -z -d $diskdir
+expect "A>"
+switch -- $case {
+  OUT { send "OUT003\r"; expect "A>" }
+  DIOE { send "DIO004 E\r"; expect "A>" }
+  DIO6 { send "DIO004 6\r"; expect "A>" }
+  DIOS { send "DIO004 S\r"; expect "A>" }
+  DIOF { send "DIO004 F\r"; expect "A>" }
+  DIOO { send "DIO004 O\r"; expect "A>" }
+  IN { send "IN005\r"; expect "A>" }
+  BUF { send "BUF006\r"; expect "A>" }
+  SYS { send "SYS016\r"; expect "A>" }
+  SCROLL { send "SCRL016\r"; expect "A>" }
+  BLOCKQ {
+    send "BLOCK016 A\r"
+    expect "WAITING"
+    set timeout 1
+    expect { "RETURNED" { exit 2 } timeout {} }
+    set timeout 20
+    send "Q"
+    expect "RETURNED"
+    expect "A>"
+  }
+  BLOCK1C {
+    send "BLOCK016 B\r"
+    expect "WAITING"
+    set timeout 1
+    expect { "RETURNED" { exit 2 } timeout {} }
+    set timeout 20
+    send "\003"
+    expect "RETURNED result dma80 alt 03 A5 5A"
+    expect "A>"
+  }
+  BLOCK10C {
+    send "BLOCK016 C\r"
+    expect "WAITING"
+    set timeout 1
+    expect { "RETURNED" { exit 2 } timeout {} }
+    set timeout 20
+    send "\003"
+    expect "A>"
+  }
+}
+send "\034"
+expect eof

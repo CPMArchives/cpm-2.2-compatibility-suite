@@ -1,0 +1,14 @@
+#!/usr/bin/expect -f
+set timeout 15
+set root [file normalize [file join [file dirname [info script]] ..]]
+set emu "<project-root>/investigations/049 - CP-M 2.2 Application Compatibility Survey/probes/mosteksim"
+set work [file join $root work]
+log_file -noappend [file join $root probes transcripts kscope-unsupported-port-raw.txt]
+spawn -noecho $emu -z -i -d [file join $work disks] -r [file join $work roms] -c [file join $work config-hardware.txt]
+expect "A>"
+send "b:\r"
+expect "B>"
+send "kscope\r"
+expect "I/O output Trap at"
+send "q\n"
+expect eof

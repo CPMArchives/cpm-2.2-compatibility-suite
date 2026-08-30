@@ -1,0 +1,569 @@
+--- "<project-root>/compatibility/02 Compatibility Ledger - Investigation 068.txt"	2026-08-19 15:06:19.424132115 +0800
++++ "stage069/02 Compatibility Ledger - Investigation 069.txt"	2026-08-19 15:14:29.925138239 +0800
+@@ -61,6 +61,47 @@
+   I027 - CP-M 2.2 BDOS Call Interface Convention and Register-State Semantics
+   I028 - CP-M 2.2 CCP Transient Execution Handoff and Loader State Contract
+   I029 - CP-M 2.2 BDOS Directory Search Semantics and FCB-DMA Enumeration Contract
++  I030 - CP-M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State Transition Semantics
++  I031 - CP-M 2.2 BDOS User Area, File Visibility, and Directory Namespace Semantics
++  I032 - CP-M 2.2 CCP Resident Command Semantics and BDOS Interaction
++  I033 - CP-M 2.2 BDOS-BIOS Error Propagation and Recovery Semantics
++  I034 - CP-M 2.2 Memory Layout, System Area, and Transient Program Boundary Semantics
++  I035 - CP-M 2.2 Cold Boot, Warm Boot, and Restart Semantics
++  I036 - CP-M 2.2 BIOS Runtime Environment and Hardware Abstraction Boundary Semantics
++  I037 - CP-M 2.2 BDOS Remaining Functions and Interface Consolidation Semantics
++  I038 - CP-M 2.2 Character Device Runtime Semantics
++  I039 - CP-M 2.2 IOBYTE and Runtime Device Assignment Semantics
++  I040 - CP-M 2.2 Disk Format, Drive Geometry, and Direct Structure Compatibility Semantics
++  I041 - CP-M 2.2 Direct System Access and Undocumented Application Interface Compatibility Semantics
++  I042 - CP-M 2.2 Common Software Compatibility Assumptions
++  I043 - CP-M 2.2 Memory and Execution Edge Case Compatibility Semantics
++  I044 - CP-M 2.2 Failure, Recovery, and Boundary Condition Compatibility Semantics
++  I045 - CP-M 2.2 Cross-Layer Compatibility Boundary Review
++  I046 - CP-M 2.2 Compatibility Boundary Closure and Remaining Gap Analysis
++  I047 - CP-M 2.2 Standard Utility Compatibility Survey
++  I048 - CP-M 2.2 Development Toolchain Compatibility Survey
++  I049 - CP-M 2.2 Application Compatibility Survey
++  I050 - CP-M 2.2 Communications Software Compatibility Survey
++  I051 - CP-M 2.2 Hardware-Dependent Software Compatibility Survey
++  I052 - CP-M 2.2 Compatibility Regression Test Specification
++  I053 - CP-M 2.2 Software Corpus Validation
++  I054 - CP-M 2.2 Undocumented Behavior Validation
++  I055 - CP-M 2.2 Community Compatibility Standard
++  I056 - CP-M 2.2 Compatibility Requirements to Architecture Mapping
++  I057 - CP-M 2.2 Required CP-M Personality Boundary
++  I058 - CP-M 2.2 Non-CP-M BetterCP-M Feature Boundary
++  I059 - CP-M 2.2 Compatibility Conformance Test Suite Design
++  I060 - CP-M 2.2 Compatibility Engineering Gap Assessment
++  I061 - CP-M 2.2 Cross-Implementation Differential Validation
++  I062 - CP-M 2.2 Compatibility Conformance Pilot Execution
++  I063 - CP-M 2.2 Processor and Instruction Profile
++  I064 - CP-M 2.2 Expanded Software Corpus Validation
++  I065 - CP-M 2.2 Communications Profile Validation
++  I066 - CP-M 2.2 Physical Fault and Recovery Validation
++  I067 - CP-M 2.2 Hardware Profile Validation
++  I068 - CP-M 2.2 Final Engineering Gap Assessment
++  I069 - CP-M 2.2 Compatibility Ledger Integrity Resolution
++
+ 
+ Documentation 
+   AG - CP/M 2.2 Alteration Guide (1979) 
+@@ -4027,379 +4068,6 @@
+       
+       
+ ----------------------------------------------------------------------------
+-011 - CP/M 2.2 BDOS Sequential Write and File Creation Semantics
+-----------------------------------------------------------------------------
+-
+-
+-0248. Function 22 convention
+-
+-      Make File shall be selected by C=16h with DE addressing its FCB.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG; I011; I030; I031.
+-
+-      Conformance: Create a controlled new name.
+-
+-
+-0249. Make uniqueness precondition
+-
+-      The Function-22 FCB shall name a file that does not already exist;
+-      the caller is responsible for preventing duplicates.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG; I011; I030; I031.
+-
+-      Conformance: Baseline tests use an absent exact name.
+-
+-
+-0250. New empty file
+-
+-      Successful Make shall create a zero-record file under the supplied
+-      valid FCB identity.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG; I011; I030; I031.
+-
+-      Conformance: Search the name and inspect RC=0.
+-
+-
+-0251. Make activates FCB
+-
+-      Successful Make shall initialize and activate the caller FCB for
+-      subsequent I/O without Function 15.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG; I011; I030; I031.
+-
+-      Conformance: Call Function 21 immediately.
+-
+-
+-0252. Make success result
+-
+-      Successful Make shall return a directory code 0-3 in A.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG; I011; I030; I031.
+-
+-      Conformance: Accept each slot code as success.
+-
+-
+-0253. Make directory-full result
+-
+-      Function 22 shall return FFh when no directory entry is available.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG; I011; I030; I031.
+-
+-      Conformance: Use a 64-entry-full test directory.
+-
+-
+-0254. Immediate empty-file visibility
+-
+-      A successfully made file shall be visible as a zero-record entry to
+-      subsequent directory search before Close.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    BDOS implementing Make; I011; I030; I031.
+-
+-      Conformance: Search First immediately after Make.
+-
+-
+-0255. Data-full empty Make
+-
+-      Exhaustion of data blocks alone shall not prevent creation of an
+-      empty file when a directory slot remains.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    empty-file contract; BDOS; I011; I030; I031.
+-
+-      Conformance: Make on allocation-full media with a free directory
+-                   slot.
+-
+-
+-0256. Make on existing name
+-
+-      Function 22 has no portable duplicate-detection/failure behavior
+-      when its uniqueness precondition is violated.
+-
+-      Disposition: NOT GUARANTEED
+-
+-      Evidence:    IG; DRI duplicate experiment; I011; I030; I031.
+-
+-      Conformance: Compatible programs shall check/delete as appropriate
+-                   before Make.
+-
+-
+-0257. Ambiguous Make name
+-
+-      Function 22 has no portable wildcard interpretation for ? in a
+-      creation identity.
+-
+-      Disposition: NOT GUARANTEED
+-
+-      Evidence:    IG precondition; DRI literal-name experiment; I011;
+-                   I030; I031.
+-
+-      Conformance: Creation names shall be exact and valid.
+-
+-
+-0258. Immediate data-block reservation
+-
+-      BetterCP/M need not reserve a data block during Make; DRI reserves
+-      only an empty directory entry.
+-
+-      Disposition: NOT REQUIRED
+-
+-      Evidence:    BDOS/experiment; I011; I030; I031.
+-
+-      Conformance: Test the zero-record public state, not an internal
+-                   reservation policy.
+-
+-
+-0259. Function 21 convention
+-
+-      Write Sequential shall be selected by C=15h with DE addressing an
+-      activated FCB.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG; I011; I030; I031.
+-
+-      Conformance: Invoke after successful Open or Make.
+-
+-
+-0260. Write activation precondition
+-
+-      Function 21 requires an FCB activated by successful Open or Make.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG; I011; I030; I031.
+-
+-      Conformance: Ordinary tests never synthesize allocation fields.
+-
+-
+-0261. Write source position
+-
+-      Function 21 shall write the record designated by the caller FCB’s
+-      current extent/current-record state.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG; I011; I030; I031.
+-
+-      Conformance: Reopen and compare sequential markers.
+-
+-
+-0262. Successful write result
+-
+-      Function 21 shall return A=00h when the record is successfully
+-      written.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG; I011; I030; I031.
+-
+-      Conformance: Write with available space.
+-
+-
+-0263. Write transfer size
+-
+-      Each successful Function 21 shall consume exactly one 128-byte
+-      logical record.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG; I011; I030; I031.
+-
+-      Conformance: Verify all bytes, including record tail.
+-
+-
+-0264. Current DMA source
+-
+-      Function 21 shall take the record from the current DMA address,
+-      including an address selected by Function 26.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG; I011; I030; I031.
+-
+-      Conformance: Alternate DMA and reopen/read.
+-
+-
+-0265. Partial-record length
+-
+-      Function 21 has no shorter application-level byte-count parameter
+-      or result; all 128 DMA bytes participate.
+-
+-      Disposition: NOT GUARANTEED
+-
+-      Evidence:    IG; I011; I030; I031.
+-
+-      Conformance: Applications pad their final logical record.
+-
+-
+-0266. CR advance after write
+-
+-      A successful sequential write shall advance the public FCB to the
+-      next record position.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG; I011; I030; I031.
+-
+-      Conformance: Observe CR after consecutive writes.
+-
+-
+-0267. RC extension
+-
+-      A successful write beyond the previous extent length shall increase
+-      the working extent record count to include that record.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    DRI implementation of file-length contract; I011;
+-                   I030; I031.
+-
+-      Conformance: Observe RC=1 and RC=3.
+-
+-
+-0268. Existing-record overwrite
+-
+-      Function 21 shall permit a successful record to overlay an existing
+-      record in an activated file.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG; I011; I030; I031.
+-
+-      Conformance: Open an existing file at a controlled CR and verify
+-                   replacement.
+-
+-
+-0269. On-demand allocation
+-
+-      Function 21 shall obtain sufficient storage when writing an
+-      unallocated record and reflect usable allocation state in the FCB.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG/FCB model; I011; I030; I031.
+-
+-      Conformance: First write to a new file and continue reading it.
+-
+-
+-0270. Exact allocation choice
+-
+-      Allocation unit representation, selected block numbers, and search
+-      order are disk-format/implementation dependent.
+-
+-      Disposition: NOT GUARANTEED
+-
+-      Evidence:    I008; BDOS; I011; I030; I031.
+-
+-      Conformance: Validate reachability, not block identity.
+-
+-
+-0271. Automatic write extent transition
+-
+-      After filling an extent, sequential writing shall prepare/open the
+-      next logical extent automatically without another application Open.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG; I011; I030; I031.
+-
+-      Conformance: Write records 128 and 129 consecutively.
+-
+-
+-0272. Successful transition state
+-
+-      When next-extent preparation succeeds after record 128, the
+-      returned working FCB shall permit the next Function 21 at that
+-      extent’s record zero; DRI exposes EX advanced and CR=0.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG; I011; I030; I031.
+-
+-      Conformance: Inspect state and successfully write record 129.
+-
+-
+-0273. Full last record remains successful
+-
+-      If record 128 itself is written but preparation of a following
+-      extent fails for lack of a directory slot, the completed record
+-      shall still report success and remain part of the file.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    BDOS/experiment consistent with per-record success;
+-                   I011; I030; I031.
+-
+-      Conformance: Use a one-slot-left directory.
+-
+-
+-0274. Next-extent failure result
+-
+-      A later Function 21 that cannot create the required next extent
+-      shall return nonzero and shall not claim a new record.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG; BDOS/experiment; I011; I030; I031.
+-
+-      Conformance: Attempt record 129 with no directory slot.
+-
+-
+-0275. Allocation-full failure
+-
+-      Function 21 shall return nonzero when the requested record cannot
+-      be allocated because storage is full.
+-
+-      Disposition: REQUIRED
+-
+-      Evidence:    IG; I011; I030; I031.
+-
+-      Conformance: First write to an empty made file on allocation-full
+-                   media.
+-
+-
+-0276. Exact write failure codes
+-
+-      DRI returns 01h for unavailable next-extent directory space and 02h
+-      for unavailable data blocks, while the manual promises only
+-      nonzero unsuccessful/full-disk status.
+-
+-      Disposition: POLICY PENDING
+-
+-      Evidence:    IG; BDOS/experiment; I011; I030; I031.
+-
+-      Conformance: Decide whether BetterCP/M guarantees these exact
+-                   distinctions.
+-
+-
+-0277. Unactivated write behavior
+-
+-      Function 21 behavior on an FCB not activated by Open or Make is
+-      outside contract; DRI may write orphaned allocation rather than
+-      reject it.
+-
+-      Disposition: NOT GUARANTEED
+-
+-      Evidence:    IG precondition; I011; I030; I031.
+-
+-      Conformance: Compatible programs shall not make such calls.
+-      
+-      
+ 0278. Explicit-drive Make/Write
+ 
+       Functions 22 and 21 shall honor a valid explicit FCB drive without
+@@ -8039,20 +7707,21 @@
+                    conformance does not compare DRI numeric addresses.
+ 
+ 
+-0523. Function 37 compatibility status
++0523. Function 37 state-effect profile scope
+ 
+-      DRI CP/M 2.2 Function 37 clears DE-selected bits from both login
+-      and read-only vectors without changing the current-drive number,
+-      but the examined application manuals do not document the service.
++      Entry 0435 is the canonical compatibility-status proposition for
++      DRI CP/M 2.2 Function 37. If that optional profile is adopted,
++      Function 37 clears DE-selected A-P drive bits from both login and
++      read-only vectors without changing the current-drive number.
+ 
+       Disposition: POLICY PENDING
+ 
+       Evidence:    I026; BDOS; I007; I017; IG/AG silence; I027;
+-                   I028; I029; I030; I031.
+-
+-      Conformance: If adopted, test inactive, current, multiple, and
+-                   read-only drive bits independently.
++                   I028; I029; I030; I031; entry 0435.
+ 
++      Conformance: If entry 0435 is adopted, test inactive, current,
++                   multiple, and read-only drive bits independently;
++                   otherwise this profile-scoped behavior is inapplicable.
+ 
+ 0524. CP/M 2.2 Function 39 has no Get-BIOS contract
+ 
+@@ -9814,6 +9483,87 @@
+                    placement.
+ 
+ 
++
++0623. Intel 8080-compatible binary execution baseline
++
++      A generic CP/M 2.2 binary personality shall execute documented
++      Intel 8080 instructions with their documented register, flag,
++      stack, control-flow, and encoding semantics sufficiently to run
++      the CP/M environment and 8080 transient programs.
++
++      Disposition: REQUIRED
++
++      Evidence:    I063 PROCESSOR INSTRUCTION PROFILE subsystem IG AG;
++                   sections 4-6 and T01-T03; I064; I067.
++
++      Conformance: Run an 8080-only instruction/flag probe and
++                   representative CP/M software on the claimed
++                   execution environment.
++
++
++0624. Declared processor-profile instruction semantics
++
++      A configuration advertising a processor profile shall implement
++      the documented instructions and CPU-visible state of that profile
++      while preserving every generic CP/M requirement it inherits. A
++      Z80 claim includes its documented extensions and 8080-compatible
++      subset; a processor profile may add but may not waive requirements.
++
++      Disposition: REQUIRED
++
++      Evidence:    I063 PROCESSOR INSTRUCTION PROFILE subsystem IG AG;
++                   T03-T05; I064; I067 HARDWARE PROFILE VALIDATION
++                   subsystem IG AG.
++
++      Conformance: Test profile-specific instruction families separately
++                   from CP/M service tests, then run the inherited
++                   generic CP/M suite unchanged.
++
++
++0625. Z80 extensions outside a generic CP/M claim
++
++      Documented Z80-only instructions and registers are not required by
++      a generic CP/M 2.2 claim that does not advertise a Z80 processor
++      profile.
++
++      Disposition: NOT REQUIRED
++
++      Evidence:    I063 PROCESSOR INSTRUCTION PROFILE subsystem IG AG;
++                   DRI source screen and T01-T05; I067.
++
++      Conformance: Do not fail a generic 8080-profile implementation
++                   merely because a Z80-only transient cannot execute.
++
++
++0626. Undocumented processor behavior
++
++      Undocumented opcodes, undocumented flag bits, and results of
++      instructions outside the selected processor profile are not
++      guaranteed by generic CP/M 2.2.
++
++      Disposition: NOT GUARANTEED
++
++      Evidence:    I063 PROCESSOR INSTRUCTION PROFILE subsystem IG AG;
++                   T06-T07; I067.
++
++      Conformance: A generic suite may verify permitted variation or
++                   trapping; stronger behavior requires a named profile.
++
++
++0627. Processor timing and interrupt topology
++
++      CP/M 2.2 does not require a universal CPU clock, exact instruction
++      timing, wait-state pattern, refresh behavior, or machine interrupt
++      topology.
++
++      Disposition: NOT REQUIRED
++
++      Evidence:    I063 PROCESSOR INSTRUCTION PROFILE subsystem IG AG;
++                   section 7 and T08; I051; I065; I067.
++
++      Conformance: Test such properties only under a profile that
++                   explicitly advertises them.
++
+ ----------------------------------------------------------------------------
+ 
+ 044 - CP-M 2.2 Failure, Recovery, and Boundary Condition Compatibility 
+@@ -10239,3 +9989,20 @@
+ readiness analysis and identifies remaining engineering work required
+ before normative freeze, while confirming that broad ecosystem coverage
+ gaps remain outside the current compatibility claim set.
++
++
++----------------------------------------------------------------------------
++
++069 - CP/M 2.2 Compatibility Ledger Integrity Resolution
++
++----------------------------------------------------------------------------
++
++Investigation 069 produced the canonical ledger by removing the second
++verbatim 0248-0277 block, explicitly cross-referencing the overlapping
++Function-37 policy scopes at 0435 and 0523, and assigning canonical
++identifiers 0623-0627 to the processor propositions evidenced by I063.
++
++The resulting numbered proposition sequence is contiguous and unique.
++No existing required proposition or evidence history was removed. The
++source catalogue was extended through I069. Detailed before/after and
++disposition audits are preserved in the Investigation 069 artifacts.

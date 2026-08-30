@@ -1,0 +1,4 @@
+bbda55e3b0f3de5d8b5891f057370e13cb29f3a3bad48c0191b8be581006dadb  images-before/drivea.dsk
+9769f04a98c817c43e252e6f067e06cf1708864869e54b3837693d548271dfc8  images-before/driveb.dsk
+23895ccd03515bd300df9c949bfa8055813841f4d9e44714889a4b40124ca684  images-after/drivea.dsk
+af421b15cef87db1b7d0d0f9fa4d6db0c65a1d75e013fe678eb1a9eaded7b366  images-after/driveb.dsk

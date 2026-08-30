@@ -1,0 +1,10 @@
+Accepted highlights; transcripts/main.txt and error.txt are authoritative.
+
+Resident precedence: DIR and DIR.COM both listed; TRANSIENT-CONFLICT-RAN absent.
+DIR: four entries per line; A: label; *.TXT matched TEXT/SAME; no match NO FILE.
+ERA: exact/partial wildcard silent; missing NO FILE; ERA *.* prompted ALL (Y/N)?.
+REN: valid silent; destination collision FILE EXISTS; missing source NO FILE.
+SAVE: SAVE 1 produced 256-byte SAVED.COM; invalid count X?; full D NO SPACE.
+TYPE: printed text/control bytes through 1Ah; empty silent; missing token?.
+USER: 1 and 0 selected distinct SAME.TXT content; 16 rejected as 16?.
+Unknown: BOGUS?. Invalid drive: Bdos Err On Q: Select, no normal command return.

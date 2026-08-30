@@ -1,0 +1,32 @@
+INVESTIGATION 038 OBSERVED OUTPUT (CONDENSED)
+
+Character separation
+  Function 11 ready=01 retained console Z.
+  Function 3 returned scripted reader C1, did not echo, and did not consume Z.
+  Function 1 later returned Z.
+  PUNCH bytes: 41 09 10 80 09 51.
+  LIST bytes:  41 09 10 80 09.
+  Console bytes after A+TAB: 41 followed by seven spaces.
+
+Status/direct BIOS
+  BIOS vector: 17 contiguous JMP entries at configured base FA00.
+  Scripted CONST: 00 then FF; CONIN: 41; READER: 52.
+  Scripted LISTST: 00 then FF (transport evidence only).
+
+IOBYTE
+  Function 7 initial/restored: 00.
+  Function 8 set A5; Function 7 returned A5; BIOS-facing punch saw A5.
+
+Blocking/readiness
+  Empty Function 11, 6/FF, 6/FE: 00 00 00.
+  Ready 6/FF first/second: 5A 00.
+  Scripted 6/FE twice: 00 00 in this DRI implementation.
+  Repeated Function 11: 01 01; subsequent 6/FF: 00; pending Z later reached CCP.
+  Function 6 output emitted A, TAB, $, Ctrl-P, B without formatting/toggle action.
+
+Failure boundary
+  Reader parity violation C1 passed through BDOS, proving parity normalization is
+  a BIOS/device obligation. Punch/list have no standardized BDOS error return in
+  Functions 4/5. Optional-device absence, blocking, discard, EOF or host failure
+  therefore requires a declared device profile; exact behavior is not universal.
+

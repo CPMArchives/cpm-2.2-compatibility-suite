@@ -1,0 +1,659 @@
+Investigation 031 — CP/M 2.2 BDOS User Area, File Visibility, and Directory Namespace Semantics Prompt
+
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 030 is complete.
+
+The authoritative Compatibility Ledger currently incorporates findings
+through Investigation 030.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports, architecture documents,
+roadmaps, specifications, or other existing BetterCP/M files.
+
+Create Investigation 031 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Define the CP/M 2.2 BDOS user area and directory namespace compatibility
+contract.
+
+Previous investigations established:
+
+- FCB identification and file operations;
+- directory search behavior;
+- file lifecycle behavior;
+- allocation behavior;
+- BDOS interface conventions;
+- CCP execution environment.
+
+Investigation 031 determines how CP/M user areas affect:
+
+- file identity;
+- file visibility;
+- directory searches;
+- file operations;
+- application-visible namespace behavior.
+
+
+Determine:
+
+- how user areas participate in file lookup;
+- how BDOS selects visible files;
+- how user area state affects file operations;
+- what applications may rely upon.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read and incorporate:
+
+
+Investigation 008:
+
+    FCB File Identification and Open-Close Semantics.
+
+
+Investigation 009:
+
+    Directory Search and DMA Transfer Semantics.
+
+
+Investigation 012:
+
+    File Deletion and Rename Semantics.
+
+
+Investigation 017:
+
+    Disk State, Allocation Vector, and DPB Semantics.
+
+
+Investigation 026:
+
+    BDOS System State Functions and Application-Visible Environment
+    Semantics.
+
+
+Investigation 029:
+
+    Directory Search Semantics and FCB-DMA Enumeration Contract.
+
+
+Investigation 030:
+
+    File Lifecycle, Extent Management, and Metadata State Transition
+    Semantics.
+
+
+Do not duplicate previous investigations.
+
+Focus on user areas as a namespace and visibility mechanism.
+
+
+SCOPE
+
+Investigate:
+
+- current user area state;
+- file visibility;
+- directory search filtering;
+- Open File behavior;
+- Make File behavior;
+- Delete behavior;
+- Rename behavior;
+- wildcard searches;
+- user area changes;
+- interaction with directory entries.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- CP/M 3 user area extensions;
+- MP/M;
+- host filesystem permissions;
+- BetterCP/M user-area design;
+- security models not present in CP/M 2.2.
+
+
+Do not assume:
+
+- user areas are equivalent to directories;
+- user areas are equivalent to modern permissions;
+- files have globally visible names.
+
+
+KEY QUESTIONS
+
+
+1. USER AREA STATE
+
+Determine how CP/M represents current user area state.
+
+Investigate:
+
+- BDOS user-number functions;
+- initial user area after boot;
+- state changes;
+- persistence across BDOS calls;
+- interaction with CCP commands.
+
+
+Determine:
+
+- where user area state is maintained;
+- how applications observe it;
+- what state transitions are guaranteed.
+
+
+2. FILE IDENTITY
+
+Determine whether user area participates in file identity.
+
+Investigate:
+
+- same filename in multiple user areas;
+- Open File behavior;
+- Make File behavior;
+- Delete behavior;
+- Rename behavior.
+
+
+Determine:
+
+- whether files in different user areas are distinct objects;
+- how BDOS resolves ambiguous names;
+- what applications can assume.
+
+
+3. DIRECTORY SEARCH VISIBILITY
+
+Determine how user areas affect Search First and Search Next.
+
+Investigate:
+
+- current user area searches;
+- wildcard searches;
+- multiple matching entries;
+- user-area transitions during searches.
+
+
+Determine:
+
+- which directory entries are visible;
+- how user areas are represented;
+- whether applications can enumerate other user areas.
+
+
+4. FCB AND USER AREA INTERACTION
+
+Determine whether FCB operations include user area state.
+
+Investigate:
+
+- Open File;
+- Make File;
+- Delete File;
+- Rename File;
+- Sequential operations.
+
+
+Determine:
+
+- whether FCB contents identify user area;
+- whether BDOS implicitly applies current user area;
+- whether applications can override user area selection.
+
+
+5. USER AREA CHANGES
+
+Determine the compatibility behavior of changing user areas.
+
+Investigate:
+
+- BDOS Set User Number behavior;
+- USER command interaction;
+- file visibility before and after change;
+- effect on existing FCBs;
+- effect on open searches.
+
+
+Determine:
+
+- what state changes;
+- what state persists;
+- what state is application-visible.
+
+
+6. FILE CREATION AND USER AREAS
+
+Determine how Make File interacts with user areas.
+
+Investigate:
+
+- creation in current user area;
+- same filename in different user areas;
+- directory representation;
+- reopening from different user areas.
+
+
+Determine:
+
+- whether user area is part of file identity;
+- whether applications can create files outside the current user area.
+
+
+7. OPEN FILE BEHAVIOR
+
+Determine how Open File resolves filenames across user areas.
+
+Investigate:
+
+- current user area;
+- files in other user areas;
+- duplicate filenames;
+- wildcard matching.
+
+
+Determine:
+
+- lookup rules;
+- search order;
+- failure behavior.
+
+
+8. DELETE AND RENAME BEHAVIOR
+
+Determine how Delete File and Rename File interact with user areas.
+
+Investigate:
+
+- current user area operations;
+- files with identical names in different user areas;
+- wildcard operations;
+- user area changes before operation.
+
+
+Determine:
+
+- visibility rules;
+- modification scope;
+- application assumptions.
+
+
+9. DIRECTORY ENTRY REPRESENTATION
+
+Determine how user areas are represented internally and externally.
+
+Investigate:
+
+- directory entry user number;
+- directory searches;
+- FCB results;
+- DMA contents.
+
+
+Determine:
+
+- what applications observe;
+- what is only internal representation.
+
+
+10. WILDCARD SEARCH BEHAVIOR
+
+Determine how wildcard searches interact with user areas.
+
+Investigate:
+
+- matching files in current user area;
+- multiple matches;
+- Search First/Search Next behavior;
+- changed user area during search.
+
+
+Cross-reference:
+
+Investigation 009.
+
+Investigation 029.
+
+
+11. CCP USER COMMAND INTERACTION
+
+Investigate CCP USER behavior.
+
+Determine:
+
+- how CCP changes user area;
+- how commands inherit user state;
+- interaction with transient programs;
+- interaction with BDOS.
+
+
+Determine:
+
+- whether USER affects only CCP state;
+- whether applications observe the same state.
+
+
+12. APPLICATION ASSUMPTIONS
+
+Determine which assumptions are valid:
+
+- filenames are unique only within a user area;
+- user area changes affect future file operations;
+- existing FCBs retain user context;
+- directory searches are user-area scoped;
+- applications can rely on user-number behavior.
+
+
+Classify each assumption.
+
+
+13. DRI SOURCE ANALYSIS
+
+Review available source material for:
+
+- user-number handling;
+- directory search filtering;
+- FCB processing;
+- file lookup;
+- Make/Open/Delete/Rename behavior;
+- CCP USER command processing.
+
+
+Extract:
+
+- documented behavior;
+- implementation behavior relevant to compatibility.
+
+
+Do not produce:
+
+- source walkthroughs;
+- implementation tutorials.
+
+
+14. EXPERIMENTAL PROGRAMS
+
+Create deterministic probes:
+
+USER31:
+
+    User-number state behavior.
+
+VIS31:
+
+    File visibility across user areas.
+
+OPEN31:
+
+    File lookup behavior.
+
+SEARCH31:
+
+    Directory search behavior.
+
+CREATE31:
+
+    File creation behavior.
+
+RENAME31:
+
+    Rename behavior.
+
+DELETE31:
+
+    Delete behavior.
+
+
+Each probe must include:
+
+- purpose;
+- procedure;
+- observed behavior;
+- compatibility conclusion.
+
+
+15. CONTROLLED TEST MATRIX
+
+Include:
+
+
+USER STATE
+
+- initial user area;
+- change user area;
+- return to original user area.
+
+
+FILE VISIBILITY
+
+- same filename in different user areas;
+- search from different users;
+- open from different users.
+
+
+FILE CREATION
+
+- create in current user area;
+- reopen after user change;
+- create duplicate filename.
+
+
+DIRECTORY SEARCH
+
+- Search First;
+- Search Next;
+- wildcard search;
+- multiple user areas.
+
+
+FILE OPERATIONS
+
+- Open;
+- Delete;
+- Rename;
+- Read;
+- Write.
+
+
+FAILURE CASES
+
+- file exists in another user area;
+- file does not exist in current user area;
+- invalid user number.
+
+16. EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+
+    documented behavior.
+
+B:
+
+    DRI implementation behavior.
+
+I:
+
+    experimental observation.
+
+D:
+
+    unresolved policy.
+
+
+These labels are internal investigation classifications only.
+
+
+Ledger evidence must use:
+
+    I031
+    BDOS
+    CCP
+    IG
+    AG
+
+
+17. COMPATIBILITY CLASSIFICATION
+
+Classify each conclusion:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Do not require:
+
+- private implementation details;
+- undocumented behavior;
+- internal directory layout beyond application-visible behavior;
+- modern filesystem semantics.
+
+
+18. EXISTING LEDGER REVIEW
+
+Review affected Compatibility Ledger entries:
+
+- FCB semantics;
+- directory search semantics;
+- file operation semantics;
+- system state semantics;
+- CCP USER behavior;
+- file lifecycle semantics.
+
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+
+The current Compatibility Ledger ends after Investigation 030.
+
+Determine the next available ledger entry number.
+
+Do not modify the Compatibility Ledger.
+
+
+19. PROPOSED LEDGER ADDITIONS
+
+Include:
+
+Proposed Compatibility Ledger additions
+
+and:
+
+Proposed existing-entry updates.
+
+
+Each entry must contain:
+
+
+NNNN. Title
+
+    Description.
+
+    Disposition:
+
+    Evidence:
+
+    Conformance:
+
+
+20. REPORT STRUCTURE
+
+Create:
+
+Investigation 031 - CP/M 2.2 BDOS User Area, File Visibility, and
+Directory Namespace Semantics.md
+
+
+Include:
+
+
+1. Objective and scope
+
+2. Relationship to previous investigations
+
+3. Documentation findings
+
+4. BDOS source findings
+
+5. User area state behavior
+
+6. File identity behavior
+
+7. Directory visibility behavior
+
+8. FCB and user area interaction
+
+9. File operation behavior
+
+10. Search behavior
+
+11. CCP USER interaction
+
+12. Experimental results
+
+13. Compatibility conclusions
+
+14. Proposed ledger additions
+
+15. Existing-entry updates
+
+16. Open questions
+
+17. Conformance implications
+
+
+21. FINAL REVIEW
+
+Verify that the investigation determines:
+
+- how user areas affect file identity;
+- how files become visible or hidden;
+- how directory searches behave;
+- how file operations select targets;
+- how user state changes;
+- what applications may rely upon.
+
+
+Ensure conclusions distinguish:
+
+- documented behavior;
+- DRI implementation behavior;
+- experimental observations;
+- unresolved policy.
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M namespace behavior.
+
+Do not replace CP/M user areas with modern directory or permission models.
+
+Determine the CP/M 2.2 compatibility contract only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

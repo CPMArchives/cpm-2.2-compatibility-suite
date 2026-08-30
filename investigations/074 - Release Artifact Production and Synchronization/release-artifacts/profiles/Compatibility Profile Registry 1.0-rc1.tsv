@@ -1,0 +1,19 @@
+profile_id	version	title	kind	release_status	inherits	normative_applicability_label	mapped_case_count	definition
+CPM22-BASE	1.0-rc1	Generic CP/M 2.2 baseline	BASELINE	INCLUDED	none	generic CP/M 2.2 baseline	0	Universal generic REQUIRED propositions; no profile may waive them.
+DRI-CCP-ECO	1.0-rc1	Strict DRI CCP/ecosystem	FIDELITY	AVAILABLE	CPM22-BASE	the Strict DRI CCP/ecosystem	2	Second default FCB and strict DRI CCP/ecosystem entry behavior.
+DRI-CONSOLE	1.0-rc1	DRI formatted-console	FIDELITY	AVAILABLE	CPM22-BASE	the DRI formatted-console profile	5	DRI logical-column and formatted-console exactness.
+DRI-LINE	1.0-rc1	DRI line-editor	FIDELITY	AVAILABLE	CPM22-BASE	the DRI line-editor profile	4	DRI line-editor input and editing behavior.
+DRI-LINE-PRES	1.0-rc1	DRI line-editor presentation	FIDELITY	AVAILABLE	CPM22-BASE	the DRI line-editor presentation profile	1	Exact DRI line-edit correction presentation.
+DRI-ERROR-INT	1.0-rc1	Interactive DRI error	FIDELITY	AVAILABLE	CPM22-BASE	the Interactive DRI error profile	1	Interactive DRI error handling where separately named by the ledger.
+CPM-DISKERR-INT	1.0-rc1	Interactive CP/M disk-error	FIDELITY	AVAILABLE	CPM22-BASE	the Interactive CP/M disk-error profile	4	Operator interaction, abort/ignore, and recovery for physical disk errors.
+DRI-PROTECT-INT	1.0-rc1	Interactive DRI protection-error	FIDELITY	AVAILABLE	CPM22-BASE	the Interactive DRI protection-error profile	1	DRI nonreturning interactive protection-error behavior.
+DRI-DIAG-PRES	1.0-rc1	DRI diagnostic presentation	FIDELITY	AVAILABLE	CPM22-BASE	the DRI diagnostic-presentation profile	3	Exact DRI diagnostic strings and presentation.
+REMOVABLE-MEDIA	1.0-rc1	Removable-media hardware	HARDWARE	AVAILABLE	CPM22-BASE	the Removable-media/hardware profile	1	Media-change behavior when the declared hardware/BIOS supplies it.
+IOBYTE-DEVICE	1.0-rc1	IOBYTE logical-device	DEVICE	AVAILABLE	CPM22-BASE	the IOBYTE logical-device profile	1	Active IOBYTE logical-device routing.
+BIOS-LIST	1.0-rc1	BIOS/list-device	DEVICE	AVAILABLE	CPM22-BASE	the BIOS/list-device profile	1	Declared LIST/list-status device behavior.
+DRI-CCP	1.0-rc1	Strict DRI CCP	FIDELITY	AVAILABLE	CPM22-BASE	the Strict DRI CCP profile	1	Strict DRI CCP behavior specifically named by the ledger.
+DECLARED-CCP	1.0-rc1	Declared CCP	CCP	AVAILABLE	CPM22-BASE	the Declared CCP profile	1	A declared CCP accepted-line and command behavior contract.
+CCP-LIFECYCLE	1.0-rc1	CCP/lifecycle	CCP	AVAILABLE	CPM22-BASE	the CCP/lifecycle profile	1	Declared CCP termination/reentry lifecycle behavior.
+DRI-RES-PRES	1.0-rc1	DRI resident presentation	FIDELITY	AVAILABLE	CPM22-BASE	the DRI resident-presentation profile	1	Exact DRI resident-command presentation.
+EXT-STRUCTERR	1.0-rc1	Headless structured-error extension	OPTIONAL	AVAILABLE	CPM22-BASE	the Headless/structured-error extension. Generic BetterCP/M CP/M 2.2 compatibility does not require this feature	1	Opt-in structured/headless physical-error interface isolated from CP/M paths.
+OPT-FN37	1.0-rc1	Undocumented Function 37 compatibility	OPTIONAL	AVAILABLE	CPM22-BASE	the Undocumented Function-37 compatibility profile. Generic BetterCP/M CP/M 2.2 compatibility does not require this feature	2	Opt-in Function 37 behavior and conditional vector effects.

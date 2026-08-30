@@ -1,0 +1,7 @@
+ledger propositions: 652
+dispositions: REQUIRED 445; NOT GUARANTEED 109; POLICY PENDING 50; NOT REQUIRED 48
+mapped propositions without primary test: 0
+regression tests: 62; duplicate identifiers: 0
+standard conclusions: 20
+undocumented behaviors reviewed: 21
+validation: PASS

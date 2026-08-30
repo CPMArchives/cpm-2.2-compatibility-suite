@@ -1,0 +1,34 @@
+#!/usr/bin/expect -f
+set timeout 60
+if {$argc != 5} {
+    puts stderr "usage: run-terminal065.exp emulator workdir transcript peerlog baud"
+    exit 2
+}
+set emulator [lindex $argv 0]
+set work [lindex $argv 1]
+set transcript [lindex $argv 2]
+set peerlog [lindex $argv 3]
+set baud [lindex $argv 4]
+set socket "/tmp/.z80pack/imsaisim.sio2"
+file delete -force $socket
+log_file -noappend $transcript
+spawn -noecho $emulator -z -R -f 2 -d [file join $work disks] -r [file join $work roms] -c [file join $work system-$baud.conf]
+expect "54K CP/M 2.2"
+expect "A: R/W, Space: 8k"
+expect "A>"
+send "b:\r"
+expect "B>"
+send "qt-imsai\r"
+expect "QTERM  V4.3e"
+exec python3 [file join [file dirname [info script]] peer065.py] terminal --log $peerlog &
+after 700
+send "\036u"
+expect "Enter modem channel A or B:"
+send "a\r"
+after 700
+send "CPM65-UP\r"
+expect "HOST65-DOWN"
+expect "HOST65-ECHO"
+after 6000
+close
+wait

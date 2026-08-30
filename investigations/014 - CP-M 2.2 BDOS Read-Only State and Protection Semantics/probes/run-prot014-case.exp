@@ -1,0 +1,20 @@
+#!/usr/bin/expect -f
+set mode [lindex $argv 0]
+set diskdir [lindex $argv 1]
+set logfile [lindex $argv 2]
+set fatal [expr {[string first $mode "ABCDFGHIJ"] >= 0}]
+set timeout 20
+log_user 1
+log_file -noappend $logfile
+spawn cpmsim -z -d $diskdir
+expect "A>"
+send "PROT014 $mode\r"
+if {$fatal} {
+    expect "Bdos Err On A"
+    send "x"
+    expect "A>"
+} else {
+    expect "A>"
+}
+send "\034"
+expect eof

@@ -1,0 +1,7 @@
+conformance tests: 62
+duplicate test identifiers: 0
+incomplete test definitions: 0
+ledger proposition lines mapped: 652
+unknown primary-test references: 0
+conformance levels: 5
+validation: PASS

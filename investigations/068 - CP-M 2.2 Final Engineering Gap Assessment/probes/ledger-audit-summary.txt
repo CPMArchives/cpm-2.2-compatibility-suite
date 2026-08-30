@@ -1,0 +1,29 @@
+Investigation 068 ledger audit
+================================
+
+Authoritative input:
+  02 Compatibility Ledger - Investigation 067.txt
+
+Numbered proposition lines: 652
+Unique proposition identifiers: 622
+Duplicate identifiers: 30 (0248 through 0277, each twice)
+Policy-pending proposition lines: 50
+Unique policy-pending identifiers: 45
+Conflicting duplicate dispositions: 0
+
+Processor incorporation check:
+  No numbered ledger entry states the Intel 8080-compatible baseline,
+  declared processor-profile instruction semantics, generic exclusion of
+  Z80-only extensions, undocumented processor variation, or generic exclusion
+  of exact timing/interrupt topology.  Investigation 063 proposed these five
+  propositions, but the current ledger contains only its narrative summary.
+
+Conformance strategy check:
+  compatibility/03 Conformance Strategy.txt remains Draft 0.1 and contains
+  only "Under development."  I052/I059/I062 contain substantive methodology,
+  but it has not been consolidated into the release-facing strategy artifact.
+
+Conclusion:
+  No new contradiction invalidates the semantic evidence base.  The numbered
+  normative artifact and release process require targeted follow-up before
+  specification freeze.

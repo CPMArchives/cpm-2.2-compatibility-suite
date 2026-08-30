@@ -1,0 +1,9 @@
+records	software_area	ledger_entries_or_ranges	i052_tests	evidence	classification	result
+V053-01,V053-02	standard utilities	0569-0579,0620-0621	UTIL-001,UTIL-004,CCP-008,ERROR-001	I047,I053	REQUIRED / NOT REQUIRED presentation	contract sufficient
+V053-03,V053-04	development toolchain	0001-0014,0589-0590,0622	UTIL-002,UTIL-003,UTIL-004	I048,I053	REQUIRED / NOT REQUIRED presentation	contract sufficient
+V053-05	WordStar	0155-0388,0606-0612	APP-001	I049,I053	REQUIRED / POLICY PENDING terminal profile	contract sufficient for tested profile
+V053-06	MBASIC and Wumpus	0001-0014,0569,0579,0588	APP-002	I049,I053	REQUIRED / NOT GUARANTEED recovery internals	contract sufficient
+V053-07	Adventure	0001-0014,0155-0388,0589	APP-003	I049,I053	REQUIRED	contract sufficient
+V053-08,V053-09,V053-10	Kermit	0155-0388,0606-0612	COMM-001,COMM-003	I050,I053	REQUIRED / POLICY PENDING communications profile	startup and failure paths sufficient; successful peer transfer untested
+V053-11	portable control	0001-0014,BDOS version/call entries	BDOS-STATE-001,MEM-001	I051,I053	REQUIRED	public path sufficient
+V053-12,V053-13	hardware-dependent software	0600-0601,0606-0612	COMM-004,HW-001,BIOS-007	I051,I053	POLICY PENDING / NOT REQUIRED baseline	expected profile mismatch

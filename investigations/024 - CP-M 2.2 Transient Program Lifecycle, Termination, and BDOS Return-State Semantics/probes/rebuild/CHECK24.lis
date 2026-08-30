@@ -1,0 +1,83 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:10:35 2026	Page 1
+Source file: CHECK24.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Open/read R/F/JOPEN24.DAT and print return codes, RC and first 20 bytes.
+                       2      2         ORG 100H
+0100  3a 82 00         3      3         LD A,(0082H)
+0103  32 93 01         4      4         LD (FNAME),A
+0106  11 b6 01         5      5         LD DE,DATA
+0109  0e 1a            6      6         LD C,26
+010b  cd 05 00         7      7         CALL 5
+010e  11 92 01         8      8         LD DE,FCB
+0111  0e 0f            9      9         LD C,15
+0113  cd 05 00        10     10         CALL 5
+0116  32 90 01        11     11         LD (ORC),A
+0119  fe ff           12     12         CP 0FFH
+011b  28 0b           13     13         JR Z,SHOW
+011d  11 92 01        14     14         LD DE,FCB
+0120  0e 14           15     15         LD C,20
+0122  cd 05 00        16     16         CALL 5
+0125  32 91 01        17     17         LD (RRC),A
+0128  11 75 01        18     18 SHOW:   LD DE,MSG
+012b  0e 09           19     19         LD C,9
+012d  cd 05 00        20     20         CALL 5
+0130  3a 90 01        21     21         LD A,(ORC)
+0133  cd 59 01        22     22         CALL HEX
+0136  3a 91 01        23     23         LD A,(RRC)
+0139  cd 59 01        24     24         CALL HEX
+013c  3a a1 01        25     25         LD A,(FCB+15)
+013f  cd 59 01        26     26         CALL HEX
+0142  21 b6 01        27     27         LD HL,DATA
+0145  06 14           28     28         LD B,20
+0147  7e              29     29 LOOP:   LD A,(HL)
+0148  cd 59 01        30     30         CALL HEX
+014b  23              31     31         INC HL
+014c  10 f9           32     32         DJNZ LOOP
+014e  1e 0d           33     33         LD E,13
+0150  cd 6d 01        34     34         CALL OUT
+0153  1e 0a           35     35         LD E,10
+0155  cd 6d 01        36     36         CALL OUT
+0158  c9              37     37         RET
+0159  f5              38     38 HEX:    PUSH AF
+015a  0f              39     39         RRCA
+015b  0f              40     40         RRCA
+015c  0f              41     41         RRCA
+015d  0f              42     42         RRCA
+015e  cd 62 01        43     43         CALL NIB
+0161  f1              44     44         POP AF
+0162  e6 0f           45     45 NIB:    AND 0FH
+0164  c6 30           46     46         ADD A,'0'
+0166  fe 3a           47     47         CP '9'+1
+0168  38 02           48     48         JR C,HOUT
+016a  c6 07           49     49         ADD A,7
+016c  5f              50     50 HOUT:   LD E,A
+016d  c5              51     51 OUT:    PUSH BC
+016e  0e 02           52     52         LD C,2
+0170  cd 05 00        53     53         CALL 5
+0173  c1              54     54         POP BC
+0174  c9              55     55         RET
+0175  43 48 45 43     56     56 MSG:    DB 'CHECK24 OPEN/READ/RC/DATA=','$'
+0179  4b 32 34 20     56     57
+017d  4f 50 45 4e     56     58
+0181  2f 52 45 41     56     59
+0185  44 2f 52 43     56     60
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:10:35 2026	Page 2
+Source file: CHECK24.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0189  2f 44 41 54     56     61
+018d  41 3d 24        56     62
+0190  00              57     63 ORC:    DB 0
+0191  ff              58     64 RRC:    DB 0FFH
+0192  00              59     65 FCB:    DB 0
+0193  52 4f 50 45     60     66 FNAME:  DB 'ROPEN24 '
+0197  4e 32 34 20     60     67
+019b  44 41 54 00     61     68         DB 'DAT',0,0,0,0
+019f  00 00 00        61     69
+01a2                  62     70         DS 16
+01b2  00 00 00 00     63     71         DB 0,0,0,0
+01b6                  64     72 DATA:   DS 128
+0236                  65     73         END

@@ -1,0 +1,37 @@
+SOURCE AND DOCUMENTATION ANALYSIS
+
+Generic Kermit-80 4.11 manual
+- Generic CP/M implementation uses standard BIOS calls and IOBYTE routing.
+- Default communications mapping is PTR (RDR/PUN); CRT, TTY, UC1, UR1, and UR2
+  mappings are supported where the BIOS implements them.
+- Generic implementation cannot set baud rate or send BREAK and may be too slow
+  above 1200 baud on some systems.
+- Its timer is CPU/system dependent and explicitly approximate.
+- Binary transfer treats CP/M files as complete 128-byte records; text mode uses
+  CP/M text conventions including Control-Z handling.
+
+IMSAI BIOS and distribution README
+- The preserved BIOS defines separate modem data/status ports and logical modem
+  routines. The distribution instructs Generic Kermit to SET PORT UC1.
+- The same distribution describes QTERM as a Z80-only IMSAI patch and XMODEM as
+  selectable between BIOS RDR/PUN and direct IMSAI ports.
+
+QTERM 4.3e sources and manuals
+- QT-IMSAI.ASM supplies machine-specific direct I/O and modem channel selection.
+- QTERM supports baud/mode changes, BREAK, DTR/hangup, chat scripts, pacing,
+  capture files, and Kermit/XMODEM, but the manual warns that claimed changes
+  occur only where the necessary patches exist.
+- Timing and terminal-emulation details are application/profile behavior.
+
+XMODEM 2.7 source and configuration
+- /X0 selects CON, /X1 BIOS RDR/PUN, /X2 configured direct ports, and /X3
+  installed routines. The supplied configuration selects IMSAI ports 23h/22h.
+- CPU MHz is an input to timeout calculations; source documents default CPU
+  rates and estimated BIOS instruction timings.
+- The program uses CP/M file calls around protocol buffers and reports logical
+  open/create/write failures itself.
+
+Interpretation discipline
+These sources identify test targets and explain observed profile dependence.
+They do not by themselves establish externally required behavior. Experimental
+claims are confined to T01-T07 in observed-output.txt.

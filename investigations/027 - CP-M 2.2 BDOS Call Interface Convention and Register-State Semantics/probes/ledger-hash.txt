@@ -1,0 +1,6 @@
+Before:
+d0e1e80848cbba88a2648c0696d4bfdda2d12db0b4b7e158bd1bc1a5a3346c16  <project-root>/compatibility/02 Compatibility Ledger - Investigation 026.txt
+
+After:
+d0e1e80848cbba88a2648c0696d4bfdda2d12db0b4b7e158bd1bc1a5a3346c16  <project-root>/compatibility/02 Compatibility Ledger - Investigation 026.txt
+

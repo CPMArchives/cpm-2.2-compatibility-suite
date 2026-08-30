@@ -1,0 +1,24 @@
+spawn cpmsim -z -d <local-workspace>/g-p-6a682f002be881918281554d644daf48/stage041/probes/case
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>DIRECT41
+DIRECT41 private-BDOS-HL invalid-SELDSK-HL 0022 0000
+User Interrupt at 0xfbc5
+I/O ran for 2 ms, waited for 0 ms
+CPU executed 509570 t-states in 0 ms
+Clock frequency 650.79 MHz

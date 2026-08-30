@@ -1,0 +1,19 @@
+0:
+-rw-rw-rw-   16640 Jan 01 1970  d00.dat
+-rw-rw-rw-   16640 Jan 01 1970  d01.dat
+-rw-rw-rw-   16640 Jan 01 1970  d02.dat
+-rw-rw-rw-   16640 Jan 01 1970  d03.dat
+-rw-rw-rw-   16640 Jan 01 1970  d04.dat
+-rw-rw-rw-   16640 Jan 01 1970  d05.dat
+-rw-rw-rw-   16640 Jan 01 1970  d06.dat
+-rw-rw-rw-   16640 Jan 01 1970  d07.dat
+-rw-rw-rw-   16640 Jan 01 1970  d08.dat
+-rw-rw-rw-   16640 Jan 01 1970  d09.dat
+-rw-rw-rw-   16640 Jan 01 1970  d10.dat
+-rw-rw-rw-   16640 Jan 01 1970  d11.dat
+-rw-rw-rw-   16640 Jan 01 1970  d12.dat
+-rw-rw-rw-   16640 Jan 01 1970  d13.dat
+-rw-rw-rw-     200 Jan 01 1970  d14.dat
+-rw-rw-rw-     200 Jan 01 1970  d15.dat
+-rw-rw-rw-     200 Jan 01 1970  d16.dat
+-rw-rw-rw-       0 Jan 01 1970  fullwr.dat

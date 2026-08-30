@@ -1,0 +1,16 @@
+usage:	cpmsim -z -8 -s -l -i -u -m val -f freq
+		-x filename -d diskpath
+
+	-z = emulate Zilog Z80
+	-8 = emulate Intel 8080
+	-s = save core and CPU
+	-l = load core and CPU
+	-i = trap on I/O to unused ports
+	-u = trap on undocumented instructions
+	-m = init memory with val (00-FF)
+	-f = CPU clock frequency freq in MHz
+	-x = load and execute filename
+	-d = use disk images at diskpath
+	     default path for disk images:
+	     ./disks
+	     /usr/local/share/z80pack/cpmsim/disks

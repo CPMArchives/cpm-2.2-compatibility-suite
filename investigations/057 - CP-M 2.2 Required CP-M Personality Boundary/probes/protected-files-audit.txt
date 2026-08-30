@@ -1,0 +1,17 @@
+INVESTIGATION 057 PROTECTED-FILES AUDIT
+
+SHA-256 manifests were generated before and after installation for every file
+under <project-root>, excluding the new Investigation 057
+directory.
+
+One new file appeared externally during the investigation:
+96c2636e3bb1b8d7726b479dac353792a3faff3f3090b6baf074134a4ccbba9f
+  investigations/I058_CPM_2_2_Non_CPM_BetterCPM_Feature_Boundary_Prompt.txt
+
+After excluding that newly created file from the after-manifest, the before and
+after manifests compare byte-identically. No pre-existing BetterCP/M file, prior
+investigation artifact, or Compatibility Ledger file changed. Investigation 057
+did not read or modify the new I058 prompt.
+
+Authoritative ledger SHA-256 before and after:
+4a8f493e0ba5596d6d1ee078a87b1bc867124fe1b12eb1b7b28e202c8eef6c50

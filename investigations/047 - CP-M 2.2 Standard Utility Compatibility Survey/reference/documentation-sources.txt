@@ -1,0 +1,26 @@
+Investigation 047 documentation sources
+========================================
+
+Digital Research, An Introduction to CP/M Features and Facilities.
+Source: <reference-archive>/Intro_to_CPM_Feat_and_Facilities.pdf
+Reviewed topics: STAT, ASM, LOAD, PIP, ED, SUBMIT.
+Preserved render excerpts: manual-pages/FEAT-19.png through FEAT-25.png and
+manual-pages/FEAT-31.png through FEAT-36.png.
+
+Digital Research, CP/M Assembler (ASM) User's Guide.
+Source: <reference-archive>/ASM.pdf
+Preserved render excerpts: manual-pages/ASM-05.png through ASM-08.png.
+
+Digital Research, CP/M Dynamic Debugging Tool (DDT) User's Guide.
+Source: <reference-archive>/DDT.pdf
+Preserved render excerpts: manual-pages/DDT-05.png through DDT-10.png.
+
+Digital Research, CP/M Editor (ED) User's Guide.
+Source: <reference-archive>/ED.pdf
+Preserved render excerpts: manual-pages/ED-05.png through ED-10.png.
+
+The CP/M 2.0 Interface Guide and CP/M 2.2 Alteration Guide evidence is
+carried through the authoritative ledger and earlier investigation reports
+reviewed in reference/investigations.  I047 does not replace their detailed
+interface findings.
+

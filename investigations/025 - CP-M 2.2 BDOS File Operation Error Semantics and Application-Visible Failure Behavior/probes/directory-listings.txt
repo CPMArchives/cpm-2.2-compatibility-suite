@@ -1,0 +1,26 @@
+Controlled image states (cpmtools format ibm-3740)
+===================================================
+
+Normal fixture
+--------------
+Contains the seven I025 probes (FILEERR25 is also installed as FERR25),
+ONE25.DAT in user 0, EMPTY25.DAT in user 0, and USER1.DAT only in user 1.
+Before accepted tests: 57 files, 62K occupied, 179K free.
+
+Directory-full before-image
+---------------------------
+64 files/directory entries, 63K occupied, 178K free. D0000000.DAT through the
+last accepted filler consume the remaining directory entries. WRITE25 Make
+returned FF and the after-image is byte-identical.
+
+Allocation-full before-image
+----------------------------
+13 files, 241K occupied, 0K free. FILLER25.DAT consumes all remaining blocks
+while leaving directory entries available. WRITE25 Make succeeded, then Write
+returned 02. The after-image additionally contains empty NEW25.DAT.
+
+Duplicate-Make after-image
+--------------------------
+The FILEERR25 case contains two directory entries named ONE25.DAT, confirming
+that Function 22 did not enforce its caller-side uniqueness precondition.
+

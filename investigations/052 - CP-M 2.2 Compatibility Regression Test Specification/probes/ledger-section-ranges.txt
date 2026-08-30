@@ -1,0 +1,36 @@
+0001-0033	001 - CP/M 2.2 Transient Program Entry Environment
+0034-0050	002 - CP/M 2.2 BDOS Call and Return Convention
+0051-0073	003 - CP/M 2.2 BDOS Console Output and String Output Semantics
+0074-0089	004 - CP/M 2.2 BDOS Direct Console IO and Console Status Semantics
+0090-0104	005 - CP/M 2.2 BDOS Console Input and Echo Semantics
+0105-0130	006 - CP/M 2.2 BDOS Buffered Console Input and Line Editing Semantics
+0131-0154	007 - CP/M 2.2 BDOS Disk Reset Selection and Drive-State Query Semantics
+0155-0186	008 - CP/M 2.2 FCB File Identification and Open-Close Semantics
+0187-0217	009 - CP/M 2.2 BDOS Directory Search and DMA Transfer Semantics
+0218-0246	010 - CP/M 2.2 BDOS Sequential Read Semantics
+0247-0283	011 - CP/M 2.2 BDOS Sequential Write and File Creation Semantics
+0284-0388	012 - CP/M 2.2 BDOS File Deletion and Rename Semantics
+0389-0412	015 - CP/M 2.2 BDOS Physical Disk Error and Error Presentation Semantics
+0413-0422	016 - CP/M 2.2 BDOS Console I/O and System Interface Semantics
+0423-0434	017 - CP/M 2.2 BDOS Disk State, Allocation Vector, and Disk Parameter
+0435-0447	018 - CP/M 2.2 BDOS Character Devices and IOBYTE Semantics
+0448-0459	019 - CP/M 2.2 BIOS Disk Interface and Logical-Sector Semantics
+0460-0473	020 - CP/M 2.2 BIOS Jump Table, Boot, and Character-I/O Semantics
+0474-0490	021 - CP/M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics
+0491-0504	023 - CP/M 2.2 CCP Transient Program Lookup, Loading, and Execution
+0505-0507	022 - CP/M 2.2 CCP Transient Program Lookup, Loading, and Execution
+0508-0511	024 - CP/M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-
+0512-0516	025 - CP/M 2.2 BDOS File Operation Error Semantics and Application-
+0517-0524	026 - CP/M 2.2 BDOS System State Functions and Application-Visible
+0525-0532	027 - CP/M 2.2 BDOS Call Interface Convention and Register-State
+0533-0540	028 - CP/M 2.2 CCP Transient Execution Handoff and Loader State Contract
+0541-0549	029 - CP/M 2.2 BDOS Directory Search Semantics and FCB/DMA Enumeration
+0550-0557	030 - CP/M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State
+0558-0567	031 - CP/M 2.2 BDOS User Area, File Visibility, and Directory Namespace
+0568-0579	032 - CP/M 2.2 CCP Resident Command Semantics and BDOS Interaction
+0580-0587	033 - CP/M 2.2 BDOS-BIOS Error Propagation and Recovery Semantics
+0588-0617	034 - CP/M 2.2 Memory Layout, System Area, and Transient Program Boundary
+0618-0618	041 - CP/M 2.2 Direct System Access and Undocumented Application Interface
+0619-0620	042 - CP/M 2.2 Common Software Compatibility Assumptions
+0621-0621	043 - CP/M 2.2 Memory and Execution Edge Case Compatibility Semantics
+0622-0622	051 - CP/M 2.2 Hardware-Dependent Software Compatibility Survey

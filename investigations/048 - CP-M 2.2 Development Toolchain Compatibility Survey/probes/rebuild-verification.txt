@@ -1,0 +1,25 @@
+Investigation 048 rebuild and repeatability verification
+========================================================
+
+Fresh-image runs completed: 3
+
+Second/third after-image comparison:
+  A: byte-identical
+  B: byte-identical
+
+After-image SHA-256:
+  A: f38637f227cf157fec0a556391be4618707141e4f9b50e8a82c4cf225e3f7bc3
+  B: 3171625321aa7408b2c50cdd9b6dc30f68c14c576e469ef3fe3b3df5d539645f
+
+Interactive/submitted link result:
+  DEV48.COM   71bb5e4208d179ac4ad8aa164491f3113a1aa7c30c4a52f5e69ca111af01cd71
+  BATCH48.COM 71bb5e4208d179ac4ad8aa164491f3113a1aa7c30c4a52f5e69ca111af01cd71
+  Result: byte-identical.
+
+Extracted generated artifact hashes are recorded in
+transcripts/generated-files.sha256.  Runs one and two had identical semantic
+transcripts after removal only of emulator shutdown address and timing lines.
+
+The preserved historical utility binaries were not rebuilt.  Their hashes are
+recorded; no unsupported historical-toolchain rebuild is claimed.
+

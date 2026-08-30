@@ -1,0 +1,15 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set timeout 30
+log_file -noappend $logfile
+spawn cpmsim -z -d $diskdir
+expect "A>"
+send -- "GAP46 FIRST.TXT SECOND.BIN\r"
+expect "GAP46 COMPLETE"
+expect "A>"
+send -- "CROSS45\r"
+expect "CROSS45 COMPLETE"
+expect "A>"
+send "\034"
+expect eof

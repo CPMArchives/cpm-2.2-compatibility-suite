@@ -1,0 +1,37 @@
+Investigation 042 representative software inventory
+===================================================
+
+Executed full deterministic workflows
+-------------------------------------
+Digital Research: ASM 2.0, LOAD, ED, PIP 1.5, STAT, DUMP, DDT 2.2,
+SUBMIT, XSUB, and a generated HELLO42 transient.
+
+Executed controlled startup/interface tests
+-------------------------------------------
+Microsoft: M80, Link-80 3.44.
+MicroPro International: WordMaster 1.07A.
+SLR Systems: Z80ASM 1.30, SuperLinker 1.31.
+Digital Research: MAC 2.0, RMAC 1.1, SDIR 1.0, SID 3.0, ZSID 1.4.
+
+Preserved executable screening corpus (19 COM files)
+----------------------------------------------------
+ASM, DDT, DUMP, ED, HIST, L80, M80, MAC, PIP, RMAC, SDIR, SID, SLRNK,
+STAT, SUBMIT, WM, XSUB, Z80ASM, ZSID.
+
+Source corpus
+-------------
+DRI ASM modules AS0COM-AS6MAIN; ED.PLM; PIP.PLM; STAT.PLM; SUBMIT.PLM;
+XSUB1.ASM; DUMP.ASM; SYSGEN.ASM; OS2CCP.ASM.
+
+Not present with adequate deterministic fixtures
+-------------------------------------------------
+Compiler, database, communications, and game/application packages. These
+categories are reported as untested, not silently generalized from other tools.
+
+Provenance caution
+------------------
+Vendor identity is taken only from preserved executable banners or DRI source
+headers. HIST's independent provenance was not established. Literal executable
+pattern matches may occur in data and are never treated alone as proof that an
+instruction executed.
+

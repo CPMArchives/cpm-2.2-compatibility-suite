@@ -1,0 +1,525 @@
+INVESTIGATION 025 — CP/M 2.2 BDOS File Operation Error Semantics and
+Application-Visible Failure Behavior
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 024 is complete.
+
+The authoritative Compatibility Ledger currently incorporates findings
+through Investigation 024.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports, architecture documents,
+roadmaps, specifications, or other existing BetterCP/M files.
+
+Create Investigation 025 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+This is an evidence investigation only.
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Establish the application-visible CP/M 2.2 BDOS file-operation failure
+contract.
+
+Previous investigations established:
+
+- FCB structure and CCP construction.
+- Sequential and random read/write semantics.
+- Directory allocation behavior.
+- Allocation vectors and disk state.
+- Transient lifecycle and termination.
+
+Investigation 025 determines:
+
+- what BDOS functions return on failure;
+- which failures are distinguishable;
+- which errors are application-visible;
+- which conditions are implementation-dependent;
+- which assumptions applications may safely make.
+
+The goal is not to repeat file-operation mechanics.
+
+The goal is to define the compatibility boundary around failure behavior.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read and incorporate:
+
+Investigation 008:
+    FCB identification and file operation foundations.
+
+Investigation 010:
+    Sequential Read semantics.
+
+Investigation 011:
+    BDOS file operation behavior.
+
+Investigation 012:
+    Additional file semantics.
+
+Investigation 013:
+    Random access and file size behavior.
+
+Investigation 017:
+    Allocation vectors and disk state.
+
+Investigation 023:
+    Default FCB construction.
+
+Investigation 024:
+    Termination without implicit file cleanup.
+
+Do not duplicate earlier experiments.
+
+Strengthen existing propositions where appropriate.
+
+Identify corrections only where new evidence requires them.
+
+
+SCOPE
+
+Investigate application-visible behavior for:
+
+- Open File failure;
+- Make File failure;
+- Close File failure;
+- Delete File failure;
+- Rename File failure;
+- Search First failure;
+- Search Next failure;
+- Sequential Read failure;
+- Sequential Write failure;
+- Random Read failure;
+- Random Write failure;
+- disk-full conditions;
+- directory-full conditions;
+- read-only conditions;
+- invalid drive conditions;
+- malformed FCB conditions where safely testable.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- physical media failure beyond existing BIOS error handling;
+- host filesystem behavior;
+- CP/M 3 error extensions;
+- compiler/runtime conventions;
+- BetterCP/M implementation choices.
+
+Do not infer requirements from a single DRI source behavior without
+application-visible evidence.
+
+
+KEY QUESTIONS
+
+
+1. BDOS ERROR RETURN CONVENTIONS
+
+Determine:
+
+- normal success return values;
+- failure return values;
+- whether all failures are represented by FFh;
+- functions with special return meanings.
+
+Create a function/error matrix.
+
+
+2. OPEN FAILURE
+
+Determine behavior when:
+
+- file does not exist;
+- drive is invalid;
+- user area differs;
+- FCB contains wildcards;
+- disk is unavailable.
+
+Record:
+
+- returned value;
+- modified FCB state;
+- directory state.
+
+
+3. MAKE FAILURE
+
+Determine behavior when:
+
+- directory is full;
+- disk allocation is exhausted;
+- file already exists;
+- invalid FCB supplied.
+
+Determine whether partial allocation can occur.
+
+
+4. CLOSE FAILURE
+
+Determine:
+
+- when Close can fail;
+- whether failed Close leaves metadata modified;
+- whether applications must retry;
+- whether FCB state changes.
+
+
+5. DELETE AND RENAME FAILURE
+
+Determine:
+
+- nonexistent file behavior;
+- wildcard behavior;
+- read-only behavior;
+- invalid drive behavior;
+- directory state afterward.
+
+
+6. SEARCH FAILURE
+
+Determine:
+
+- Search First no-match behavior;
+- Search Next exhaustion;
+- FCB modifications;
+- DMA contents after failure.
+
+Cross-check directory search investigations.
+
+
+7. READ FAILURES
+
+Determine:
+
+- EOF return;
+- unallocated record behavior;
+- invalid extent behavior;
+- disk error behavior;
+- DMA contents after failure.
+
+
+8. WRITE FAILURES
+
+Determine:
+
+- disk-full behavior;
+- directory-full behavior;
+- allocation failure;
+- partial-write behavior;
+- FCB state after failure.
+
+
+9. RANDOM ACCESS FAILURES
+
+Determine:
+
+- random record beyond EOF;
+- invalid record values;
+- file extension behavior;
+- returned status.
+
+Cross-check I013.
+
+
+10. READ-ONLY BEHAVIOR
+
+Determine how BDOS reports:
+
+- read-only drive;
+- read-only file behavior where applicable;
+- attempted modification.
+
+Do not confuse BDOS policy with BIOS write protection.
+
+
+11. INVALID DRIVE BEHAVIOR
+
+Determine:
+
+- invalid drive selection;
+- invalid FCB drive byte;
+- current-drive interaction.
+
+Cross-check I007.
+
+
+12. FCB MODIFICATION ON FAILURE
+
+Determine which FCB fields are:
+
+- modified;
+- preserved;
+- undefined.
+
+Especially:
+
+- RC;
+- EX;
+- S1/S2;
+- random record fields.
+
+
+13. DMA CONTENT AFTER FAILURE
+
+Determine whether failed operations:
+
+- leave DMA unchanged;
+- partially modify DMA;
+- provide error information.
+
+Do not assume.
+
+
+14. DRI SOURCE ANALYSIS
+
+Review BDOS source to determine:
+
+- return paths;
+- error checks;
+- shared failure routines.
+
+Do not produce source commentary.
+
+Extract compatibility-relevant behavior only.
+
+
+15. EXPERIMENTAL PROGRAMS
+
+Create deterministic probes:
+
+FILEERR25:
+    General BDOS error matrix.
+
+OPEN25:
+    Open failures.
+
+WRITE25:
+    Write failures.
+
+READ25:
+    Read failures.
+
+SEARCH25:
+    Search exhaustion.
+
+FCB25:
+    FCB state after failure.
+
+DISK25:
+    Disk-full and directory-full cases.
+
+
+16. CONTROLLED TEST MATRIX
+
+Include:
+
+- existing file;
+- missing file;
+- duplicate file;
+- full directory;
+- full allocation space;
+- invalid drive;
+- wildcard search;
+- EOF read;
+- random beyond EOF;
+- failed write;
+- failed close.
+
+
+17. EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+    documented CP/M behavior.
+
+B:
+    DRI implementation behavior.
+
+I:
+    experimental observation.
+
+D:
+    unresolved compatibility policy.
+
+These labels are internal investigation classifications only.
+
+Ledger evidence must use actual sources:
+
+    I025
+    BDOS
+    CCP
+    IG
+    AG
+
+
+18. COMPATIBILITY CLASSIFICATION
+
+For every conclusion classify:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Be conservative.
+
+Do not require:
+
+- internal BDOS error routines;
+- exact FCB mutation order;
+- undefined DMA contents;
+- undocumented error distinctions.
+
+
+19. EXISTING LEDGER REVIEW
+
+Review affected entries:
+
+0001-0034
+0080-0170
+0210-0247
+0506-0512
+
+Determine:
+
+- evidence strengthening;
+- wording correction;
+- disposition change;
+- duplicate avoidance.
+
+
+20. PROPOSED LEDGER ADDITIONS
+
+The current ledger ends after Investigation 024.
+
+Begin proposed entries at:
+
+0513
+
+Do not modify the Compatibility Ledger.
+
+Include:
+
+Proposed Compatibility Ledger additions
+
+and:
+
+Proposed existing-entry updates.
+
+
+Each entry must contain:
+
+NNNN. Title
+
+    Description.
+
+    Disposition:
+
+    Evidence:
+
+    Conformance:
+
+
+21. REPORT STRUCTURE
+
+Create:
+
+Investigation 025 - CP/M 2.2 BDOS File Operation Error Semantics and
+Application-Visible Failure Behavior.md
+
+
+Include:
+
+1. Objective and scope
+2. Relationship to previous investigations
+3. Documentation findings
+4. BDOS source findings
+5. Error matrix
+6. Experimental methodology
+7. Results
+8. Compatibility conclusions
+9. Proposed ledger additions
+10. Existing-entry updates
+11. Open questions
+12. Artifact preservation audit
+13. Sources
+
+
+22. ARTIFACT REQUIREMENTS
+
+Create:
+
+Investigation 025/
+
+with:
+
+probes/
+
+Preserve:
+
+- source;
+- binaries;
+- listings;
+- harnesses;
+- transcripts;
+- disk images;
+- directory listings;
+- build instructions;
+- SHA-256 manifests.
+
+
+23. PRESERVATION AUDIT
+
+Before investigation:
+
+- hash current ledger;
+- record emulator version;
+- hash fixture images.
+
+After investigation:
+
+- verify ledger unchanged;
+- verify previous investigations unchanged;
+- verify protected files unchanged;
+- hash new artifacts.
+
+
+24. COMPLETION REPORT
+
+When complete report:
+
+- files created;
+- artifact count;
+- experiments performed;
+- principal findings;
+- proposed ledger range;
+- ledger hash before/after;
+- confirmation no protected files changed;
+- documentation reviewed.
+
+
+FINAL GOAL
+
+Define the CP/M 2.2 BDOS file-operation failure contract:
+
+When a CP/M application asks BDOS to perform a file operation and the
+operation cannot succeed, exactly what does the application observe?
+
+The result should distinguish:
+
+- guaranteed compatibility behavior;
+- DRI implementation behavior;
+- undefined behavior;
+- BetterCP/M policy choices.

@@ -1,0 +1,13 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set timeout 40
+log_file -noappend $logfile
+spawn cpmsim -z -d $diskdir
+expect "A>"
+foreach cmd {"CHAR38" "STATUS38" "IOBYTE38" "BLOCK38 E" "BLOCK38 6" "BLOCK38 F" "BLOCK38 O" "ERROR38" "BLOCK38 S"} {
+  send "$cmd\r"
+  expect "A>"
+}
+send "\034"
+expect eof

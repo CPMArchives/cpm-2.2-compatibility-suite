@@ -1,0 +1,8 @@
+PASS	exact frozen cases mapped: 43
+PASS	selected first-slice cases: 38
+PASS	deferred cases: 5
+PASS	unique ledger entries: 43/43
+PASS	unique case IDs: 43/43
+PASS	all selected cases have selectors: 38/38
+PASS	all selected cases have fixtures: 38/38
+PASS	OPEN31 unsupported isolated scenarios are not credited

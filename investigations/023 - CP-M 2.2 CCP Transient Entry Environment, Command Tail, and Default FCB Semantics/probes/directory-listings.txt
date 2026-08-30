@@ -1,0 +1,32 @@
+Accepted fixture additions (cpmtools format ibm-3740)
+=====================================================
+
+The complete disks retain all files from the Investigation 022 accepted base.
+The following Investigation 023 files were added and were visible to cpmls -D.
+
+drivea.dsk, user 0
+------------------
+BIG23.COM       20 records
+DMACHK.DAT       0 directory RC (data remains readable as one padded record)
+ENTRY23.COM      7 directory RC; loader-derived default-FCB RC observed as 08h
+T.COM            7 directory RC; one-character alias of ENTRY23.COM
+
+drivea.dsk, user 1
+------------------
+DMACHK.DAT
+ENTRY23.COM
+
+driveb.dsk, user 0
+------------------
+DMACHK.DAT
+ENTRY23.COM
+
+driveb.dsk, user 1
+------------------
+DMACHK.DAT
+ENTRY23.COM
+
+cpmls totals after fixture creation:
+drive A: 29 files, 165K occupied, 76K free
+drive B: 26 files, 44K occupied, 197K free
+

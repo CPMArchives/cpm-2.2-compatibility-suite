@@ -1,0 +1,8 @@
+
+--> FILE:  RZ      .COM		CRC = D0 14
+--> FILE:  RZSZ    .FOR		CRC = 1F EF
+--> FILE:  SZ      .COM		CRC = 3E A8
+--> FILE:  SZRZ    .PMA		CRC = 75 B7
+--> FILE:  WADDR   .TXT		CRC = BE BD
+--> FILE:  MLOAD   .COM		CRC = AD 31
+--> FILE:  KERMIT  .COM		CRC = FB AF

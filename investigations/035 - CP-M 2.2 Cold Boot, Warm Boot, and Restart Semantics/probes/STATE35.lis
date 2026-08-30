@@ -1,0 +1,241 @@
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 07:17:02 2026	Page 1
+Source file: STATE35.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1  ORG 0100H
+0100  21 06 01         2      2  LD HL,NAME
+0103  c3 0e 01         3      3  JP OBSBEGIN
+0106  53 54 41 54      4      4 NAME: DB 'STATE35',0
+010a  45 33 35 00      4      5
+010e  22 b5 02         5      6 OBSBEGIN: LD (NAMEPTR),HL
+0111  ed 73 b7 02      6      7  LD (ENTSP),SP
+0115  3a 03 00         7      8  LD A,(0003H)
+0118  32 c7 02         8      9  LD (IOBYTEV),A
+011b  3a 04 00         9     10  LD A,(0004H)
+011e  32 c8 02        10     11  LD (PZ4),A
+0121  2a 00 00        11     12  LD HL,(0000H)
+0124  22 bd 02        12     13  LD (PZ0),HL
+0127  2a 05 00        13     14  LD HL,(0005H)
+012a  22 bf 02        14     15  LD (PZ5),HL
+012d  3a 50 00        15     16  LD A,(0050H)
+0130  32 c9 02        16     17  LD (SCR50),A
+0133  3a 00 d0        17     18  LD A,(0D000H)
+0136  32 ca 02        18     19  LD (TPAMARK),A
+0139  3a 00 e4        19     20  LD A,(0E400H)
+013c  32 cb 02        20     21  LD (CCPBYTE),A
+013f  0e 19           21     22  LD C,25
+0141  cd 05 00        22     23  CALL 0005H
+0144  32 c5 02        23     24  LD (DRIVE),A
+0147  1e ff           24     25  LD E,0FFH
+0149  0e 20           25     26  LD C,32
+014b  cd 05 00        26     27  CALL 0005H
+014e  32 c6 02        27     28  LD (USER),A
+0151  0e 18           28     29  LD C,24
+0153  cd 05 00        29     30  CALL 0005H
+0156  22 b9 02        30     31  LD (LOGIN),HL
+0159  0e 1d           31     32  LD C,29
+015b  cd 05 00        32     33  CALL 0005H
+015e  22 bb 02        33     34  LD (ROVEC),HL
+0161  0e 1b           34     35  LD C,27
+0163  cd 05 00        35     36  CALL 0005H
+0166  22 c1 02        36     37  LD (ALVPTR),HL
+0169  0e 1f           37     38  LD C,31
+016b  cd 05 00        38     39  CALL 0005H
+016e  22 c3 02        39     40  LD (DPBPTR),HL
+0171  0e 0b           40     41  LD C,11
+0173  cd 05 00        41     42  CALL 0005H
+0176  32 cc 02        42     43  LD (CONSTAT),A
+0179  21 80 00        43     44  LD HL,0080H
+017c  06 80           44     45  LD B,128
+017e  3e ee           45     46  LD A,0EEH
+0180  77              46     47 FILL80: LD (HL),A
+0181  23              47     48  INC HL
+0182  10 fc           48     49  DJNZ FILL80
+0184  21 00 08        49     50  LD HL,0800H
+0187  06 80           50     51  LD B,128
+0189  3e a5           51     52  LD A,0A5H
+018b  77              52     53 FILL300: LD (HL),A
+018c  23              53     54  INC HL
+018d  10 fc           54     55  DJNZ FILL300
+018f  af              55     56  XOR A
+0190  32 dc 02        56     57  LD (FCB+12),A
+0193  11 d0 02        57     58  LD DE,FCB
+0196  0e 11           58     59  LD C,17
+0198  cd 05 00        59     60  CALL 0005H
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 07:17:02 2026	Page 2
+Source file: STATE35.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+019b  32 cd 02        60     61  LD (SEARCHRC),A
+019e  3a 80 00        61     62  LD A,(0080H)
+01a1  32 ce 02        62     63  LD (DMA80),A
+01a4  3a 00 08        63     64  LD A,(0800H)
+01a7  32 cf 02        64     65  LD (DMA800),A
+01aa  31 74 03        65     66  LD SP,STACK
+01ad  2a b5 02        66     67  LD HL,(NAMEPTR)
+01b0  cd 74 03        67     68  CALL PUTS
+01b3  21 5e 02        68     69  LD HL,MSG
+01b6  cd 74 03        69     70  CALL PUTS
+01b9  3a c5 02        70     71  LD A,(DRIVE)
+01bc  cd 9b 03        71     72  CALL HEXB
+01bf  cd 8c 03        72     73  CALL SPACE
+01c2  3a c6 02        73     74  LD A,(USER)
+01c5  cd 9b 03        74     75  CALL HEXB
+01c8  cd 8c 03        75     76  CALL SPACE
+01cb  2a b9 02        76     77  LD HL,(LOGIN)
+01ce  cd b2 03        77     78  CALL HEXW
+01d1  cd 8c 03        78     79  CALL SPACE
+01d4  2a bb 02        79     80  LD HL,(ROVEC)
+01d7  cd b2 03        80     81  CALL HEXW
+01da  cd 8c 03        81     82  CALL SPACE
+01dd  3a c7 02        82     83  LD A,(IOBYTEV)
+01e0  cd 9b 03        83     84  CALL HEXB
+01e3  cd 8c 03        84     85  CALL SPACE
+01e6  3a c8 02        85     86  LD A,(PZ4)
+01e9  cd 9b 03        86     87  CALL HEXB
+01ec  cd 8c 03        87     88  CALL SPACE
+01ef  2a bd 02        88     89  LD HL,(PZ0)
+01f2  cd b2 03        89     90  CALL HEXW
+01f5  cd 8c 03        90     91  CALL SPACE
+01f8  2a bf 02        91     92  LD HL,(PZ5)
+01fb  cd b2 03        92     93  CALL HEXW
+01fe  cd 8c 03        93     94  CALL SPACE
+0201  3a c9 02        94     95  LD A,(SCR50)
+0204  cd 9b 03        95     96  CALL HEXB
+0207  cd 8c 03        96     97  CALL SPACE
+020a  3a ca 02        97     98  LD A,(TPAMARK)
+020d  cd 9b 03        98     99  CALL HEXB
+0210  cd 8c 03        99    100  CALL SPACE
+0213  3a cb 02       100    101  LD A,(CCPBYTE)
+0216  cd 9b 03       101    102  CALL HEXB
+0219  cd 8c 03       102    103  CALL SPACE
+021c  2a c1 02       103    104  LD HL,(ALVPTR)
+021f  cd b2 03       104    105  CALL HEXW
+0222  cd 8c 03       105    106  CALL SPACE
+0225  2a c3 02       106    107  LD HL,(DPBPTR)
+0228  cd b2 03       107    108  CALL HEXW
+022b  cd 8c 03       108    109  CALL SPACE
+022e  3a cc 02       109    110  LD A,(CONSTAT)
+0231  cd 9b 03       110    111  CALL HEXB
+0234  cd 8c 03       111    112  CALL SPACE
+0237  3a cd 02       112    113  LD A,(SEARCHRC)
+023a  cd 9b 03       113    114  CALL HEXB
+023d  cd 8c 03       114    115  CALL SPACE
+0240  3a ce 02       115    116  LD A,(DMA80)
+0243  cd 9b 03       116    117  CALL HEXB
+0246  cd 8c 03       117    118  CALL SPACE
+0249  3a cf 02       118    119  LD A,(DMA800)
+024c  cd 9b 03       119    120  CALL HEXB
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 07:17:02 2026	Page 3
+Source file: STATE35.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+024f  cd 8c 03       120    121  CALL SPACE
+0252  2a b7 02       121    122  LD HL,(ENTSP)
+0255  cd b2 03       122    123  CALL HEXW
+0258  cd 91 03       123    124  CALL CRLF
+025b  c3 ba 03       124    125  JP EXIT0
+025e  20 44 52 49    125    126 MSG: DB ' DRIVE USER LOGIN RO IOBYTE PZ4 PZ0 PZ5 M50 TD000 CCP ALV DPB CST SRC DMA80 DMA800 SP ',0
+0262  56 45 20 55    125    127
+0266  53 45 52 20    125    128
+026a  4c 4f 47 49    125    129
+026e  4e 20 52 4f    125    130
+0272  20 49 4f 42    125    131
+0276  59 54 45 20    125    132
+027a  50 5a 34 20    125    133
+027e  50 5a 30 20    125    134
+0282  50 5a 35 20    125    135
+0286  4d 35 30 20    125    136
+028a  54 44 30 30    125    137
+028e  30 20 43 43    125    138
+0292  50 20 41 4c    125    139
+0296  56 20 44 50    125    140
+029a  42 20 43 53    125    141
+029e  54 20 53 52    125    142
+02a2  43 20 44 4d    125    143
+02a6  41 38 30 20    125    144
+02aa  44 4d 41 38    125    145
+02ae  30 30 20 53    125    146
+02b2  50 20 00       125    147
+02b5  00 00          126    148 NAMEPTR: DW 0
+02b7  00 00          127    149 ENTSP: DW 0
+02b9  00 00          128    150 LOGIN: DW 0
+02bb  00 00          129    151 ROVEC: DW 0
+02bd  00 00          130    152 PZ0: DW 0
+02bf  00 00          131    153 PZ5: DW 0
+02c1  00 00          132    154 ALVPTR: DW 0
+02c3  00 00          133    155 DPBPTR: DW 0
+02c5  00             134    156 DRIVE: DB 0
+02c6  00             135    157 USER: DB 0
+02c7  00             136    158 IOBYTEV: DB 0
+02c8  00             137    159 PZ4: DB 0
+02c9  00             138    160 SCR50: DB 0
+02ca  00             139    161 TPAMARK: DB 0
+02cb  00             140    162 CCPBYTE: DB 0
+02cc  00             141    163 CONSTAT: DB 0
+02cd  00             142    164 SEARCHRC: DB 0
+02ce  00             143    165 DMA80: DB 0
+02cf  00             144    166 DMA800: DB 0
+02d0  00 41 54 54    145    167 FCB: DB 0,'ATTR    DAT',0,0,0,0
+02d4  52 20 20 20    145    168
+02d8  20 44 41 54    145    169
+02dc  00 00 00 00    145    170
+02e0                 146    171  DS 16
+02f0  00             147    172  DB 0
+02f1                 148    173  DS 3
+02f4                 149    174  DS 128
+0374                 150    175 STACK:
+0374  7e             151    176 PUTS: LD A,(HL)
+0375  23             152    177  INC HL
+0376  b7             153    178  OR A
+0377  c8             154    179  RET Z
+0378  5f             155    180  LD E,A
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 07:17:02 2026	Page 4
+Source file: STATE35.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0379  cd 7e 03       156    181  CALL PUTC
+037c  18 f6          157    182  JR PUTS
+037e  f5             158    183 PUTC: PUSH AF
+037f  c5             159    184  PUSH BC
+0380  d5             160    185  PUSH DE
+0381  e5             161    186  PUSH HL
+0382  0e 02          162    187  LD C,2
+0384  cd 05 00       163    188  CALL 0005H
+0387  e1             164    189  POP HL
+0388  d1             165    190  POP DE
+0389  c1             166    191  POP BC
+038a  f1             167    192  POP AF
+038b  c9             168    193  RET
+038c  1e 20          169    194 SPACE: LD E,' '
+038e  c3 7e 03       170    195  JP PUTC
+0391  1e 0d          171    196 CRLF: LD E,13
+0393  cd 7e 03       172    197  CALL PUTC
+0396  1e 0a          173    198  LD E,10
+0398  c3 7e 03       174    199  JP PUTC
+039b  f5             175    200 HEXB: PUSH AF
+039c  0f             176    201  RRCA
+039d  0f             177    202  RRCA
+039e  0f             178    203  RRCA
+039f  0f             179    204  RRCA
+03a0  cd a4 03       180    205  CALL NIB
+03a3  f1             181    206  POP AF
+03a4  e6 0f          182    207 NIB: AND 0FH
+03a6  c6 30          183    208  ADD A,'0'
+03a8  fe 3a          184    209  CP '9'+1
+03aa  38 02          185    210  JR C,NOUT
+03ac  c6 07          186    211  ADD A,7
+03ae  5f             187    212 NOUT: LD E,A
+03af  c3 7e 03       188    213  JP PUTC
+03b2  7c             189    214 HEXW: LD A,H
+03b3  cd 9b 03       190    215  CALL HEXB
+03b6  7d             191    216  LD A,L
+03b7  c3 9b 03       192    217  JP HEXB
+03ba  0e 00          193    218 EXIT0: LD C,0
+03bc  c3 05 00       194    219  JP 0005H
+                     195    220
+03bf                 196    221  END

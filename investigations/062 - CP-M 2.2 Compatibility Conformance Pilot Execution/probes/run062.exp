@@ -1,0 +1,38 @@
+#!/usr/bin/expect -f
+set timeout 40
+if {$argc != 3} {
+    puts stderr "usage: run062.exp RUN_DIRECTORY IMPLEMENTATION TRANSCRIPT"
+    exit 2
+}
+set rundir [lindex $argv 0]
+set impl [lindex $argv 1]
+set transcript [lindex $argv 2]
+log_file -noappend $transcript
+cd $rundir
+spawn /tmp/i061-z80pack/cromemcosim/cromemcosim -M1 -R
+if {$impl eq "dri"} {
+    expect -re {\r\nA>}
+    set prompt {\r\nA>}
+} else {
+    expect -re {\r\nA\.}
+    set prompt {\r\nA\.}
+}
+foreach command {
+    "VECTOR41"
+    "ZERO41 ALPHA.TXT BETA.BIN"
+    "BASE61"
+    "STATE61"
+    "EDGE43"
+    "ZRET43"
+    "FN043"
+    "BIOS41"
+    "PIP COPY62.TXT=SRC61.TXT"
+    "DIR *.*"
+    "NOFILE62"
+} {
+    send -- "$command\r"
+    expect -re $prompt
+}
+send -- "\034"
+expect eof
+

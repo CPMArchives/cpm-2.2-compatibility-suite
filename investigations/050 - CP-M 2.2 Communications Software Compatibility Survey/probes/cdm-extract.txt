@@ -1,0 +1,16 @@
+
+CP/M Disk Manager 1.11, Copyright 1995 Frank D. Cringle.
+Portions copyright (C) Jan 2004 Carl Mascott.
+Modified by Andreas Gerlich Jan 2004 to create files for CP/M 3.1 (yaze-ag).
+cdm comes with ABSOLUTELY NO WARRANTY; for details
+see the file "COPYING" in the distribution directory.
+
+<local-home>/Documents/Codex/2026-08-13/review-the-current-bettercp-m-architecture/work/yaze-src/kermit_szrz.ydsk mounted as disk A with 100352 of 1048576 bytes allocated
+A0>in copycu ... fn1:a0:kermit.com fn0:u:<local-workspace>/g-p-6a682f002be881918281554d644daf48/stage050/probes/KERMIT.COM
+A0>in copycu ... fn1:a0:rz.com fn0:u:<local-workspace>/g-p-6a682f002be881918281554d644daf48/stage050/probes/RZ.COM
+A0>in copycu ... fn1:a0:sz.com fn0:u:<local-workspace>/g-p-6a682f002be881918281554d644daf48/stage050/probes/SZ.COM
+A0>in copycu ... fn1:a0:rzsz.for fn0:t:<local-workspace>/g-p-6a682f002be881918281554d644daf48/stage050/reference/RZSZ.FOR
+A0>in copycu ... fn1:a0:szrz.pma fn0:t:<local-workspace>/g-p-6a682f002be881918281554d644daf48/stage050/reference/SZRZ.PMA
+A0>in copycu ... fn1:a0:waddr.txt fn0:t:<local-workspace>/g-p-6a682f002be881918281554d644daf48/stage050/reference/WADDR.TXT
+A0>in copycu ... fn1:a0:crcklist.crc fn0:t:<local-workspace>/g-p-6a682f002be881918281554d644daf48/stage050/reference/CRCKLIST.CRC
+A0>

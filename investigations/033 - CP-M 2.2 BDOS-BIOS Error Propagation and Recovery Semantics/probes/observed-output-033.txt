@@ -1,0 +1,33 @@
+READERR33
+ Procedure: normal read N; physical sequential A, random B, directory Search K;
+ logical EOF/unwritten I/J. Observation: physical cases printed Bad Sector;
+ ignore returned normal-looking 00 (A/B) or slot 01 (K), while DMA lacked valid
+ transferred data. Logical cases returned 01 without diagnostic.
+ Conclusion: BIOS failure presentation is not a BDOS logical status namespace.
+
+WRITEERR33
+ Procedure: inject before sequential C, random D, Make E, Close F, Delete L.
+ Observation: after ignore all returned success-looking codes; images remained
+ unchanged, while FCBs could advance/activate/change in memory.
+ Conclusion: ignored physical failure invalidates success/persistence inference.
+
+DIRERR33
+ Procedure: fail Search directory read K, Make directory write E, Delete write L.
+ Observation: success-looking slot/result followed ignore, but Search DMA was
+ not valid and Make/Delete did not persist.
+ Conclusion: directory result codes do not certify I/O after an ignored fault.
+
+RECOVER33
+ Procedure: ignore mode A or abort mode G, then DIR ATTR.DAT and healthy mode N.
+ Observation: both reached usable A>; DIR and healthy read succeeded. Ignore
+ returned through the transient; Control-C did not return to it and warm-booted.
+ A repeated run armed and ignored mode A twice in one session, then completed a
+ healthy mode N read; its disk image remained identical to the base.
+ Conclusion: reference recovery permits later work, but interrupted FCB/search
+ state is not a valid continuation contract.
+
+CCPERR33
+ Procedure: compare logical errors, ignore, Control-C, then subsequent commands.
+ Observation: logical errors had no CCP intervention; physical errors blocked in
+ `Bdos Err On A: Bad Sector`; x resumed caller, Control-C restarted CCP.
+ Conclusion: CCP is recovery destination/presenter, not a translator to file codes.

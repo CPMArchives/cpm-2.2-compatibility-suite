@@ -1,0 +1,182 @@
+utility	version	source	com	com_sha256	origin
+BDOSTEST	dev10	bdostest/dev10/BDOSTEST.ASM	bdostest/dev10/BDOSTEST.COM	4b8169bde9ed04131b4e00001dde06325d2401c6e1e998ab44501d9291fafebc	current source/build
+BDOSTEST	dev11	bdostest/dev11/BDOSTEST.ASM	bdostest/dev11/BDOSTEST.COM	59b585a847de049cfc2df1cef09673447656a24376a324cf52a8e432632b513c	current source/build
+BDOSTEST	dev12	bdostest/dev12/BDOSTEST.ASM	bdostest/dev12/BDOSTEST.COM	8cd363edbd9780172554cb016eefe288be7373b195160e6827ee809b7ebac3ed	current source/build
+BDOSTEST	dev13	bdostest/dev13/BDOSTEST.ASM	bdostest/dev13/BDOSTEST.COM	e0c2b41eb7140362d045589027c648125902c18d23341de75a97adff217f12b6	current source/build
+BDOSTEST	dev14	bdostest/dev14/BDOSTEST.ASM	bdostest/dev14/BDOSTEST.COM	9262504892c7655f6cd9aaddbd34ce26f338cb0d06cb668c46ef34014b86702e	current source/build
+BDOSTEST	dev2	NOT RECOVERED	bdostest/dev2/BDOSTEST.COM	bb9419304e09a1047a53854fc73235984c8aad8904b80abd29f36d902f985516	suite/fixtures/trs80-montezuma-bdostest/bdostest-dev2-b-200k.dmk
+BDOSTEST	dev3	NOT RECOVERED	bdostest/dev3/BDOSTEST.COM	cc34eb1bcda100853d2ceee394b95cb3613d32c480c3bf4487c6eb5327cf15f2	suite/fixtures/trs80-montezuma-bdostest/bdostest-dev3-b-200k.dmk
+BDOSTEST	dev4	NOT RECOVERED	bdostest/dev4/BDOSTEST.COM	42f5496dca7a184ed7811c26d3b38f2bc88274cf6ea685fa0c0d1f410a6a4e7f	suite/fixtures/trs80-montezuma-bdostest/bdostest-dev4-b-200k.dmk
+BDOSTEST	dev5	NOT RECOVERED	bdostest/dev5/BDOSTEST.COM	18577ea85441e937528e69c89c51edb4d96bbfb848382f6dbb4d86ffc1be0f03	suite/fixtures/trs80-montezuma-bdostest/bdostest-dev5-b-200k.dmk
+BDOSTEST	dev6	NOT RECOVERED	bdostest/dev6/BDOSTEST.COM	e59318a0761ff30adafe514488974d1093f583a8d396a275457c09c61a881f4e	suite/fixtures/trs80-montezuma-bdostest/bdostest-dev6-b-200k.dmk
+BDOSTEST	dev7	NOT RECOVERED	bdostest/dev7/BDOSTEST.COM	74bd280d39954dbe24209950c5f7bb5db25c27ce300fce501b72972e4ba09fab	suite/fixtures/trs80-montezuma-bdostest/bdostest-dev7-b-200k.dmk
+BDOSTEST	dev8	bdostest/dev8/BDOSTEST.ASM	bdostest/dev8/BDOSTEST.COM	27fe2105302d087be9f28ad4f3b29fe88dfc9353b58bba41451ab2ec3245aae7	suite/fixtures/trs80-montezuma-bdostest/bdostest-dev8-b-200k.dmk
+BDOSTEST	dev9	bdostest/dev9/BDOSTEST.ASM	bdostest/dev9/BDOSTEST.COM	fc181e95c922d80596c62e82873a7624911f3a8193633241d26331a4c29dd094	current source/build
+BIOSTEST	dev1	biostest/dev1/BIOSTEST.ASM	biostest/dev1/BIOSTEST.COM	602a9a95e08b3f8e94ed625bb9d8d041b8a7e08169b462a3dd45e261c2097a9f	current source/build
+BIOSTEST	dev10	biostest/dev10/BIOSTEST.ASM	biostest/dev10/BIOSTEST.COM	53de3459a8e17ac49a4663b763d79d51c0598e4110962a9ccaac27846dadd5cd	current source/build
+BIOSTEST	dev11	biostest/dev11/BIOSTEST.ASM	biostest/dev11/BIOSTEST.COM	5494bcd9b99d6fe7d044c526c9c704441b53b926c2a359b311a73ab96d432704	current source/build
+BIOSTEST	dev12	biostest/dev12/BIOSTEST.ASM	biostest/dev12/BIOSTEST.COM	387b85c06b9195372deb43220048b4e90c4a3bbb906fd4357d6cdef615d576a0	current source/build
+BIOSTEST	dev13	biostest/dev13/BIOSTEST.ASM	biostest/dev13/BIOSTEST.COM	b07ebc806c4afcd8f1073233e014dc3d650ac9016641f0317a188350027b168e	current source/build
+BIOSTEST	dev14	biostest/dev14/BIOSTEST.ASM	biostest/dev14/BIOSTEST.COM	2e758be30cfe09bad74a6f4f417bff5ba330b90fb548ed182f788a6719888081	current source/build
+BIOSTEST	dev15	biostest/dev15/BIOSTEST.ASM	biostest/dev15/BIOSTEST.COM	f16b2098be9616bffb87d3ebda1341e3a9b133d1331357a6e3ecbab72512050e	current source/build
+BIOSTEST	dev16	biostest/dev16/BIOSTEST.ASM	biostest/dev16/BIOSTEST.COM	432bbebcd0b80bd2a0ac7b2d708873f44b4242dd0e65c55fb66c36c6efef893c	current source/build
+BIOSTEST	dev17	biostest/dev17/BIOSTEST.ASM	biostest/dev17/BIOSTEST.COM	189a6128adbef7ba3cd436e5730a562651fab7326d8e4e1e0b891e9904a3ebe2	current source/build
+BIOSTEST	dev18	biostest/dev18/BIOSTEST.ASM	biostest/dev18/BIOSTEST.COM	4b73bebe5bdbbfe912373f3f3daafd5e208c68948fecefcd607dfe9d249451fa	current source/build
+BIOSTEST	dev19	biostest/dev19/BIOSTEST.ASM	biostest/dev19/BIOSTEST.COM	6639c7b0e664fc31f3c403a74a2011b21fe238dc7cca9ff6d0ba0879978bc1ba	current source/build
+BIOSTEST	dev2	biostest/dev2/BIOSTEST.ASM	biostest/dev2/BIOSTEST.COM	ea13127d9c1f9045f0f7deb3c24824e438b90f664eedf944b275efef5c8d8746	current source/build
+BIOSTEST	dev20	biostest/dev20/BIOSTEST.ASM	biostest/dev20/BIOSTEST.COM	3a039999143b2374e5751f67ce7a1009c5d1a4afeca1d79e2b718dc77411d273	current source/build
+BIOSTEST	dev21	biostest/dev21/BIOSTEST.ASM	biostest/dev21/BIOSTEST.COM	5a6c1732b79ddd7a4b0c6a496c8a6c20584b51ac8cab51a592d6d35ff31b3ddf	current source/build
+BIOSTEST	dev22	biostest/dev22/BIOSTEST.ASM	biostest/dev22/BIOSTEST.COM	39d5668082fa0e49e19ad9ecbfd511b2544c99311d602fdf668a01c31b24ec77	current source/build
+BIOSTEST	dev23	biostest/dev23/BIOSTEST.ASM	biostest/dev23/BIOSTEST.COM	df6b90ed49e8c697b9544f9262c016bcda41a878686b7aa4d316234cb29249f8	current source/build
+BIOSTEST	dev24	biostest/dev24/BIOSTEST.ASM	biostest/dev24/BIOSTEST.COM	066cf042acad6bc38b59e7ab08c06dc1070f6b88e10b14fa07b9b1b472de8dfb	current source/build
+BIOSTEST	dev25	biostest/dev25/BIOSTEST.ASM	biostest/dev25/BIOSTEST.COM	065e38cf45cb5135d99238e6fcd385254554ba8ee8da9df31b01097a8e600b1e	current source/build
+BIOSTEST	dev26	biostest/dev26/BIOSTEST.ASM	biostest/dev26/BIOSTEST.COM	0a331cd3280778dd6ce8558e04584d5603d3e89361041bcd06ad4c92233d03ed	current source/build
+BIOSTEST	dev27	biostest/dev27/BIOSTEST.ASM	biostest/dev27/BIOSTEST.COM	560597752adb5bef1af438b648daab86ad138357d5c1ac9e7bc982761e9c5052	current source/build
+BIOSTEST	dev28	biostest/dev28/BIOSTEST.ASM	biostest/dev28/BIOSTEST.COM	1c1e8237e33eed8b0c13270e813d1eb5faf2ca9e0c143101d894dbd797534ed1	current source/build
+BIOSTEST	dev29	biostest/dev29/BIOSTEST.ASM	biostest/dev29/BIOSTEST.COM	a34dd95ff5b52acb135a012f0288750a85a1cc0b9bf9c6954b9aff915a848c1d	current source/build
+BIOSTEST	dev3	biostest/dev3/BIOSTEST.ASM	biostest/dev3/BIOSTEST.COM	af223771fea554d50d457a1f964fa37c300ce4aa1f4a68521d59816c6c8cf197	current source/build
+BIOSTEST	dev30	biostest/dev30/BIOSTEST.ASM	biostest/dev30/BIOSTEST.COM	ebd281c5e60bfd3ee24aed32eac2c2f48fe55bc98cf2c5c3e8e1d47170c2d444	current source/build
+BIOSTEST	dev31	biostest/dev31/BIOSTEST.ASM	biostest/dev31/BIOSTEST.COM	3b4093cfbf12d746ae2a0419d1f90d34d8e81d21da441949a28372b29bd7d06b	current source/build
+BIOSTEST	dev32	biostest/dev32/BIOSTEST.ASM	biostest/dev32/BIOSTEST.COM	fbd2c274694e78739ad96917f1eed216fa721d9e4253c2eea658cbf0d978afff	current source/build
+BIOSTEST	dev4	biostest/dev4/BIOSTEST.ASM	biostest/dev4/BIOSTEST.COM	f52365249eff7b45e16dcbad65e2dddf24af40e2744c9a258535dec5a3e57e04	current source/build
+BIOSTEST	dev5	biostest/dev5/BIOSTEST.ASM	biostest/dev5/BIOSTEST.COM	2e6e56c52d6982ad43835335043bb93aa0f40c7d80ba592419fc0e87f6e024ae	current source/build
+BIOSTEST	dev6	biostest/dev6/BIOSTEST.ASM	biostest/dev6/BIOSTEST.COM	e14714fe07a802560767c6c1fc155805b4e351d6f19ecbcaf5878fc565d3f7ee	current source/build
+BIOSTEST	dev7	biostest/dev7/BIOSTEST.ASM	biostest/dev7/BIOSTEST.COM	d6795a9cbd37a3af2be5fe683639f90a9fa1cf50ac97d5902e2d4da886c3ef9e	current source/build
+BIOSTEST	dev8	biostest/dev8/BIOSTEST.ASM	biostest/dev8/BIOSTEST.COM	13f2299f8f6620399265efb80742d148a06906a58313c96e1111756c428d187c	current source/build
+BIOSTEST	dev9	biostest/dev9/BIOSTEST.ASM	biostest/dev9/BIOSTEST.COM	476a6ccd532bdcb53932bb9ff88bb216452cb4e0699e520aa3dc07b7d1235813	current source/build
+CCPTEST	dev1	NOT RECOVERED	ccptest/dev1/CCPTEST.COM	5b42ff502f9fa88549af5ba2266b759270df5e5f1445abe9e3f8a4af08ee6c80	suite/fixtures/trs80-montezuma-ccptest/ccptest-dev1-b-200k.dmk
+CCPTEST	dev10	NOT RECOVERED	ccptest/dev10/CCPTEST.COM	1031c6d8e4969213523bc15cefb0aebcec4824ccede6739f7670aec15da04904	suite/fixtures/trs80-montezuma-ccptest/ccptest-dev10-b-200k.dmk
+CCPTEST	dev11	NOT RECOVERED	ccptest/dev11/CCPTEST.COM	15ee3a99ddda4da61e55a0b33d79c4b96fff00722ae0f87c3e159e1240772409	suite/fixtures/trs80-montezuma-ccptest/ccptest-dev11-b-200k.dmk
+CCPTEST	dev12	NOT RECOVERED	ccptest/dev12/CCPTEST.COM	8d1f1d7e863763480e18b8a53bde604a5d7e823dc50507d9cc7cd62e0977630e	suite/fixtures/trs80-montezuma-ccptest/ccptest-dev12-b-200k.dmk
+CCPTEST	dev13	ccptest/dev13/CCPTEST.ASM	ccptest/dev13/CCPTEST.COM	ab3dbab9fec5c4b803a4fe0192a5b41dcd8fb01068d9dcdd2d0584397c08c4c2	suite/fixtures/trs80-montezuma-ccptest/ccptest-dev13-b-200k.dmk
+CCPTEST	dev14	ccptest/dev14/CCPTEST.ASM	ccptest/dev14/CCPTEST.COM	636f35df37da887129e99bf7dd57de0a59385b8b856bdffe9bc98d4d6bfaf0fc	current source/build
+CCPTEST	dev15	ccptest/dev15/CCPTEST.ASM	ccptest/dev15/CCPTEST.COM	dca64c1504a44ea4781917193448c31bd5904efe4c404581474935cc6c484136	current source/build
+CCPTEST	dev16	ccptest/dev16/CCPTEST.ASM	ccptest/dev16/CCPTEST.COM	32502bab86fc1f374b13a2d5c2611e9f03a2a85901952162b4aed52b52df9edd	current source/build
+CCPTEST	dev17	ccptest/dev17/CCPTEST.ASM	ccptest/dev17/CCPTEST.COM	1145c3002b76c4ab27d7fec57fb63555ec770a827cddcb760fad7c6fe3ac5ef1	current source/build
+CCPTEST	dev18	ccptest/dev18/CCPTEST.ASM	ccptest/dev18/CCPTEST.COM	53a670df0d7046ca719c706d20352677d9fba991a2b32e24a5d1d52c1874545b	current source/build
+CCPTEST	dev19	ccptest/dev19/CCPTEST.ASM	ccptest/dev19/CCPTEST.COM	36a2ca05dbc57306307bf279321f7abc190c01fa3e69354f03c83c2713d4681a	current source/build
+CCPTEST	dev2	NOT RECOVERED	ccptest/dev2/CCPTEST.COM	aa54042ce6d9322061fe3dc4306ad7de8101572dae69e7ec8d42356f0aefb4cc	suite/fixtures/trs80-montezuma-ccptest/ccptest-dev2-b-200k.dmk
+CCPTEST	dev3	NOT RECOVERED	ccptest/dev3/CCPTEST.COM	ec596ad259153e81ea5b84dd3c6caf13271f37862419e5375b506d96a3635a07	suite/fixtures/trs80-montezuma-ccptest/ccptest-dev3-b-200k.dmk
+CCPTEST	dev4	NOT RECOVERED	ccptest/dev4/CCPTEST.COM	ccc53c9ed1b710bdd48bd4aaa19fed1c730ac70b57fc940a5fdd1a85d0d27eaf	suite/fixtures/trs80-montezuma-ccptest/ccptest-dev4-b-200k.dmk
+CCPTEST	dev5	NOT RECOVERED	ccptest/dev5/CCPTEST.COM	bea585000afef21109a457ed206bd039ed8017985d4b65e45f5e3c6c6142d85d	suite/fixtures/trs80-montezuma-ccptest/ccptest-dev5-b-200k.dmk
+CCPTEST	dev6	NOT RECOVERED	ccptest/dev6/CCPTEST.COM	1eaa3b0cf579146b53a76c60038d05415685616c9acbc158fb26f0bef46ebb17	suite/fixtures/trs80-montezuma-ccptest/ccptest-dev6-b-200k.dmk
+CCPTEST	dev7	NOT RECOVERED	ccptest/dev7/CCPTEST.COM	dafff1497e475587a56902e671c5d800099e3263688dcb19a5197738982b7a2d	suite/fixtures/trs80-montezuma-ccptest/ccptest-dev7-b-200k.dmk
+CCPTEST	dev8	NOT RECOVERED	ccptest/dev8/CCPTEST.COM	04b4f84b743256a677c2dc7bb29a35f731819ecbcb2d44ab2c253a0721eb0fcf	suite/fixtures/trs80-montezuma-ccptest/ccptest-dev8-b-200k.dmk
+CCPTEST	dev9	NOT RECOVERED	ccptest/dev9/CCPTEST.COM	284349a4f3d7566407e988289d34de50818e3119c9774a60c8dd45a8428c0e40	suite/fixtures/trs80-montezuma-ccptest/ccptest-dev9-b-200k.dmk
+CONSTEST	dev12	constest/dev12/CONSTEST.ASM	constest/dev12/CONSTEST.COM	633eef6fc899dc437d73065388ffecb01ef7acf92d1d728de1952411c4c65bf7	current source/build
+CONSTEST	dev13	constest/dev13/CONSTEST.ASM	constest/dev13/CONSTEST.COM	0bff423f4cfcd59e15ffac4790a83ae9230b5089227b79b9cdb6bae2b7207767	current source/build
+CONSTEST	dev14	constest/dev14/CONSTEST.ASM	constest/dev14/CONSTEST.COM	45614d27829ec5de27c454407684b5372424e88631ce7456f91b247ba4275e01	current source/build
+CONSTEST	dev15	constest/dev15/CONSTEST.ASM	constest/dev15/CONSTEST.COM	d54989e35c45b19ba5cd72517029f4c9caa0598376c0a27f152377cfbe1c7b6d	current source/build
+CONSTEST	dev16	constest/dev16/CONSTEST.ASM	constest/dev16/CONSTEST.COM	3ff58cb1a60f879c1e9b47ed2c891cd445b620332ffb6b8114540d0e7d910370	current source/build
+CONSTEST	dev17	constest/dev17/CONSTEST.ASM	constest/dev17/CONSTEST.COM	f5c43e3fcd1a7db6ac0a731b6e444ceb2a17d471b633abbe873c42e48d165a16	current source/build
+CONSTEST	dev18	constest/dev18/CONSTEST.ASM	constest/dev18/CONSTEST.COM	066b7c0811446e284df1dbd41c253f65a8bb106386621fe7d7c2008f938795a2	current source/build
+CPUTEST	dev1	cputest/dev1/CPUTEST.ASM	cputest/dev1/CPUTEST.COM	ad797b4215018617ddc63aed6b3915f0f0179d6227761b4744ee2dc905bdb011	current source/build
+CPUTEST	dev2	cputest/dev2/CPUTEST.ASM	cputest/dev2/CPUTEST.COM	13b7c867b83ca0f911cd75e282b9af55728c9ffc5c7e1fa5cb44ff7e078ad2a4	current source/build
+CPUTEST	dev3	cputest/dev3/CPUTEST.ASM	cputest/dev3/CPUTEST.COM	222efe4051b2477f72ef30851ca48dc829ccd36902f4fdb95059ef721d8b3476	current source/build
+CPUTEST	dev4	cputest/dev4/CPUTEST.ASM	cputest/dev4/CPUTEST.COM	76047e932b8392a966b55f06e787e76c6ca5b000a7ee22f4824b6f608e9c9471	current source/build
+CPUTEST	dev5	cputest/dev5/CPUTEST.ASM	cputest/dev5/CPUTEST.COM	cbc10778340cea0377be10d349c58737f5cf3d70e556f9a9fc9890d82b1bef6e	current source/build
+CPUTEST	dev6	cputest/dev6/CPUTEST.ASM	cputest/dev6/CPUTEST.COM	18ed2c9fb3beaa98dcedfb985199016f5ff2fd38338f6cdf294f5e91e30dfa9b	current source/build
+DIRTEST	dev10	dirtest/dev10/DIRTEST.ASM	dirtest/dev10/DIRTEST.COM	c857959c0fd81e9e78925aa52fae4adf3b66b5ed4f33648160db7611a213e566	current source/build
+DIRTEST	dev11	dirtest/dev11/DIRTEST.ASM	dirtest/dev11/DIRTEST.COM	2157dd0a1d91e0fe02523ba4904e7cfd50a34990a8e4fef0caf0ad38949d64f0	current source/build
+DIRTEST	dev12	dirtest/dev12/DIRTEST.ASM	dirtest/dev12/DIRTEST.COM	44380cce668d6bac4563bdd4be6571c75027d5d3db853043806b8c3433fc82c4	current source/build
+DIRTEST	dev13	dirtest/dev13/DIRTEST.ASM	dirtest/dev13/DIRTEST.COM	aba2c32238065cc6b6da908072a7b7653c928829c27d72fa5d51617e7a6504cd	current source/build
+DIRTEST	dev14	dirtest/dev14/DIRTEST.ASM	dirtest/dev14/DIRTEST.COM	763ee5679a8990f9d83fe44cfd19d3d21c148e9cdbe13e09029c5fb2f86fcca5	current source/build
+DIRTEST	dev7	NOT RECOVERED	dirtest/dev7/DIRTEST.COM	c494c719098994ae98f6c403c94f8f90d31463065331893706aa879e95f85ea7	suite/fixtures/trs80-montezuma-dirtest/dirtest-dev7-b-200k.dmk
+DIRTEST	dev8	dirtest/dev8/DIRTEST.ASM	dirtest/dev8/DIRTEST.COM	25a97f1097f372aa898dfbbbd907b286f1e20cc3e50f0053f465be5ee572d878	suite/fixtures/trs80-montezuma-dirtest/dirtest-dev8-b-200k.dmk
+DIRTEST	dev9	dirtest/dev9/DIRTEST.ASM	dirtest/dev9/DIRTEST.COM	fb6fdcbd3f9edc6856755d04370126989513df83282802088a86cd70e5c130fb	current source/build
+DISKTEST	dev1	disktest/dev1/DISKTEST.ASM	disktest/dev1/DISKTEST.COM	04b781c9a94990ece1b47fd671d3e55ef6705235ac72b2bf00f28b7ed05f69c8	suite/fixtures/trs80-montezuma-disktest/disktest-dev1-b-200k.dmk
+DISKTEST	dev10	disktest/dev10/DISKTEST.ASM	disktest/dev10/DISKTEST.COM	f7c9dacd9c3e79371f6f266c46647343bbaf1d34fcb12aa0eb566fe2251df806	suite/fixtures/trs80-montezuma-disktest/disktest-dev10-b-200k.dmk
+DISKTEST	dev11	disktest/dev11/DISKTEST.ASM	disktest/dev11/DISKTEST.COM	d33a9e281faace25f6e198da6290621668b6cc4449ae35666ba2304679a7408c	suite/fixtures/trs80-montezuma-disktest/disktest-dev11-b-200k.dmk
+DISKTEST	dev12	disktest/dev12/DISKTEST.ASM	disktest/dev12/DISKTEST.COM	d69bb2971a1a05a7b3c734c842b7be0037c0818950d7e567f4dd12b9dc55f856	suite/fixtures/trs80-montezuma-disktest/disktest-dev12-b-200k.dmk
+DISKTEST	dev13	disktest/dev13/DISKTEST.ASM	disktest/dev13/DISKTEST.COM	2d5343aca62caf63cb142d42859c1897918bf9b48233db286b50f69bd396229a	suite/fixtures/trs80-montezuma-disktest/disktest-dev13-b-200k.dmk
+DISKTEST	dev14	disktest/dev14/DISKTEST.ASM	disktest/dev14/DISKTEST.COM	52b11e4423c08e0d58ec27966e262cb7f5d7daebcefae6ac4018140d24c625c9	suite/fixtures/trs80-montezuma-disktest/disktest-dev14-b-200k.dmk
+DISKTEST	dev15	disktest/dev15/DISKTEST.ASM	disktest/dev15/DISKTEST.COM	06e81cc0239a225f17d6c27dc97ca611e17944b9d078e9405568f44a6bba9fbc	suite/fixtures/trs80-montezuma-disktest/disktest-dev15-b-200k.dmk
+DISKTEST	dev16	disktest/dev16/DISKTEST.ASM	disktest/dev16/DISKTEST.COM	8f2691cb5326a9d29aa5b84a8160af82d2e043afc974b514c6ff4ca19c62302e	suite/fixtures/trs80-montezuma-disktest/disktest-dev16-b-200k.dmk
+DISKTEST	dev17	disktest/dev17/DISKTEST.ASM	disktest/dev17/DISKTEST.COM	5ec4621bc25e59ca8414e53257a0b4ac7a294868c0d8d848c6e5e580760f7377	suite/fixtures/trs80-montezuma-disktest/disktest-dev17-b-200k.dmk
+DISKTEST	dev18	disktest/dev18/DISKTEST.ASM	disktest/dev18/DISKTEST.COM	4224a2ac07b8cf2ab35c9270b71164ca4c65a969c7020f889615985d02af47e2	suite/fixtures/trs80-montezuma-disktest/disktest-dev18-b-200k.dmk
+DISKTEST	dev19	disktest/dev19/DISKTEST.ASM	disktest/dev19/DISKTEST.COM	bdf893966420b90fc8562827f6a6b97c5591808eaef9436d5a957f51b87c7de4	suite/fixtures/trs80-montezuma-disktest/disktest-dev19-b-200k.dmk
+DISKTEST	dev2	disktest/dev2/DISKTEST.ASM	disktest/dev2/DISKTEST.COM	196eca257ac5d1d27649a149242f312ebbf7dbf2fbdb06fc4635ca1c03036ee0	suite/fixtures/trs80-montezuma-disktest/disktest-dev2-b-200k.dmk
+DISKTEST	dev20	disktest/dev20/DISKTEST.ASM	disktest/dev20/DISKTEST.COM	e589bf9d8872c6766c4d5ed7cbe65ec65079e3e50dcd9dcdcfb15e675fa48166	suite/fixtures/trs80-montezuma-disktest/disktest-dev20-b-200k.dmk
+DISKTEST	dev21	disktest/dev21/DISKTEST.ASM	disktest/dev21/DISKTEST.COM	245d8be23ff8b9a5687676ce4584b9b064043e7e48dd88c9ae73ff0d2973e741	suite/fixtures/trs80-montezuma-disktest/disktest-dev21-b-200k.dmk
+DISKTEST	dev22	disktest/dev22/DISKTEST.ASM	disktest/dev22/DISKTEST.COM	cab34073ec724276e8351776169ab35f31ffd53c64267cdd40cc46327f84da8e	suite/fixtures/trs80-montezuma-disktest/disktest-dev22-b-200k.dmk
+DISKTEST	dev23	disktest/dev23/DISKTEST.ASM	disktest/dev23/DISKTEST.COM	ca7de22a761c9d80f72180e6aabedaec984dfc36e2dca4c67692e0502574a509	suite/fixtures/trs80-montezuma-disktest/disktest-dev23-b-200k.dmk
+DISKTEST	dev24	disktest/dev24/DISKTEST.ASM	disktest/dev24/DISKTEST.COM	741719a734e3f1c445ffd8027e945c089bedaf5fb9198d6a0b047bd6c7de7040	suite/fixtures/trs80-montezuma-disktest/disktest-dev24-b-200k.dmk
+DISKTEST	dev25	disktest/dev25/DISKTEST.ASM	disktest/dev25/DISKTEST.COM	46dbc3176ab003edb8b554cd8e5e032fa884545fb8b4bf716af26a42e419a946	suite/fixtures/trs80-montezuma-disktest/disktest-dev25-b-200k.dmk
+DISKTEST	dev26	disktest/dev26/DISKTEST.ASM	disktest/dev26/DISKTEST.COM	9afce5b9eec7d325267d7cb7ed8317e9ef9d0a7d0bab42c210fac321120bc86f	suite/fixtures/trs80-montezuma-disktest/disktest-dev26-b-200k.dmk
+DISKTEST	dev27	disktest/dev27/DISKTEST.ASM	disktest/dev27/DISKTEST.COM	23ee9b57beef4c1a714b6a6d43976ca95e17064845369a2a40791c86bbb94cb7	suite/fixtures/trs80-montezuma-disktest/disktest-dev27-b-200k.dmk
+DISKTEST	dev28	disktest/dev28/DISKTEST.ASM	disktest/dev28/DISKTEST.COM	73e41351ef9dce0be2d8f94b3022eeb259e4cac7728ebdd0c988957859e031ed	suite/fixtures/trs80-montezuma-disktest/disktest-dev28-b-200k.dmk
+DISKTEST	dev29	disktest/dev29/DISKTEST.ASM	disktest/dev29/DISKTEST.COM	318e56ab731f8e085bf85852b9789f6cbcfd8e112537014170b4435ba695d6e3	suite/fixtures/trs80-montezuma-disktest/disktest-dev29-b-200k.dmk
+DISKTEST	dev3	disktest/dev3/DISKTEST.ASM	disktest/dev3/DISKTEST.COM	04e970617129acb9ad2dd319d7939ee30833c7ed86339810f540f377737b265f	suite/fixtures/trs80-montezuma-disktest/disktest-dev3-b-200k.dmk
+DISKTEST	dev30	disktest/dev30/DISKTEST.ASM	disktest/dev30/DISKTEST.COM	bd0e194aef447cf0e3fa15ab7844577904848527709d54f6d1bd83cdb032b875	suite/fixtures/trs80-montezuma-disktest/disktest-dev30-b-200k.dmk
+DISKTEST	dev31	disktest/dev31/DISKTEST.ASM	disktest/dev31/DISKTEST.COM	67c15688813497eac4b5209fd9fc9fb24ecdeba75811d0034e810c2ea0b551f0	suite/fixtures/trs80-montezuma-disktest/disktest-dev31-b-200k.dmk
+DISKTEST	dev32	disktest/dev32/DISKTEST.ASM	disktest/dev32/DISKTEST.COM	d9fe260bd4bd9579939d541e2e147d7e85b9138e30f359bd6b7f357c69d8e503	suite/fixtures/trs80-montezuma-disktest/disktest-dev32-b-200k.dmk
+DISKTEST	dev33	disktest/dev33/DISKTEST.ASM	disktest/dev33/DISKTEST.COM	8cc8a9d2175bbb2f1228b0a6ecc073f5a7eef9653ff36677614f62100510b480	suite/fixtures/trs80-montezuma-disktest/disktest-dev33-b-200k.dmk
+DISKTEST	dev34	disktest/dev34/DISKTEST.ASM	disktest/dev34/DISKTEST.COM	b029153bc043edd7f47b6063595ba85bf8bb1613f369a1d619b5351a56fd359b	suite/fixtures/trs80-montezuma-disktest/disktest-dev34-b-200k.dmk
+DISKTEST	dev35	disktest/dev35/DISKTEST.ASM	disktest/dev35/DISKTEST.COM	96ff162e19da0fad7f8c5a6b6909bc4074c2d10901233e7bfe48bbea4526528a	suite/fixtures/trs80-montezuma-disktest/disktest-dev35-b-200k.dmk
+DISKTEST	dev36	disktest/dev36/DISKTEST.ASM	disktest/dev36/DISKTEST.COM	d3c9f9b1221c2ccd14eaeb38c18d25fcc35df324e2430e22a2776f555f5a124f	current source/build
+DISKTEST	dev37	disktest/dev37/DISKTEST.ASM	disktest/dev37/DISKTEST.COM	f7b05f6b4d814fd0c4b8209649e96212710d4e7055b4de7a662d1b3769aa6814	current source/build
+DISKTEST	dev38	disktest/dev38/DISKTEST.ASM	disktest/dev38/DISKTEST.COM	54f038b8b65cba29fb47ae8fe8274eddf89b8444c1bd56dfc36dc5a89081bec6	current source/build
+DISKTEST	dev39	disktest/dev39/DISKTEST.ASM	disktest/dev39/DISKTEST.COM	22076e61ee1b52de82c537b5017dace8c877bc19305b7086ffa6a80ab6a7dcd4	current source/build
+DISKTEST	dev4	disktest/dev4/DISKTEST.ASM	disktest/dev4/DISKTEST.COM	04b464a3d4f17089773b9e2ed8a729e00f9b2828e73330ab94d116bde184cd02	suite/fixtures/trs80-montezuma-disktest/disktest-dev4-b-200k.dmk
+DISKTEST	dev40	disktest/dev40/DISKTEST.ASM	disktest/dev40/DISKTEST.COM	462a7c1c95e03df93fa80e2bb0cdb895578fa976b83e78a3de70d4996863bb1f	current source/build
+DISKTEST	dev41	disktest/dev41/DISKTEST.ASM	disktest/dev41/DISKTEST.COM	f89c9f87534f22d63a73c3ef85ba083687e920c4bbaceb9753cff3d14fa8af48	current source/build
+DISKTEST	dev5	disktest/dev5/DISKTEST.ASM	disktest/dev5/DISKTEST.COM	ca475b791d5a2a9eeb8f1bb1b1f233369d485697a73179d16bd8b28722e64f48	suite/fixtures/trs80-montezuma-disktest/disktest-dev5-b-200k.dmk
+DISKTEST	dev6	disktest/dev6/DISKTEST.ASM	disktest/dev6/DISKTEST.COM	364971b586599c39eb7d3b9cb667574144d5fda1e102ff1ac31bfa116603e659	suite/fixtures/trs80-montezuma-disktest/disktest-dev6-b-200k.dmk
+DISKTEST	dev7	disktest/dev7/DISKTEST.ASM	disktest/dev7/DISKTEST.COM	0f6438e6a922ac2c7650590d2e81b0a88997dc496d30675c18e954ab42e75b5e	suite/fixtures/trs80-montezuma-disktest/disktest-dev7-b-200k.dmk
+DISKTEST	dev8	disktest/dev8/DISKTEST.ASM	disktest/dev8/DISKTEST.COM	5a41a75b0900ffca9dd1b449c48e23d583bd34eaf65311ef0fa995dcad23fceb	suite/fixtures/trs80-montezuma-disktest/disktest-dev8-b-200k.dmk
+DISKTEST	dev9	disktest/dev9/DISKTEST.ASM	disktest/dev9/DISKTEST.COM	854c410a7c09860400d0be5ec82aa04569761660dce6a6262ed38ed13238a8c9	suite/fixtures/trs80-montezuma-disktest/disktest-dev9-b-200k.dmk
+ECOTEST	dev1	ecotest/dev1/ECOTEST.ASM	ecotest/dev1/ECOTEST.COM	7c35f77457cc69fbf6d9cabc8b417b9fe746e9d2994192ce5f4b5395e2f4564e	current source/build
+ECOTEST	dev2	ecotest/dev2/ECOTEST.ASM	ecotest/dev2/ECOTEST.COM	fa66f8d9d101aff5cbce15f7e8822aff8e8ae6da7731c7df191c34fc77a6daa7	current source/build
+ECOTEST	dev3	ecotest/dev3/ECOTEST.ASM	ecotest/dev3/ECOTEST.COM	d1eff607cde672975cef8452b399d3a5bae87bad07e714ad492334624410c80d	current source/build
+ECOTEST	dev4	ecotest/dev4/ECOTEST.ASM	ecotest/dev4/ECOTEST.COM	91fecc81c05fabf1a3933efb4de427d1ab5d082d735ddd0bd2eb14f70ec055a8	current source/build
+ECOTEST	dev5	ecotest/dev5/ECOTEST.ASM	ecotest/dev5/ECOTEST.COM	110c1326b49a32c87608790e302102a8743081aef10479118d26e4197ecdd28c	current source/build
+ENTRYTST	dev1	NOT RECOVERED	entrytst/dev1/ENTRYTST.COM	26b6d14fb3fd44c154da97a5dec98f8c47a3ecaedb890e866d536fa48eee7c82	suite/fixtures/trs80-montezuma-entrytst/entrytst-dev1-b-200k.dmk
+ENTRYTST	dev10	entrytst/dev10/ENTRYTST.ASM	entrytst/dev10/ENTRYTST.COM	f435eaa8c79e867bf311a15223d1653845c611407c063853d2ca2ad577c4b8c2	current source/build
+ENTRYTST	dev11	entrytst/dev11/ENTRYTST.ASM	entrytst/dev11/ENTRYTST.COM	da3c2bf7b9f1c669dfdc10b08973b2adb9860acea088be3db67b35ab398a0347	current source/build
+ENTRYTST	dev12	entrytst/dev12/ENTRYTST.ASM	entrytst/dev12/ENTRYTST.COM	daa8bf046acaf18fa76657e28a9844c2c531c7ccd085314df61cc669bff10964	current source/build
+ENTRYTST	dev13	entrytst/dev13/ENTRYTST.ASM	entrytst/dev13/ENTRYTST.COM	98950a81c7b7a143c5f199f4c994d6654056bdcc49f3d5e0f041912e8069bf21	current source/build
+ENTRYTST	dev14	entrytst/dev14/ENTRYTST.ASM	entrytst/dev14/ENTRYTST.COM	b35a4b288fa6b36c852bac1a9ea7137f387468d563194fb061ae2911640012a3	current source/build
+ENTRYTST	dev15	entrytst/dev15/ENTRYTST.ASM	entrytst/dev15/ENTRYTST.COM	ec90288c4dd9e364553bb4124d84579038612eba21d73ebbff6bb4710bd6e8fd	current source/build
+ENTRYTST	dev16	entrytst/dev16/ENTRYTST.ASM	entrytst/dev16/ENTRYTST.COM	6feb6d954a82e7da5bf3e9d817291a4b523d60d485b215e1a0babf2620f6112a	current source/build
+ENTRYTST	dev2	NOT RECOVERED	entrytst/dev2/ENTRYTST.COM	b80ba28d16a68b1ef4bdb52b1fb28df962d08e5dedfc81ec572fcdc7edbf77dd	suite/fixtures/trs80-montezuma-entrytst/entrytst-dev2-b-200k.dmk
+ENTRYTST	dev3	NOT RECOVERED	entrytst/dev3/ENTRYTST.COM	0094e7adf6a1e85f80dc8b2347d9485fb572ec16f2d523345550196ca6e478a6	suite/fixtures/trs80-montezuma-entrytst/entrytst-dev3-b-200k.dmk
+ENTRYTST	dev4	NOT RECOVERED	entrytst/dev4/ENTRYTST.COM	a8ededeb08e47c6fd37b23ac7564edde974053c2d6f2b4ace802ceaecaf34df6	suite/fixtures/trs80-montezuma-entrytst/entrytst-dev4-b-200k.dmk
+ENTRYTST	dev5	NOT RECOVERED	entrytst/dev5/ENTRYTST.COM	e3be06484e06b2c2f340fe2ee8019820a275aba0b43b65a50b73b72050cb0b1b	suite/fixtures/trs80-montezuma-entrytst/entrytst-dev5-b-200k.dmk
+ENTRYTST	dev6	NOT RECOVERED	entrytst/dev6/ENTRYTST.COM	33c7232aea919c96c9e9925b7ff5eedf9edc9277d3782607deaba9c72b349a26	suite/fixtures/trs80-montezuma-entrytst/entrytst-dev6-b-200k.dmk
+ENTRYTST	dev7	NOT RECOVERED	entrytst/dev7/ENTRYTST.COM	609dae8bf5d18b1f7b3a171569451c40066891d8dc29a0fc2faf179d5c00bd01	suite/fixtures/trs80-montezuma-entrytst/entrytst-dev7-b-200k.dmk
+ENTRYTST	dev8	entrytst/dev8/ENTRYTST.ASM	entrytst/dev8/ENTRYTST.COM	022dda646e89da79d8383748a0064792c1b609947413ef0d06bc2fa022f1a7a6	suite/fixtures/trs80-montezuma-entrytst/entrytst-dev8-b-200k.dmk
+ENTRYTST	dev9	entrytst/dev9/ENTRYTST.ASM	entrytst/dev9/ENTRYTST.COM	0b5d62a364c6327198a92379d9bbe2dd6fff6ad18db38b9dcd9b50318ba4cd64	current source/build
+ERRTEST	dev1	errtest/dev1/ERRTEST.ASM	errtest/dev1/ERRTEST.COM	b48ebfa0c579db44bc2f5bfe47395575f308747aa0d58d683f30ec44768bdaa9	preserved development archive
+ERRTEST	dev10	errtest/dev10/ERRTEST.ASM	errtest/dev10/ERRTEST.COM	01caf1b8c2e8ad353f135b7ab13b4d4ba573b8a8bb92d757f970f6d14d81e542	current source/build
+ERRTEST	dev11	errtest/dev11/ERRTEST.ASM	errtest/dev11/ERRTEST.COM	6888c33cbcdaa8fb6ec091bc41346b2e5ca1e37b05c2a1ede382fedc5682d0e9	current source/build
+ERRTEST	dev2	errtest/dev2/ERRTEST.ASM	errtest/dev2/ERRTEST.COM	904e5832d4180689af205407f4412a604e812c17e4f4256c6c06c2fe90907e7a	preserved development archive
+ERRTEST	dev3	errtest/dev3/ERRTEST.ASM	errtest/dev3/ERRTEST.COM	7c5f6dbb2aec6813253dc189b0b63c40e42e46b099d21aec315fd1d6e9b35205	current source/build
+ERRTEST	dev4	errtest/dev4/ERRTEST.ASM	errtest/dev4/ERRTEST.COM	ddd2f193c4304682c3b67f5ce0cce7a8dc51f584840ffde790b9dabf4d7e52cb	current source/build
+ERRTEST	dev5	errtest/dev5/ERRTEST.ASM	errtest/dev5/ERRTEST.COM	a4f81a05272f6bfabef6cf3494b6273078b3718f020a5cf8e0436bdd359cca3a	current source/build
+ERRTEST	dev6	errtest/dev6/ERRTEST.ASM	errtest/dev6/ERRTEST.COM	ca143106b35da4daa3546834a2382a24920164849b5b5975e60deb00f7b7941b	current source/build
+ERRTEST	dev7	errtest/dev7/ERRTEST.ASM	errtest/dev7/ERRTEST.COM	8298e310995a2866719c127b33ff6dcfa4904d34b115a0bccb98cef22273c848	current source/build
+ERRTEST	dev8	errtest/dev8/ERRTEST.ASM	errtest/dev8/ERRTEST.COM	96875fdd22dc5213f750248e2ebd22ff5580e8ccc768b2670869f4f6275ca1ab	current source/build
+ERRTEST	dev9	errtest/dev9/ERRTEST.ASM	errtest/dev9/ERRTEST.COM	dc1a6d8a5614cc3d7fdbf4d5a3ab2b21659e9de13fddd4c528bd5e4289589fed	current source/build
+FILETEST	dev26	filetest/dev26/FILETEST.ASM	filetest/dev26/FILETEST.COM	a324f0245c0d83887ed145cbc3702f283c5b213751a1cc9d0498cf0f4ed79388	preserved development archive
+FILETEST	dev27	filetest/dev27/FILETEST.ASM	filetest/dev27/FILETEST.COM	fad8e520436821a2fc6c32c14f99c45c2ec1ef12c1ee35b4c4e15090552b164d	current source/build
+FILETEST	dev28	filetest/dev28/FILETEST.ASM	filetest/dev28/FILETEST.COM	4eb28e7580ab40bdd56fa6242014ca12c7c922a0a1822346604a78844fdeec1d	current source/build
+FILETEST	dev29	filetest/dev29/FILETEST.ASM	filetest/dev29/FILETEST.COM	52c9b0699f55f27a8b1ac4df09d36a7774ceb2d53030a02ef8b86a59c8f35e97	current source/build
+FILETEST	dev30	filetest/dev30/FILETEST.ASM	filetest/dev30/FILETEST.COM	b59e6280cf346892398dedd9fd5c84f663a7d8d5804ad5124b29af9283d49d45	current source/build
+FILETEST	dev31	filetest/dev31/FILETEST.ASM	filetest/dev31/FILETEST.COM	d2b0f725db06ef61fa59a1e733eb2d4437f1fae2d437126c4dada2ca5b52bb47	current source/build
+FILETEST	dev32	filetest/dev32/FILETEST.ASM	filetest/dev32/FILETEST.COM	848f68af32b43fb82f33716f45719e071854580bc4a9600aeac83f74bf909091	current source/build
+FILETEST	dev33	filetest/dev33/FILETEST.ASM	filetest/dev33/FILETEST.COM	e016ea921355f10b2de62e0890e38ca27ad4c48fe04e283608d2edaff8393f84	current source/build
+FILETEST	dev34	filetest/dev34/FILETEST.ASM	filetest/dev34/FILETEST.COM	b415f4be3bc2952739c939fa5f64af2335ae10661ea74ab2ff18e9d1961c4ea4	current source/build
+FILETEST	dev35	filetest/dev35/FILETEST.ASM	filetest/dev35/FILETEST.COM	34a28f17ac88875ce43cda8f5a07a9587dfcb8ba5f94a4d4894713b9fb7c1f65	current source/build
+FILETEST	dev36	filetest/dev36/FILETEST.ASM	filetest/dev36/FILETEST.COM	16401ecb21f705a780379fd55d8b111c7b1100c46d3c7bec7ad7ee72508b67f4	current source/build
+FILETST2	dev31	filetst2/dev31/FILETST2.ASM	filetst2/dev31/FILETST2.COM	4d147d277a11daea22c856949e55a3506c1297eab9e90859014530c556f80970	current source/build
+FILETST2	dev32	filetst2/dev32/FILETST2.ASM	filetst2/dev32/FILETST2.COM	24dd1abd926903d0a8c800532ae065c103b65a5d386f0a31cace43a13c1ad443	current source/build
+RANDTEST	dev33	randtest/dev33/RANDTEST.ASM	randtest/dev33/RANDTEST.COM	57c9c0f4ea28476b5ad86030bbf3370531719aaf3d417492ac002f41fa900ea9	current source/build
+RANDTEST	dev34	randtest/dev34/RANDTEST.ASM	randtest/dev34/RANDTEST.COM	f3498e959ce819b4159b8d2aec9ce2d26ad3c03b539c06990c13194aa321deb9	current source/build
+RANDTEST	dev35	randtest/dev35/RANDTEST.ASM	randtest/dev35/RANDTEST.COM	ca472866ec34f09ea9b0fa15ff7528b943b35b8dfe5dbfa0f521705838a14a39	current source/build
+RANDTEST	dev36	randtest/dev36/RANDTEST.ASM	randtest/dev36/RANDTEST.COM	0aa75174e71ad64e97026d54510f993bdf0b01f2a35ddfe67c832031a23d9ef9	current source/build
+SCRATCH	dev1	scratch/dev1/SCRATCH.ASM	scratch/dev1/SCRATCH.COM	761bcebba8ff05cc826c8344e585f14ea4210a90bbf4182c9fd8e5013213b4db	preserved development archive
+SCRATCH	dev2	scratch/dev2/SCRATCH.ASM	scratch/dev2/SCRATCH.COM	e567313a95815ffdc0a051f60ae5f55aa8fd3b1bd8cf79bb390044b35a328254	current source/build
+SCRATCH	dev3	scratch/dev3/SCRATCH.ASM	scratch/dev3/SCRATCH.COM	98de7471f69b859c7e36f3de88bf0eae4e6a4f98e477e75dcb8370527f30b892	current source/build
+SCRATCH	dev4	scratch/dev4/SCRATCH.ASM	scratch/dev4/SCRATCH.COM	18fde47fdab16bdaba8107e835301f0fd3a030ddf1271e7f2c75f16d3776dd25	current source/build
+SCRATCH	dev5	scratch/dev5/SCRATCH.ASM	scratch/dev5/SCRATCH.COM	d0393b778de5208af3d427b89d3e05ab481530a4b012debd89c74fbc91b1537c	current source/build
+SCRATCH	dev6	scratch/dev6/SCRATCH.ASM	scratch/dev6/SCRATCH.COM	05dbdad02a6a2bca6ee9237085083c7020349590088946cbf15ba42c4ac7d664	current source/build

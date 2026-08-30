@@ -1,0 +1,27 @@
+#!/usr/bin/expect -f
+set timeout 30
+if {$argc != 3} {
+    puts stderr "usage: run-unavailable065.exp emulator workdir transcript"
+    exit 2
+}
+set emulator [lindex $argv 0]
+set work [lindex $argv 1]
+set transcript [lindex $argv 2]
+file delete -force "/tmp/.z80pack/imsaisim.sio2"
+log_file -noappend $transcript
+spawn -noecho $emulator -z -R -d [file join $work disks] -r [file join $work roms] -c [file join $work system-9600.conf]
+expect "54K CP/M 2.2"
+expect "A: R/W, Space: 8k"
+expect "A>"
+send "b:\r"
+expect "B>"
+send "qt-imsai\r"
+expect "QTERM  V4.3e"
+send "\036u"
+expect "Enter modem channel A or B:"
+send "a\r"
+after 1000
+send "NO-DEVICE\r"
+after 3000
+send "\034"
+expect eof

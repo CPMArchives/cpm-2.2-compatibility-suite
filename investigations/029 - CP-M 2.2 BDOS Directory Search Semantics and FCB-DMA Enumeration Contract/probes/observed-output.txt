@@ -1,0 +1,32 @@
+Accepted result summary (full console evidence is under transcripts/)
+
+MATCH29:
+  exact ALPHA       rc 02, selected entry user 00 ALPHA   TXT
+  name wildcard    rc 02, selected entry user 00 ALPHA   TXT
+  type wildcard    rc 03, selected entry user 00 BETA    TXT
+  lowercase FCB    rc FF
+  BIGMULTI first   rc 01, extent 00, RC 80
+  BIGMULTI next    rc 02, extent 01, RC 02
+  BIGMULTI end     rc FF
+
+STATE29:
+  first            rc 02 (ALPHA)
+  after F25/F12    rc 03 (BETA)
+  after Set DMA    rc 00 (next record at DMA2)
+  new First BETA   rc 03
+  following Next   rc FF
+
+USER29:
+  user 0 UONE      rc FF
+  user 1 UONE      rc 02, entry user byte 01
+  dr='?' first     rc 00, user byte 00
+  dr='?' next      rc 01, user byte 00 (sequence continues across directory)
+
+ERROR29:
+  no match         rc FF
+  Search Next      rc FF
+  invalid drive    "Bdos Err On Q: Select"; no normal return before Ctrl-C
+
+DMA29:
+  rc 00; 128 bytes captured. Slot 2 contains BIG.DAT extent 0 and slot 3
+  contains BIG.DAT extent 1, demonstrating the four-entry record format.

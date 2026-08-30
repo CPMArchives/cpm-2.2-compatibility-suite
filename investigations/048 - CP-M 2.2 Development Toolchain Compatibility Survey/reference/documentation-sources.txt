@@ -1,0 +1,24 @@
+Investigation 048 documentation sources
+========================================
+
+Digital Research, CP/M MAC Macro Assembler: Language Manual and Application
+Guide (1977).
+Preserved: CPM_Mac_Macro_Assembler_1977.pdf
+Source: https://www.bitsavers.org/pdf/digitalResearch/cpm/CPM_Mac_Macro_Assembler_1977.pdf
+Reviewed: operation under CP/M, output files, memory requirements, macro use.
+Rendered excerpts: manual-pages/MAC-008.png through MAC-011.png.
+
+Digital Research, LINK-80 Operator's Guide, second printing (December 1980).
+Preserved: LINK-80_Operators_Guide_Dec80.pdf
+Source: https://www.bitsavers.org/pdf/digitalResearch/cpm/LINK-80_Operators_Guide_Dec80.pdf
+Reviewed: LINK operation/switches/errors, REL/IRL and temporary files, RMAC
+operation and relocatable directives, PL/I-80 integration.
+Rendered excerpts: manual-pages/LINK-06.png through LINK-11.png and
+manual-pages/RMAC-18.png through RMAC-21.png.
+
+Digital Research, CP/M Assembler User's Guide; CP/M Dynamic Debugging Tool
+User's Guide; An Introduction to CP/M Features and Facilities; CP/M 2.0
+Interface Guide; CP/M 2.2 Alteration Guide.
+These sources were reviewed and preserved by earlier investigations. I048
+uses their established absolute assembly, load, debugger, interface, and
+page-zero findings rather than duplicating their page archive.

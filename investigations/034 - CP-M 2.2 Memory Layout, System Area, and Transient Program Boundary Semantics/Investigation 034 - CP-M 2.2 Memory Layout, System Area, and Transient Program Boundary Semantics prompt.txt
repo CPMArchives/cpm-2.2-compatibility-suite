@@ -1,0 +1,646 @@
+Investigation 034 — CP/M 2.2 Memory Layout, System Area, and Transient Program Boundary Semantics Prompt
+
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 033 is complete.
+
+The authoritative Compatibility Ledger currently incorporates findings
+through Investigation 033.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports, architecture documents,
+roadmaps, specifications, or other existing BetterCP/M files.
+
+Create Investigation 034 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Define the CP/M 2.2 memory layout and transient program boundary
+compatibility contract.
+
+Previous investigations established:
+
+- transient program entry environment;
+- command tail behavior;
+- default FCB behavior;
+- BDOS calling conventions;
+- CCP execution handoff;
+- transient program lifecycle;
+- system interface behavior.
+
+
+Investigation 034 determines the memory assumptions made by CP/M 2.2
+programs.
+
+Investigate:
+
+- memory zero page;
+- BDOS entry location;
+- BIOS entry location;
+- CCP location;
+- transient program area;
+- COM program loading boundary;
+- system memory ownership.
+
+
+Determine:
+
+- which memory locations are compatibility-visible;
+- what applications may assume;
+- what behavior is implementation-specific.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read and incorporate:
+
+
+Investigation 001:
+
+    CP/M 2.2 Transient Program Entry Environment.
+
+
+Investigation 002:
+
+    BDOS Call and Return Convention.
+
+
+Investigation 023:
+
+    CCP Transient Entry Environment, Command Tail, and Default FCB
+    Semantics.
+
+
+Investigation 024:
+
+    Transient Program Lifecycle, Termination, and BDOS Return-State
+    Semantics.
+
+
+Investigation 027:
+
+    BDOS Call Interface Convention and Register-State Semantics.
+
+
+Investigation 028:
+
+    CCP Transient Execution Handoff and Loader State Contract.
+
+
+Investigation 033:
+
+    BDOS/BIOS Error Propagation and Recovery Semantics.
+
+
+Do not duplicate previous investigations.
+
+Focus on memory layout and ownership boundaries.
+
+
+SCOPE
+
+Investigate:
+
+- zero page;
+- system vectors;
+- BDOS entry;
+- BIOS entry;
+- CCP placement;
+- TPA boundaries;
+- COM loading;
+- stack assumptions;
+- memory available to transient programs.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- BetterCP/M memory architecture;
+- bank switching design;
+- CP/M 3 memory extensions;
+- MP/M memory management;
+- hardware-specific memory mapping.
+
+
+Do not require:
+
+- exact internal implementation layout;
+- undocumented memory usage;
+- non-application-visible behavior.
+
+
+KEY QUESTIONS
+
+
+1. ZERO PAGE SEMANTICS
+
+Determine the compatibility meaning of addresses 0000h–00FFh.
+
+Investigate:
+
+- warm boot vector;
+- BDOS entry vector;
+- default FCB area;
+- command tail area;
+- application-visible locations.
+
+
+Determine:
+
+- which locations are guaranteed;
+- which locations are conventions;
+- which locations are implementation-specific.
+
+
+2. BDOS ENTRY LOCATION
+
+Determine the BDOS entry contract.
+
+Investigate:
+
+- CALL 0005H convention;
+- vector contents;
+- parameter passing;
+- return behavior.
+
+
+Determine:
+
+- what applications may assume;
+- whether the BDOS address itself is significant;
+- whether relocation affects compatibility.
+
+
+3. BIOS ENTRY LOCATION
+
+Determine the BIOS entry contract.
+
+Investigate:
+
+- BIOS jump table;
+- application access;
+- standard entry locations;
+- compatibility expectations.
+
+
+Determine:
+
+- what applications may assume;
+- whether direct BIOS calls are part of the CP/M contract.
+
+
+4. CCP MEMORY PLACEMENT
+
+Determine the role of CCP placement.
+
+Investigate:
+
+- CCP location;
+- relationship to BDOS;
+- relationship to TPA;
+- relocation behavior.
+
+
+Determine:
+
+- whether applications depend on CCP location;
+- what is implementation detail.
+
+5. TRANSIENT PROGRAM AREA
+
+Determine the TPA boundary contract.
+
+Investigate:
+
+- program loading address;
+- available memory;
+- relationship to CCP;
+- relationship to BDOS;
+- relationship to BIOS;
+- maximum COM program size.
+
+
+Determine:
+
+- what applications may assume;
+- what varies by implementation;
+- what is compatibility-critical.
+
+
+6. COM PROGRAM LOADING
+
+Determine how CCP loads transient programs.
+
+Investigate:
+
+- load address;
+- memory initialization;
+- command tail placement;
+- default FCB placement;
+- stack initialization;
+- transfer of control.
+
+
+Cross-reference:
+
+Investigation 022.
+
+Investigation 023.
+
+Investigation 028.
+
+
+Determine:
+
+- loader guarantees;
+- implementation details.
+
+
+7. STACK SEMANTICS
+
+Determine stack expectations for transient programs.
+
+Investigate:
+
+- initial stack location;
+- stack ownership;
+- stack growth;
+- relationship to loaded program.
+
+
+Determine:
+
+- whether applications can assume stack placement;
+- whether programs commonly depend on it.
+
+
+8. MEMORY OWNERSHIP
+
+Determine ownership of system memory regions.
+
+Investigate:
+
+- CCP memory;
+- BDOS memory;
+- BIOS memory;
+- TPA memory;
+- zero page.
+
+
+Determine:
+
+- which areas applications may modify;
+- which areas applications must preserve;
+- which areas are system-owned.
+
+
+9. SYSTEM MEMORY CHANGES DURING EXECUTION
+
+Determine whether memory layout changes during:
+
+- transient execution;
+- BDOS calls;
+- warm boot;
+- CCP return.
+
+
+Investigate:
+
+- overwritten regions;
+- preserved regions;
+- temporary buffers.
+
+
+10. DIRECT SYSTEM ACCESS
+
+Determine compatibility implications of programs accessing:
+
+- BDOS directly;
+- BIOS directly;
+- zero-page locations;
+- system tables.
+
+
+Determine:
+
+- which direct accesses are part of the CP/M compatibility contract;
+- which are implementation assumptions.
+
+
+11. APPLICATION MEMORY ASSUMPTIONS
+
+Determine which assumptions are valid:
+
+- BDOS entry exists at standard location;
+- zero page contents are available;
+- CCP location is irrelevant;
+- TPA is contiguous;
+- memory above the program is available;
+- stack placement is predictable.
+
+
+Classify each assumption.
+
+
+12. DRI SOURCE ANALYSIS
+
+Review available source material for:
+
+- CCP loading;
+- BDOS placement;
+- BIOS placement;
+- initialization;
+- memory vectors;
+- system relocation.
+
+
+Extract:
+
+- compatibility-relevant behavior;
+- implementation-specific behavior.
+
+
+Do not produce:
+
+- source walkthroughs;
+- memory implementation tutorials.
+
+
+13. EXPERIMENTAL PROGRAMS
+
+Create deterministic probes:
+
+
+MEM34:
+
+    Report visible memory environment.
+
+
+ZERO34:
+
+    Examine zero-page contents.
+
+
+LOAD34:
+
+    Examine COM program loading state.
+
+
+STACK34:
+
+    Examine initial stack behavior.
+
+
+VECTOR34:
+
+    Examine BDOS and BIOS entry vectors.
+
+
+Each probe must include:
+
+- purpose;
+- procedure;
+- observed behavior;
+- compatibility conclusion.
+
+
+14. CONTROLLED TEST MATRIX
+
+Include:
+
+
+ZERO PAGE
+
+- standard entry state;
+- BDOS call state;
+- CCP return state.
+
+
+PROGRAM LOADING
+
+- small COM program;
+- large COM program;
+- program termination.
+
+
+MEMORY BOUNDARIES
+
+- TPA beginning;
+- TPA end;
+- system area boundaries.
+
+
+DIRECT ACCESS
+
+- BDOS vector access;
+- BIOS vector access;
+- zero-page access.
+
+
+SYSTEM TRANSITIONS
+
+- transient execution;
+- BDOS calls;
+- return to CCP.
+
+15. EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+
+    documented behavior.
+
+B:
+
+    DRI implementation behavior.
+
+I:
+
+    experimental observation.
+
+D:
+
+    unresolved policy.
+
+
+These labels are internal investigation classifications only.
+
+
+Ledger evidence must use:
+
+    I034
+    MEMORY
+    CCP
+    BDOS
+    BIOS
+    IG
+    AG
+
+
+16. COMPATIBILITY CLASSIFICATION
+
+Classify each conclusion:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Do not require:
+
+- exact CCP placement;
+- exact BDOS placement;
+- exact BIOS placement;
+- undocumented memory contents;
+- private implementation layout.
+
+
+17. EXISTING LEDGER REVIEW
+
+Review affected Compatibility Ledger entries:
+
+- transient entry environment;
+- command tail behavior;
+- default FCB behavior;
+- BDOS call interface;
+- CCP handoff;
+- BIOS interface;
+- system initialization.
+
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+
+The current Compatibility Ledger ends after Investigation 033.
+
+Determine the next available ledger entry number.
+
+Do not modify the Compatibility Ledger.
+
+
+18. PROPOSED LEDGER ADDITIONS
+
+Include:
+
+Proposed Compatibility Ledger additions
+
+and:
+
+Proposed existing-entry updates.
+
+
+Each entry must contain:
+
+
+NNNN. Title
+
+    Description.
+
+    Disposition:
+
+    Evidence:
+
+    Conformance:
+
+
+19. REPORT STRUCTURE
+
+Create:
+
+Investigation 034 - CP/M 2.2 Memory Layout, System Area, and
+Transient Program Boundary Semantics.md
+
+
+Include:
+
+
+1. Objective and scope
+
+2. Relationship to previous investigations
+
+3. Documentation findings
+
+4. Source findings
+
+5. Zero page semantics
+
+6. BDOS entry semantics
+
+7. BIOS entry semantics
+
+8. CCP memory placement
+
+9. Transient program area
+
+10. COM program loading
+
+11. Stack semantics
+
+12. Memory ownership
+
+13. Direct system access
+
+14. Experimental results
+
+15. Compatibility conclusions
+
+16. Proposed ledger additions
+
+17. Existing-entry updates
+
+18. Open questions
+
+19. Conformance implications
+
+
+20. FINAL REVIEW
+
+Verify that the investigation determines:
+
+- the CP/M 2.2 memory contract;
+- system-owned memory regions;
+- transient program boundaries;
+- application-visible vectors;
+- loader assumptions;
+- direct-access compatibility requirements.
+
+
+Ensure conclusions distinguish:
+
+- documented behavior;
+- DRI implementation behavior;
+- experimental observations;
+- unresolved policy.
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M memory architecture.
+
+Do not replace CP/M memory semantics with modern process models.
+
+Determine the CP/M 2.2 memory layout and transient program boundary
+compatibility contract only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

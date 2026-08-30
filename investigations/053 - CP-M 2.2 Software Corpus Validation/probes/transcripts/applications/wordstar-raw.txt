@@ -1,0 +1,82 @@
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+Mostek AID-80F and SYS-80FT Emulator Release 1.1
+by Mike Douglas
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Drive 0: CPM/system.dsk
+Drive 1: CPM/wordstar.dsk
+Drive 2: CPM/games.dsk
+
+Boot ROM: MostekROM.bin
+
+Loader statistics for file <local-workspace>/g-p-6a682f002be881918281554d644daf48/stage053/work/049/work/roms/MostekROM.bin:
+START : E000H
+END   : EFFFH
+PC    : E000H
+LOADED: 1000H (4096)
+
+Type CTRL-\ to halt emulation
+
+
+
+56K CP/M 2.2 Ver 1.1
+ for Mostek AID-80F
+
+A>b:
+B>ws
+6Y7 Y7 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Y"   MicroPro WordStar  release 3.00  serial # WT9720FZ      
+  COPYRIGHT (C) 1981  MicroPro International Corporation  
+
+             Adds Regent 20/25                
+             Teletype-like printer            
+             No communications protocol       
+             CP/M List Output driver (LST:)   
+Y!                  < < <  N O - F I L E   M E N U  > > >                     Y"    ---Preliminary  Commands---   | --File  Commands-- | -System  Commands- Y#  L  Changed logged disk drive    |                    |  R  Run a program  Y$  F  File directory    on (OFF)   |  P  Print a file   |  X  EXIT to system Y%  H  Set help level               |                    |                    Y&   ---Commands to open a file---  |  E  RENAME a file  | -WordStar Options- Y'     D  Open a  document  file    |  O  COPY   a file  |  M  Run MailMerge  Y(     N  Open a non-document file  |  Y  DELETE a file  |  S  Run SpellStar   Y) Y(lY  dY! Y!1KY"     NAME OF FILE TO EDIT? KY# Y#!KY$ Y":Y# Y":AY +editing no fileY$!KY%!KY&"KY'$KY($KY";PP49.TXTY# Y$ Y# Y$ NEW FILEY% Y& Y   Y! Y!o.Y! Y"$                                                                           .Y#o.Y$                                                                                .Y" BETTERCPM APPLICATION SURVEYY# SECOND LINEY  ^KxY )   WAIT  Y 3KY! Y #Y! Y!oKY"     SAVING KY# KY$ Y"+FILE B:APP49.TXTY# Y$ Y";Y$ SECOND LINEY% SECOND LINE                                                                    .Y&o.Y'o.Y(o.Y)o.Y*o.Y+o.Y,o.Y-o.Y.o.Y/o.Y0o.Y1o.Y2o.Y3o.Y4o.Y5o.Y6o.Y )B:APP49.TXT  PAGE 1 LINE 2 COL 12Y$ L----!----!----!----!----!----!----!----!----!----!----!--------R               Y";Y )   WAIT  KY! Y";Y7 Y7 
+B>dir APP49.TXT
+B: APP49    TXT
+B>type APP49.TXT
+BETTERCPM APPLICATION SURVEY
+SECOND LINE
+B>
+User Interrupt at 0xdaf2
+I/O ran for 5480 ms, waited for 0 ms
+CPU executed 226671034 t-states in 205 ms
+clock frequency = 1103.45 MHz
+
+PC   A  SZHPNC I  R  IFF BC   DE   HL   A'F' B'C' D'E' H'L' IX   IY   SP
+daf2 80 011100 00 2f 11  007f c406 cf06 478b 0000 0002 e9db f87d dc12 cf2f
+>>> q

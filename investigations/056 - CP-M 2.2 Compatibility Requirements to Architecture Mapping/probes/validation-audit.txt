@@ -1,0 +1,7 @@
+ledger proposition lines mapped: 652
+unique ledger identifiers represented: 622
+unassigned responsibility mappings: 0
+mappings missing evidence/test/classification: 0
+regression tests referenced: 62 inventory entries
+consolidated mappings: 15
+validation: PASS

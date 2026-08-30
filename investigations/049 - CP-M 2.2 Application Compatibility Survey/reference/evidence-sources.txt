@@ -1,0 +1,17 @@
+Evidence classes and sources
+============================
+
+A - CP/M 2.0 Interface Guide and CP/M 2.2 Alteration Guide findings already
+    preserved and analyzed in Investigations 001-048.  These define the public
+    transient, page-zero, BDOS, FCB/DMA, console, file, disk, and BIOS surface.
+
+B - DRI CCP/BDOS/utility source findings preserved in Investigations 041, 042,
+    047, and 048.  They identify implementation paths and test targets but do
+    not turn private DRI code into an application interface.
+
+I - WordStar 3.00, Microsoft BASIC-80/WUMP.BAS, Adventure A02, raw transcripts,
+    extracted files, disk before/after images, and repeat hashes in this
+    investigation.
+
+D - Acceptance-corpus and machine/terminal-profile choices identified in the
+    report's open questions.

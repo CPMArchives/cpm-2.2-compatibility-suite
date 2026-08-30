@@ -1,0 +1,26 @@
+INVESTIGATION 039 OBSERVED OUTPUT (CONDENSED)
+
+DRI STAT
+  Initial DEV: CON/RDR/PUN/LST all TTY (IOBYTE 00).
+  STAT CON:=BAD: -> Invalid Assignment; state not changed.
+  STAT CON:=CRT: -> no diagnostic.
+  DEV then showed CON=CRT, RDR/PUN/LST=TTY (IOBYTE 01).
+  STAT CON:=TTY: restored all TTY.
+
+Raw IOBYTE and runtime switching
+  Probes entered with 0003h/Function 7 = 01.
+  Function 8 set A5; Function 7 returned A5; a BIOS-facing handler saw A5.
+  Restore returned the prior 01, not an assumed zero.
+  SWITCH39 set 01 then invoked Function 0. Post-WBOOT STAT still reported CRT.
+
+BDOS/BIOS boundary
+  Reader, punch, list and console streams remained independent.
+  BDOS did not decode or cache the mapping; BIOS-facing handlers saw the live byte.
+  Direct BIOS39 captured page zero C3 03 FA 01 00 C3 06 EC.
+
+Invalid/unavailable boundary
+  Every two-bit field encoding 0-3 is structurally representable, but a configured
+  BIOS may not supply the named physical device. STAT rejects unknown textual names;
+  raw Function 8 accepts all byte values. Operation behavior for a representable but
+  unavailable mapping remains device-profile policy, as established by I038.
+

@@ -1,0 +1,298 @@
+Investigation 063 — CP/M 2.2 Processor and Instruction Profile Prompt
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 062 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation 062.
+
+Create Investigation 063 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports or artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Determine the processor and instruction-set assumptions that form part
+of the CP/M 2.2 compatibility boundary.
+
+Previous investigations established:
+
+- the CP/M 2.2 compatibility standard;
+- software ecosystem requirements;
+- conformance methodology;
+- implementation-independent compatibility boundaries.
+
+Investigation 063 determines which processor-level behaviors are
+required for CP/M 2.2 compatibility and which belong to machine or
+implementation profiles.
+
+Determine:
+
+- processor assumptions made by CP/M 2.2 software;
+- instruction-set requirements;
+- CPU-visible behavior that affects compatibility;
+- boundaries between CP/M compatibility and hardware profiles.
+
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+- documented CP/M 2.2 behavior;
+- Digital Research implementation behavior;
+- common CP/M programming practices;
+- historically significant software dependencies.
+
+Distinguish between:
+
+- required processor behavior;
+- implementation-specific CPU assumptions;
+- optional hardware capabilities.
+
+Do not assume all historical CPU behavior is part of the CP/M contract.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Review completed investigations through Investigation 062.
+
+Pay particular attention to:
+
+Investigation 041:
+    Direct System Access and Undocumented Application Interface
+    Compatibility Semantics.
+
+Investigation 051:
+    CP/M 2.2 Hardware-Dependent Software Compatibility Survey.
+
+Investigation 055:
+    CP/M 2.2 Community Compatibility Standard.
+
+Investigation 061:
+    CP/M 2.2 Cross-Implementation Differential Validation.
+
+Investigation 062:
+    CP/M 2.2 Compatibility Conformance Pilot Execution.
+
+
+SCOPE
+
+Investigate:
+
+- CPU assumptions;
+- instruction-set dependencies;
+- register behavior;
+- flag behavior;
+- timing assumptions;
+- processor-specific software dependencies;
+- compatibility classification.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- BetterCP/M CPU implementation;
+- processor optimization;
+- future processor ports;
+- unsupported CPU architectures.
+
+
+INVESTIGATION QUESTIONS
+
+
+1. PROCESSOR CORPUS
+
+Identify representative CP/M 2.2 software and source materials used
+to determine processor assumptions.
+
+Record:
+
+- software name;
+- version where available;
+- source/archive location;
+- processor assumptions;
+- evidence collected.
+
+
+2. INSTRUCTION-SET DEPENDENCIES
+
+Determine:
+
+- which instructions are required;
+- whether software assumes Z80-specific instructions;
+- whether software assumes 8080 compatibility;
+- whether instruction usage affects CP/M compatibility.
+
+
+3. REGISTER AND FLAG BEHAVIOR
+
+Determine:
+
+- observable register assumptions;
+- flag behavior dependencies;
+- undocumented CPU-state dependencies;
+- software impact.
+
+
+4. TIMING AND HARDWARE DEPENDENCY
+
+Determine:
+
+- timing assumptions;
+- delay-loop dependencies;
+- interrupt assumptions;
+- whether these belong to CP/M compatibility or hardware profiles.
+
+
+5. SOFTWARE IMPACT
+
+Determine:
+
+- whether common CP/M software depends on processor-specific behavior;
+- whether dependencies are widespread;
+- whether they affect conformance.
+
+
+6. COMPATIBILITY CLASSIFICATION
+
+Classify processor-level behaviors as:
+
+- required compatibility behavior;
+- hardware-profile behavior;
+- implementation-specific behavior;
+- not guaranteed.
+
+
+7. EXPERIMENTAL REQUIREMENTS
+
+Create processor-profile validation records.
+
+Each record must include:
+
+- behavior tested;
+- software tested;
+- processor environment;
+- procedure;
+- observed behavior;
+- compatibility conclusion.
+
+
+EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+    documented behavior.
+
+B:
+    Digital Research implementation behavior.
+
+I:
+    experimental observation.
+
+D:
+    unresolved policy.
+
+
+Ledger evidence must identify:
+
+I063
+PROCESSOR
+INSTRUCTION
+PROFILE
+subsystem
+IG
+AG
+
+
+COMPATIBILITY CLASSIFICATION
+
+Classify findings:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Do not require:
+
+- CPU behavior without software compatibility evidence;
+- implementation-specific optimizations;
+- undocumented processor assumptions without validation.
+
+
+LEDGER REVIEW
+
+Review affected Compatibility Ledger entries.
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+Do not modify the ledger directly.
+
+
+REPORT STRUCTURE
+
+Create:
+
+Investigation 063 - CP/M 2.2 Processor and Instruction Profile.md
+
+Include:
+
+1. Objective and scope
+2. Compatibility standard
+3. Relationship to previous investigations
+4. Processor evidence corpus
+5. Instruction-set analysis
+6. Register and flag analysis
+7. Timing and hardware analysis
+8. Software impact analysis
+9. Compatibility classification
+10. Experimental results
+11. Compatibility conclusions
+12. Proposed ledger additions
+13. Existing-entry updates
+14. Open questions
+15. Conformance implications
+
+
+FINAL REVIEW
+
+Before completing the investigation, verify:
+
+- processor assumptions are separated from CP/M semantics;
+- CPU-specific behavior is evidence-based;
+- hardware-profile assumptions are not incorrectly classified as CP/M
+  requirements;
+- conformance implications are identified.
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M processor architecture.
+
+Do not assume a processor behavior is required without evidence.
+
+Determine the CP/M 2.2 processor and instruction compatibility boundary
+only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

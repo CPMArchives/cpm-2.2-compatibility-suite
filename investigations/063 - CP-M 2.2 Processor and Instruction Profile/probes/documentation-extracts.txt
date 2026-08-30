@@ -1,0 +1,27 @@
+Investigation 063 documentation notes (paraphrase and bounded extracts)
+
+CP/M 2.0 Interface Guide, introduction:
+- Standard CP/M assumes an Intel MDS-800 reference development system.
+- Hardware dependence is isolated in the BIOS; CCP and BDOS are presented as
+  hardware-independent modules.
+
+CP/M 2.2 Alteration Guide, reserved page zero:
+- 0000h contains a jump to warm start; 0005h contains a jump to BDOS.
+- 0003h is identified as the Intel standard IOBYTE.
+- 0008h-0037h are identified as interrupt/restart locations, with 0038h used
+  by DDT/SID for programmed breakpoints when active.
+
+CP/M 2.2 Alteration Guide, BIOS and disk adaptation:
+- BIOS interfaces are expressed with 8080 register pairs and operations.
+- Sector skew may be changed for faster processors, memory, and disks. This
+  documents configurability rather than a standard processor clock.
+
+The manuals define CP/M-visible register call conventions but do not promise:
+- Z80 IX/IY, alternate registers, I, or R at transient entry or across BDOS;
+- Z80-only or undocumented opcode execution;
+- a processor clock rate or instruction-cycle timing contract;
+- a universal interrupt controller or interrupt-mode topology.
+
+Source files reviewed from the read-only project mirror:
+- sources/CPM_2_0_Interface_Guide.pdf
+- sources/CPM_2.2_Alteration_Guide_1979.pdf

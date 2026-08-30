@@ -1,0 +1,28 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set timeout 40
+log_file -noappend $logfile
+spawn -noecho cpmsim -z -d $diskdir
+expect "A>"
+send -- "DIR ATTR.DAT\r"
+expect "ATTR"
+expect "A>"
+send -- "CROSS70A\r"
+expect "CROSS70A COMPLETE"
+expect "A>"
+send -- "DIR ATTR.DAT\r"
+expect "ATTR"
+expect "A>"
+send -- "SAVE 1 COPY70.DAT\r"
+expect "A>"
+send -- "DIR COPY70.DAT\r"
+expect "COPY70"
+expect "A>"
+send -- "ERA COPY70.DAT\r"
+expect "A>"
+send -- "DIR COPY70.DAT\r"
+expect "NO FILE"
+expect "A>"
+send "\034"
+expect eof

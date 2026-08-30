@@ -1,0 +1,29 @@
+INVESTIGATION 053 OBSERVED OUTPUT SUMMARY
+
+Thirteen deterministic validation records were executed. All produced their
+specified acceptance observation.
+
+- V053-01: standard utility workflow completed, including SUBMIT/XSUB input.
+- V053-02: ASM and PIP reported their expected missing-input failures.
+- V053-03: assembler/linker/debugger/batch workflow completed; independently
+  generated DEV48.COM and BATCH48.COM were byte-identical.
+- V053-04: LINK reported UNDEFINED SYMBOLS and returned to command service.
+- V053-05: WordStar created APP49.TXT; DIR found it and TYPE reproduced the text.
+- V053-06: Wumpus reached its prompt; Control-C and SYSTEM returned to CP/M.
+- V053-07: Adventure reached the seeded initial location and returned cleanly.
+- V053-08: Kermit VERSION/SHOW/EXIT completed.
+- V053-09: Kermit emitted send-init data without a peer and recovered on scripted abort.
+- V053-10: Kermit handled unavailable speed support and a missing send file.
+- V053-11: BASE051 reported VERSION=22 PASS.
+- V053-12: IMSAI QTERM trapped precisely on unsupported IN 23h at PC 0112h.
+- V053-13: KSCOPE trapped precisely on unsupported OUT 0Eh at PC 0110h.
+
+Disk-image results
+- Adventure, Wumpus, Kermit, BASE051/QTERM/KSCOPE images were unchanged.
+- WordStar and the intentionally mutating utility/toolchain workflows changed.
+- Exact SHA-256 values are in images-sha256.txt.
+
+Harness note
+The I047/I048 copied runners close scripted console input after their final
+markers. cpmsim then reports that console input cannot be read and enters its
+monitor. This post-test shutdown is not a CP/M software failure.

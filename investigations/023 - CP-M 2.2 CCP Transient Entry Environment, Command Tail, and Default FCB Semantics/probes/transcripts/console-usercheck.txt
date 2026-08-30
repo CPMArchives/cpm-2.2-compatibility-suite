@@ -1,0 +1,38 @@
+spawn cpmsim -z -d /tmp/inv023-user.PB9YaK
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>USER 1
+A>B:STATE22 CHECK
+STATE22 PZ4=10 USER=01 SP/RET=EBA9 EB5F TAILCOUNT=06
+
+A>B:ENTRY23 CHECK
+ENTRY23 FORMAT=01
+REGREC=A9EB0810FF00FFF9EFEBFD5C8526CDE279FD3130F2C300204800000101
+PZ0000-0007=C303FA0010C306EC
+FCB005C-007F=00434845434B202020202020000000070020202020202020202020200000000000FBB5FB
+TAIL0080-00FF=0620434845434B0058694688FE01EAF15B04824551BDF5071E6485AC646FC51BA5EF555C59013F92367EEA2790277AD4F17450372A88ECA5AE87E84DE50F92BC2378FBED1398B35073E947FF6AC6E68550463B7294E1B9B9D1E63A1E37AD40362DA7BE0EA3B41866E758722E7590D240478CBAC135859F6BB0A20BED86999843
+STACK16=5FEB0000242424202020202053554200
+LIVE DRIVE USER=00 01
+DMA OPEN READ DATA=02 00 443032332D44454641554C542D444D41
+
+A>[0;31mE (7155) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 10 ms, waited for 0 ms
+CPU executed 1384265 t-states in 1 ms
+Clock frequency 1363.80 MHz

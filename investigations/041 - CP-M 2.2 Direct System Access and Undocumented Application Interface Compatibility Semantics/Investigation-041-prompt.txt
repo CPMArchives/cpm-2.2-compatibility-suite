@@ -1,0 +1,279 @@
+Investigation 041 — CP/M 2.2 Direct System Access and Undocumented
+Application Interface Compatibility Semantics Prompt
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 040 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation
+040.
+
+Create Investigation 041 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports or artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+OBJECTIVE
+
+Determine the CP/M 2.2 direct system access compatibility contract.
+
+Previous investigations established:
+
+-   documented BDOS behavior;
+-   BIOS runtime behavior;
+-   disk structure behavior;
+-   character-device behavior;
+-   storage compatibility boundaries.
+
+Investigation 041 determines the compatibility implications of CP/M
+software accessing system interfaces directly rather than exclusively
+through documented high-level services.
+
+Investigate:
+
+-   direct BDOS access;
+-   direct BIOS access;
+-   zero-page usage;
+-   system vectors;
+-   fixed memory locations;
+-   undocumented but historically significant interfaces.
+
+Determine:
+
+-   which direct-access behaviors are compatibility requirements;
+-   which behaviors are implementation-specific;
+-   which historical conventions must be preserved for CP/M software
+    compatibility.
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+-   documented CP/M 2.2 behavior;
+-   Digital Research implementation behavior;
+-   common CP/M programming practices;
+-   historically significant software dependencies.
+
+Do not assume that undocumented behavior is required without evidence.
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Investigation 002: BDOS Call and Return Convention.
+
+Investigation 020: BIOS Jump Table, Boot, and Character-IO Semantics.
+
+Investigation 027: BDOS Call Interface Convention and Register-State
+Semantics.
+
+Investigation 034: Memory Layout, System Area, and Transient Program
+Boundary Semantics.
+
+Investigation 036: BIOS Runtime Environment and Hardware Abstraction
+Boundary Semantics.
+
+Investigation 037: BDOS Remaining Functions and Interface Consolidation
+Semantics.
+
+Investigation 040: Disk Format, Drive Geometry, and Direct Structure
+Compatibility Semantics.
+
+SCOPE
+
+Investigate:
+
+-   direct BDOS invocation;
+-   direct BIOS invocation;
+-   zero-page compatibility;
+-   system vectors;
+-   fixed memory locations;
+-   application-visible internal structures;
+-   software assumptions about system layout.
+
+NON-GOALS
+
+Do not investigate:
+
+-   BetterCP/M internal architecture;
+-   modern operating-system interfaces;
+-   implementation details invisible to applications;
+-   CP/M 3 or MP/M extensions.
+
+INVESTIGATION QUESTIONS
+
+1.  DIRECT BDOS ACCESS
+
+Determine:
+
+-   how applications locate BDOS;
+-   whether applications call BDOS directly;
+-   what calling conventions are assumed;
+-   what software depends upon these behaviors.
+
+2.  DIRECT BIOS ACCESS
+
+Determine:
+
+-   how applications locate BIOS;
+-   how applications invoke BIOS services;
+-   which BIOS behaviors are externally visible;
+-   what software depends upon these behaviors.
+
+3.  ZERO-PAGE COMPATIBILITY
+
+Determine:
+
+-   which zero-page locations are software-visible;
+-   which locations have historical significance;
+-   which values or structures applications depend upon.
+
+4.  SYSTEM VECTOR COMPATIBILITY
+
+Determine:
+
+-   which vectors are compatibility-visible;
+-   how software uses them;
+-   whether they are expected to remain stable.
+
+5.  FIXED MEMORY ASSUMPTIONS
+
+Determine:
+
+-   whether applications depend upon fixed addresses;
+-   whether common software assumes specific memory layouts;
+-   whether such assumptions are historically significant.
+
+6.  SOFTWARE ECOSYSTEM USAGE
+
+Investigate software categories:
+
+-   system utilities;
+-   debuggers;
+-   assemblers;
+-   disk utilities;
+-   development tools.
+
+Determine:
+
+-   common direct-access patterns;
+-   undocumented assumptions;
+-   de facto compatibility requirements.
+
+7.  EXPERIMENTAL REQUIREMENTS
+
+Create deterministic probes covering:
+
+-   BDOS vector access;
+-   BIOS vector access;
+-   zero-page inspection;
+-   system state visibility;
+-   direct service invocation.
+
+Each probe must include:
+
+-   purpose;
+-   procedure;
+-   observed behavior;
+-   compatibility conclusion.
+
+8.  CONTROLLED TEST MATRIX
+
+Include:
+
+-   documented interface access;
+-   direct interface access;
+-   normal state;
+-   boundary state;
+-   modified state;
+-   failure state.
+
+EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A: documented behavior.
+
+B: Digital Research implementation behavior.
+
+I: experimental observation.
+
+D: unresolved policy.
+
+Ledger evidence must identify:
+
+I041 SYSTEM BDOS BIOS MEMORY subsystem IG AG
+
+COMPATIBILITY CLASSIFICATION
+
+Classify findings:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+Do not require:
+
+-   private implementation details;
+-   invisible internal algorithms;
+-   undocumented behavior without evidence.
+
+LEDGER REVIEW
+
+Review affected Compatibility Ledger entries.
+
+Determine:
+
+-   evidence strengthening;
+-   corrections;
+-   duplicate avoidance.
+
+Do not modify the ledger directly.
+
+REPORT STRUCTURE
+
+Create:
+
+Investigation 041 - CP/M 2.2 Direct System Access and Undocumented
+Application Interface Compatibility Semantics.md
+
+Include:
+
+1.  Objective and scope
+2.  Compatibility standard
+3.  Relationship to previous investigations
+4.  Direct BDOS access
+5.  Direct BIOS access
+6.  Zero-page compatibility
+7.  System vector compatibility
+8.  Fixed memory assumptions
+9.  Software ecosystem findings
+10. Documentation findings
+11. Source findings
+12. Experimental results
+13. Compatibility conclusions
+14. Proposed ledger additions
+15. Existing-entry updates
+16. Open questions
+17. Conformance implications
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M architecture.
+
+Do not replace CP/M semantics with modern abstractions.
+
+Determine the CP/M 2.2 direct system access compatibility contract only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

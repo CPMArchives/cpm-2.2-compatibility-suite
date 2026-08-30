@@ -1,0 +1,141 @@
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 06:51:15 2026	Page 1
+Source file: ZERO34.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1  ORG 0100H
+0100  ed 73 be 01      2      2  LD (ENTSP),SP
+0104  21 00 00         3      3  LD HL,0000H
+0107  11 c0 01         4      4  LD DE,BEFORE
+010a  01 00 01         5      5  LD BC,256
+010d  ed b0            6      6  LDIR
+010f  0e 0c            7      7  LD C,12
+0111  cd 05 00         8      8  CALL 0005H
+0114  21 00 00         9      9  LD HL,0000H
+0117  11 c0 02        10     10  LD DE,AFTER
+011a  01 00 01        11     11  LD BC,256
+011d  ed b0           12     12  LDIR
+011f  21 c0 01        13     13  LD HL,BEFORE
+0122  11 c0 02        14     14  LD DE,AFTER
+0125  01 00 01        15     15  LD BC,256
+0128  dd 21 00 00     16     16  LD IX,0
+012c  1a              17     17 DIFFLP: LD A,(DE)
+012d  be              18     18  CP (HL)
+012e  28 02           19     19  JR Z,NODIFF
+0130  dd 23           20     20  INC IX
+0132  23              21     21 NODIFF: INC HL
+0133  13              22     22  INC DE
+0134  0b              23     23  DEC BC
+0135  78              24     24  LD A,B
+0136  b1              25     25  OR C
+0137  20 f3           26     26  JR NZ,DIFFLP
+0139  31 40 04        27     27  LD SP,STACK
+013c  21 81 01        28     28  LD HL,MSG1
+013f  cd 40 04        29     29  CALL PUTS
+0142  2a be 01        30     30  LD HL,(ENTSP)
+0145  cd 7e 04        31     31  CALL HEXW
+0148  21 92 01        32     32  LD HL,MSG2
+014b  cd 40 04        33     33  CALL PUTS
+014e  dd e5           34     34  PUSH IX
+0150  e1              35     35  POP HL
+0151  cd 7e 04        36     36  CALL HEXW
+0154  cd 5d 04        37     37  CALL CRLF
+0157  21 a4 01        38     38  LD HL,BMSG
+015a  cd 40 04        39     39  CALL PUTS
+015d  21 c0 01        40     40  LD HL,BEFORE
+0160  cd 72 01        41     41  CALL DUMP256
+0163  21 b1 01        42     42  LD HL,AMSG
+0166  cd 40 04        43     43  CALL PUTS
+0169  21 c0 02        44     44  LD HL,AFTER
+016c  cd 72 01        45     45  CALL DUMP256
+016f  c3 8c 04        46     46  JP EXIT0
+0172  06 00           47     47 DUMP256: LD B,0
+0174  7e              48     48 DUMPLOOP: LD A,(HL)
+0175  23              49     49  INC HL
+0176  cd 67 04        50     50  CALL HEXB
+0179  cd 58 04        51     51  CALL SPACE
+017c  10 f6           52     52  DJNZ DUMPLOOP
+017e  c3 5d 04        53     53  JP CRLF
+0181  5a 45 52 4f     54     54 MSG1: DB 'ZERO34 ENTRY_SP ',0
+0185  33 34 20 45     54     55
+0189  4e 54 52 59     54     56
+018d  5f 53 50 20     54     57
+0191  00              54     58
+0192  20 44 49 46     55     59 MSG2: DB ' DIFF_AFTER_FN12 ',0
+0196  46 5f 41 46     55     60
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 06:51:15 2026	Page 2
+Source file: ZERO34.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+019a  54 45 52 5f     55     61
+019e  46 4e 31 32     55     62
+01a2  20 00           55     63
+01a4  5a 45 52 4f     56     64 BMSG: DB 'ZERO_BEFORE ',0
+01a8  5f 42 45 46     56     65
+01ac  4f 52 45 20     56     66
+01b0  00              56     67
+01b1  5a 45 52 4f     57     68 AMSG: DB 'ZERO_AFTER  ',0
+01b5  5f 41 46 54     57     69
+01b9  45 52 20 20     57     70
+01bd  00              57     71
+01be  00 00           58     72 ENTSP: DW 0
+01c0                  59     73 BEFORE: DS 256
+02c0                  60     74 AFTER: DS 256
+03c0                  61     75  DS 128
+0440                  62     76 STACK:
+0440  7e              63     77 PUTS: LD A,(HL)
+0441  23              64     78  INC HL
+0442  b7              65     79  OR A
+0443  c8              66     80  RET Z
+0444  5f              67     81  LD E,A
+0445  cd 4a 04        68     82  CALL PUTC
+0448  18 f6           69     83  JR PUTS
+044a  f5              70     84 PUTC: PUSH AF
+044b  c5              71     85  PUSH BC
+044c  d5              72     86  PUSH DE
+044d  e5              73     87  PUSH HL
+044e  0e 02           74     88  LD C,2
+0450  cd 05 00        75     89  CALL 0005H
+0453  e1              76     90  POP HL
+0454  d1              77     91  POP DE
+0455  c1              78     92  POP BC
+0456  f1              79     93  POP AF
+0457  c9              80     94  RET
+0458  1e 20           81     95 SPACE: LD E,' '
+045a  c3 4a 04        82     96  JP PUTC
+045d  1e 0d           83     97 CRLF: LD E,13
+045f  cd 4a 04        84     98  CALL PUTC
+0462  1e 0a           85     99  LD E,10
+0464  c3 4a 04        86    100  JP PUTC
+0467  f5              87    101 HEXB: PUSH AF
+0468  0f              88    102  RRCA
+0469  0f              89    103  RRCA
+046a  0f              90    104  RRCA
+046b  0f              91    105  RRCA
+046c  cd 70 04        92    106  CALL NIB
+046f  f1              93    107  POP AF
+0470  e6 0f           94    108 NIB: AND 0FH
+0472  c6 30           95    109  ADD A,'0'
+0474  fe 3a           96    110  CP '9'+1
+0476  38 02           97    111  JR C,NOUT
+0478  c6 07           98    112  ADD A,7
+047a  5f              99    113 NOUT: LD E,A
+047b  c3 4a 04       100    114  JP PUTC
+047e  7c             101    115 HEXW: LD A,H
+047f  cd 67 04       102    116  CALL HEXB
+0482  7d             103    117  LD A,L
+0483  c3 67 04       104    118  JP HEXB
+0486  11 8b 04       105    119 CALLHL: LD DE,CALLBACK
+0489  d5             106    120  PUSH DE
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 06:51:15 2026	Page 3
+Source file: ZERO34.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+048a  e9             107    121  JP (HL)
+048b  c9             108    122 CALLBACK: RET
+048c  0e 00          109    123 EXIT0: LD C,0
+048e  c3 05 00       110    124  JP 0005H
+                     111    125
+0491                 112    126  END

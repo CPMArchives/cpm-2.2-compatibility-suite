@@ -1,0 +1,37 @@
+source_section	primary_tests
+001 - CP/M 2.2 Transient Program Entry Environment	MEM-001,MEM-005,CCP-003
+002 - CP/M 2.2 BDOS Call and Return Convention	BDOS-CALL-001
+003 - CP/M 2.2 BDOS Console Output and String Output Semantics	BDOS-CON-001
+004 - CP/M 2.2 BDOS Direct Console IO and Console Status Semantics	BDOS-CON-002,BDOS-CON-005
+005 - CP/M 2.2 BDOS Console Input and Echo Semantics	BDOS-CON-003
+006 - CP/M 2.2 BDOS Buffered Console Input and Line Editing Semantics	BDOS-CON-004
+007 - CP/M 2.2 BDOS Disk Reset Selection and Drive-State Query Semantics	BDOS-STATE-002
+008 - CP/M 2.2 FCB File Identification and Open-Close Semantics	BDOS-FILE-001,BDOS-FILE-002
+009 - CP/M 2.2 BDOS Directory Search and DMA Transfer Semantics	BDOS-FILE-003,BDOS-STATE-003
+010 - CP/M 2.2 BDOS Sequential Read Semantics	BDOS-FILE-004
+011 - CP/M 2.2 BDOS Sequential Write and File Creation Semantics	BDOS-FILE-002,BDOS-FILE-005,BDOS-FILE-011
+012 - CP/M 2.2 BDOS File Deletion and Rename Semantics	BDOS-FILE-006,BDOS-FILE-007,BDOS-FILE-008,BDOS-FILE-009
+015 - CP/M 2.2 BDOS Physical Disk Error and Error Presentation Semantics	ERROR-002,ERROR-003,ERROR-004
+016 - CP/M 2.2 BDOS Console I/O and System Interface Semantics	BDOS-CON-001,BDOS-CON-005,BDOS-STATE-001
+017 - CP/M 2.2 BDOS Disk State, Allocation Vector, and Disk Parameter	BDOS-STATE-002,BIOS-006
+018 - CP/M 2.2 BDOS Character Devices and IOBYTE Semantics	BIOS-003,COMM-002
+019 - CP/M 2.2 BIOS Disk Interface and Logical-Sector Semantics	BIOS-004
+020 - CP/M 2.2 BIOS Jump Table, Boot, and Character-I/O Semantics	BIOS-001,BIOS-002,BIOS-005
+021 - CP/M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics	CCP-001,CCP-002
+022 - CP/M 2.2 CCP Transient Program Lookup, Loading, and Execution	CCP-005,CCP-006
+023 - CP/M 2.2 CCP Transient Program Lookup, Loading, and Execution	CCP-003,CCP-005,CCP-006
+024 - CP/M 2.2 Transient Program Lifecycle, Termination, and BDOS Return-	CCP-007,MEM-005
+025 - CP/M 2.2 BDOS File Operation Error Semantics and Application-	ERROR-001,APP-004
+026 - CP/M 2.2 BDOS System State Functions and Application-Visible	BDOS-STATE-001,BDOS-STATE-002,BDOS-STATE-003
+027 - CP/M 2.2 BDOS Call Interface Convention and Register-State	BDOS-CALL-001
+028 - CP/M 2.2 CCP Transient Execution Handoff and Loader State Contract	CCP-006,MEM-004
+029 - CP/M 2.2 BDOS Directory Search Semantics and FCB/DMA Enumeration	BDOS-FILE-003
+030 - CP/M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State	BDOS-FILE-002,BDOS-FILE-011
+031 - CP/M 2.2 BDOS User Area, File Visibility, and Directory Namespace	BDOS-FILE-010
+032 - CP/M 2.2 CCP Resident Command Semantics and BDOS Interaction	CCP-004,UTIL-001
+033 - CP/M 2.2 BDOS-BIOS Error Propagation and Recovery Semantics	ERROR-002,ERROR-003,ERROR-004
+034 - CP/M 2.2 Memory Layout, System Area, and Transient Program Boundary	MEM-002,MEM-004,MEM-005
+041 - CP/M 2.2 Direct System Access and Undocumented Application Interface	BIOS-001,BIOS-007,MEM-006
+042 - CP/M 2.2 Common Software Compatibility Assumptions	CCP-008,MEM-006
+043 - CP/M 2.2 Memory and Execution Edge Case Compatibility Semantics	MEM-003,MEM-004
+051 - CP/M 2.2 Hardware-Dependent Software Compatibility Survey	BIOS-007,HW-001,HW-002,HW-003

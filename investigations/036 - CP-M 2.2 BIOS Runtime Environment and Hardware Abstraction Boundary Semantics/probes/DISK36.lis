@@ -1,0 +1,539 @@
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:01:41 2026	Page 1
+Source file: DISK36.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Investigation 019 BIOS disk-boundary trace fixture.
+                       2      2 ; Patches BIOS jump operands only, delegates every call to original routines.
+                       3      3 ; Build: z80asm -fb -oBIOS019.COM BIOS019.ASM
+                       4      4         ORG 0100H
+0100  31 f2 0b         5      5 START:  LD SP,STACKTOP
+0103  cd 1c 03         6      6         CALL PATCH
+0106  0e 0d            7      7         LD C,13
+0108  cd 05 00         8      8         CALL 5
+                       9      9
+010b  21 58 04        10     10         LD HL,L_SEARCH
+010e  cd df 01        11     11         CALL NEWCASE
+0111  11 a5 04        12     12         LD DE,FCBWILD
+0114  0e 11           13     13         LD C,17
+0116  cd 05 00        14     14         CALL 5
+0119  cd e7 01        15     15         CALL SHOWCASE
+                      16     16
+011c  11 c9 04        17     17         LD DE,FCBREAD
+011f  0e 0f           18     18         LD C,15
+0121  cd 05 00        19     19         CALL 5
+0124  21 5f 04        20     20         LD HL,L_SEQREAD
+0127  cd df 01        21     21         CALL NEWCASE
+012a  11 c9 04        22     22         LD DE,FCBREAD
+012d  0e 14           23     23         LD C,20
+012f  cd 05 00        24     24         CALL 5
+0132  cd e7 01        25     25         CALL SHOWCASE
+                      26     26
+0135  11 11 05        27     27         LD DE,FCBDEL
+0138  0e 13           28     28         LD C,19
+013a  cd 05 00        29     29         CALL 5
+013d  21 67 04        30     30         LD HL,L_MAKE
+0140  cd df 01        31     31         CALL NEWCASE
+0143  11 ed 04        32     32         LD DE,FCBNEW
+0146  0e 16           33     33         LD C,22
+0148  cd 05 00        34     34         CALL 5
+014b  cd e7 01        35     35         CALL SHOWCASE
+                      36     36
+014e  11 72 09        37     37         LD DE,DMA1
+0151  0e 1a           38     38         LD C,26
+0153  cd 05 00        39     39         CALL 5
+0156  21 6c 04        40     40         LD HL,L_WRITE1
+0159  cd df 01        41     41         CALL NEWCASE
+015c  11 ed 04        42     42         LD DE,FCBNEW
+015f  0e 15           43     43         LD C,21
+0161  cd 05 00        44     44         CALL 5
+0164  cd e7 01        45     45         CALL SHOWCASE
+                      46     46
+0167  21 73 04        47     47         LD HL,L_WRITE2
+016a  cd df 01        48     48         CALL NEWCASE
+016d  11 ed 04        49     49         LD DE,FCBNEW
+0170  0e 15           50     50         LD C,21
+0172  cd 05 00        51     51         CALL 5
+0175  cd e7 01        52     52         CALL SHOWCASE
+                      53     53
+0178  21 7a 04        54     54         LD HL,L_CLOSE
+017b  cd df 01        55     55         CALL NEWCASE
+017e  11 ed 04        56     56         LD DE,FCBNEW
+0181  0e 10           57     57         LD C,16
+0183  cd 05 00        58     58         CALL 5
+0186  cd e7 01        59     59         CALL SHOWCASE
+                      60     60
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:01:41 2026	Page 2
+Source file: DISK36.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                      61     61         ; Reopen and random update record zero: allocated-data write type.
+0189  11 ed 04        62     62         LD DE,FCBNEW
+018c  0e 0f           63     63         LD C,15
+018e  cd 05 00        64     64         CALL 5
+0191  af              65     65         XOR A
+0192  32 0e 05        66     66         LD (FCBNEW+33),A
+0195  32 0f 05        67     67         LD (FCBNEW+34),A
+0198  32 10 05        68     68         LD (FCBNEW+35),A
+019b  21 80 04        69     69         LD HL,L_RANDR
+019e  cd df 01        70     70         CALL NEWCASE
+01a1  11 ed 04        71     71         LD DE,FCBNEW
+01a4  0e 21           72     72         LD C,33
+01a6  cd 05 00        73     73         CALL 5
+01a9  cd e7 01        74     74         CALL SHOWCASE
+01ac  21 89 04        75     75         LD HL,L_RANDW
+01af  cd df 01        76     76         CALL NEWCASE
+01b2  11 ed 04        77     77         LD DE,FCBNEW
+01b5  0e 22           78     78         LD C,34
+01b7  cd 05 00        79     79         CALL 5
+01ba  cd e7 01        80     80         CALL SHOWCASE
+                      81     81
+01bd  11 ed 04        82     82         LD DE,FCBNEW
+01c0  0e 10           83     83         LD C,16
+01c2  cd 05 00        84     84         CALL 5
+01c5  21 93 04        85     85         LD HL,L_DELETE
+01c8  cd df 01        86     86         CALL NEWCASE
+01cb  11 11 05        87     87         LD DE,FCBDEL
+01ce  0e 13           88     88         LD C,19
+01d0  cd 05 00        89     89         CALL 5
+01d3  cd e7 01        90     90         CALL SHOWCASE
+                      91     91
+01d6  cd 89 03        92     92         CALL XLTEST
+01d9  cd 7c 03        93     93         CALL RESTORE
+01dc  c3 00 00        94     94         JP 0
+                      95     95
+01df                  96     96 NEWCASE:
+01df  22 50 05        97     97         LD (CASELABEL),HL
+01e2  af              98     98         XOR A
+01e3  32 4f 05        99     99         LD (NREC),A
+01e6  c9             100    100         RET
+01e7                 101    101 SHOWCASE:
+01e7  11 34 04       102    102         LD DE,CASEHDR
+01ea  0e 09          103    103         LD C,9
+01ec  cd 05 00       104    104         CALL 5
+01ef  2a 50 05       105    105         LD HL,(CASELABEL)
+01f2  cd fd 03       106    106         CALL PUTS
+01f5  cd 13 04       107    107         CALL CRLF
+01f8  21 8a 05       108    108         LD HL,TRACE
+01fb  3a 4f 05       109    109         LD A,(NREC)
+01fe  47             110    110         LD B,A
+01ff                 111    111 SHLOOP:
+01ff  78             112    112         LD A,B
+0200  b7             113    113         OR A
+0201  c8             114    114         RET Z
+0202  c5             115    115         PUSH BC
+0203  06 0a          116    116         LD B,10
+0205  7e             117    117 SHBYTE: LD A,(HL)
+0206  23             118    118         INC HL
+0207  e5             119    119         PUSH HL
+0208  c5             120    120         PUSH BC
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:01:41 2026	Page 3
+Source file: DISK36.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0209  cd 1d 04       121    121         CALL HEXBYTE
+020c  1e 20          122    122         LD E,' '
+020e  cd 07 04       123    123         CALL PUTC
+0211  c1             124    124         POP BC
+0212  e1             125    125         POP HL
+0213  10 f0          126    126         DJNZ SHBYTE
+0215  cd 13 04       127    127         CALL CRLF
+0218  c1             128    128         POP BC
+0219  10 e4          129    129         DJNZ SHLOOP
+021b  c9             130    130         RET
+                     131    131
+                     132    132 ; record = event, drive, track lo/hi, sec lo/hi, dma lo/hi, aux, result
+021c                 133    133 LOG:
+021c  f5             134    134         PUSH AF
+021d  c5             135    135         PUSH BC
+021e  d5             136    136         PUSH DE
+021f  e5             137    137         PUSH HL
+0220  3a 4f 05       138    138         LD A,(NREC)
+0223  fe 64          139    139         CP 100
+0225  30 3c          140    140         JR NC,LOGDONE
+0227  6f             141    141         LD L,A
+0228  26 00          142    142         LD H,0
+022a  29             143    143         ADD HL,HL
+022b  54             144    144         LD D,H
+022c  5d             145    145         LD E,L
+022d  29             146    146         ADD HL,HL
+022e  29             147    147         ADD HL,HL
+022f  19             148    148         ADD HL,DE
+0230  11 8a 05       149    149         LD DE,TRACE
+0233  19             150    150         ADD HL,DE
+0234  3a 52 05       151    151         LD A,(EVENT)
+0237  77             152    152         LD (HL),A
+0238  23             153    153         INC HL
+0239  3a 53 05       154    154         LD A,(CURDRV)
+023c  77             155    155         LD (HL),A
+023d  23             156    156         INC HL
+023e  ed 5b 54 05    157    157         LD DE,(CURTRK)
+0242  73             158    158         LD (HL),E
+0243  23             159    159         INC HL
+0244  72             160    160         LD (HL),D
+0245  23             161    161         INC HL
+0246  ed 5b 56 05    162    162         LD DE,(CURSEC)
+024a  73             163    163         LD (HL),E
+024b  23             164    164         INC HL
+024c  72             165    165         LD (HL),D
+024d  23             166    166         INC HL
+024e  ed 5b 58 05    167    167         LD DE,(CURDMA)
+0252  73             168    168         LD (HL),E
+0253  23             169    169         INC HL
+0254  72             170    170         LD (HL),D
+0255  23             171    171         INC HL
+0256  3a 5a 05       172    172         LD A,(AUX)
+0259  77             173    173         LD (HL),A
+025a  23             174    174         INC HL
+025b  3a 5b 05       175    175         LD A,(RES)
+025e  77             176    176         LD (HL),A
+025f  21 4f 05       177    177         LD HL,NREC
+0262  34             178    178         INC (HL)
+0263                 179    179 LOGDONE:
+0263  e1             180    180         POP HL
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:01:41 2026	Page 4
+Source file: DISK36.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0264  d1             181    181         POP DE
+0265  c1             182    182         POP BC
+0266  f1             183    183         POP AF
+0267  c9             184    184         RET
+                     185    185
+                     186    186 ; BIOS wrappers. Setup calls log before delegating; I/O logs after result.
+0268  79             187    187 WSEL:  LD A,C
+0269  32 53 05       188    188         LD (CURDRV),A
+026c  7b             189    189         LD A,E
+026d  32 5a 05       190    190         LD (AUX),A
+0270  3e 53          191    191         LD A,'S'
+0272  32 52 05       192    192         LD (EVENT),A
+0275  af             193    193         XOR A
+0276  32 5b 05       194    194         LD (RES),A
+0279  cd 1c 02       195    195         CALL LOG
+027c  2a 62 05       196    196         LD HL,(OSEL)
+027f  c3 12 03       197    197         JP CALLHL
+0282  ed 43 54 05    198    198 WTRK:  LD (CURTRK),BC
+0286  3e 54          199    199         LD A,'T'
+0288  18 0e          200    200         JR WSET
+028a  ed 43 56 05    201    201 WSEC:  LD (CURSEC),BC
+028e  3e 43          202    202         LD A,'C'
+0290  18 06          203    203         JR WSET
+0292  ed 43 58 05    204    204 WDMA:  LD (CURDMA),BC
+0296  3e 4d          205    205         LD A,'M'
+0298  32 52 05       206    206 WSET:  LD (EVENT),A
+029b  af             207    207         XOR A
+029c  32 5a 05       208    208         LD (AUX),A
+029f  32 5b 05       209    209         LD (RES),A
+02a2  cd 1c 02       210    210         CALL LOG
+02a5  fe 54          211    211         CP 'T'
+02a7  2a 64 05       212    212         LD HL,(OTRK)
+02aa  28 0d          213    213         JR Z,WCALL
+02ac  3a 52 05       214    214         LD A,(EVENT)
+02af  fe 43          215    215         CP 'C'
+02b1  2a 66 05       216    216         LD HL,(OSEC)
+02b4  28 03          217    217         JR Z,WCALL
+02b6  2a 68 05       218    218         LD HL,(ODMA)
+02b9  c3 12 03       219    219 WCALL: JP CALLHL
+02bc  2a 6a 05       220    220 WREAD: LD HL,(OREAD)
+02bf  cd 12 03       221    221         CALL CALLHL
+02c2  f5             222    222         PUSH AF
+02c3  32 5b 05       223    223         LD (RES),A
+02c6  3e 52          224    224         LD A,'R'
+02c8  32 52 05       225    225         LD (EVENT),A
+02cb  af             226    226         XOR A
+02cc  32 5a 05       227    227         LD (AUX),A
+02cf  cd 1c 02       228    228         CALL LOG
+02d2  f1             229    229         POP AF
+02d3  c9             230    230         RET
+02d4                 231    231 WWRITE:
+02d4  79             232    232         LD A,C
+02d5  32 5a 05       233    233         LD (AUX),A
+02d8  2a 6c 05       234    234         LD HL,(OWRITE)
+02db  cd 12 03       235    235         CALL CALLHL
+02de  f5             236    236         PUSH AF
+02df  32 5b 05       237    237         LD (RES),A
+02e2  3e 57          238    238         LD A,'W'
+02e4  32 52 05       239    239         LD (EVENT),A
+02e7  cd 1c 02       240    240         CALL LOG
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:01:41 2026	Page 5
+Source file: DISK36.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+02ea  f1             241    241         POP AF
+02eb  c9             242    242         RET
+02ec  ed 43 56 05    243    243 WXLT:  LD (CURSEC),BC
+02f0  ed 53 5c 05    244    244         LD (XLTPTR),DE
+02f4  2a 70 05       245    245         LD HL,(OXLT)
+02f7  cd 12 03       246    246         CALL CALLHL
+02fa  f5             247    247         PUSH AF
+02fb  e5             248    248         PUSH HL
+02fc  22 5e 05       249    249         LD (XLTOUT),HL
+02ff  7d             250    250         LD A,L
+0300  32 5a 05       251    251         LD (AUX),A
+0303  7c             252    252         LD A,H
+0304  32 5b 05       253    253         LD (RES),A
+0307  3e 58          254    254         LD A,'X'
+0309  32 52 05       255    255         LD (EVENT),A
+030c  cd 1c 02       256    256         CALL LOG
+030f  e1             257    257         POP HL
+0310  f1             258    258         POP AF
+0311  c9             259    259         RET
+0312                 260    260 CALLHL:
+0312  22 1a 03       261    261         LD (INDJMP+1),HL
+0315  cd 19 03       262    262         CALL INDJMP
+0318  c9             263    263         RET
+0319  c3 00 00       264    264 INDJMP: JP 0
+                     265    265
+031c  2a 01 00       266    266 PATCH: LD HL,(0001H)
+031f  2b             267    267         DEC HL
+0320  2b             268    268         DEC HL
+0321  2b             269    269         DEC HL
+0322  11 1b 00       270    270         LD DE,27
+0325  19             271    271         ADD HL,DE
+0326  22 60 05       272    272         LD (VBASE),HL
+                     273    273         ; Save 8 vectors (SELDSK through SECTRAN).
+0329  11 72 05       274    274         LD DE,SAVED
+032c  01 18 00       275    275         LD BC,24
+032f  ed b0          276    276         LDIR
+0331  2a 60 05       277    277         LD HL,(VBASE)
+0334  11 62 05       278    278         LD DE,OSEL
+0337  06 08          279    279         LD B,8
+0339  23             280    280 GETOPS: INC HL
+033a  7e             281    281         LD A,(HL)
+033b  12             282    282         LD (DE),A
+033c  23             283    283         INC HL
+033d  13             284    284         INC DE
+033e  7e             285    285         LD A,(HL)
+033f  12             286    286         LD (DE),A
+0340  23             287    287         INC HL
+0341  13             288    288         INC DE
+0342  10 f5          289    289         DJNZ GETOPS
+0344  2a 60 05       290    290         LD HL,(VBASE)
+0347  11 68 02       291    291         LD DE,WSEL
+034a  cd 74 03       292    292         CALL PUTJP
+034d  11 82 02       293    293         LD DE,WTRK
+0350  cd 74 03       294    294         CALL PUTJP
+0353  11 8a 02       295    295         LD DE,WSEC
+0356  cd 74 03       296    296         CALL PUTJP
+0359  11 92 02       297    297         LD DE,WDMA
+035c  cd 74 03       298    298         CALL PUTJP
+035f  11 bc 02       299    299         LD DE,WREAD
+0362  cd 74 03       300    300         CALL PUTJP
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:01:41 2026	Page 6
+Source file: DISK36.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0365  11 d4 02       301    301         LD DE,WWRITE
+0368  cd 74 03       302    302         CALL PUTJP
+                     303    303         ; Skip LISTST, patch SECTRAN.
+036b  23             304    304         INC HL
+036c  23             305    305         INC HL
+036d  23             306    306         INC HL
+036e  11 ec 02       307    307         LD DE,WXLT
+0371  c3 74 03       308    308         JP PUTJP
+0374  36 c3          309    309 PUTJP: LD (HL),0C3H
+0376  23             310    310         INC HL
+0377  73             311    311         LD (HL),E
+0378  23             312    312         INC HL
+0379  72             313    313         LD (HL),D
+037a  23             314    314         INC HL
+037b  c9             315    315         RET
+037c                 316    316 RESTORE:
+037c  21 72 05       317    317         LD HL,SAVED
+037f  ed 5b 60 05    318    318         LD DE,(VBASE)
+0383  01 18 00       319    319         LD BC,24
+0386  ed b0          320    320         LDIR
+0388  c9             321    321         RET
+                     322    322
+                     323    323 ; Direct BIOS identity/nonidentity translation and reads at track 2.
+0389                 324    324 XLTEST:
+0389  af             325    325         XOR A
+038a  32 4f 05       326    326         LD (NREC),A
+038d  0e 00          327    327         LD C,0
+038f  1e 00          328    328         LD E,0
+0391  cd 68 02       329    329         CALL WSEL
+0394  01 02 00       330    330         LD BC,2
+0397  cd 82 02       331    331         CALL WTRK
+039a  01 02 00       332    332         LD BC,2
+039d  11 00 00       333    333         LD DE,0
+03a0  cd ec 02       334    334         CALL WXLT
+03a3  44             335    335         LD B,H
+03a4  4d             336    336         LD C,L
+03a5  cd 8a 02       337    337         CALL WSEC
+03a8  01 f2 09       338    338         LD BC,IDBUF
+03ab  cd 92 02       339    339         CALL WDMA
+03ae  cd bc 02       340    340         CALL WREAD
+03b1  01 02 00       341    341         LD BC,2
+03b4  11 35 05       342    342         LD DE,XTABLE
+03b7  cd ec 02       343    343         CALL WXLT
+03ba  44             344    344         LD B,H
+03bb  4d             345    345         LD C,L
+03bc  cd 8a 02       346    346         CALL WSEC
+03bf  01 72 0a       347    347         LD BC,XLBUF
+03c2  cd 92 02       348    348         CALL WDMA
+03c5  cd bc 02       349    349         CALL WREAD
+03c8  21 9a 04       350    350         LD HL,L_XLT
+03cb  22 50 05       351    351         LD (CASELABEL),HL
+03ce  cd e7 01       352    352         CALL SHOWCASE
+03d1  11 3c 04       353    353         LD DE,BUFLAB
+03d4  0e 09          354    354         LD C,9
+03d6  cd 05 00       355    355         CALL 5
+03d9  21 f2 09       356    356         LD HL,IDBUF
+03dc  06 10          357    357         LD B,16
+03de  cd ea 03       358    358         CALL PRINTN
+03e1  21 72 0a       359    359         LD HL,XLBUF
+03e4  06 10          360    360         LD B,16
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:01:41 2026	Page 7
+Source file: DISK36.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+03e6  cd ea 03       361    361         CALL PRINTN
+03e9  c9             362    362         RET
+03ea  7e             363    363 PRINTN: LD A,(HL)
+03eb  23             364    364         INC HL
+03ec  e5             365    365         PUSH HL
+03ed  c5             366    366         PUSH BC
+03ee  cd 1d 04       367    367         CALL HEXBYTE
+03f1  1e 20          368    368         LD E,' '
+03f3  cd 07 04       369    369         CALL PUTC
+03f6  c1             370    370         POP BC
+03f7  e1             371    371         POP HL
+03f8  10 f0          372    372         DJNZ PRINTN
+03fa  c3 13 04       373    373         JP CRLF
+                     374    374
+03fd  7e             375    375 PUTS:  LD A,(HL)
+03fe  23             376    376         INC HL
+03ff  b7             377    377         OR A
+0400  c8             378    378         RET Z
+0401  5f             379    379         LD E,A
+0402  cd 07 04       380    380         CALL PUTC
+0405  18 f6          381    381         JR PUTS
+0407  c5             382    382 PUTC:  PUSH BC
+0408  d5             383    383         PUSH DE
+0409  e5             384    384         PUSH HL
+040a  0e 02          385    385         LD C,2
+040c  cd 05 00       386    386         CALL 5
+040f  e1             387    387         POP HL
+0410  d1             388    388         POP DE
+0411  c1             389    389         POP BC
+0412  c9             390    390         RET
+0413  1e 0d          391    391 CRLF:  LD E,13
+0415  cd 07 04       392    392         CALL PUTC
+0418  1e 0a          393    393         LD E,10
+041a  c3 07 04       394    394         JP PUTC
+041d                 395    395 HEXBYTE:
+041d  f5             396    396         PUSH AF
+041e  0f             397    397         RRCA
+041f  0f             398    398         RRCA
+0420  0f             399    399         RRCA
+0421  0f             400    400         RRCA
+0422  cd 26 04       401    401         CALL NIB
+0425  f1             402    402         POP AF
+0426  e6 0f          403    403 NIB:   AND 0FH
+0428  c6 30          404    404         ADD A,'0'
+042a  fe 3a          405    405         CP '9'+1
+042c  38 02          406    406         JR C,NOUT
+042e  c6 07          407    407         ADD A,7
+0430  5f             408    408 NOUT:  LD E,A
+0431  c3 07 04       409    409         JP PUTC
+                     410    410
+0434  0d 0a 43 41    411    411 CASEHDR: DB 13,10,'CASE $'
+0438  53 45 20 24    411    412
+043c  49 44 45 4e    412    413 BUFLAB: DB 'IDENTITY[16] then XLT[16]',13,10,'$'
+0440  54 49 54 59    412    414
+0444  5b 31 36 5d    412    415
+0448  20 74 68 65    412    416
+044c  6e 20 58 4c    412    417
+0450  54 5b 31 36    412    418
+0454  5d 0d 0a 24    412    419
+0458  53 45 41 52    413    420 L_SEARCH: DB 'SEARCH',0
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:01:41 2026	Page 8
+Source file: DISK36.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+045c  43 48 00       413    421
+045f  53 45 51 52    414    422 L_SEQREAD: DB 'SEQREAD',0
+0463  45 41 44 00    414    423
+0467  4d 41 4b 45    415    424 L_MAKE: DB 'MAKE',0
+046b  00             415    425
+046c  57 52 49 54    416    426 L_WRITE1: DB 'WRITE1',0
+0470  45 31 00       416    427
+0473  57 52 49 54    417    428 L_WRITE2: DB 'WRITE2',0
+0477  45 32 00       417    429
+047a  43 4c 4f 53    418    430 L_CLOSE: DB 'CLOSE',0
+047e  45 00          418    431
+0480  52 41 4e 44    419    432 L_RANDR: DB 'RANDREAD',0
+0484  52 45 41 44    419    433
+0488  00             419    434
+0489  52 41 4e 44    420    435 L_RANDW: DB 'RANDWRITE',0
+048d  57 52 49 54    420    436
+0491  45 00          420    437
+0493  44 45 4c 45    421    438 L_DELETE: DB 'DELETE',0
+0497  54 45 00       421    439
+049a  58 4c 54 2d    422    440 L_XLT: DB 'XLT-DIRECT',0
+049e  44 49 52 45    422    441
+04a2  43 54 00       422    442
+                     423    443
+04a5  00 3f 3f 3f    424    444 FCBWILD: DB 0,'???????????'
+04a9  3f 3f 3f 3f    424    445
+04ad  3f 3f 3f 3f    424    446
+04b1                 425    447         DS 24,0
+04c9  00 44 53 4b    426    448 FCBREAD: DB 0,'DSKFILE DAT'
+04cd  46 49 4c 45    426    449
+04d1  20 44 41 54    426    450
+04d5                 427    451         DS 24,0
+04ed  00 42 49 4f    428    452 FCBNEW: DB 0,'BIOS019 DAT'
+04f1  53 30 31 39    428    453
+04f5  20 44 41 54    428    454
+04f9                 429    455         DS 24,0
+0511  00 42 49 4f    430    456 FCBDEL: DB 0,'BIOS019 DAT'
+0515  53 30 31 39    430    457
+0519  20 44 41 54    430    458
+051d                 431    459         DS 24,0
+0535  01 02 0a 04    432    460 XTABLE: DB 1,2,10,4,5,6,7,8,9,3,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26
+0539  05 06 07 08    432    461
+053d  09 03 0b 0c    432    462
+0541  0d 0e 0f 10    432    463
+0545  11 12 13 14    432    464
+0549  15 16 17 18    432    465
+054d  19 1a          432    466
+054f  00             433    467 NREC: DB 0
+0550  00 00          434    468 CASELABEL: DW 0
+0552  00             435    469 EVENT: DB 0
+0553  00             436    470 CURDRV: DB 0
+0554  00 00          437    471 CURTRK: DW 0
+0556  00 00          438    472 CURSEC: DW 0
+0558  80 00          439    473 CURDMA: DW 0080H
+055a  00             440    474 AUX: DB 0
+055b  00             441    475 RES: DB 0
+055c  00 00          442    476 XLTPTR: DW 0
+055e  00 00          443    477 XLTOUT: DW 0
+0560  00 00          444    478 VBASE: DW 0
+0562  00 00          445    479 OSEL: DW 0
+0564  00 00          446    480 OTRK: DW 0
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 08:01:41 2026	Page 9
+Source file: DISK36.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0566  00 00          447    481 OSEC: DW 0
+0568  00 00          448    482 ODMA: DW 0
+056a  00 00          449    483 OREAD: DW 0
+056c  00 00          450    484 OWRITE: DW 0
+056e  00 00          451    485 OLISTST: DW 0
+0570  00 00          452    486 OXLT: DW 0
+0572                 453    487 SAVED: DS 24
+058a                 454    488 TRACE: DS 1000
+0972                 455    489 DMA1: DS 128,0A5H
+09f2                 456    490 IDBUF: DS 128
+0a72                 457    491 XLBUF: DS 128
+0af2                 458    492         DS 256
+0bf2                 459    493 STACKTOP:
+0bf2                 460    494         END START

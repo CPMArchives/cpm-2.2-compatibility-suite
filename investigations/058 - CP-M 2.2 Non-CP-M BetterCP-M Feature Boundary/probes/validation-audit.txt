@@ -1,0 +1,7 @@
+ledger proposition lines constrained: 652
+unique ledger identifiers represented: 622
+incomplete extension constraints: 0
+feature-category classifications: 26
+incomplete feature classifications: 0
+risk surfaces: 9
+validation: PASS

@@ -1,0 +1,7 @@
+ledger proposition lines mapped: 652
+unique ledger identifiers represented: 622
+incomplete personality mappings: 0
+consolidated mappings: 17
+software boundary cases: 8
+validation ownership families: 12
+validation: PASS

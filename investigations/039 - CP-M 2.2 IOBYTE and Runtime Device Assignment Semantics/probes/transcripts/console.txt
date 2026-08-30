@@ -1,0 +1,114 @@
+spawn cpmsim -z -d /private/tmp/i039-runs
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>STAT DEV:
+CON: is TTY:
+RDR: is TTY:
+PUN: is TTY:
+LST: is TTY:
+
+A>STAT CON:=BAD:
+
+Invalid Assignment
+A>STAT CON:=CRT:
+
+A>STAT DEV:
+CON: is CRT:
+RDR: is TTY:
+PUN: is TTY:
+LST: is TTY:
+
+A>IOBYTE39
+
+CHAR018 stat rdr pend rdrcnt io0 get0 loc1 get1 locrest punchio dma80 dmaalt plen llen conlen
+01 C1 5A 01 01 01 A5 A5 01 A5 A5 5A 06 05 08 
+PUNCH len/bytes 06 41 09 10 80 09 51 
+LIST len/bytes 05 41 09 10 80 09 
+CON len/bytes 08 41 20 20 20 20 20 20 20 
+
+A>DEVICE39
+
+CHAR018 stat rdr pend rdrcnt io0 get0 loc1 get1 locrest punchio dma80 dmaalt plen llen conlen
+01 C1 5A 01 01 01 A5 A5 01 A5 A5 5A 06 05 08 
+PUNCH len/bytes 06 41 09 10 80 09 51 
+LIST len/bytes 05 41 09 10 80 09 
+CON len/bytes 08 41 20 20 20 20 20 20 20 
+
+A>SWITCH39
+SWITCH39 SET IOBYTE 01 THEN WBOOT
+
+A>STAT DEV:
+CON: is CRT:
+RDR: is TTY:
+PUN: is TTY:
+LST: is TTY:
+
+A>BDOS39
+
+CHAR018 stat rdr pend rdrcnt io0 get0 loc1 get1 locrest punchio dma80 dmaalt plen llen conlen
+01 C1 5A 01 01 01 A5 A5 01 A5 A5 5A 06 05 08 
+PUNCH len/bytes 06 41 09 10 80 09 51 
+LIST len/bytes 05 41 09 10 80 09 
+CON len/bytes 08 41 20 20 20 20 20 20 20 
+
+A>BIOS39
+BIOS020 PZ00-07: C3 03 FA 01 00 C3 06 EC 
+BIOS BASE: FA00
+VECTORS index opcode target:
+00 C3 FB3E
+01 C3 FB51
+02 C3 FBBC
+03 C3 FBBF
+04 C3 FBC2
+05 C3 FBC6
+06 C3 FBCD
+07 C3 FBD1
+08 C3 FBD4
+09 C3 FBD9
+0A C3 FC05
+0B C3 FC09
+0C C3 FC1E
+0D C3 FC25
+0E C3 FC29
+0F C3 FBCA
+10 C3 FC0D
+DIRECT CONST0 CONST1 CONIN READER LISTST0 LISTST1 OUTN: 00 FF 41 52 00 FF 06 
+OUTPUT PAIRS device-byte: 43 09 4C 10 50 1A 
+
+A>STAT39
+
+CHAR018 stat rdr pend rdrcnt io0 get0 loc1 get1 locrest punchio dma80 dmaalt plen llen conlen
+01 C1 5A 01 01 01 A5 A5 01 A5 A5 5A 06 05 08 
+PUNCH len/bytes 06 41 09 10 80 09 51 
+LIST len/bytes 05 41 09 10 80 09 
+CON len/bytes 08 41 20 20 20 20 20 20 20 
+
+A>STAT CON:=TTY:
+
+A>STAT DEV:
+CON: is TTY:
+RDR: is TTY:
+PUN: is TTY:
+LST: is TTY:
+
+A>[0;31mE (16750) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 27 ms, waited for 0 ms
+CPU executed 5290658 t-states in 2 ms
+Clock frequency 1822.47 MHz

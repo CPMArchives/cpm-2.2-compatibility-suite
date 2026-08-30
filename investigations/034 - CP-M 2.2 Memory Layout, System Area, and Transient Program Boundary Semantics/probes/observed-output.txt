@@ -1,0 +1,51 @@
+MEM34
+ Purpose: report the visible memory boundary and verify the final advertised TPA
+ byte is writable while BDOS remains resident.
+ Procedure: derive the BDOS entry from 0006h, subtract six for the documented
+ resident boundary, write/read/restore the preceding byte, call Function 12.
+ Observation: EC06 entry, EC00 DRI serialization base, EC05 advertised last TPA
+ byte; A5 read back; Function 12 returned 0022. CCP byte at E400 was C3.
+ Conclusion: the boundary is discoverable; exact numeric placement is not.
+
+ZERO34
+ Purpose: capture zero-page entry state and stability across a returning call.
+ Procedure: copy 0000h-00FFh, call Function 12, copy again, compare, then dump.
+ Observation: zero differences within each call pair. Gateways were C3/FA03 and
+ C3/EC06. Reserved/scratch and unused tail bytes were not uniformly zero and the
+ tail/buffer region differed at later CCP entry.
+ Conclusion: defined fields have defined roles; unspecified bytes are not data
+ contracts, and page zero is shared system/application interface state.
+
+LOAD34
+ Purpose: distinguish loaded COM records, unloaded memory, CCP boundary, and
+ configured maximum file loading.
+ Procedure: run 378-byte LOAD34, 453-record LARGEOK, and 454-record TOOLARGE.
+ Observation: LOAD34 reported bytes from its three loaded records and residual
+ upper memory. LARGEOK printed its marker; TOOLARGE printed BAD LOAD without its
+ marker.
+ Conclusion: COM load is contiguous and record-granular, but loader maximum and
+ upper-memory contents are configuration-dependent.
+
+STACK34
+ Purpose: characterize the initial return environment without consuming it.
+ Procedure: save entry SP/top bytes, use a private stack for output, restore SP,
+ and execute RET.
+ Observation: reference SP EBA9, return word EB5F, successful CCP return.
+ Conclusion: a valid RET word is required; exact address, depth, and bytes are not.
+
+VECTOR34
+ Purpose: test documented BDOS and BIOS discovery/access paths.
+ Procedure: derive BIOS base from WBOOT operand, call BIOS CONST through its
+ vector entry, and call BDOS Function 12 through 0005h.
+ Observation: WBOOT FA03, BIOS base FA00, CONST FA06 returned 00, BDOS target
+ EC06 and version 0022.
+ Conclusion: gateway/vector semantics are required; targets are configuration.
+
+OVERLAY/transition fixture
+ Purpose: distinguish CCP loader protection from runtime use of overlayable TPA.
+ Procedure: adopt a private stack, write A5 at reference CCP base E400 and 5A at
+ derived EC05, report both via BDOS, then JMP 0000h without restoring them.
+ Observation: both markers read back. WBOOT restored CCP; following MEM34 and
+ ZERO34 commands ran normally with C3 restored at E400.
+ Conclusion: the CCP may occupy memory usable by a deliberate overlaying transient,
+ but RET/CCP continuation is invalid after overlay; WBOOT recovery is required.

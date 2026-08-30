@@ -1,0 +1,52 @@
+INVESTIGATION 035 OBSERVED OUTPUT (CONDENSED)
+
+Environment: z80pack CP/M 2.2, 64K Z80SIM CBIOS V1.2. Each case began
+from byte-identical A and B images. Full raw console text is in
+transcripts/. Field values below are hexadecimal.
+
+Cold startup
+  COLD35: DRIVE=00 USER=00 LOGIN=0001 RO=0000 IOBYTE=00 PZ4=00
+  PZ0=03C3 PZ5=06C3 M50=00 CCP=C3 ALV=FCB0 DPB=FA8D
+  Search First changed DMA 0080h, not the sentinel at 0800h.
+
+Direct BIOS BOOT after mutation
+  BIOS sign-on and A> prompt appeared. The next COLD35 showed drive 0,
+  user 0, login vector 0001, IOBYTE 00, restored page-zero gateways and
+  default DMA. Markers M50=5A and TD000=A5 survived.
+
+Ordinary RET after mutation
+  STATE35: DRIVE=00 USER=07 LOGIN=0003 IOBYTE=40 PZ4=70
+  PZ0=40C3 PZ5=43C3 M50=5A TD000=A5.
+  The saved CCP return restored drive A but did not invoke WBOOT, rebuild
+  the deliberately changed gateway operands, or reset the DMA.
+
+BDOS Function 0 after mutation
+  STATE35: DRIVE=01 USER=07 LOGIN=0003 IOBYTE=40 PZ4=71
+  PZ0=03C3 PZ5=06C3 M50=5A TD000=A5.
+  Default DMA 0080h was active; the 0800h sentinel remained A5.
+
+JMP 0000h after mutation
+  The observation matched Function 0 for the measured fields: drive B,
+  user 7, reconstructed gateways/default DMA, and surviving markers.
+
+BDOS Function 13
+  PRE:  DRIVE=01 USER=07 LOGIN=0003 RO=0002
+  POST: DRIVE=00 USER=07 LOGIN=0001 RO=0000
+  Search First used DMA 0080h; the 0800h sentinel remained A5.
+
+Pending console input
+  PEND35 reported READY. The harness offered Z; the probe observed status
+  without consuming the character and jumped to 0000h. After restart a
+  scripted carriage return produced an empty CCP command, not Z?. The
+  pending character therefore did not survive in this configuration.
+
+Physical read error and Control-C
+  DRI printed: Bdos Err On B: Bad Sector
+  It did not return to RECOVER35. After Control-C, STATE35 reported drive
+  B, user 7, IOBYTE 40, PZ4=71, restored 0000h/0005h gateways, default
+  DMA, and TD000=A5.
+
+Disk images
+  Every after-image was byte-identical to its corresponding before-image.
+  This was expected because the matrix performed no successful writes.
+

@@ -1,0 +1,28 @@
+spawn cpmsim -z -d /private/tmp/inv016-runs/BLOCK10C
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>BLOCK016 C
+
+WAITING
+^C
+A>[0;31mE (3755) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 1004 ms, waited for 0 ms
+CPU executed 421949 t-states in 0 ms
+Clock frequency 917.28 MHz

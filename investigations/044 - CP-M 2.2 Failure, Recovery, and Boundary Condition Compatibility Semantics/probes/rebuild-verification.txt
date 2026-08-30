@@ -1,0 +1,12 @@
+Investigation 044 byte-identical rebuild verification
+=====================================================
+
+The binaries were copied aside, rebuilt from the preserved sources, and
+compared byte-for-byte.
+
+  IDENTICAL FAIL44.COM
+  IDENTICAL WRITE25.COM
+  IDENTICAL OPEN25.COM
+  IDENTICAL PHYS015.COM
+
+Result: PASS

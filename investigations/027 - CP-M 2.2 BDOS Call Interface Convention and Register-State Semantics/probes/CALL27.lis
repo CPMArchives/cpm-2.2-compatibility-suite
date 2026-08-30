@@ -1,0 +1,217 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 18:39:29 2026	Page 1
+Source file: CALL27.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Investigation 027: CP/M 2.2 BDOS call/return ABI probe.
+                       2      2 ; z80pack z80asm 2.1: z80asm -fb -oABI002.COM ABI002.ASM
+                       3      3 ;
+                       4      4 ; Each case seeds registers, records SP immediately before CALL 0005H,
+                       5      5 ; calls BDOS, and records state immediately after return.  Direct stores do
+                       6      6 ; not change flags.  AF is saved after all main pairs.  R is deliberately
+                       7      7 ; omitted: it necessarily changes while the probe records other state.
+                       8      8
+                       9      9 	ORG	0100H
+                      10     10
+0100                  11     11 START:
+0100  3a 03 00        12     12 	LD	A,(0003H)
+0103  32 4d 02        13     13 	LD	(OLDIO),A
+0106  1e a5           14     14 	LD	E,0A5H
+0108  0e 08           15     15 	LD	C,8
+010a  cd 05 00        16     16 	CALL	0005H		; establish a nonzero byte-return test value
+                      17     17
+010d  3e 0c           18     18 	LD	A,12
+010f  32 4e 02        19     19 	LD	(CASEFUNC),A
+0112  11 b2 a1        20     20 	LD	DE,0A1B2H
+0115  cd 9a 01        21     21 	CALL	RUNCASE
+0118  21 51 02        22     22 	LD	HL,TEMP
+011b  11 6a 02        23     23 	LD	DE,REC12
+011e  01 19 00        24     24 	LD	BC,RECLEN
+0121  ed b0           25     25 	LDIR
+                      26     26
+0123  3e 07           27     27 	LD	A,7
+0125  32 4e 02        28     28 	LD	(CASEFUNC),A
+0128  11 34 12        29     29 	LD	DE,01234H
+012b  cd 9a 01        30     30 	CALL	RUNCASE
+012e  21 51 02        31     31 	LD	HL,TEMP
+0131  11 83 02        32     32 	LD	DE,REC07
+0134  01 19 00        33     33 	LD	BC,RECLEN
+0137  ed b0           34     34 	LDIR
+                      35     35
+0139  3e 18           36     36 	LD	A,24
+013b  32 4e 02        37     37 	LD	(CASEFUNC),A
+013e  11 78 56        38     38 	LD	DE,05678H
+0141  cd 9a 01        39     39 	CALL	RUNCASE
+0144  21 51 02        40     40 	LD	HL,TEMP
+0147  11 9c 02        41     41 	LD	DE,REC24
+014a  01 19 00        42     42 	LD	BC,RECLEN
+014d  ed b0           43     43 	LDIR
+                      44     44
+014f  3e 1a           45     45 	LD	A,26
+0151  32 4e 02        46     46 	LD	(CASEFUNC),A
+0154  11 80 00        47     47 	LD	DE,0080H		; keep/restore default DMA
+0157  cd 9a 01        48     48 	CALL	RUNCASE
+015a  21 51 02        49     49 	LD	HL,TEMP
+015d  11 b5 02        50     50 	LD	DE,REC26
+0160  01 19 00        51     51 	LD	BC,RECLEN
+0163  ed b0           52     52 	LDIR
+                      53     53
+0165  3e 29           54     54 	LD	A,41		; first number beyond DRI 2.2 table (0..40)
+0167  32 4e 02        55     55 	LD	(CASEFUNC),A
+016a  11 bc 9a        56     56 	LD	DE,09ABCH
+016d  cd 9a 01        57     57 	CALL	RUNCASE
+0170  21 51 02        58     58 	LD	HL,TEMP
+0173  11 ce 02        59     59 	LD	DE,REC41
+0176  01 19 00        60     60 	LD	BC,RECLEN
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 18:39:29 2026	Page 2
+Source file: CALL27.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0179  ed b0           61     61 	LDIR
+                      62     62
+017b  3a 4d 02        63     63 	LD	A,(OLDIO)
+017e  5f              64     64 	LD	E,A
+017f  0e 08           65     65 	LD	C,8
+0181  cd 05 00        66     66 	CALL	0005H		; restore IOBYTE
+                      67     67
+0184  11 43 02        68     68 	LD	DE,HEADER
+0187  0e 09           69     69 	LD	C,9
+0189  cd 05 00        70     70 	CALL	0005H
+018c  11 6a 02        71     71 	LD	DE,REC12
+018f  01 7d 00        72     72 	LD	BC,RECLEN*5
+0192  cd 0e 02        73     73 	CALL	DUMP
+0195  0e 00           74     74 	LD C,0
+0197  c3 05 00        75     75 	JP 0005H
+                      76     76
+                      77     77 ; Input: CASEFUNC and DE argument.  Values deliberately make clobbers clear.
+019a                  78     78 RUNCASE:
+019a  ed 53 4f 02     79     79 	LD	(CASEDE),DE
+019e  21 55 7d        80     80 	LD	HL,07D55H
+01a1  e5              81     81 	PUSH	HL
+01a2  f1              82     82 	POP	AF
+01a3  08              83     83 	EX	AF,AF'
+01a4  21 aa 8e        84     84 	LD	HL,08EAAH
+01a7  e5              85     85 	PUSH	HL
+01a8  f1              86     86 	POP	AF
+01a9  08              87     87 	EX	AF,AF'
+01aa  21 d4 c3        88     88 	LD	HL,0C3D4H
+01ad  dd 21 f6 e5     89     89 	LD	IX,0E5F6H
+01b1  fd 21 57 13     90     90 	LD	IY,01357H
+01b5  01 68 24        91     91 	LD	BC,02468H
+01b8  11 9c 36        92     92 	LD	DE,0369CH
+01bb  d9              93     93 	EXX
+01bc  01 ad 48        94     94 	LD	BC,048ADH
+01bf  11 be 5a        95     95 	LD	DE,05ABEH
+01c2  21 cf 6c        96     96 	LD	HL,06CCFH
+01c5  d9              97     97 	EXX
+01c6  ed 5b 4f 02     98     98 	LD	DE,(CASEDE)
+01ca  3a 4e 02        99     99 	LD	A,(CASEFUNC)
+01cd  4f             100    100 	LD	C,A
+01ce  06 b1          101    101 	LD	B,0B1H
+01d0  ed 73 52 02    102    102 	LD	(T_PRESP),SP
+01d4  cd 05 00       103    103 	CALL	0005H
+01d7  ed 73 54 02    104    104 	LD	(T_POSTSP),SP
+01db  ed 43 58 02    105    105 	LD	(T_BC),BC
+01df  ed 53 5a 02    106    106 	LD	(T_DE),DE
+01e3  22 5c 02       107    107 	LD	(T_HL),HL
+01e6  dd 22 5e 02    108    108 	LD	(T_IX),IX
+01ea  fd 22 60 02    109    109 	LD	(T_IY),IY
+01ee  f5             110    110 	PUSH	AF
+01ef  e1             111    111 	POP	HL
+01f0  22 56 02       112    112 	LD	(T_AF),HL
+01f3  d9             113    113 	EXX
+01f4  ed 43 64 02    114    114 	LD	(T_BCX),BC
+01f8  ed 53 66 02    115    115 	LD	(T_DEX),DE
+01fc  22 68 02       116    116 	LD	(T_HLX),HL
+01ff  d9             117    117 	EXX
+0200  08             118    118 	EX	AF,AF'
+0201  f5             119    119 	PUSH	AF
+0202  e1             120    120 	POP	HL
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 18:39:29 2026	Page 3
+Source file: CALL27.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0203  22 62 02       121    121 	LD	(T_AFX),HL
+0206  08             122    122 	EX	AF,AF'
+0207  3a 4e 02       123    123 	LD	A,(CASEFUNC)
+020a  32 51 02       124    124 	LD	(T_FUNC),A
+020d  c9             125    125 	RET
+                     126    126
+020e                 127    127 DUMP:
+020e  1a             128    128 	LD	A,(DE)
+020f  c5             129    129 	PUSH	BC
+0210  d5             130    130 	PUSH	DE
+0211  cd 2a 02       131    131 	CALL	HEXBYTE
+0214  d1             132    132 	POP	DE
+0215  c1             133    133 	POP	BC
+0216  13             134    134 	INC	DE
+0217  0b             135    135 	DEC	BC
+0218  78             136    136 	LD	A,B
+0219  b1             137    137 	OR	C
+021a  20 f2          138    138 	JR	NZ,DUMP
+021c  1e 0d          139    139 	LD	E,13
+021e  0e 02          140    140 	LD	C,2
+0220  cd 05 00       141    141 	CALL	0005H
+0223  1e 0a          142    142 	LD	E,10
+0225  0e 02          143    143 	LD	C,2
+0227  c3 05 00       144    144 	JP	0005H
+                     145    145
+022a                 146    146 HEXBYTE:
+022a  f5             147    147 	PUSH	AF
+022b  0f             148    148 	RRCA
+022c  0f             149    149 	RRCA
+022d  0f             150    150 	RRCA
+022e  0f             151    151 	RRCA
+022f  cd 33 02       152    152 	CALL	HEXNIB
+0232  f1             153    153 	POP	AF
+0233                 154    154 HEXNIB:
+0233  e6 0f          155    155 	AND	0FH
+0235  c6 30          156    156 	ADD	A,'0'
+0237  fe 3a          157    157 	CP	'9'+1
+0239  38 02          158    158 	JR	C,HEXOUT
+023b  c6 07          159    159 	ADD	A,7
+023d                 160    160 HEXOUT:
+023d  5f             161    161 	LD	E,A
+023e  0e 02          162    162 	LD	C,2
+0240  c3 05 00       163    163 	JP	0005H
+                     164    164
+0243  43 41 4c 4c    165    165 HEADER:	DB 'CALL27 ',13,10,'$'
+0247  32 37 20 0d    165    166
+024b  0a 24          165    167
+024d  00             166    168 OLDIO:	DB 0
+024e  00             167    169 CASEFUNC: DB 0
+024f  00 00          168    170 CASEDE:	DW 0
+                     169    171
+                     170    172 ; Record: function, pre-SP, post-SP, AF, BC, DE, HL, IX, IY,
+                     171    173 ;         AF', BC', DE', HL' (all words little-endian).
+0251                 172    174 TEMP:
+0251  00             173    175 T_FUNC:	DB 0
+0252  00 00          174    176 T_PRESP: DW 0
+0254  00 00          175    177 T_POSTSP: DW 0
+0256  00 00          176    178 T_AF:	DW 0
+0258  00 00          177    179 T_BC:	DW 0
+025a  00 00          178    180 T_DE:	DW 0
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 18:39:29 2026	Page 4
+Source file: CALL27.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+025c  00 00          179    181 T_HL:	DW 0
+025e  00 00          180    182 T_IX:	DW 0
+0260  00 00          181    183 T_IY:	DW 0
+0262  00 00          182    184 T_AFX:	DW 0
+0264  00 00          183    185 T_BCX:	DW 0
+0266  00 00          184    186 T_DEX:	DW 0
+0268  00 00          185    187 T_HLX:	DW 0
+026a                 186    188 TEMPEND:
+0019  =              187    189 RECLEN	EQU TEMPEND-TEMP
+                     188    190
+026a                 189    191 REC12:	DS RECLEN
+0283                 190    192 REC07:	DS RECLEN
+029c                 191    193 REC24:	DS RECLEN
+02b5                 192    194 REC26:	DS RECLEN
+02ce                 193    195 REC41:	DS RECLEN
+                     194    196
+02e7                 195    197 	END

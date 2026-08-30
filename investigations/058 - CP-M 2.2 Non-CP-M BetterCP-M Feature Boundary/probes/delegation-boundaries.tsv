@@ -1,0 +1,11 @@
+delegated_mechanism	may_exist_outside_personality	personality_retains_accountability_for	prohibited_leakage_or_inference
+CPU execution engine	yes	Z80-visible execution, registers/instructions as declared, 0100h entry and termination observations	host CPU state, incompatible instruction/address semantics
+memory backing/protection	yes	page zero, TPA boundaries, writable/executable strict-profile behavior, configured ceiling	host pointers, protection faults contradicting selected CP/M profile
+physical/host storage	yes	FCB/DMA, 128-byte records, extents, directory/user namespace, persistence and CP/M error semantics	host names, ordering, timestamps, atomicity or error codes not promised
+physical disks/controllers	yes	configured BIOS logical sectors, translation, DPH/DPB structures and result boundary	raw device assumptions outside named profile
+terminal/console transport	yes	BDOS formatted/direct behavior and selected BIOS raw device path	host line editing, encoding, buffering or control handling changing CP/M result
+character/serial devices	yes	advertised logical routes, byte behavior and named communications profile	silent fallback or universal device claims
+clock/scheduling/concurrency	yes	observable blocking, status, retry and ordering required by the ledger	host timing behavior promoted without evidence
+error detection/retry mechanism	yes	classified CP/M return/fatal/restart/recovery and visible mutation state	private provider exceptions or host diagnostics as CP/M interface
+CCP parser/loader mechanism	yes	CP/M command parsing, FCB/tail construction, lookup/load and command cycle	modern path/search/quoting behavior replacing CP/M rules
+test/evidence infrastructure	yes	no runtime responsibility; validates declared personality surface	test harness design treated as operating-system requirement

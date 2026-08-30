@@ -1,0 +1,271 @@
+Investigation 046 — CP/M 2.2 Compatibility Boundary Closure and Remaining Gap Analysis Prompt
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 045 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation 045.
+
+Create Investigation 046 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger.
+Do not modify previous investigation reports or artifacts.
+
+This is an evidence investigation only.
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Determine whether the current CP/M 2.2 compatibility investigation
+series has identified all remaining compatibility boundaries required
+for a high-compatibility CP/M 2.2 environment.
+
+Previous investigations established:
+
+- CCP behavior;
+- BDOS behavior;
+- BIOS behavior;
+- disk behavior;
+- memory behavior;
+- execution behavior;
+- failure behavior;
+- software ecosystem assumptions;
+- cross-layer interactions.
+
+Investigation 046 performs a compatibility closure review.
+
+Determine:
+
+- whether any observable CP/M 2.2 compatibility boundaries remain
+  unresolved;
+- whether additional investigations are required;
+- whether current evidence is sufficient for compatibility decisions.
+
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+- documented CP/M 2.2 behavior;
+- Digital Research implementation behavior;
+- common CP/M programming practices;
+- historically significant software dependencies.
+
+The objective is compatibility with the practical CP/M software
+ecosystem.
+
+Do not assume undocumented behavior is required without evidence.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Review completed investigations through Investigation 045.
+
+Pay particular attention to:
+
+Investigation 041:
+    Direct System Access and Undocumented Application Interface
+    Compatibility Semantics.
+
+Investigation 042:
+    Common Software Compatibility Assumptions.
+
+Investigation 043:
+    Memory and Execution Edge Case Compatibility Semantics.
+
+Investigation 044:
+    Failure, Recovery, and Boundary Condition Compatibility Semantics.
+
+Investigation 045:
+    Cross-Layer Compatibility Boundary Review.
+
+
+SCOPE
+
+Investigate:
+
+- remaining compatibility gaps;
+- incomplete evidence;
+- unresolved policy questions;
+- missing subsystem boundaries;
+- missing ecosystem assumptions.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- BetterCP/M architecture;
+- implementation design;
+- new operating-system features;
+- unsupported CP/M versions.
+
+
+INVESTIGATION QUESTIONS
+
+1. COMPATIBILITY COVERAGE REVIEW
+
+Determine:
+
+- whether all major CP/M 2.2 observable interfaces are covered;
+- whether any compatibility boundary lacks investigation.
+
+
+2. LEDGER GAP REVIEW
+
+Review Compatibility Ledger entries.
+
+Determine:
+
+- missing entries;
+- incomplete entries;
+- conflicting entries;
+- entries requiring stronger evidence.
+
+
+3. SOFTWARE COMPATIBILITY REVIEW
+
+Determine:
+
+- whether existing investigations adequately represent CP/M software
+  expectations;
+- whether common software assumptions remain unexplored.
+
+
+4. IMPLEMENTATION VERSUS COMPATIBILITY REVIEW
+
+Determine:
+
+- which behaviors are true compatibility requirements;
+- which behaviors are implementation details;
+- which behaviors should remain unspecified.
+
+
+5. REMAINING INVESTIGATION NEEDS
+
+Determine:
+
+- whether additional investigations are required;
+- the purpose and scope of each proposed investigation.
+
+
+6. EXPERIMENTAL REQUIREMENTS
+
+Create deterministic validation probes covering:
+
+- unresolved compatibility boundaries;
+- cross-layer interactions;
+- representative software assumptions.
+
+Each probe must include:
+
+- purpose;
+- procedure;
+- observed behavior;
+- compatibility conclusion.
+
+
+EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+    documented behavior.
+
+B:
+    Digital Research implementation behavior.
+
+I:
+    experimental observation.
+
+D:
+    unresolved policy.
+
+
+Ledger evidence must identify:
+
+I046
+CLOSURE
+COMPATIBILITY
+SYSTEM
+subsystem
+IG
+AG
+
+
+COMPATIBILITY CLASSIFICATION
+
+Classify findings:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+LEDGER REVIEW
+
+Review all affected Compatibility Ledger entries.
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+Do not modify the ledger directly.
+
+
+REPORT STRUCTURE
+
+Create:
+
+Investigation 046 - CP/M 2.2 Compatibility Boundary Closure and Remaining Gap Analysis.md
+
+Include:
+
+1. Objective and scope
+2. Compatibility standard
+3. Relationship to previous investigations
+4. Coverage review
+5. Ledger analysis
+6. Software ecosystem review
+7. Remaining compatibility gaps
+8. Experimental validation
+9. Proposed future investigations
+10. Compatibility conclusions
+11. Proposed ledger additions
+12. Existing-entry updates
+13. Open questions
+14. Conformance implications
+
+
+FINAL REVIEW
+
+Before completing the investigation, verify:
+
+- all major compatibility boundaries have been reviewed;
+- unresolved issues are identified;
+- evidence sources are recorded;
+- conclusions are classified;
+- compatibility requirements are separated from implementation details.
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M architecture.
+
+Do not replace CP/M semantics with modern abstractions.
+
+Determine the remaining CP/M 2.2 compatibility contract and closure
+requirements only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

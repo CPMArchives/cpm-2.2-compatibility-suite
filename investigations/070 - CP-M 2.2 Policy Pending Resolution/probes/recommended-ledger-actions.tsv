@@ -1,0 +1,50 @@
+id	title	I070 decision	recommended ledger disposition	required wording treatment	applicability/profile	evidence label
+0012	Second default FCB at 006Ch	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	Strict DRI CCP/ecosystem	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0016	Default FCB unopened control fields	NOT GUARANTEED	NOT GUARANTEED	replace exact assertion with permitted-variation wording where necessary	Generic baseline	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0019	Leading blank in command tail	REQUIRED	REQUIRED	direct baseline requirement	Generic CP/M	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0020	Uppercase command-tail representation	REQUIRED	REQUIRED	direct baseline requirement	Generic CP/M	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0021	NUL after counted command tail	NOT GUARANTEED	NOT GUARANTEED	replace exact assertion with permitted-variation wording where necessary	Generic baseline	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0069	Exact logical-column update rules	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	DRI formatted-console profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0070	LF resets DRI logical column	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	DRI formatted-console profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0071	CR does not reset DRI logical column	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	DRI formatted-console profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0072	Pending-key buffering during formatted output	NOT GUARANTEED	NOT GUARANTEED	replace exact assertion with permitted-variation wording where necessary	Generic baseline	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0073	Ctrl-C behavior after output pause	NOT GUARANTEED	NOT GUARANTEED	replace exact assertion with permitted-variation wording where necessary	Generic baseline	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0086	Exact function 11 ready result	NOT GUARANTEED	NOT GUARANTEED	replace exact assertion with permitted-variation wording where necessary	Generic baseline	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0087	Function 11 pending-byte retention	NOT GUARANTEED	NOT GUARANTEED	replace exact assertion with permitted-variation wording where necessary	Generic baseline	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0088	DRI function 6 ignores retained pending byte	NOT GUARANTEED	NOT GUARANTEED	replace exact assertion with permitted-variation wording where necessary	Generic baseline	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0103	Function-1 Ctrl-P printer-echo state change	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	DRI formatted-console profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0104	Function 1 consumes function-11-retained input	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	DRI formatted-console profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0125	Function 10 Ctrl-P exclusion and printer-echo toggle	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	DRI line-editor profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0126	Function 10 post-Ctrl-P echo state	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	DRI line-editor profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0127	Function 10 seven-bit input masking	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	DRI line-editor profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0128	Function 10 exact correction-display bytes	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	DRI line-editor presentation profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0129	Function 10 noninitial Ctrl-C behavior	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	DRI line-editor profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0154	Unavailable-drive presentation	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	Interactive DRI error profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0155	Function 13 user-number preservation	REQUIRED	REQUIRED	direct baseline requirement	Generic CP/M	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0183	Failed-open FCB residual bytes	NOT GUARANTEED	NOT GUARANTEED	replace exact assertion with permitted-variation wording where necessary	Generic baseline	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0233	Exact EOF code	NOT GUARANTEED	NOT GUARANTEED	replace exact assertion with permitted-variation wording where necessary	Generic baseline	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0246	Physical read-error presentation	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	Interactive CP/M disk-error profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0276	Exact write failure codes	REQUIRED	REQUIRED	direct baseline requirement	Generic CP/M	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0283	Physical write-error presentation	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	Interactive CP/M disk-error profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0309	Wildcard Rename	OUTSIDE SCOPE	NOT REQUIRED	state explicit exclusion from compatibility claim	No generic or supported profile claim	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0314	Delete/Rename physical errors	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	Interactive CP/M disk-error profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0346	Allocation-full exact code	REQUIRED	REQUIRED	direct baseline requirement	Generic CP/M	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0354	Physical random-I/O errors	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	Interactive CP/M disk-error profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0385	Fatal presentation	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	Interactive DRI protection-error profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0387	Exact diagnostic text	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	DRI diagnostic-presentation profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0389	Automatic media-change protection	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	Removable-media/hardware profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0411	Exact Bad Sector text	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	DRI diagnostic-presentation profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0412	Accepted ignore characters	NOT GUARANTEED	NOT GUARANTEED	replace exact assertion with permitted-variation wording where necessary	Generic baseline	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0413	Structured physical-error extension	OPTIONAL	NOT REQUIRED	state optional opt-in profile/extension applicability	Headless/structured-error extension	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0435	Function 37 compatibility status	OPTIONAL	NOT REQUIRED	state optional opt-in profile/extension applicability	Undocumented Function-37 compatibility profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0446	Active IOBYTE routing policy	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	IOBYTE logical-device profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0472	LISTST result policy	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	BIOS/list-device profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0476	CCP prompt presentation freedom	NOT GUARANTEED	NOT GUARANTEED	replace exact assertion with permitted-variation wording where necessary	Generic baseline	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0478	DRI CCP command capacity	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	Strict DRI CCP profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0480	TAB is not CCP SPACE	REQUIRED	REQUIRED	direct baseline requirement	Generic CP/M	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0490	Exact DRI command-error presentation	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	DRI diagnostic-presentation profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0506	Default FCB operand assignment	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	Strict DRI CCP/ecosystem	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0508	Tail capacity is bounded by CCP input acquisition	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	Declared CCP profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0512	Post-termination drive and user policy	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	CCP/lifecycle profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0523	Function 37 state-effect profile scope	OPTIONAL	NOT REQUIRED	state optional opt-in profile/extension applicability	Undocumented Function-37 compatibility profile	I070 POLICY PENDING RESOLUTION subsystem IG AG
+0580	Exact resident output presentation	PROFILE REQUIRED	REQUIRED	rewrite as conditional named-profile requirement	DRI resident-presentation profile	I070 POLICY PENDING RESOLUTION subsystem IG AG

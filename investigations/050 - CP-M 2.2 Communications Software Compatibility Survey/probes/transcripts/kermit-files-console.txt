@@ -1,0 +1,56 @@
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+Mostek AID-80F and SYS-80FT Emulator Release 1.1
+by Mike Douglas
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Drive 0: CPM/system.dsk
+Drive 1: CPM/comms.dsk
+
+Boot ROM: MostekROM.bin
+
+Loader statistics for file <local-workspace>/g-p-6a682f002be881918281554d644daf48/stage050/work/roms/MostekROM.bin:
+START : E000H
+END   : EFFFH
+PC    : E000H
+LOADED: 1000H (4096)
+
+Type CTRL-\ to halt emulation
+
+
+
+56K CP/M 2.2 Ver 1.1
+ for Mostek AID-80F
+
+A>b:
+B>kermit
+Kermit-80 v4.11 configured for Generic CP/M-80 with Generic (Dumb) CRT Terminal type selected 
+
+For help, type ? at any point in a command
+Kermit-80   0B:>copy test50.txt copy50.txt
+Kermit-80   0B:>directory
+                    Directory for drive  0B:
+KERMIT  .COM  29k : TEST50  .TXT   1k : BIO #3  .BAS   2k : COPY50  .TXT   1k
+
+                Drive B has 208K bytes free
+
+
+Kermit-80   0B:>exit
+B>
+User Interrupt at 0xdaf2
+I/O ran for 1969 ms, waited for 0 ms
+CPU executed 92815046 t-states in 83 ms
+clock frequency = 1116.61 MHz
+
+PC   A  SZHPNC I  R  IFF BC   DE   HL   A'F' B'C' D'E' H'L' IX   IY   SP
+daf2 80 011100 00 22 11  007f c406 cf06 10fd 0000 0002 e9db 4059 dc12 cf2f
+>>> q

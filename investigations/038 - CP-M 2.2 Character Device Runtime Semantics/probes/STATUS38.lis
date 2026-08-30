@@ -1,0 +1,350 @@
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 09:10:32 2026	Page 1
+Source file: STATUS38.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Investigation 020 deterministic BIOS jump-table and character-call probe.
+                       2      2 ; Build: z80asm -fb -oBIOS020.COM BIOS020.ASM
+                       3      3         ORG 0100H
+0100  31 60 04         4      4 START:  LD SP,STACKTOP
+0103  11 1c 03         5      5         LD DE,HDR
+0106  0e 09            6      6         LD C,9
+0108  cd 05 00         7      7         CALL 5
+010b  21 00 00         8      8         LD HL,0
+010e  06 08            9      9         LD B,8
+0110  cd d3 02        10     10         CALL DUMP
+                      11     11
+                      12     12         ; Derive BIOS base from the documented WBOOT vector at 0000h.
+0113  2a 01 00        13     13         LD HL,(0001H)
+0116  2b              14     14         DEC HL
+0117  2b              15     15         DEC HL
+0118  2b              16     16         DEC HL
+0119  22 ad 03        17     17         LD (BBASE),HL
+011c  11 2e 03        18     18         LD DE,BLAB
+011f  0e 09           19     19         LD C,9
+0121  cd 05 00        20     20         CALL 5
+0124  2a ad 03        21     21         LD HL,(BBASE)
+0127  cd eb 02        22     22         CALL HEXWORD
+012a  cd 12 03        23     23         CALL CRLF
+                      24     24
+                      25     25         ; Emit all 17 vector rows: index, opcode, target.
+012d  11 3a 03        26     26         LD DE,VLAB
+0130  0e 09           27     27         LD C,9
+0132  cd 05 00        28     28         CALL 5
+0135  2a ad 03        29     29         LD HL,(BBASE)
+0138  06 11           30     30         LD B,17
+013a  af              31     31         XOR A
+013b  f5              32     32 VLOOP: PUSH AF
+013c  c5              33     33         PUSH BC
+013d  e5              34     34         PUSH HL
+013e  cd f2 02        35     35         CALL HEXBYTE
+0141  1e 20           36     36         LD E,' '
+0143  cd 06 03        37     37         CALL PUTC
+0146  e1              38     38         POP HL
+0147  7e              39     39         LD A,(HL)
+0148  cd f2 02        40     40         CALL HEXBYTE
+014b  1e 20           41     41         LD E,' '
+014d  cd 06 03        42     42         CALL PUTC
+0150  23              43     43         INC HL
+0151  5e              44     44         LD E,(HL)
+0152  23              45     45         INC HL
+0153  56              46     46         LD D,(HL)
+0154  e5              47     47         PUSH HL
+0155  eb              48     48         EX DE,HL
+0156  cd eb 02        49     49         CALL HEXWORD
+0159  cd 12 03        50     50         CALL CRLF
+015c  e1              51     51         POP HL
+015d  23              52     52         INC HL
+015e  c1              53     53         POP BC
+015f  f1              54     54         POP AF
+0160  3c              55     55         INC A
+0161  10 d8           56     56         DJNZ VLOOP
+                      57     57
+0163  cd 10 02        58     58         CALL PATCH
+                      59     59         ; Direct calls through the public vector entries.
+0166  2a ad 03        60     60         LD HL,(BBASE)
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 09:10:32 2026	Page 2
+Source file: STATUS38.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0169  11 06 00        61     61         LD DE,6
+016c  19              62     62         ADD HL,DE
+016d  cd 09 02        63     63         CALL ICALL
+0170  32 b4 03        64     64         LD (RESULTS+0),A          ; CONST empty = 00
+0173  3e 01           65     65         LD A,1
+0175  32 b1 03        66     66         LD (READY),A
+0178  2a ad 03        67     67         LD HL,(BBASE)
+017b  11 06 00        68     68         LD DE,6
+017e  19              69     69         ADD HL,DE
+017f  cd 09 02        70     70         CALL ICALL
+0182  32 b5 03        71     71         LD (RESULTS+1),A          ; CONST ready = FF
+0185  2a ad 03        72     72         LD HL,(BBASE)
+0188  11 09 00        73     73         LD DE,9
+018b  19              74     74         ADD HL,DE
+018c  cd 09 02        75     75         CALL ICALL
+018f  32 b6 03        76     76         LD (RESULTS+2),A          ; CONIN = 41
+0192  0e 09           77     77         LD C,09H
+0194  2a ad 03        78     78         LD HL,(BBASE)
+0197  11 0c 00        79     79         LD DE,12
+019a  19              80     80         ADD HL,DE
+019b  cd 09 02        81     81         CALL ICALL
+019e  0e 10           82     82         LD C,10H
+01a0  2a ad 03        83     83         LD HL,(BBASE)
+01a3  11 0f 00        84     84         LD DE,15
+01a6  19              85     85         ADD HL,DE
+01a7  cd 09 02        86     86         CALL ICALL
+01aa  0e 1a           87     87         LD C,1AH
+01ac  2a ad 03        88     88         LD HL,(BBASE)
+01af  11 12 00        89     89         LD DE,18
+01b2  19              90     90         ADD HL,DE
+01b3  cd 09 02        91     91         CALL ICALL
+01b6  2a ad 03        92     92         LD HL,(BBASE)
+01b9  11 15 00        93     93         LD DE,21
+01bc  19              94     94         ADD HL,DE
+01bd  cd 09 02        95     95         CALL ICALL
+01c0  32 b7 03        96     96         LD (RESULTS+3),A          ; READER = 52
+01c3  2a ad 03        97     97         LD HL,(BBASE)
+01c6  11 2d 00        98     98         LD DE,45
+01c9  19              99     99         ADD HL,DE
+01ca  cd 09 02       100    100         CALL ICALL
+01cd  32 b8 03       101    101         LD (RESULTS+4),A          ; LISTST first = 00
+01d0  2a ad 03       102    102         LD HL,(BBASE)
+01d3  11 2d 00       103    103         LD DE,45
+01d6  19             104    104         ADD HL,DE
+01d7  cd 09 02       105    105         CALL ICALL
+01da  32 b9 03       106    106         LD (RESULTS+5),A          ; LISTST second = FF
+01dd  3a b3 03       107    107         LD A,(OUTN)
+01e0  32 ba 03       108    108         LD (RESULTS+6),A
+01e3  cd 6d 02       109    109         CALL RESTORE
+                     110    110
+01e6  11 59 03       111    111         LD DE,RLAB
+01e9  0e 09          112    112         LD C,9
+01eb  cd 05 00       113    113         CALL 5
+01ee  21 b4 03       114    114         LD HL,RESULTS
+01f1  06 07          115    115         LD B,7
+01f3  cd d3 02       116    116         CALL DUMP
+01f6  11 92 03       117    117         LD DE,OLAB
+01f9  0e 09          118    118         LD C,9
+01fb  cd 05 00       119    119         CALL 5
+01fe  21 bb 03       120    120         LD HL,OUTBUF
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 09:10:32 2026	Page 3
+Source file: STATUS38.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0201  3a b3 03       121    121         LD A,(OUTN)
+0204  47             122    122         LD B,A
+0205  cd d3 02       123    123         CALL DUMP
+0208  c9             124    124         RET
+                     125    125
+                     126    126 ; Call address in HL without relying on a fixed BIOS address.
+0209  22 0d 02       127    127 ICALL:  LD (ICDEST+1),HL
+020c  cd 00 00       128    128 ICDEST: CALL 0000H
+020f  c9             129    129         RET
+                     130    130
+0210  2a ad 03       131    131 PATCH:  LD HL,(BBASE)
+0213  11 06 00       132    132         LD DE,6
+0216  19             133    133         ADD HL,DE
+0217  22 af 03       134    134         LD (VPTR),HL
+021a  11 cb 03       135    135         LD DE,SAVED
+021d  01 12 00       136    136         LD BC,18                 ; CONST..READER, six vectors
+0220  ed b0          137    137         LDIR
+0222  2a ad 03       138    138         LD HL,(BBASE)
+0225  11 2d 00       139    139         LD DE,45
+0228  19             140    140         ADD HL,DE
+0229  11 dd 03       141    141         LD DE,SAVED+18
+022c  01 03 00       142    142         LD BC,3                  ; LISTST
+022f  ed b0          143    143         LDIR
+0231  2a af 03       144    144         LD HL,(VPTR)
+0234  11 8c 02       145    145         LD DE,HCONST
+0237  cd 65 02       146    146         CALL PUTJP
+023a  11 94 02       147    147         LD DE,HCONIN
+023d  cd 65 02       148    148         CALL PUTJP
+0240  11 9b 02       149    149         LD DE,HCONOUT
+0243  cd 65 02       150    150         CALL PUTJP
+0246  11 a0 02       151    151         LD DE,HLIST
+0249  cd 65 02       152    152         CALL PUTJP
+024c  11 a5 02       153    153         LD DE,HPUNCH
+024f  cd 65 02       154    154         CALL PUTJP
+0252  11 aa 02       155    155         LD DE,HREADER
+0255  cd 65 02       156    156         CALL PUTJP
+0258  2a ad 03       157    157         LD HL,(BBASE)
+025b  11 2d 00       158    158         LD DE,45
+025e  19             159    159         ADD HL,DE
+025f  11 ad 02       160    160         LD DE,HLISTST
+0262  c3 65 02       161    161         JP PUTJP
+0265  36 c3          162    162 PUTJP: LD (HL),0C3H
+0267  23             163    163         INC HL
+0268  73             164    164         LD (HL),E
+0269  23             165    165         INC HL
+026a  72             166    166         LD (HL),D
+026b  23             167    167         INC HL
+026c  c9             168    168         RET
+026d                 169    169 RESTORE:
+026d  21 cb 03       170    170         LD HL,SAVED
+0270  ed 5b af 03    171    171         LD DE,(VPTR)
+0274  01 12 00       172    172         LD BC,18
+0277  ed b0          173    173         LDIR
+0279  21 dd 03       174    174         LD HL,SAVED+18
+027c  ed 5b ad 03    175    175         LD DE,(BBASE)
+0280  eb             176    176         EX DE,HL
+0281  01 2d 00       177    177         LD BC,45
+0284  09             178    178         ADD HL,BC
+0285  eb             179    179         EX DE,HL
+0286  01 03 00       180    180         LD BC,3
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 09:10:32 2026	Page 4
+Source file: STATUS38.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0289  ed b0          181    181         LDIR
+028b  c9             182    182         RET
+                     183    183
+028c  3a b1 03       184    184 HCONST: LD A,(READY)
+028f  b7             185    185         OR A
+0290  c8             186    186         RET Z
+0291  3e ff          187    187         LD A,0FFH
+0293  c9             188    188         RET
+0294  af             189    189 HCONIN:XOR A
+0295  32 b1 03       190    190         LD (READY),A
+0298  3e 41          191    191         LD A,41H
+029a  c9             192    192         RET
+029b                 193    193 HCONOUT:
+029b  3e 43          194    194         LD A,43H                 ; C marker
+029d  c3 bb 02       195    195         JP CAP
+02a0  3e 4c          196    196 HLIST: LD A,4CH                 ; L marker
+02a2  c3 bb 02       197    197         JP CAP
+02a5  3e 50          198    198 HPUNCH:LD A,50H                 ; P marker
+02a7  c3 bb 02       199    199         JP CAP
+02aa  3e 52          200    200 HREADER:LD A,52H
+02ac  c9             201    201         RET
+02ad                 202    202 HLISTST:
+02ad  3a b2 03       203    203         LD A,(LSTN)
+02b0  3c             204    204         INC A
+02b1  32 b2 03       205    205         LD (LSTN),A
+02b4  fe 01          206    206         CP 1
+02b6  3e 00          207    207         LD A,0
+02b8  c8             208    208         RET Z
+02b9  3d             209    209         DEC A                    ; FF
+02ba  c9             210    210         RET
+02bb  21 bb 03       211    211 CAP:    LD HL,OUTBUF
+02be  f5             212    212         PUSH AF
+02bf  3a b3 03       213    213         LD A,(OUTN)
+02c2  5f             214    214         LD E,A
+02c3  16 00          215    215         LD D,0
+02c5  19             216    216         ADD HL,DE
+02c6  f1             217    217         POP AF
+02c7  77             218    218         LD (HL),A
+02c8  23             219    219         INC HL
+02c9  71             220    220         LD (HL),C
+02ca  3a b3 03       221    221         LD A,(OUTN)
+02cd  c6 02          222    222         ADD A,2
+02cf  32 b3 03       223    223         LD (OUTN),A
+02d2  c9             224    224         RET
+                     225    225
+02d3  78             226    226 DUMP:   LD A,B
+02d4  b7             227    227         OR A
+02d5  ca 12 03       228    228         JP Z,CRLF
+02d8  7e             229    229 DLOOP:  LD A,(HL)
+02d9  23             230    230         INC HL
+02da  e5             231    231         PUSH HL
+02db  c5             232    232         PUSH BC
+02dc  cd f2 02       233    233         CALL HEXBYTE
+02df  1e 20          234    234         LD E,' '
+02e1  cd 06 03       235    235         CALL PUTC
+02e4  c1             236    236         POP BC
+02e5  e1             237    237         POP HL
+02e6  10 f0          238    238         DJNZ DLOOP
+02e8  c3 12 03       239    239         JP CRLF
+02eb  e5             240    240 HEXWORD:PUSH HL
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 09:10:32 2026	Page 5
+Source file: STATUS38.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+02ec  7c             241    241         LD A,H
+02ed  cd f2 02       242    242         CALL HEXBYTE
+02f0  e1             243    243         POP HL
+02f1  7d             244    244         LD A,L
+02f2  f5             245    245 HEXBYTE:PUSH AF
+02f3  0f             246    246         RRCA
+02f4  0f             247    247         RRCA
+02f5  0f             248    248         RRCA
+02f6  0f             249    249         RRCA
+02f7  cd fb 02       250    250         CALL NIB
+02fa  f1             251    251         POP AF
+02fb  e6 0f          252    252 NIB:    AND 0FH
+02fd  c6 30          253    253         ADD A,'0'
+02ff  fe 3a          254    254         CP '9'+1
+0301  38 02          255    255         JR C,NIBO
+0303  c6 07          256    256         ADD A,7
+0305  5f             257    257 NIBO:   LD E,A
+0306  c5             258    258 PUTC:   PUSH BC
+0307  d5             259    259         PUSH DE
+0308  e5             260    260         PUSH HL
+0309  0e 02          261    261         LD C,2
+030b  cd 05 00       262    262         CALL 5
+030e  e1             263    263         POP HL
+030f  d1             264    264         POP DE
+0310  c1             265    265         POP BC
+0311  c9             266    266         RET
+0312  1e 0d          267    267 CRLF:   LD E,13
+0314  cd 06 03       268    268         CALL PUTC
+0317  1e 0a          269    269         LD E,10
+0319  c3 06 03       270    270         JP PUTC
+                     271    271
+031c  42 49 4f 53    272    272 HDR:    DB 'BIOS020 PZ00-07: $'
+0320  30 32 30 20    272    273
+0324  50 5a 30 30    272    274
+0328  2d 30 37 3a    272    275
+032c  20 24          272    276
+032e  42 49 4f 53    273    277 BLAB:   DB 'BIOS BASE: $'
+0332  20 42 41 53    273    278
+0336  45 3a 20 24    273    279
+033a  56 45 43 54    274    280 VLAB:   DB 'VECTORS index opcode target:',13,10,'$'
+033e  4f 52 53 20    274    281
+0342  69 6e 64 65    274    282
+0346  78 20 6f 70    274    283
+034a  63 6f 64 65    274    284
+034e  20 74 61 72    274    285
+0352  67 65 74 3a    274    286
+0356  0d 0a 24       274    287
+0359  44 49 52 45    275    288 RLAB:   DB 'DIRECT CONST0 CONST1 CONIN READER LISTST0 LISTST1 OUTN: $'
+035d  43 54 20 43    275    289
+0361  4f 4e 53 54    275    290
+0365  30 20 43 4f    275    291
+0369  4e 53 54 31    275    292
+036d  20 43 4f 4e    275    293
+0371  49 4e 20 52    275    294
+0375  45 41 44 45    275    295
+0379  52 20 4c 49    275    296
+037d  53 54 53 54    275    297
+0381  30 20 4c 49    275    298
+0385  53 54 53 54    275    299
+0389  31 20 4f 55    275    300
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 09:10:32 2026	Page 6
+Source file: STATUS38.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+038d  54 4e 3a 20    275    301
+0391  24             275    302
+0392  4f 55 54 50    276    303 OLAB:   DB 'OUTPUT PAIRS device-byte: $'
+0396  55 54 20 50    276    304
+039a  41 49 52 53    276    305
+039e  20 64 65 76    276    306
+03a2  69 63 65 2d    276    307
+03a6  62 79 74 65    276    308
+03aa  3a 20 24       276    309
+03ad  00 00          277    310 BBASE:  DW 0
+03af  00 00          278    311 VPTR:   DW 0
+03b1  00             279    312 READY:  DB 0
+03b2  00             280    313 LSTN:   DB 0
+03b3  00             281    314 OUTN:   DB 0
+03b4                 282    315 RESULTS:DS 7
+03bb                 283    316 OUTBUF: DS 16
+03cb                 284    317 SAVED:  DS 21
+03e0                 285    318         DS 128
+0460                 286    319 STACKTOP:
+0460                 287    320         END

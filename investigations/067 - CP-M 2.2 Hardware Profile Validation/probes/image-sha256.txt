@@ -1,0 +1,4 @@
+cd18f24ac180b085ff43212484bded5e012d42d796deab175ae0d5ef58c0ab80  stage067/probes/images-before/cromemco.dsk
+1b270db502711fdc429f8d16cccfc243cd314e1f4aebcbde31aece45538467fb  stage067/probes/images-before/imsai.dsk
+cd18f24ac180b085ff43212484bded5e012d42d796deab175ae0d5ef58c0ab80  stage067/probes/images-after/cromemco.dsk
+a56157a1f172dea1151b8f4f27b2cd1118b6fb0cf546fec22ede837e58d1150c  stage067/probes/images-after/imsai.dsk

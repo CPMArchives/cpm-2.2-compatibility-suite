@@ -1,0 +1,172 @@
+spawn cpmsim -z -d <local-workspace>/g-p-6a682f002be881918281554d644daf48/stage048/probes/case
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>ASM B:ABS48
+CP/M ASSEMBLER - VER 2.0
+0112
+000H USE FACTOR
+END OF ASSEMBLY
+
+A>LOAD B:ABS48
+
+FIRST ADDRESS 0100
+LAST  ADDRESS 0111
+BYTES READ    0012
+RECORDS WRITTEN 01
+
+
+A>B:ABS48
+ABS48 OK
+A>MAC B:MACRO48
+CP/M MACRO ASSEM 2.0
+0114
+000H USE FACTOR
+END OF ASSEMBLY
+
+A>LOAD B:MACRO48
+
+FIRST ADDRESS 0100
+LAST  ADDRESS 0113
+BYTES READ    0014
+RECORDS WRITTEN 01
+
+
+A>B:MACRO48
+MACRO48 OK
+A>RMAC B:MAIN48
+CP/M RMAC ASSEM 1.1
+0004
+000H USE FACTOR
+END OF ASSEMBLY
+
+A>RMAC B:MSG48
+CP/M RMAC ASSEM 1.1
+0013
+000H USE FACTOR
+END OF ASSEMBLY
+
+A>LINK B:DEV48=B:MAIN48,B:MSG48
+LINK 1.3 
+
+MSGOUT   0104   
+
+ABSOLUTE     0000
+CODE SIZE    0017 (0100-0116)
+DATA SIZE    0000
+COMMON SIZE  0000
+USE FACTOR     00
+
+A>B:DEV48
+TOOL48 OK
+A>RMAC B:BIG48
+CP/M RMAC ASSEM 1.1
+013E
+000H USE FACTOR
+END OF ASSEMBLY
+
+A>LINK B:BIG48=B:BIG48
+LINK 1.3 
+
+ABSOLUTE     0000
+CODE SIZE    013E (0100-023D)
+DATA SIZE    0000
+COMMON SIZE  0000
+USE FACTOR     00
+
+A>STAT B:BIG48.COM
+
+ Recs  Bytes  Ext Acc
+    3     1k    1 R/W B:BIG48.COM
+Bytes Remaining On B: 143k
+
+A>B:BIG48
+BIG48 OK
+A>RMAC B:BAD48
+CP/M RMAC ASSEM 1.1
+0004
+000H USE FACTOR
+END OF ASSEMBLY
+
+A>LINK B:BADOUT=B:BAD48
+LINK 1.3 
+
+UNDEFINED SYMBOLS:
+
+ABSENT  
+
+ABSOLUTE     0000
+CODE SIZE    0004 (0100-0103)
+DATA SIZE    0000
+COMMON SIZE  0000
+USE FACTOR     00
+
+A>DDT B:DEV48.COM
+DDT VERS 2.2
+NEXT  PC
+0180 0100
+-D100,116
+0100 CD 04 01 C9 11 0D 01 0E 09 CD 05 00 C9 54 4F 4F .............TOO
+0110 4C 34 38 20 4F 4B 24 L48 OK$
+-G100,0103
+TOOL48 OK*0103
+-G0
+
+A>SID B:DEV48.COM
+SID Version 3.0
+NEXT MSZE  PC  END
+0180 0180 0100 D0FF
+#D100,116
+0100: CD 04 01 C9 11 0D 01 0E 09 CD 05 00 C9 54 4F 4F .............TOO
+0110: 4C 34 38 20 4F 4B 24 1A 1A 1A 1A 1A 1A 1A 1A 1A L48 OK$.........
+#G100,0103
+TOOL48 OK
+*0103
+#G0
+
+A>SUBMIT BUILD48
+
+A>RMAC B:MAIN48
+CP/M RMAC ASSEM 1.1
+0004
+000H USE FACTOR
+END OF ASSEMBLY
+
+A>RMAC B:MSG48
+CP/M RMAC ASSEM 1.1
+0013
+000H USE FACTOR
+END OF ASSEMBLY
+
+A>LINK B:BATCH48=B:MAIN48,B:MSG48
+LINK 1.3 
+
+MSGOUT   0104   
+
+ABSOLUTE     0000
+CODE SIZE    0017 (0100-0116)
+DATA SIZE    0000
+COMMON SIZE  0000
+USE FACTOR     00
+
+A>B:BATCH48
+TOOL48 OK
+A>B:SPEED
+CPU speed is unlimited
+
+A>[0;31mE (N) IO: can't read console 0[0m
+

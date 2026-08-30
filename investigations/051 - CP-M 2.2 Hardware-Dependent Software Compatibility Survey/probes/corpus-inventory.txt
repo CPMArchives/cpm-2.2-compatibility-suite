@@ -1,0 +1,29 @@
+HARDWARE-DEPENDENT SOFTWARE CORPUS
+
+BASE051
+  Control probe; public CP/M BDOS only; executed T01.
+
+QTERM 4.3e, IMSAI 8080 / VT100 patch
+  Terminal/modem software; IMSAI SIO-2 ports 22h-25h and 4 MHz patch;
+  source and executable preserved; unsupported-profile test T02.
+
+KSCOPE, Cromemco Dazzler
+  Display demonstration; Dazzler ports 0Eh/0Fh and interrupt assumptions;
+  source and executable preserved; unsupported-profile test T03.
+
+VI/Open, IMSAI VIO version
+  Full-screen editor; memory-mapped VIO at F000h, ports 6Eh/6Fh, and dynamic
+  BIOS-vector discovery; source and executable preserved; mismatch test T04.
+
+PROMMER 2.0 distribution / patch area 1.0
+  EPROM-programmer utility; base port 14h, 4 MHz timing loops, interrupt mode,
+  and terminal patches; source and executable preserved; T05 inconclusive.
+
+Altair FDCT1 and KILLBITS
+  Standalone controller/front-panel utilities; direct ports 8/9 and FFh;
+  source preserved and not executed as CP/M COM programs.
+
+IMSAI CP/M 2.2 BIOS
+  Configured BIOS reference; direct serial, printer, interrupt controller,
+  FDC, LEDs, firmware signatures, and memory-mapped descriptor assumptions;
+  source evidence only, not an application.

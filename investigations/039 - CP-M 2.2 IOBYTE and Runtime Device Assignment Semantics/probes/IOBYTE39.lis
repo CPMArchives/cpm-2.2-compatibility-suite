@@ -1,0 +1,375 @@
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 09:25:21 2026	Page 1
+Source file: IOBYTE39.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Investigation 018 deterministic BDOS character-device/IOBYTE probe.
+                       2      2 ; z80asm -fb -oCHAR018.COM CHAR018.ASM
+                       3      3         ORG 0100H
+0100  31 48 05         4      4 START:  LD SP,STACKTOP
+0103  3a 03 00         5      5         LD A,(0003H)
+0106  32 c4 03         6      6         LD (IOORIG),A
+0109  11 48 04         7      7         LD DE,ALTDMA
+010c  0e 1a            8      8         LD C,26
+010e  cd 05 00         9      9         CALL 5
+0111  3e a5           10     10         LD A,0A5H
+0113  32 80 00        11     11         LD (0080H),A
+0116  3e 5a           12     12         LD A,05AH
+0118  32 48 04        13     13         LD (ALTDMA),A
+011b  cd 5b 02        14     14         CALL PATCH
+                      15     15
+                      16     16         ; Put Z into DRI console pending state, then call Reader returning C1.
+011e  3e 5a           17     17         LD A,'Z'
+0120  32 d0 03        18     18         LD (INCHAR),A
+0123  3e 01           19     19         LD A,1
+0125  32 cf 03        20     20         LD (READY),A
+0128  0e 0b           21     21         LD C,11
+012a  cd 05 00        22     22         CALL 5
+012d  32 c0 03        23     23         LD (STATRC),A
+0130  0e 03           24     24         LD C,3
+0132  cd 05 00        25     25         CALL 5
+0135  32 c1 03        26     26         LD (RDRRC),A
+0138  0e 01           27     27         LD C,1
+013a  cd 05 00        28     28         CALL 5
+013d  32 c2 03        29     29         LD (PENDRC),A
+                      30     30
+                      31     31         ; Raw PUNCH bytes.
+0140  21 bc 03        32     32         LD HL,OUTBYTES
+0143  06 04           33     33         LD B,4
+0145  5e              34     34 PLOOP: LD E,(HL)
+0146  23              35     35         INC HL
+0147  e5              36     36         PUSH HL
+0148  c5              37     37         PUSH BC
+0149  0e 04           38     38         LD C,4
+014b  cd 05 00        39     39         CALL 5
+014e  c1              40     40         POP BC
+014f  e1              41     41         POP HL
+0150  10 f3           42     42         DJNZ PLOOP
+                      43     43
+                      44     44         ; Raw LIST bytes, including Ctrl-P; then formatted X must not be copied.
+0152  21 bc 03        45     45         LD HL,OUTBYTES
+0155  06 04           46     46         LD B,4
+0157  5e              47     47 LLOOP: LD E,(HL)
+0158  23              48     48         INC HL
+0159  e5              49     49         PUSH HL
+015a  c5              50     50         PUSH BC
+015b  0e 05           51     51         LD C,5
+015d  cd 05 00        52     52         CALL 5
+0160  c1              53     53         POP BC
+0161  e1              54     54         POP HL
+0162  10 f3           55     55         DJNZ LLOOP
+0164  1e 58           56     56         LD E,'X'
+0166  0e 02           57     57         LD C,2
+0168  cd 05 00        58     58         CALL 5
+                      59     59
+                      60     60         ; Function 5/4 TABs must not alter formatted console column.
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 09:25:21 2026	Page 2
+Source file: IOBYTE39.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+016b  1e 0a           61     61         LD E,10
+016d  0e 02           62     62         LD C,2
+016f  cd 05 00        63     63         CALL 5
+0172  af              64     64         XOR A
+0173  32 e7 03        65     65         LD (CONLEN),A
+0176  1e 41           66     66         LD E,'A'
+0178  0e 02           67     67         LD C,2
+017a  cd 05 00        68     68         CALL 5
+017d  1e 09           69     69         LD E,9
+017f  0e 04           70     70         LD C,4
+0181  cd 05 00        71     71         CALL 5
+0184  1e 09           72     72         LD E,9
+0186  0e 05           73     73         LD C,5
+0188  cd 05 00        74     74         CALL 5
+018b  1e 09           75     75         LD E,9
+018d  0e 02           76     76         LD C,2
+018f  cd 05 00        77     77         CALL 5
+                      78     78
+                      79     79         ; IOBYTE register/location round trip and BIOS-observed routing value.
+0192  0e 07           80     80         LD C,7
+0194  cd 05 00        81     81         CALL 5
+0197  32 c5 03        82     82         LD (GET0),A
+019a  1e a5           83     83         LD E,0A5H
+019c  0e 08           84     84         LD C,8
+019e  cd 05 00        85     85         CALL 5
+01a1  3a 03 00        86     86         LD A,(0003H)
+01a4  32 c6 03        87     87         LD (LOC1),A
+01a7  0e 07           88     88         LD C,7
+01a9  cd 05 00        89     89         CALL 5
+01ac  32 c7 03        90     90         LD (GET1),A
+01af  1e 51           91     91         LD E,'Q'
+01b1  0e 04           92     92         LD C,4
+01b3  cd 05 00        93     93         CALL 5
+01b6  3a c4 03        94     94         LD A,(IOORIG)
+01b9  5f              95     95         LD E,A
+01ba  0e 08           96     96         LD C,8
+01bc  cd 05 00        97     97         CALL 5
+01bf  3a 03 00        98     98         LD A,(0003H)
+01c2  32 c8 03        99     99         LD (LOCR),A
+01c5  3a 80 00       100    100         LD A,(0080H)
+01c8  32 ca 03       101    101         LD (RESULTS+10),A
+01cb  3a 48 04       102    102         LD A,(ALTDMA)
+01ce  32 cb 03       103    103         LD (RESULTS+11),A
+01d1  3a e5 03       104    104         LD A,(PLEN)
+01d4  32 cc 03       105    105         LD (RESULTS+12),A
+01d7  3a e6 03       106    106         LD A,(LLEN)
+01da  32 cd 03       107    107         LD (RESULTS+13),A
+01dd  3a e7 03       108    108         LD A,(CONLEN)
+01e0  32 ce 03       109    109         LD (RESULTS+14),A
+                     110    110
+01e3  cd 9f 02       111    111         CALL RESTORE
+01e6  11 2a 03       112    112         LD DE,HEADER
+01e9  0e 09          113    113         LD C,9
+01eb  cd 05 00       114    114         CALL 5
+01ee  21 c0 03       115    115         LD HL,RESULTS
+01f1  06 0f          116    116         LD B,15
+01f3  7e             117    117 RPRINT: LD A,(HL)
+01f4  23             118    118         INC HL
+01f5  e5             119    119         PUSH HL
+01f6  c5             120    120         PUSH BC
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 09:25:21 2026	Page 3
+Source file: IOBYTE39.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+01f7  cd 13 03       121    121         CALL HEXBYTE
+01fa  1e 20          122    122         LD E,' '
+01fc  cd fd 02       123    123         CALL PUTC
+01ff  c1             124    124         POP BC
+0200  e1             125    125         POP HL
+0201  10 f0          126    126         DJNZ RPRINT
+0203  cd 09 03       127    127         CALL CRLF
+0206  11 8c 03       128    128         LD DE,PLAB
+0209  0e 09          129    129         LD C,9
+020b  cd 05 00       130    130         CALL 5
+020e  21 e8 03       131    131         LD HL,PBUF
+0211  3a e5 03       132    132         LD A,(PLEN)
+0214  cd 3a 02       133    133         CALL PRINTBUF
+0217  11 9d 03       134    134         LD DE,LLAB
+021a  0e 09          135    135         LD C,9
+021c  cd 05 00       136    136         CALL 5
+021f  21 08 04       137    137         LD HL,LBUF
+0222  3a e6 03       138    138         LD A,(LLEN)
+0225  cd 3a 02       139    139         CALL PRINTBUF
+0228  11 ad 03       140    140         LD DE,CLAB
+022b  0e 09          141    141         LD C,9
+022d  cd 05 00       142    142         CALL 5
+0230  21 28 04       143    143         LD HL,CBUF
+0233  3a e7 03       144    144         LD A,(CONLEN)
+0236  cd 3a 02       145    145         CALL PRINTBUF
+0239  c9             146    146         RET
+                     147    147
+023a                 148    148 PRINTBUF:
+023a  47             149    149         LD B,A
+023b  cd 13 03       150    150         CALL HEXBYTE
+023e  1e 20          151    151         LD E,' '
+0240  cd fd 02       152    152         CALL PUTC
+0243  78             153    153 PBLOOP: LD A,B
+0244  b7             154    154         OR A
+0245  ca 09 03       155    155         JP Z,CRLF
+0248  7e             156    156         LD A,(HL)
+0249  23             157    157         INC HL
+024a  e5             158    158         PUSH HL
+024b  c5             159    159         PUSH BC
+024c  cd 13 03       160    160         CALL HEXBYTE
+024f  1e 20          161    161         LD E,' '
+0251  cd fd 02       162    162         CALL PUTC
+0254  c1             163    163         POP BC
+0255  e1             164    164         POP HL
+0256  10 eb          165    165         DJNZ PBLOOP
+0258  c3 09 03       166    166         JP CRLF
+                     167    167
+025b  2a 01 00       168    168 PATCH: LD HL,(0001H)
+025e  2b             169    169         DEC HL
+025f  2b             170    170         DEC HL
+0260  2b             171    171         DEC HL
+0261  11 06 00       172    172         LD DE,6
+0264  19             173    173         ADD HL,DE
+0265  22 d1 03       174    174         LD (VBASE),HL
+0268  11 d3 03       175    175         LD DE,SAVED
+026b  01 12 00       176    176         LD BC,18
+026e  ed b0          177    177         LDIR
+0270  2a d1 03       178    178         LD HL,(VBASE)
+0273  11 ac 02       179    179         LD DE,HCONST
+0276  cd 97 02       180    180         CALL PUTJP
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 09:25:21 2026	Page 4
+Source file: IOBYTE39.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0279  11 b4 02       181    181         LD DE,HCONIN
+027c  cd 97 02       182    182         CALL PUTJP
+027f  11 c3 02       183    183         LD DE,HCONOUT
+0282  cd 97 02       184    184         CALL PUTJP
+0285  11 e3 02       185    185         LD DE,HLIST
+0288  cd 97 02       186    186         CALL PUTJP
+028b  11 d0 02       187    187         LD DE,HPUNCH
+028e  cd 97 02       188    188         CALL PUTJP
+0291  11 bc 02       189    189         LD DE,HREADER
+0294  c3 97 02       190    190         JP PUTJP
+0297  36 c3          191    191 PUTJP: LD (HL),0C3H
+0299  23             192    192         INC HL
+029a  73             193    193         LD (HL),E
+029b  23             194    194         INC HL
+029c  72             195    195         LD (HL),D
+029d  23             196    196         INC HL
+029e  c9             197    197         RET
+029f                 198    198 RESTORE:
+029f  21 d3 03       199    199         LD HL,SAVED
+02a2  ed 5b d1 03    200    200         LD DE,(VBASE)
+02a6  01 12 00       201    201         LD BC,18
+02a9  ed b0          202    202         LDIR
+02ab  c9             203    203         RET
+                     204    204
+02ac  3a cf 03       205    205 HCONST: LD A,(READY)
+02af  b7             206    206         OR A
+02b0  c8             207    207         RET Z
+02b1  3e ff          208    208         LD A,0FFH
+02b3  c9             209    209         RET
+02b4  af             210    210 HCONIN: XOR A
+02b5  32 cf 03       211    211         LD (READY),A
+02b8  3a d0 03       212    212         LD A,(INCHAR)
+02bb  c9             213    213         RET
+02bc                 214    214 HREADER:
+02bc  21 c3 03       215    215         LD HL,RDRCOUNT
+02bf  34             216    216         INC (HL)
+02c0  3e c1          217    217         LD A,0C1H
+02c2  c9             218    218         RET
+02c3                 219    219 HCONOUT:
+02c3  21 28 04       220    220         LD HL,CBUF
+02c6  3a e7 03       221    221         LD A,(CONLEN)
+02c9  cd f0 02       222    222         CALL CAPTURE
+02cc  32 e7 03       223    223         LD (CONLEN),A
+02cf  c9             224    224         RET
+02d0  21 e8 03       225    225 HPUNCH: LD HL,PBUF
+02d3  3a e5 03       226    226         LD A,(PLEN)
+02d6  cd f0 02       227    227         CALL CAPTURE
+02d9  32 e5 03       228    228         LD (PLEN),A
+02dc  3a 03 00       229    229         LD A,(0003H)
+02df  32 c9 03       230    230         LD (PUNCHIO),A
+02e2  c9             231    231         RET
+02e3  21 08 04       232    232 HLIST: LD HL,LBUF
+02e6  3a e6 03       233    233         LD A,(LLEN)
+02e9  cd f0 02       234    234         CALL CAPTURE
+02ec  32 e6 03       235    235         LD (LLEN),A
+02ef  c9             236    236         RET
+                     237    237 ; A=count, HL=buffer, C=byte; returns incremented count.
+02f0                 238    238 CAPTURE:
+02f0  fe 20          239    239         CP 32
+02f2  30 07          240    240         JR NC,CAPCNT
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 09:25:21 2026	Page 5
+Source file: IOBYTE39.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+02f4  f5             241    241         PUSH AF
+02f5  5f             242    242         LD E,A
+02f6  16 00          243    243         LD D,0
+02f8  19             244    244         ADD HL,DE
+02f9  71             245    245         LD (HL),C
+02fa  f1             246    246         POP AF
+02fb  3c             247    247 CAPCNT: INC A
+02fc  c9             248    248         RET
+                     249    249
+02fd  c5             250    250 PUTC:  PUSH BC
+02fe  d5             251    251         PUSH DE
+02ff  e5             252    252         PUSH HL
+0300  0e 02          253    253         LD C,2
+0302  cd 05 00       254    254         CALL 5
+0305  e1             255    255         POP HL
+0306  d1             256    256         POP DE
+0307  c1             257    257         POP BC
+0308  c9             258    258         RET
+0309  1e 0d          259    259 CRLF:  LD E,13
+030b  cd fd 02       260    260         CALL PUTC
+030e  1e 0a          261    261         LD E,10
+0310  c3 fd 02       262    262         JP PUTC
+0313                 263    263 HEXBYTE:
+0313  f5             264    264         PUSH AF
+0314  0f             265    265         RRCA
+0315  0f             266    266         RRCA
+0316  0f             267    267         RRCA
+0317  0f             268    268         RRCA
+0318  cd 1c 03       269    269         CALL NIB
+031b  f1             270    270         POP AF
+031c  e6 0f          271    271 NIB:   AND 0FH
+031e  c6 30          272    272         ADD A,'0'
+0320  fe 3a          273    273         CP '9'+1
+0322  38 02          274    274         JR C,NOUT
+0324  c6 07          275    275         ADD A,7
+0326  5f             276    276 NOUT:  LD E,A
+0327  c3 fd 02       277    277         JP PUTC
+                     278    278
+032a  0d 0a 43 48    279    279 HEADER: DB 13,10,'CHAR018 stat rdr pend rdrcnt io0 get0 loc1 get1 locrest punchio dma80 dmaalt plen llen conlen',13,10,'$'
+032e  41 52 30 31    279    280
+0332  38 20 73 74    279    281
+0336  61 74 20 72    279    282
+033a  64 72 20 70    279    283
+033e  65 6e 64 20    279    284
+0342  72 64 72 63    279    285
+0346  6e 74 20 69    279    286
+034a  6f 30 20 67    279    287
+034e  65 74 30 20    279    288
+0352  6c 6f 63 31    279    289
+0356  20 67 65 74    279    290
+035a  31 20 6c 6f    279    291
+035e  63 72 65 73    279    292
+0362  74 20 70 75    279    293
+0366  6e 63 68 69    279    294
+036a  6f 20 64 6d    279    295
+036e  61 38 30 20    279    296
+0372  64 6d 61 61    279    297
+0376  6c 74 20 70    279    298
+037a  6c 65 6e 20    279    299
+037e  6c 6c 65 6e    279    300
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 09:25:21 2026	Page 6
+Source file: IOBYTE39.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0382  20 63 6f 6e    279    301
+0386  6c 65 6e 0d    279    302
+038a  0a 24          279    303
+038c  50 55 4e 43    280    304 PLAB: DB 'PUNCH len/bytes $'
+0390  48 20 6c 65    280    305
+0394  6e 2f 62 79    280    306
+0398  74 65 73 20    280    307
+039c  24             280    308
+039d  4c 49 53 54    281    309 LLAB: DB 'LIST len/bytes $'
+03a1  20 6c 65 6e    281    310
+03a5  2f 62 79 74    281    311
+03a9  65 73 20 24    281    312
+03ad  43 4f 4e 20    282    313 CLAB: DB 'CON len/bytes $'
+03b1  6c 65 6e 2f    282    314
+03b5  62 79 74 65    282    315
+03b9  73 20 24       282    316
+03bc  41 09 10 80    283    317 OUTBYTES: DB 41H,09H,10H,80H
+03c0                 284    318 RESULTS:
+03c0  00             285    319 STATRC: DB 0
+03c1  00             286    320 RDRRC: DB 0
+03c2  00             287    321 PENDRC: DB 0
+03c3  00             288    322 RDRCOUNT: DB 0
+03c4  00             289    323 IOORIG: DB 0
+03c5  00             290    324 GET0: DB 0
+03c6  00             291    325 LOC1: DB 0
+03c7  00             292    326 GET1: DB 0
+03c8  00             293    327 LOCR: DB 0
+                     294    328 ; filled just before report through fixed aliases below
+03c9  00 00 00 00    295    329         DB 0,0,0,0,0,0
+03cd  00 00          295    330
+03c9  =              296    331 PUNCHIO: EQU RESULTS+9
+03cf  00             297    332 READY: DB 0
+03d0  00             298    333 INCHAR: DB 0
+03d1  00 00          299    334 VBASE: DW 0
+03d3                 300    335 SAVED: DS 18
+03e5  00             301    336 PLEN: DB 0
+03e6  00             302    337 LLEN: DB 0
+03e7  00             303    338 CONLEN: DB 0
+03e8                 304    339 PBUF: DS 32
+0408                 305    340 LBUF: DS 32
+0428                 306    341 CBUF: DS 32
+0448                 307    342 ALTDMA: DS 128,05AH
+04c8                 308    343         DS 128
+0548                 309    344 STACKTOP:
+0548                 310    345         END START

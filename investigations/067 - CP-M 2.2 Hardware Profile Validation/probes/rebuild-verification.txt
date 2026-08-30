@@ -1,0 +1,20 @@
+Z80/8080-Macro-Assembler  Release 2.1
+Copyright (C) 1987-2024 by Udo Munk & 2022-2024 by Thomas Eberhardt
+0 error(s)
+Z80/8080-Macro-Assembler  Release 2.1
+Copyright (C) 1987-2024 by Udo Munk & 2022-2024 by Thomas Eberhardt
+0 error(s)
+Z80/8080-Macro-Assembler  Release 2.1
+Copyright (C) 1987-2024 by Udo Munk & 2022-2024 by Thomas Eberhardt
+0 error(s)
+Z80/8080-Macro-Assembler  Release 2.1
+Copyright (C) 1987-2024 by Udo Munk & 2022-2024 by Thomas Eberhardt
+0 error(s)
+ad28d15b7a7baa2d4f4c3f4145bea8a74c3cd3db76cd2b90edf076ce4c6881ac  stage067/probes/BASE051.COM
+ad28d15b7a7baa2d4f4c3f4145bea8a74c3cd3db76cd2b90edf076ce4c6881ac  /tmp/i067-rebuild/BASE051.COM
+b4c6110955ab55a5f80900b83035fc8163a36beadc7335efa88df24eb9c145b2  stage067/probes/CPU8080.COM
+b4c6110955ab55a5f80900b83035fc8163a36beadc7335efa88df24eb9c145b2  /tmp/i067-rebuild/CPU8080.COM
+130ed1bc164a12b7adf356949316288764dae437fb4b8c1f6dbffac6fbf0b6a3  stage067/probes/CPUZ80.COM
+130ed1bc164a12b7adf356949316288764dae437fb4b8c1f6dbffac6fbf0b6a3  /tmp/i067-rebuild/CPUZ80.COM
+706429c300e5aec67d679a762ab4f70415a4d687f644eb96072d2f8bc8f1992d  stage067/probes/ZERO41.COM
+706429c300e5aec67d679a762ab4f70415a4d687f644eb96072d2f8bc8f1992d  /tmp/i067-rebuild/ZERO41.COM

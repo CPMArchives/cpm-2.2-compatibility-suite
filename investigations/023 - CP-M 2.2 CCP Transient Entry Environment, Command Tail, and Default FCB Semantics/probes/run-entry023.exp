@@ -1,0 +1,36 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set timeout 90
+log_file -noappend $logfile
+spawn cpmsim -z -d $diskdir
+
+proc cmd {s} {
+    expect ">"
+    send -- "$s\r"
+}
+
+cmd "ENTRY23"
+cmd "ENTRY23 ARG"
+cmd "ENTRY23 ARG1 ARG2"
+cmd "entry23 lower Mixed.txt 9-z_?"
+cmd "ENTRY23 filename.ext"
+cmd "ENTRY23 ABCDEFGHIJK.XYZ"
+cmd "ENTRY23   ARG"
+cmd "ENTRY23 SHORT.T X:ABCDEFGH.XYZ"
+cmd "ENTRY23 A*.T?T B:???.*"
+cmd "BIG23 ARG"
+cmd "B:ENTRY23"
+cmd "B:ENTRY23 ARG"
+cmd "USER 1"
+cmd "B:STATE22 BEFORE-USER1-ENTRY"
+cmd "ENTRY23 USERONE B:SECOND.DAT"
+cmd "USER 0"
+cmd "B:"
+cmd "ENTRY23 ONE TWO"
+cmd "ENTRY23 A:ONE B:TWO"
+cmd "A:"
+
+expect ">"
+send "\034"
+expect eof

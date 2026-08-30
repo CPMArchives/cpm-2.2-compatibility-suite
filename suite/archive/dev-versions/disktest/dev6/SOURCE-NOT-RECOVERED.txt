@@ -1,0 +1,2 @@
+Matching DISKTEST dev6 source was not found.
+The COM file was recovered from the retained runtime DMK named in MANIFEST.tsv.

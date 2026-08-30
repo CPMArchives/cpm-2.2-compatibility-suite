@@ -1,0 +1,69 @@
+Investigation 048 source and executable analysis
+================================================
+
+Evidence discipline
+-------------------
+Source and distributed binaries are class B evidence.  Literal executable
+patterns are leads, not proof, because byte sequences can also be data.  Only
+patterns corroborated by source, documentation, or execution inform findings.
+
+ASM and MAC/RMAC
+----------------
+DRI ASM source uses the public 0005h gateway, default FCB/DMA conventions,
+and the operand at 0006h to size workspace.  The MAC manual documents a disk
+ASM input and HEX, PRN, and SYM outputs and an approximately 20K minimum
+usable configuration.  The LINK/RMAC manual documents RMAC's PRN, SYM, and
+binary REL output and relocatable CSEG/DSEG/COMMON plus PUBLIC/EXTRN concepts.
+The experiments confirm absolute and relocatable workflows on explicit B:.
+
+LOAD
+----
+LOAD.PLM uses the default FCB at 005Ch and buffer at 0080h.  It opens and
+sequentially reads Intel HEX, deletes/makes/writes/closes the named COM file,
+reports record/address information, and distinguishes read, write, open, and
+close failures.  The one-record ABS48 and MACRO48 observations corroborate
+the established COM/0100h and FCB/DMA/file-lifecycle contracts.
+
+LINK and libraries
+------------------
+The LINK manual documents Microsoft-format REL modules from RMAC, PL/I-80,
+or other translators; IRL libraries created by LIB; symbol/external
+resolution; COM/SYM output; a default 0100h load address; and as many as eight
+default-disk temporary $$$ files.  It also documents that temporary files
+can remain after abnormal termination.  I048 resolved MSGOUT across two REL
+files and verified normal temporary-file cleanup.  LIB/IRL selection and
+overlay linking were not experimentally exercised.
+
+DDT, SID, and ZSID
+------------------
+DDT source uses public page-zero WBOOT/BDOS state and debugger-owned patches,
+including special handling around BDOS execution.  DDT and SID both loaded
+DEV48.COM at 0100h, displayed its bytes, stopped at a temporary breakpoint,
+and returned through G0.  ZSID was preserved but only its earlier I042 startup
+evidence is used.  Exact debugger tables, prompt text, target addresses, and
+breakpoint implementation are not OS requirements.
+
+Comparative binaries
+--------------------
+The preserved executable screen covers ASM, MAC, RMAC, M80, Z80ASM, LINK,
+L80, SLRNK, LOAD, DDT, SID, ZSID, LIB, LIB80, and CREF80.  Many contain
+literal 0005h call/jump and 0006h-load patterns, corroborating the documented
+common environment for the DRI/source-covered subset.  No claim is made from
+an unmatched pattern or from startup alone.
+
+Compiler boundary
+-----------------
+The LINK manual explicitly accepts compiler-generated REL and automatically
+searches PLILIB.IRL for PL/I-80 programs.  No compiler executable with
+adequate provenance was locally available, so no compiler execution is
+claimed.  The supplied SPEED.COM, documented by its source as generated with
+Hi-Tech C, ran; it directly uses emulator-specific clock ports.  This proves
+only that one generated COM loads and runs, and illustrates that compiled
+applications may add platform-specific hardware dependencies outside CP/M.
+
+Conclusion
+----------
+The toolchain composes already ledgered CP/M interfaces.  REL, HEX, SYM, PRN,
+IRL, library ordering, compiler runtime ABIs, and exact tool diagnostics are
+tool/file-format contracts, not new BetterCP/M operating-system interfaces.
+

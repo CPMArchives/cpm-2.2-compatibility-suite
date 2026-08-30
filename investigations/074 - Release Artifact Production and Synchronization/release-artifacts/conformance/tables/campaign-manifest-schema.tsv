@@ -1,0 +1,17 @@
+field	requirement	definition
+campaign_id	required	Globally unique immutable campaign identifier.
+started_utc	required	UTC start time in ISO 8601 format.
+candidate_name	required	Implementation and release identifier.
+candidate_hash	required	SHA-256 of candidate system image or release manifest.
+ledger_hash	required	SHA-256 of Ledger 071 used by the campaign.
+test_inventory_hash	required	SHA-256 of frozen-test-inventory.tsv.
+case_matrix_hash	required	SHA-256 of conformance-framework-matrix.tsv.
+oracle_hash	required	SHA-256 of oracle-definitions.tsv.
+claim_level	required	BASELINE, INTERFACE, FULL-SYSTEM, or DEVELOPMENT.
+selected_profiles	required	Explicit list; empty list is valid.
+fixture_manifest_hash	required	SHA-256 of pristine fixtures and media.
+runner_manifest_hash	required	SHA-256 of runner, emulator, BIOS, and build-tool identities.
+environment	required	CPU, memory, terminal, device, disk, emulator, and host details.
+repetitions	required	Declared count and rationale for asynchronous or fault cases.
+reviewer	required for manual cases	Named reviewer and review time.
+artifact_index_hash	required	SHA-256 of the content-addressed artifact index.

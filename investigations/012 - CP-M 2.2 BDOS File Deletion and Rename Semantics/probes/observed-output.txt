@@ -1,0 +1,74 @@
+Investigation 012 observed results
+==================================
+
+Accepted run: 14 August 2026
+System: DRI CP/M 2.2, z80pack cpmsim 1.39, Z80 CBIOS 1.2
+Probe SHA-256: afee3d9d22dbbd57bed80a5eac6cbfc4294bdaec8b54700640190b98ddfecfd3
+
+Image hashes
+------------
+
+                  before                                                            after
+A bbda55e3b0f3de5d8b5891f057370e13cb29f3a3bad48c0191b8be581006dadb  23895ccd03515bd300df9c949bfa8055813841f4d9e44714889a4b40124ca684
+B 9769f04a98c817c43e252e6f067e06cf1708864869e54b3837693d548271dfc8  af421b15cef87db1b7d0d0f9fa4d6db0c65a1d75e013fe678eb1a9eaded7b366
+
+Both changes are expected consequences of successful directory operations.
+The preserved images-before copies were not mutated.
+
+Delete observations
+-------------------
+
+1. DELONE.DAT search returned its entry (RC=1, allocation 04h). Function 19
+   returned 00; the next exact search returned FFh.
+2. Deleting nonexistent NOFILE.DAT returned FFh and made no match.
+3. WILD?.DAT matched WILD1 and WILD2. One Function-19 call returned 00 and
+   removed both; the following wildcard search returned FFh. KEEP.DAT remained.
+4. DRI changed each matching directory entry's first byte to E5h and cleared
+   every nonzero allocation-map element from the in-memory allocation vector.
+5. REUSE.DAT initially used allocation 09h. After deletions, recreating it and
+   writing one record succeeded with allocation 04h, demonstrating that freed
+   space was immediately available. Exact reuse choice is allocator-dependent.
+6. B:BDEL.DAT deleted successfully while Function 25 continued to report A as
+   default. BOLD.DAT was unaffected until its later rename.
+7. User 0 deletion of user-1 U1FILE.DAT returned FFh. After Function 32 selected
+   user 1, the same FCB delete returned 00; user 0 was then restored.
+8. OPENDEL.DAT was opened, deleted using another FCB, then read successfully
+   through the stale activated FCB (marker A). Because its blocks were already
+   free for reuse, this is unsafe DRI behavior and not a portable guarantee.
+
+Rename observations
+-------------------
+
+9. OLDNAME.DAT -> NEWNAME.DAT returned 00. OLDNAME search returned FFh;
+   NEWNAME search found the same RC=3 and allocation 0Ah. Content/allocation and
+   extent state were preserved; the entry was rewritten in its existing slot.
+10. SRCFILE.DAT -> existing DEST.DAT returned 00 and produced two DEST.DAT
+    directory entries. DRI did not detect or reject the collision.
+11. Missing NOSRC.DAT -> WONT.DAT returned FFh.
+12. WREN?.DAT -> XREN?.DAT returned 00 and renamed both matches to the same
+    literal XREN?.DAT spelling, preserving each entry's allocation. DRI did not
+    perform character substitution into destination question marks.
+13. Explicit-drive BOLD.DAT -> BNEW.DAT returned 00 and retained B's data while
+    leaving A as default. Destination drive byte 16 was zero as documented.
+14. OPNREN.DAT was opened, renamed to OPNNEW.DAT using another FCB, then read
+    through the stale old-name FCB successfully (marker A). This depends on
+    retained allocation state, not continuing name validity.
+
+Post-run directory state
+------------------------
+
+A contains KEEP, NEWNAME (3 records), OPNNEW, recreated REUSE, two DEST entries,
+and two literal XREN? entries. DELONE, WILD1, WILD2, OPENDEL, OLDNAME, SRCFILE,
+WREN1, WREN2, OPNREN, and user-1 U1FILE are absent.
+
+B contains BNEW (3 records); BDEL and BOLD are absent.
+
+Interpretation limits
+---------------------
+
+- Success codes 0-3 are directory-position codes, not counts of affected files.
+- Exact directory slots, allocation numbers, and freed-block selection are not
+  portable. CP/M 2.2 has no baseline timestamp field to preserve.
+- Destination collision, wildcard rename, and operations through stale open
+  FCBs are not specified by the interface even where DRI behaved repeatably.
+- Write-protection/read-only-file error paths were outside this investigation.

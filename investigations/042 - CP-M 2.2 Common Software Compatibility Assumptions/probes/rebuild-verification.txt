@@ -1,0 +1,11 @@
+Investigation 042 byte-identical rebuild verification
+=====================================================
+
+The preserved IN42.COM was copied aside, build.sh was run with the documented
+assembler, and the rebuilt file was compared byte-for-byte.
+
+IN42.COM byte-identical
+SHA-256: 1e6a394edafd0066feb5552f5e5efffe1d8df3b0590a2feac463f08cc31fffb8
+
+Result: PASS.
+

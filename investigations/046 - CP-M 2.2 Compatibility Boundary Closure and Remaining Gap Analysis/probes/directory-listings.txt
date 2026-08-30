@@ -1,0 +1,20 @@
+--- main-ready-drivea.dsk
+0:
+attr.dat
+big.dat
+closeme.dat
+cross45.com
+dskfile.dat
+gap46.com
+phys015.com
+rofile.dat
+--- main-drivea.dsk
+0:
+attr.dat
+big.dat
+closeme.dat
+cross45.com
+dskfile.dat
+gap46.com
+phys015.com
+rofile.dat

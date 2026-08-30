@@ -1,0 +1,16 @@
+field	required	definition
+release_id	yes	Unique release identifier, e.g. bettercpm-cpm22-standard-1.0-rc1.
+created_utc	yes	ISO 8601 UTC assembly time.
+release_status	yes	RELEASE_CANDIDATE, FINAL, or WITHDRAWN.
+compatibility_ledger	yes	Artifact ID, version/path, SHA-256, and normative role.
+policy	yes	Artifact ID, version/path, SHA-256, and normative role.
+standard	yes	Artifact ID, version/path, SHA-256, and normative role.
+conformance_specification	yes	Artifact ID, version/path, SHA-256, and normative role.
+profile_registry	yes	Artifact ID, version/path, SHA-256, and normative role.
+conformance_tables	yes	List of frozen IDs, paths, versions, SHA-256 values, and roles.
+profile_release_status	yes	Each stable profile ID marked INCLUDED, AVAILABLE, or EXCLUDED.
+authority_precedence	yes	Conflict and supersession rule; ledger propositions remain authoritative for compatibility behavior.
+historical_artifacts	yes	Non-current retained artifacts and their explicit historical status.
+known_limitations	yes	Unimplemented tooling, campaign status, and excluded endorsements.
+artifact_index_hash	yes	Hash of complete package artifact index.
+verification_result	yes	Validator version, result, and verification record hash.

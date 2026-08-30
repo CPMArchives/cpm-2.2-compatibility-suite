@@ -1,0 +1,86 @@
+Investigation 041 observed output
+=================================
+
+Environment
+-----------
+z80pack cpmsim Release 1.39; 64K CP/M 2.2; Z80 CBIOS V1.2.
+All cases began from freshly restored drive images. See transcripts/console.txt
+and transcripts/failure.txt for the complete captured sessions.
+
+1. VECTOR41 -- public gateway inspection
+Purpose: Inspect the documented page-zero gateways.
+Procedure: Read 0000h-0007h without modifying them.
+Observed: C3 03 FA 00 00 C3 06 EC.
+Conclusion: This configuration exposed JMP WBOOT at 0000h and JMP BDOS at
+0005h. FA03h and EC06h are observed addresses, not portable constants.
+
+2. ZERO41 -- visible page-zero state
+Purpose: Test documented page-zero visibility and stability across a returning
+BDOS call.
+Procedure: Snapshot 0000h-0007h, 005Ch-005Fh, and 0080h-0083h; call Function
+12 through 0005h; snapshot again.
+Observed: Both snapshots were identical within the run; Function 12 returned
+HL=0022h. Command-tail bytes varied between executions because the CCP supplied
+the current command line.
+Conclusion: The defined page-zero objects are directly readable. Their roles,
+not incidental bytes in variable/reserved fields, form the contract.
+
+3. BDOS41 -- documented BDOS access
+Purpose: Reconfirm the public calling boundary under a representative normal,
+state-query, state-setting, and out-of-range matrix.
+Procedure: Invoke Functions 12, 7, 24, 26, and 41 through CALL 0005h while
+recording registers and entry/return stack state.
+Observed: Function 12 returned 0022h; Function 7 returned the fixture IOBYTE
+A5h; Function 24 returned the login vector; Function 26 returned normally; the
+out-of-range selector returned zero. Caller SP was balanced on returning calls.
+Conclusion: Applications may depend on the documented CALL 0005h convention,
+not on a numeric private target or unspecified register preservation.
+
+4. MOD41 -- modified gateway state
+Purpose: Determine whether the reference flat-memory implementation permits a
+historically used, reversible gateway interposition pattern.
+Procedure: Save 0005h-0007h, replace its JMP target with a wrapper, call
+Function 12, chain the saved target, then restore all three bytes.
+Observed: wrapper-count=01 and result HL=0022h; subsequent BDOS output worked.
+Conclusion: Interposition was physically possible in this DRI-compatible flat
+memory configuration. Arbitrary patch persistence or private-target stability is
+not guaranteed; this observation does not elevate the private target to an ABI.
+
+5. BIOS41 -- direct documented BIOS vectors
+Purpose: Verify discovery, vector shape, direct invocation, and raw character
+semantics at the documented BIOS boundary.
+Procedure: Derive BIOS base as (word at 0001h)-3, inspect 17 consecutive JMP
+entries, temporarily patch character entries to deterministic fixtures, call
+them directly, capture arguments/results, and restore the vectors.
+Observed: Derived base FA00h. Entries 00h-10h were consecutive C3h vectors.
+CONST returned 00h/FFh; CONIN returned 41h; READER returned 52h; LISTST returned
+00h/FFh. CONOUT, LIST, and PUNCH captured C=09h, 10h, and 1Ah respectively.
+Conclusion: Vector order, discovery rule, and service-level conventions are the
+portable interface. Base FA00h and handler targets are configuration-specific.
+
+6. DIRECT41 -- private target and raw failure boundary
+Purpose: Contrast undocumented direct entry with a direct BIOS failure case.
+Procedure: Call Function 12 at the current target stored in 0006h instead of
+through 0005h; derive and call SELDSK directly with C=FFh; interrupt the emulator
+after recording the result rather than assuming a usable CCP state.
+Observed: The private-target call returned HL=0022h. Invalid SELDSK returned
+HL=0000h. No further CP/M behavior was claimed.
+Conclusion: The first result is DRI-layout evidence only. A direct BIOS caller
+receives raw BIOS semantics and bypasses BDOS validation, diagnostics, and
+recovery; behavior after invalid direct operations is profile-dependent.
+
+Controlled matrix
+-----------------
+Documented/direct: BDOS41 used documented CALL 0005h; BIOS41 used documented
+direct BIOS vectors; DIRECT41 bypassed the public BDOS gateway.
+Normal: VECTOR41, ZERO41, BDOS41, BIOS41.
+Boundary: BDOS selector 41 and direct BIOS vector endpoints.
+Modified: MOD41 and reversible BIOS41 fixture vectors.
+Failure: invalid SELDSK C=FFh in isolated DIRECT41 run.
+
+Media result
+------------
+Drive A before/after: 56ffb0c13fdd22db19c0c0dab98c7f5f781dd2457d4d90040c8b64b458541040
+Drive B before/after: 30d3f145e86179801a72963f7ddd59ef83a1c045d3d19901d0a4a697b26a8a7a
+The test media were unchanged.
+

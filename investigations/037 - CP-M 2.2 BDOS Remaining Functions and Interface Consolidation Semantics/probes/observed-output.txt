@@ -1,0 +1,31 @@
+INVESTIGATION 037 OBSERVED OUTPUT (CONDENSED)
+
+Common ABI
+  Function 12 -> HL=0022, A=22, B=00.
+  Function 25 -> 0000 in the initial A-drive state.
+  Function 26 returned zero but changed residual DE; selector 41 returned zero.
+  IX/IY survival was observed but is not required.
+
+State/DMA
+  Initial A/user0/login0001/RO0000 became B/user7/login0003/RO0000.
+  Search First used the selected alternate DMA; 0080h remained unchanged.
+
+Logical failures
+  Missing Open/Close/Delete/Rename: FF.
+  Duplicate Make: 01 in the controlled directory.
+  DMA sentinel remained AA; FCB changes differed by function.
+
+Function 40
+  Overwrite record 0: 00; append record 1: 00.
+  New SPARSE.DAT record 10: 00; computed size 11 records.
+  Record 9 then read successfully with byte 0 = 00.
+  Record 10 read successfully with byte 0 = 53 ('S').
+  Record 128: 00; computed size 129 records.
+  Record 65535: 00; computed 24-bit size encoded 010000h (65536 records).
+  R2 nonzero overflow: 06.
+  Controlled full B disk: 02.
+
+The zero-fill observation is bounded to records in a newly allocated physical
+allocation block. It does not prove that every logical hole before a distant
+random record becomes readable; I013 showed ordinary sparse holes can return 01.
+

@@ -1,0 +1,151 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:27:49 2026	Page 1
+Source file: USER29.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1  ORG 100H
+0100  31 3a 02         2      2  LD SP,STACK
+0103  af               3      3  XOR A
+0104  cd 7d 02         4      4  CALL SEL
+0107  cd 83 02         5      5  CALL SETDMA
+010a  21 51 01         6      6  LD HL,BAN
+010d  cd 3a 02         7      7  CALL PUTS
+0110  1e 00            8      8  LD E,0
+0112  0e 20            9      9  LD C,32
+0114  cd 05 00        10     10  CALL 5
+0117  11 72 01        11     11  LD DE,FCB
+011a  0e 11           12     12  LD C,17
+011c  cd 05 00        13     13  CALL 5
+011f  cd 8b 02        14     14  CALL REPORT
+0122  1e 01           15     15  LD E,1
+0124  0e 20           16     16  LD C,32
+0126  cd 05 00        17     17  CALL 5
+0129  11 72 01        18     18  LD DE,FCB
+012c  0e 11           19     19  LD C,17
+012e  cd 05 00        20     20  CALL 5
+0131  cd 8b 02        21     21  CALL REPORT
+0134  1e 00           22     22  LD E,0
+0136  0e 20           23     23  LD C,32
+0138  cd 05 00        24     24  CALL 5
+013b  11 96 01        25     25  LD DE,FANY
+013e  0e 11           26     26  LD C,17
+0140  cd 05 00        27     27  CALL 5
+0143  cd 8b 02        28     28  CALL REPORT
+0146  0e 12           29     29  LD C,18
+0148  cd 05 00        30     30  CALL 5
+014b  cd 8b 02        31     31  CALL REPORT
+014e  c3 78 02        32     32  JP EXIT
+0151  55 53 45 52     33     33 BAN: DB 'USER29 user0/user1/dr-question',13,10,0
+0155  32 39 20 75     33     34
+0159  73 65 72 30     33     35
+015d  2f 75 73 65     33     36
+0161  72 31 2f 64     33     37
+0165  72 2d 71 75     33     38
+0169  65 73 74 69     33     39
+016d  6f 6e 0d 0a     33     40
+0171  00              33     41
+0172  00 55 4f 4e     34     42 FCB: DB 0,'UONE    TXT',0,0,0,0
+0176  45 20 20 20     34     43
+017a  20 54 58 54     34     44
+017e  00 00 00 00     34     45
+0182                  35     46  DS 20
+0196  3f 3f 3f 3f     36     47 FANY: DB '?','???????????','?',0,0,0
+019a  3f 3f 3f 3f     36     48
+019e  3f 3f 3f 3f     36     49
+01a2  3f 00 00 00     36     50
+01a6                  37     51  DS 20
+01ba                  38     52  DS 128
+023a                  39     53 STACK:
+023a  7e              40     54 PUTS: LD A,(HL)
+023b  23              41     55  INC HL
+023c  b7              42     56  OR A
+023d  c8              43     57  RET Z
+023e  5f              44     58  LD E,A
+023f  cd 44 02        45     59  CALL PUTC
+0242  18 f6           46     60  JR PUTS
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:27:49 2026	Page 2
+Source file: USER29.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0244  f5              47     61 PUTC: PUSH AF
+0245  c5              48     62  PUSH BC
+0246  d5              49     63  PUSH DE
+0247  e5              50     64  PUSH HL
+0248  0e 02           51     65  LD C,2
+024a  cd 05 00        52     66  CALL 5
+024d  e1              53     67  POP HL
+024e  d1              54     68  POP DE
+024f  c1              55     69  POP BC
+0250  f1              56     70  POP AF
+0251  c9              57     71  RET
+0252  1e 20           58     72 SPACE: LD E,' '
+0254  c3 44 02        59     73  JP PUTC
+0257  1e 0d           60     74 CRLF: LD E,13
+0259  cd 44 02        61     75  CALL PUTC
+025c  1e 0a           62     76  LD E,10
+025e  c3 44 02        63     77  JP PUTC
+0261  f5              64     78 HEXB: PUSH AF
+0262  0f              65     79  RRCA
+0263  0f              66     80  RRCA
+0264  0f              67     81  RRCA
+0265  0f              68     82  RRCA
+0266  cd 6a 02        69     83  CALL NIB
+0269  f1              70     84  POP AF
+026a  e6 0f           71     85 NIB: AND 0FH
+026c  c6 30           72     86  ADD A,'0'
+026e  fe 3a           73     87  CP '9'+1
+0270  38 02           74     88  JR C,NOUT
+0272  c6 07           75     89  ADD A,7
+0274  5f              76     90 NOUT: LD E,A
+0275  c3 44 02        77     91  JP PUTC
+0278  0e 00           78     92 EXIT: LD C,0
+027a  c3 05 00        79     93  JP 5
+027d  5f              80     94 SEL: LD E,A
+027e  0e 0e           81     95  LD C,14
+0280  c3 05 00        82     96  JP 5
+0283  11 e5 02        83     97 SETDMA: LD DE,DMA
+0286  0e 1a           84     98  LD C,26
+0288  c3 05 00        85     99  JP 5
+028b  32 d4 02        86    100 REPORT: LD (RC),A
+028e  fe ff           87    101  CP 0FFH
+0290  28 14           88    102  JR Z,RPRINT
+0292  6f              89    103  LD L,A
+0293  26 00           90    104  LD H,0
+0295  29              91    105  ADD HL,HL
+0296  29              92    106  ADD HL,HL
+0297  29              93    107  ADD HL,HL
+0298  29              94    108  ADD HL,HL
+0299  29              95    109  ADD HL,HL
+029a  11 e5 02        96    110  LD DE,DMA
+029d  19              97    111  ADD HL,DE
+029e  11 d5 02        98    112  LD DE,SNAP
+02a1  01 10 00        99    113  LD BC,16
+02a4  ed b0          100    114  LDIR
+02a6                 101    115 RPRINT:
+02a6  21 c8 02       102    116  LD HL,LABEL
+02a9  cd 3a 02       103    117  CALL PUTS
+02ac  3a d4 02       104    118  LD A,(RC)
+02af  cd 61 02       105    119  CALL HEXB
+02b2  fe ff          106    120  CP 0FFH
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:27:49 2026	Page 3
+Source file: USER29.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+02b4  28 0f          107    121  JR Z,RDONE
+02b6  cd 52 02       108    122  CALL SPACE
+02b9  21 d5 02       109    123  LD HL,SNAP
+02bc  06 10          110    124  LD B,16
+02be  7e             111    125 RBYTE: LD A,(HL)
+02bf  23             112    126  INC HL
+02c0  cd 61 02       113    127  CALL HEXB
+02c3  10 f9          114    128  DJNZ RBYTE
+02c5  c3 57 02       115    129 RDONE: JP CRLF
+02c8  72 63 2f 65    116    130 LABEL: DB 'rc/entry16 ',0
+02cc  6e 74 72 79    116    131
+02d0  31 36 20 00    116    132
+02d4  00             117    133 RC: DB 0
+02d5                 118    134 SNAP: DS 16,0
+02e5                 119    135 DMA: DS 128,0A5H
+0365                 120    136  END

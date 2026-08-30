@@ -1,0 +1,147 @@
+F073-02 — Release Package Assembly and Validation
+
+## Objective
+
+Assemble the BetterCP/M CP/M 2.2 Compatibility Standard 1.0-rc1 release candidate package from the completed and validated normative artifacts produced through I074.
+
+F073-02 is a release engineering task, not a compatibility investigation.
+
+It shall not:
+- discover new CP/M behavior;
+- modify compatibility propositions;
+- change dispositions;
+- alter policy decisions;
+- redesign conformance;
+- change profile applicability.
+
+Any semantic change discovered during assembly must be rejected from the package and recorded for separate authorization.
+
+## Authoritative Inputs
+
+Use the following as authoritative:
+
+- Compatibility Ledger 072
+- Compatibility Standard 1.0-rc1
+- Compatibility Policy 1.0-rc1
+- Conformance Specification 1.0-rc1
+- Compatibility Profile Registry 1.0-rc1
+- Profile-case mapping
+- I073 artifact inventory
+- I073 synchronization matrix
+- I074 validation records
+
+## Scope
+
+Produce the assembled RC1 package.
+
+Required activities:
+
+### 1. Release Manifest
+
+Create the authoritative release manifest.
+
+The manifest must include:
+
+- release identifier;
+- artifact inventory;
+- artifact paths;
+- SHA-256 hashes;
+- version identifiers;
+- authority relationships;
+- supersession relationships.
+
+The manifest becomes the authoritative statement of what constitutes the release candidate.
+
+### 2. Publication Index
+
+Create the publication index.
+
+Verify:
+
+- all public artifacts have defined locations;
+- paths match the release manifest;
+- superseded historical artifacts remain distinguishable from current RC artifacts.
+
+### 3. Release Notes
+
+Create release notes describing:
+
+- RC1 purpose;
+- compatibility scope;
+- included artifacts;
+- known limitations;
+- non-certification status;
+- deferred implementation work.
+
+Do not imply that BetterCP/M implementation or certification exists.
+
+### 4. Package Assembly
+
+Create the complete RC1 package.
+
+Verify:
+
+- all required artifacts are present;
+- all hashes match;
+- all cross-references resolve;
+- no stale paths remain;
+- no draft artifacts are incorrectly presented as normative.
+
+### 5. Final Validation
+
+Perform:
+
+- artifact inventory validation;
+- hash validation;
+- link/path audit;
+- synchronization checks;
+- supersession checks.
+
+## Non-Goals
+
+Do not:
+
+- create certification results;
+- run candidate implementations;
+- create conformance claims;
+- modify the Compatibility Ledger.
+
+## Ledger Requirement
+
+No ledger update is expected.
+
+F073-02 is a packaging task only.
+
+If an unexpected ledger-impacting issue is discovered:
+- stop the change;
+- document the issue;
+- identify the required authorization path.
+
+Do not silently modify Ledger 072.
+
+## Required Outputs
+
+Create:
+
+- release manifest;
+- publication index;
+- release notes;
+- assembled RC1 package;
+- package inventory;
+- hash manifest;
+- validation report.
+
+## Completion Criteria
+
+F073-02 is complete when:
+
+- the RC1 package is assembled;
+- all normative artifacts are included;
+- all hashes validate;
+- all synchronization checks pass;
+- publication paths are authoritative;
+- the package can be reproduced from the manifest.
+
+Final conclusion:
+
+Determine whether the BetterCP/M CP/M 2.2 Compatibility Standard 1.0-rc1 package is complete and internally consistent as a release candidate artifact.

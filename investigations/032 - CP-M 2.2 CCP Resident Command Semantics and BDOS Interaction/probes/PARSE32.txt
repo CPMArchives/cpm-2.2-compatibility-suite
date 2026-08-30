@@ -1,0 +1,6 @@
+Purpose: recognition, resident precedence, malformed and unknown input.
+Procedure: install marker COMs with resident names; invoke DIR, DIR.COM, BOGUS,
+bad SAVE and USER operands.
+Observed: resident names won even with .COM type; BOGUS?, X?, and 16? used
+token-plus-question-mark recovery. Invalid-drive DIR entered BDOS fatal Select.
+Conclusion: resident recognition precedes ordinary transient lookup and errors recover to CCP.

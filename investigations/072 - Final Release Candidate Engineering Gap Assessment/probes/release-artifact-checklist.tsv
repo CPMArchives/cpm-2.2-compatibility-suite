@@ -1,0 +1,11 @@
+artifact	definition_status	source	rc_action
+Compatibility standard document	PARTIAL	01 Compatibility Policy.txt; Ledger 071; I070	Synthesize and publish a versioned normative standard.
+Canonical compatibility ledger	READY	02 Compatibility Ledger - Investigation 071.txt	Include unchanged and bind SHA-256.
+Conformance specification	DEFINED BUT UNPUBLISHED	I071 report and probes	Promote into public versioned specification.
+Frozen test inventory	READY	I071 frozen-test-inventory.tsv	Include version 1.0.0 and hash.
+Case/oracle set	READY	I071 conformance-framework-matrix.tsv and oracle-definitions.tsv	Include version 1.0.0 and hashes.
+Profile definitions	PARTIAL	I070 profile-boundaries.txt; Ledger 071	Publish stable registry and RC inclusion status.
+Certification rules	READY	I071 certification-levels.tsv and failure-handling.tsv	Include in conformance specification.
+Evidence requirements	READY	I071 manifest/result schemas	Include in conformance specification.
+Release manifest	MISSING	No current release manifest; I071 supplies schema concepts	Create after normative document set and profile registry are frozen.
+Publication/index map	STALE	compatibility/gophermap	Update links and authority labels during RC assembly.

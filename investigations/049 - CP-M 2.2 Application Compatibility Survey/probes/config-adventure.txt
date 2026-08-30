@@ -1,0 +1,3 @@
+drive0 = CPM/system.dsk
+drive1 = CPM/adventure.dsk
+bootrom = MostekROM.bin

@@ -1,0 +1,23 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set timeout 90
+log_file -noappend $logfile
+spawn cpmsim -z -d $diskdir
+expect "A>"
+foreach cmd {"DIR" "DIR *.TXT" "DIR NOMATCH.ZZZ" "DIR.COM" "BOGUS" "TYPE TEXT.TXT" "TYPE EMPTY.DAT" "TYPE BINARY.DAT" "TYPE MISSING.TXT" "REN NEWFILE.DAT=OLDFILE.DAT" "REN EXISTS.DAT=SOURCE.DAT" "REN NEW.DAT=NOSOURCE.DAT" "ERA ONE.DEL" "ERA NOTHING.DEL" "SAVE 1 SAVED.COM" "SAVE X BAD.COM" "USER 1" "DIR SAME.TXT" "TYPE SAME.TXT" "USER 0" "TYPE SAME.TXT" "USER 16"} {
+ send -- "$cmd\r"
+ expect "A>"
+}
+send -- "ERA WILD?.DEL\r"
+expect "A>"
+send -- "ERA ROFILE.DAT\r"
+expect "A>"
+send -- "SAVE 1 D:FULL.COM\r"
+expect "A>"
+send -- "ERA *.*\r"
+expect "ALL (Y/N)?"
+send -- "N\r"
+expect "A>"
+send "\034"
+expect eof

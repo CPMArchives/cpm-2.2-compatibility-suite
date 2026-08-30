@@ -1,0 +1,34 @@
+INVESTIGATION 055 CONFORMANCE CATEGORIES
+
+1. Baseline CP/M 2.2
+   All applicable REQUIRED ledger propositions for a standard CP/M 2.2 system:
+   entry/page zero, CCP, BDOS, FCB/DMA/storage, configured BIOS, memory/lifecycle,
+   and documented error/recovery behavior. A baseline claim cannot silently omit
+   a REQUIRED proposition merely because the implementation is different.
+
+2. Strict community ecosystem
+   The baseline plus REQUIRED ecosystem behavior whose necessity is established
+   by historical software, notably DRI SUBMIT/XSUB interoperation and writable/
+   executable application-owned TPA. This is still a requirements category, not
+   permission to freeze private DRI internals.
+
+3. Optional compatibility profile
+   A named terminal, console-presentation, IOBYTE/device, communications, error-
+   presentation, extension, or policy selection. POLICY PENDING propositions do
+   not become passing baseline requirements until the profile is selected and
+   its evidence boundary is stated.
+
+4. Hardware-profile compatibility
+   A named BIOS/machine/device profile with configured geometry, character paths,
+   ports, MMIO, controller or peripheral behavior. Generic CP/M compatibility
+   does not imply every historical machine. A matching-profile claim activates
+   its applicable tests; a mismatched direct access is not a baseline failure.
+
+5. Outside/unsupported behavior
+   NOT REQUIRED private mechanisms and behaviors outside the declared profile.
+   NOT GUARANTEED items are not features in this category: they are explicit
+   variability constraints that tests and applications must not over-assert.
+
+Claim syntax (conceptual)
+   CP/M 2.2 baseline + [strict community] + [named optional profiles] +
+   [named hardware profiles], with versioned ledger/test/evidence identifiers.

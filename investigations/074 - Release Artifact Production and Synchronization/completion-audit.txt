@@ -1,0 +1,19 @@
+INVESTIGATION 074 COMPLETION AUDIT
+
+Compatibility Standard produced: yes
+Compatibility Policy produced: yes
+Conformance Specification produced: yes
+Profile Registry produced: yes
+Frozen I071 tables copied byte-identically: 9/9
+Top-level test IDs: 62 unique
+Proposition cases/oracles: 627/627 unique
+Profile-required cases mapped exactly once: 28/28
+Optional cases mapped exactly once: 3/3
+Synchronization checks: 10/10 PASS
+Ledger 072 modified: no
+Ledger 072 SHA-256 remains: eb16466fdbff8fb2bc07bd02a07198b8426fb6452be3dd1f256cbff4af0547d3
+Compatibility semantics changed: no
+Previous artifacts modified: no
+BetterCP/M implementation modified: no
+Remaining work limited to manifest/package/publication and later certification: yes
+RESULT: PASS

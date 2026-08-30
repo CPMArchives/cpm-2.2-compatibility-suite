@@ -1,0 +1,287 @@
+Investigation 044 — CP/M 2.2 Failure, Recovery, and Boundary Condition
+Compatibility Semantics Prompt
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 043 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation
+043.
+
+Create Investigation 044 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger. Do not modify previous
+investigation reports or artifacts.
+
+This is an evidence investigation only. Do not implement BetterCP/M
+changes.
+
+OBJECTIVE
+
+Determine the CP/M 2.2 failure, recovery, and boundary-condition
+compatibility contract.
+
+Previous investigations established:
+
+-   normal BDOS behavior;
+-   BIOS behavior;
+-   disk behavior;
+-   memory behavior;
+-   software ecosystem assumptions.
+
+Investigation 044 determines how CP/M software observes and responds to
+abnormal conditions.
+
+Investigate:
+
+-   invalid operations;
+-   resource exhaustion;
+-   disk failures;
+-   device failures;
+-   corrupted state;
+-   boundary conditions;
+-   recovery behavior.
+
+Determine:
+
+-   which failure behaviors are compatibility requirements;
+-   which behaviors are implementation-specific;
+-   which recovery conventions historically matter.
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+-   documented CP/M 2.2 behavior;
+-   Digital Research implementation behavior;
+-   common CP/M programming practices;
+-   historically significant software dependencies.
+
+Do not assume failure behavior is unimportant because normal operation
+succeeds.
+
+Do not require undocumented behavior without evidence.
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Investigation 015: Physical Disk Error and Error Presentation Semantics.
+
+Investigation 025: BDOS File Operation Error Semantics and
+Application-Visible Failure Behavior.
+
+Investigation 033: BDOS/BIOS Error Propagation and Recovery Semantics.
+
+Investigation 037: BDOS Remaining Functions and Interface Consolidation
+Semantics.
+
+Investigation 040: Disk Format, Drive Geometry, and Direct Structure
+Compatibility Semantics.
+
+Investigation 043: Memory and Execution Edge Case Compatibility
+Semantics.
+
+SCOPE
+
+Investigate:
+
+-   error propagation;
+-   failure return values;
+-   abnormal termination;
+-   resource exhaustion;
+-   recovery behavior;
+-   boundary states;
+-   software assumptions about failures.
+
+NON-GOALS
+
+Do not investigate:
+
+-   BetterCP/M error-handling architecture;
+-   modern exception systems;
+-   implementation-specific internal recovery algorithms;
+-   unrelated operating systems.
+
+INVESTIGATION QUESTIONS
+
+1.  FAILURE VISIBILITY
+
+Determine:
+
+-   which failures are visible to applications;
+-   how failures are reported;
+-   whether software depends upon specific failure indications.
+
+2.  RESOURCE EXHAUSTION
+
+Determine behavior for:
+
+-   full disks;
+-   full directories;
+-   insufficient memory;
+-   unavailable devices.
+
+3.  DISK AND FILE ERRORS
+
+Determine:
+
+-   error propagation;
+-   retry behavior;
+-   partial operation behavior;
+-   application expectations.
+
+4.  DEVICE FAILURES
+
+Determine:
+
+-   unavailable input;
+-   unavailable output;
+-   device errors;
+-   status reporting.
+
+5.  INVALID INPUT AND PARAMETERS
+
+Determine:
+
+-   behavior for invalid FCBs;
+-   invalid addresses;
+-   invalid function parameters;
+-   unsupported operations.
+
+6.  RECOVERY BEHAVIOR
+
+Determine:
+
+-   whether software expects retry;
+-   whether software expects termination;
+-   whether software expects warm restart;
+-   whether recovery state is preserved.
+
+7.  SOFTWARE ECOSYSTEM USAGE
+
+Investigate:
+
+-   utilities;
+-   communications software;
+-   development tools;
+-   file-management programs.
+
+Determine:
+
+-   common failure-handling assumptions;
+-   de facto compatibility requirements.
+
+8.  EXPERIMENTAL REQUIREMENTS
+
+Create deterministic probes covering:
+
+-   disk failures;
+-   file failures;
+-   device failures;
+-   invalid requests;
+-   boundary conditions.
+
+Each probe must include:
+
+-   purpose;
+-   procedure;
+-   observed behavior;
+-   compatibility conclusion.
+
+9.  CONTROLLED TEST MATRIX
+
+Include:
+
+-   normal state;
+-   boundary state;
+-   failure state;
+-   recovery state;
+-   repeated failure conditions.
+
+EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A: documented behavior.
+
+B: Digital Research implementation behavior.
+
+I: experimental observation.
+
+D: unresolved policy.
+
+Ledger evidence must identify:
+
+I044 ERROR RECOVERY BDOS BIOS subsystem IG AG
+
+COMPATIBILITY CLASSIFICATION
+
+Classify findings:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+Do not require:
+
+-   internal recovery algorithms;
+-   undocumented behavior without evidence;
+-   behavior invisible to applications.
+
+LEDGER REVIEW
+
+Review affected Compatibility Ledger entries.
+
+Determine:
+
+-   evidence strengthening;
+-   corrections;
+-   duplicate avoidance.
+
+Do not modify the ledger directly.
+
+REPORT STRUCTURE
+
+Create:
+
+Investigation 044 - CP/M 2.2 Failure, Recovery, and Boundary Condition
+Compatibility Semantics.md
+
+Include:
+
+1.  Objective and scope
+2.  Compatibility standard
+3.  Relationship to previous investigations
+4.  Failure visibility
+5.  Resource exhaustion
+6.  Disk and file errors
+7.  Device failures
+8.  Invalid input and parameters
+9.  Recovery behavior
+10. Software ecosystem findings
+11. Documentation findings
+12. Source findings
+13. Experimental results
+14. Compatibility conclusions
+15. Proposed ledger additions
+16. Existing-entry updates
+17. Open questions
+18. Conformance implications
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M error architecture.
+
+Do not replace CP/M failure semantics with modern abstractions.
+
+Determine the CP/M 2.2 failure, recovery, and boundary-condition
+compatibility contract only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

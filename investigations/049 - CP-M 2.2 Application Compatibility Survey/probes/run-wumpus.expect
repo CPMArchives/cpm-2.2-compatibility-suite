@@ -1,0 +1,23 @@
+#!/usr/bin/expect -f
+set timeout 20
+set send_slow {1 0.04}
+set root [file normalize [file join [file dirname [info script]] ..]]
+set emu [file join $root build z80pack mosteksim mosteksim]
+set work [file join $root work]
+log_file -noappend [file join $root probes transcripts wumpus-raw.txt]
+spawn -noecho $emu -z -d [file join $work disks] -r [file join $work roms] -c [file join $work config-games.txt]
+expect "A>"
+send -s "b:\r"
+expect "B>"
+send -s "mbasic wump\r"
+expect "INSTRUCTIONS (Y-N)?"
+send -s "N\r"
+expect "SHOOT OR MOVE (S-M)?"
+send "\003"
+expect "Ok"
+send -s "system\r"
+expect "B>"
+send "\034"
+expect ">>>"
+send "q\n"
+expect eof

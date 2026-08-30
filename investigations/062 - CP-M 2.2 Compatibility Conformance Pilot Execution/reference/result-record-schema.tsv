@@ -1,0 +1,16 @@
+field	required	meaning
+run_id	yes	unique immutable execution identifier
+test_id	yes	identifier from proposed-conformance-test-inventory.tsv
+ledger_entries	yes	exact proposition identifiers evaluated
+claim_level	yes	development, baseline, strict, profile-qualified or corpus endorsement
+profiles	yes	processor/platform/terminal/device/media/error/extension selections
+classification	yes	disposition treatment evaluated
+result	yes	PASS, FAIL, NOT-APPLICABLE, BLOCKED or UNRESOLVED as allowed
+expected_observation	yes	versioned criterion from inventory
+actual_observation	yes	raw and concise structured result
+fixture_hashes	yes	before images, input data, software and configuration hashes
+artifact_links	yes	transcripts, register/memory/FCB/DMA captures and after images
+environment	yes	implementation build, machine profile and runner identity
+repetition	yes	count and per-run results for asynchronous/timing cases
+failure_classification	if non-pass	product, fixture, permitted variation, policy, unsupported profile or blocker
+reviewer	manual/profile cases	identity or recorded review action; no implication of test framework

@@ -1,0 +1,165 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:27:49 2026	Page 1
+Source file: STATE29.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1  ORG 100H
+0100  31 e9 02         2      2  LD SP,STACK
+0103  af               3      3  XOR A
+0104  cd 2c 03         4      4  CALL SEL
+0107  cd 32 03         5      5  CALL SETDMA
+010a  21 65 01         6      6  LD HL,BAN
+010d  cd e9 02         7      7  CALL PUTS
+0110  11 a0 01         8      8  LD DE,FCB
+0113  0e 11            9      9  LD C,17
+0115  cd 05 00        10     10  CALL 5
+0118  cd 3a 03        11     11  CALL REPORT
+011b  0e 19           12     12  LD C,25
+011d  cd 05 00        13     13  CALL 5
+0120  0e 0c           14     14  LD C,12
+0122  cd 05 00        15     15  CALL 5
+0125  0e 12           16     16  LD C,18
+0127  cd 05 00        17     17  CALL 5
+012a  cd 3a 03        18     18  CALL REPORT
+012d  11 e9 01        19     19  LD DE,DMA2
+0130  0e 1a           20     20  LD C,26
+0132  cd 05 00        21     21  CALL 5
+0135  0e 12           22     22  LD C,18
+0137  cd 05 00        23     23  CALL 5
+013a  32 e8 01        24     24  LD (RC2),A
+013d  21 95 01        25     25  LD HL,L2
+0140  cd e9 02        26     26  CALL PUTS
+0143  3a e8 01        27     27  LD A,(RC2)
+0146  cd 10 03        28     28  CALL HEXB
+0149  cd 06 03        29     29  CALL CRLF
+014c  cd 32 03        30     30  CALL SETDMA
+014f  11 c4 01        31     31  LD DE,OTHER
+0152  0e 11           32     32  LD C,17
+0154  cd 05 00        33     33  CALL 5
+0157  cd 3a 03        34     34  CALL REPORT
+015a  0e 12           35     35  LD C,18
+015c  cd 05 00        36     36  CALL 5
+015f  cd 3a 03        37     37  CALL REPORT
+0162  c3 27 03        38     38  JP EXIT
+0165  53 54 41 54     39     39 BAN: DB 'STATE29 first/unrelated/changed-DMA/new-first',13,10,0
+0169  45 32 39 20     39     40
+016d  66 69 72 73     39     41
+0171  74 2f 75 6e     39     42
+0175  72 65 6c 61     39     43
+0179  74 65 64 2f     39     44
+017d  63 68 61 6e     39     45
+0181  67 65 64 2d     39     46
+0185  44 4d 41 2f     39     47
+0189  6e 65 77 2d     39     48
+018d  66 69 72 73     39     49
+0191  74 0d 0a 00     39     50
+0195  6e 65 77 64     40     51 L2: DB 'newdma rc ',0
+0199  6d 61 20 72     40     52
+019d  63 20 00        40     53
+01a0  00 3f 3f 3f     41     54 FCB: DB 0,'????????TXT','?',0,0,0
+01a4  3f 3f 3f 3f     41     55
+01a8  3f 54 58 54     41     56
+01ac  3f 00 00 00     41     57
+01b0                  42     58  DS 20
+01c4  00 42 45 54     43     59 OTHER: DB 0,'BETA    TXT',0,0,0,0
+01c8  41 20 20 20     43     60
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:27:49 2026	Page 2
+Source file: STATE29.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+01cc  20 54 58 54     43     61
+01d0  00 00 00 00     43     62
+01d4                  44     63  DS 20
+01e8  00              45     64 RC2: DB 0
+01e9                  46     65 DMA2: DS 128,0D2H
+0269                  47     66  DS 128
+02e9                  48     67 STACK:
+02e9  7e              49     68 PUTS: LD A,(HL)
+02ea  23              50     69  INC HL
+02eb  b7              51     70  OR A
+02ec  c8              52     71  RET Z
+02ed  5f              53     72  LD E,A
+02ee  cd f3 02        54     73  CALL PUTC
+02f1  18 f6           55     74  JR PUTS
+02f3  f5              56     75 PUTC: PUSH AF
+02f4  c5              57     76  PUSH BC
+02f5  d5              58     77  PUSH DE
+02f6  e5              59     78  PUSH HL
+02f7  0e 02           60     79  LD C,2
+02f9  cd 05 00        61     80  CALL 5
+02fc  e1              62     81  POP HL
+02fd  d1              63     82  POP DE
+02fe  c1              64     83  POP BC
+02ff  f1              65     84  POP AF
+0300  c9              66     85  RET
+0301  1e 20           67     86 SPACE: LD E,' '
+0303  c3 f3 02        68     87  JP PUTC
+0306  1e 0d           69     88 CRLF: LD E,13
+0308  cd f3 02        70     89  CALL PUTC
+030b  1e 0a           71     90  LD E,10
+030d  c3 f3 02        72     91  JP PUTC
+0310  f5              73     92 HEXB: PUSH AF
+0311  0f              74     93  RRCA
+0312  0f              75     94  RRCA
+0313  0f              76     95  RRCA
+0314  0f              77     96  RRCA
+0315  cd 19 03        78     97  CALL NIB
+0318  f1              79     98  POP AF
+0319  e6 0f           80     99 NIB: AND 0FH
+031b  c6 30           81    100  ADD A,'0'
+031d  fe 3a           82    101  CP '9'+1
+031f  38 02           83    102  JR C,NOUT
+0321  c6 07           84    103  ADD A,7
+0323  5f              85    104 NOUT: LD E,A
+0324  c3 f3 02        86    105  JP PUTC
+0327  0e 00           87    106 EXIT: LD C,0
+0329  c3 05 00        88    107  JP 5
+032c  5f              89    108 SEL: LD E,A
+032d  0e 0e           90    109  LD C,14
+032f  c3 05 00        91    110  JP 5
+0332  11 94 03        92    111 SETDMA: LD DE,DMA
+0335  0e 1a           93    112  LD C,26
+0337  c3 05 00        94    113  JP 5
+033a  32 83 03        95    114 REPORT: LD (RC),A
+033d  fe ff           96    115  CP 0FFH
+033f  28 14           97    116  JR Z,RPRINT
+0341  6f              98    117  LD L,A
+0342  26 00           99    118  LD H,0
+0344  29             100    119  ADD HL,HL
+0345  29             101    120  ADD HL,HL
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:27:49 2026	Page 3
+Source file: STATE29.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0346  29             102    121  ADD HL,HL
+0347  29             103    122  ADD HL,HL
+0348  29             104    123  ADD HL,HL
+0349  11 94 03       105    124  LD DE,DMA
+034c  19             106    125  ADD HL,DE
+034d  11 84 03       107    126  LD DE,SNAP
+0350  01 10 00       108    127  LD BC,16
+0353  ed b0          109    128  LDIR
+0355                 110    129 RPRINT:
+0355  21 77 03       111    130  LD HL,LABEL
+0358  cd e9 02       112    131  CALL PUTS
+035b  3a 83 03       113    132  LD A,(RC)
+035e  cd 10 03       114    133  CALL HEXB
+0361  fe ff          115    134  CP 0FFH
+0363  28 0f          116    135  JR Z,RDONE
+0365  cd 01 03       117    136  CALL SPACE
+0368  21 84 03       118    137  LD HL,SNAP
+036b  06 10          119    138  LD B,16
+036d  7e             120    139 RBYTE: LD A,(HL)
+036e  23             121    140  INC HL
+036f  cd 10 03       122    141  CALL HEXB
+0372  10 f9          123    142  DJNZ RBYTE
+0374  c3 06 03       124    143 RDONE: JP CRLF
+0377  72 63 2f 65    125    144 LABEL: DB 'rc/entry16 ',0
+037b  6e 74 72 79    125    145
+037f  31 36 20 00    125    146
+0383  00             126    147 RC: DB 0
+0384                 127    148 SNAP: DS 16,0
+0394                 128    149 DMA: DS 128,0A5H
+0414                 129    150  END

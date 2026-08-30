@@ -1,0 +1,120 @@
+EXECUTE MODE: Begin Investigation 015.
+
+Topic:
+CP/M 2.2 BDOS Physical Disk Error and Error Presentation Semantics
+
+Objective:
+Determine the externally observable CP/M 2.2 behavior when BDOS encounters physical disk errors, including the boundary between documented BDOS return codes, BIOS/media error handling, and DRI fatal error presentation.
+
+Requirements:
+
+1. Do not infer behavior solely from source code.
+2. Separate:
+   - documented CP/M interface behavior;
+   - DRI source implementation behavior;
+   - experimentally observed behavior;
+   - unresolved BetterCP/M policy decisions.
+3. Do not modify the Compatibility Ledger.
+4. Produce investigation artifacts only.
+5. Preserve all existing BetterCP/M files and ledger files.
+
+Investigate:
+
+A. Documentation review
+- Identify documented BDOS behavior for disk read/write failures.
+- Identify any documented error codes for:
+  - sequential read;
+  - sequential write;
+  - random read;
+  - random write;
+  - Make;
+  - Delete;
+  - Rename;
+  - Close.
+- Identify what the Interface Guide leaves unspecified.
+
+B. DRI source analysis
+Examine CP/M 2.2 BDOS source for:
+- disk error dispatch;
+- BIOS error entry paths;
+- read-error handling;
+- write-error handling;
+- retry/abort behavior;
+- console diagnostic paths;
+- warm restart behavior;
+- relationship between BDOS return codes and fatal handlers.
+
+C. Controlled experiments
+
+Create isolated test cases using fresh restored disk images.
+
+For each case:
+- preserve before-image;
+- run exactly one failure scenario;
+- capture console output;
+- capture whether BDOS returns;
+- capture register results if it returns;
+- capture FCB state;
+- capture DMA state;
+- compare before/after disk image hashes.
+
+Test where feasible:
+
+1. Physical read failure during:
+   - sequential read;
+   - random read.
+
+2. Physical write failure during:
+   - sequential write;
+   - random write;
+   - Make;
+   - Close.
+
+3. Compare:
+   - normal documented BDOS failure;
+   - DRI fatal handler behavior;
+   - any BIOS-dependent behavior.
+
+D. Compatibility conclusions
+
+Determine:
+
+- Which behaviors are required CP/M 2.2 compatibility surface.
+- Which behaviors are DRI implementation details.
+- Which behaviors should remain policy pending for BetterCP/M.
+
+Do not promote conclusions into ledger entries automatically.
+
+Required artifacts:
+
+Create:
+
+investigations/015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics/
+
+Containing:
+
+- Investigation 015 - CP-M 2.2 BDOS Physical Disk Error and Error Presentation Semantics.md
+- probes/
+  - source files
+  - build instructions
+  - README
+  - observed output
+  - transcripts
+- preserved disk images
+- hashes
+- any emulator/harness scripts
+
+Completion requirements:
+
+The investigation is complete only when:
+
+- all required experiments have run;
+- incomplete cases are explicitly marked incomplete;
+- no evidence is claimed from unperformed experiments;
+- audit section confirms artifact existence;
+- SHA-256 hashes are recorded;
+- no ledger modifications have been made.
+
+If a required experiment cannot be performed:
+STOP and report the blocker.
+Do not replace missing evidence with source reconstruction.

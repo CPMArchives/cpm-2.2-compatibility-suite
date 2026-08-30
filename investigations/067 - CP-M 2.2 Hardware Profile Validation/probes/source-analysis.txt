@@ -1,0 +1,38 @@
+Investigation 067 source and configuration analysis
+====================================================
+
+Public boundary
+  CP/M documentation defines the BDOS/page-zero interface and the standard
+  17-entry BIOS vector.  It leaves physical controller, console, printer,
+  reader/punch, clock, interrupt, display, port, and memory-map realization to
+  system integration.  A machine profile may add behavior but cannot weaken a
+  generic CP/M proposition included in its claim.
+
+Cromemco profile
+  The preserved configuration advertises a Cromemco Z-1, RDOS ROM boot,
+  banked ROM, MMU, FDC mapping, TU-ART devices, and optional host terminals.
+  These explain boot and device realization, but BASE051 reaches only BDOS.
+
+IMSAI profile
+  The preserved configuration advertises MPU ROM/RAM, FIF disk mapping,
+  SIO1/SIO2 channels, VIO keyboard, modem, and configured speeds.  I051 source
+  shows that QTERM's IMSAI patch uses direct ports 22h/23h or 24h/25h rather
+  than the generic BIOS vector.  I065 supplies a matching executable/endpoint
+  test.  Its port values and host socket are profile details.
+
+Mostek mismatch fixture
+  I051's isolated unused-port trap showed the exact boundary: QTERM and KSCOPE
+  first used portable CP/M output, then trapped at their unadvertised direct
+  hardware accesses.  This is inherited experimental evidence, not a new run.
+
+Processor profiles
+  CPU8080 and CPUZ80 isolate instruction semantics from BIOS/service
+  semantics.  The source confirms the former uses the documented 8080 subset;
+  the latter deliberately uses documented Z80-only index, alternate-register,
+  relative-branch, bit, and block operations.
+
+Limit
+  Configuration/source review defines test expectations; it does not replace
+  experiments.  Altair and Intel MDS profiles were inventoried but not run.
+  No Dazzler, VIO display, printer, physical serial line, raw controller, or
+  front-panel success is claimed in I067.

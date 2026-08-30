@@ -1,0 +1,8 @@
+Authoritative ledger (not modified):
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 021.txt
+
+SHA-256 before Investigation 022:
+26ad23c1ee9cd85a0a1325090b7e27cf875b109b4a75ae8c0cc1dc1e96440402
+
+SHA-256 at staging completion:
+26ad23c1ee9cd85a0a1325090b7e27cf875b109b4a75ae8c0cc1dc1e96440402

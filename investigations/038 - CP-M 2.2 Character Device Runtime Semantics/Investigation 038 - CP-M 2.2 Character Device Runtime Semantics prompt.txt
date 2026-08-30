@@ -1,0 +1,646 @@
+Investigation 038 — CP/M 2.2 Character Device Runtime Semantics Prompt
+
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 037 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation 037.
+
+Create Investigation 038 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports or artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Determine the CP/M 2.2 character-device runtime compatibility contract.
+
+Previous investigations established:
+
+- BDOS console functions;
+- BIOS character-device functions;
+- IOBYTE semantics;
+- BDOS error behavior;
+- BIOS runtime boundaries.
+
+
+Investigation 038 determines how character devices behave as a practical
+CP/M software interface.
+
+Investigate:
+
+- console device behavior;
+- reader behavior;
+- punch behavior;
+- list device behavior;
+- device status behavior;
+- blocking behavior;
+- device assignment interaction;
+- software dependencies on character-device conventions.
+
+
+Determine:
+
+- which character-device behaviors are compatibility requirements;
+- which behaviors are implementation-specific;
+- which behaviors are historically significant ecosystem conventions.
+
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+- documented CP/M 2.2 behavior;
+- Digital Research implementation behavior;
+- common CP/M programming practices;
+- historically significant software dependencies.
+
+
+Do not assume that only documented BDOS behavior matters.
+
+Do not require undocumented behavior without evidence.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+
+Investigation 003:
+
+    BDOS Console Output and String Output Semantics.
+
+
+Investigation 004:
+
+    BDOS Direct Console IO and Console Status Semantics.
+
+
+Investigation 005:
+
+    BDOS Console Input and Echo Semantics.
+
+
+Investigation 006:
+
+    BDOS Buffered Console Input and Line Editing Semantics.
+
+
+Investigation 018:
+
+    CP/M 2.2 Character Devices and IOBYTE Semantics.
+
+
+Investigation 020:
+
+    CP/M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics.
+
+
+Investigation 036:
+
+    CP/M 2.2 BIOS Runtime Environment and Hardware Abstraction
+    Boundary Semantics.
+
+
+Investigation 037:
+
+    CP/M 2.2 BDOS Remaining Functions and Interface Consolidation
+    Semantics.
+
+
+Do not duplicate previous investigations.
+
+Focus on remaining runtime compatibility questions.
+
+SCOPE
+
+Investigate:
+
+- character-device semantics visible through BDOS;
+- character-device semantics visible through BIOS;
+- device status behavior;
+- input behavior;
+- output behavior;
+- device assignment behavior;
+- software expectations around character devices.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- BetterCP/M device architecture;
+- modern terminal abstractions;
+- hardware-specific serial implementations;
+- CP/M 3 device extensions;
+- MP/M device management.
+
+
+Do not repeat:
+
+- already established console input/output behavior;
+- already established IOBYTE definitions;
+- already established BIOS jump-table semantics.
+
+
+INVESTIGATION QUESTIONS
+
+
+1. CHARACTER DEVICE COMPATIBILITY BOUNDARY
+
+Determine whether CP/M character devices form a compatibility-visible
+interface beyond normal BDOS console functions.
+
+Investigate:
+
+- direct BIOS device access;
+- BDOS device access;
+- application usage patterns;
+- common utility behavior.
+
+
+Determine:
+
+- which device behaviors software can reasonably depend upon.
+
+
+2. CONSOLE DEVICE RUNTIME SEMANTICS
+
+Review remaining console behavior questions.
+
+Determine:
+
+- input availability behavior;
+- output behavior;
+- control-character handling;
+- status reporting;
+- interaction between BDOS and BIOS console services.
+
+
+Determine:
+
+- whether existing software depends upon specific behavior beyond the
+  documented interface.
+
+
+3. READER DEVICE SEMANTICS
+
+Determine the compatibility contract for the reader device.
+
+Investigate:
+
+- input availability;
+- end-of-input behavior;
+- blocking behavior;
+- status reporting;
+- BDOS/BIOS interaction.
+
+
+Determine:
+
+- whether software historically depends on reader behavior.
+
+
+4. PUNCH DEVICE SEMANTICS
+
+Determine the compatibility contract for the punch device.
+
+Investigate:
+
+- output behavior;
+- status behavior;
+- failure behavior;
+- BDOS/BIOS interaction.
+
+
+Determine:
+
+- whether software historically depends on punch behavior.
+
+
+5. LIST DEVICE SEMANTICS
+
+Determine the compatibility contract for the list device.
+
+Investigate:
+
+- output behavior;
+- status behavior;
+- printer readiness;
+- blocking behavior;
+- failure behavior.
+
+
+Determine:
+
+- whether software historically depends on list-device behavior.
+
+
+6. DEVICE STATUS SEMANTICS
+
+Determine the meaning of device status functions.
+
+Investigate:
+
+- ready/not-ready states;
+- timing assumptions;
+- polling behavior;
+- returned values.
+
+
+Determine:
+
+- whether applications depend upon exact status behavior.
+
+
+7. DEVICE ASSIGNMENT INTERACTION
+
+Determine how runtime device assignment affects applications.
+
+Investigate:
+
+- IOBYTE mappings;
+- BDOS device functions;
+- BIOS device calls;
+- reassignment during execution.
+
+
+Determine:
+
+- whether software assumes devices remain fixed;
+- whether device switching is compatibility-visible.
+
+
+8. BLOCKING AND TIMING BEHAVIOR
+
+Determine whether software depends upon:
+
+- blocking reads;
+- blocking writes;
+- polling loops;
+- immediate return behavior;
+- device availability timing.
+
+
+Determine:
+
+- which timing assumptions are compatibility-relevant;
+- which are hardware-dependent.
+
+
+9. ERROR AND FAILURE BEHAVIOR
+
+Determine character-device failure semantics.
+
+Investigate:
+
+- unavailable devices;
+- failed output;
+- failed input;
+- device status errors.
+
+
+Determine:
+
+- application-visible behavior;
+- required compatibility behavior.
+
+
+10. SOFTWARE ECOSYSTEM USAGE
+
+Examine software categories that use character devices:
+
+- communications programs;
+- terminal programs;
+- editors;
+- printing utilities;
+- development tools;
+- transfer utilities.
+
+
+Determine:
+
+- common usage patterns;
+- undocumented assumptions;
+- de facto compatibility requirements.
+
+
+11. SOURCE ANALYSIS
+
+Review available source material for:
+
+- CCP device usage;
+- BDOS character-device handling;
+- BIOS device interfaces;
+- device assignment logic.
+
+
+Extract:
+
+- documented behavior;
+- DRI implementation behavior;
+- application-visible conventions.
+
+
+Do not produce:
+
+- source walkthroughs;
+- device-driver implementation guides.
+
+
+12. EXPERIMENTAL PROGRAMS
+
+Create deterministic probes covering:
+
+
+CHAR38:
+
+    Character-device behavior.
+
+
+STATUS38:
+
+    Device status behavior.
+
+
+IOBYTE38:
+
+    Device assignment behavior.
+
+
+BLOCK38:
+
+    Blocking and readiness behavior.
+
+
+ERROR38:
+
+    Device failure behavior.
+
+
+Each probe must include:
+
+- purpose;
+- procedure;
+- observed behavior;
+- compatibility conclusion.
+
+
+13. CONTROLLED TEST MATRIX
+
+Include:
+
+
+DEVICES
+
+- console;
+- reader;
+- punch;
+- list.
+
+
+OPERATIONS
+
+- input;
+- output;
+- status.
+
+
+STATES
+
+- available;
+- unavailable;
+- boundary condition;
+- failure condition.
+
+
+INTERFACES
+
+- BDOS;
+- BIOS;
+- direct application access.
+
+
+APPLICATIONS
+
+- standard utilities;
+- communications software;
+- printing software.
+
+14. COMPATIBILITY CLASSIFICATION
+
+For each finding, determine:
+
+- whether software can observe the behavior;
+- whether existing CP/M software depends upon the behavior;
+- whether evidence supports requiring compatibility.
+
+
+Classify findings:
+
+REQUIRED
+
+    BetterCP/M shall reproduce the behavior.
+
+
+POLICY PENDING
+
+    Evidence exists, but a compatibility decision remains open.
+
+
+NOT REQUIRED
+
+    BetterCP/M need not reproduce the behavior.
+
+
+NOT GUARANTEED
+
+    Software should not depend upon the behavior.
+
+
+15. EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+
+    documented behavior.
+
+B:
+
+    Digital Research implementation behavior.
+
+I:
+
+    experimental observation.
+
+D:
+
+    unresolved policy.
+
+
+These classifications are internal investigation labels only.
+
+
+Ledger evidence must identify:
+
+    I038
+    DEVICE
+    BIOS
+    BDOS
+    subsystem
+    IG
+    AG
+
+
+16. EXISTING LEDGER REVIEW
+
+Review affected Compatibility Ledger entries:
+
+- console behavior;
+- character devices;
+- IOBYTE;
+- BIOS character services;
+- BDOS character services;
+- device status behavior;
+- error behavior.
+
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+
+Do not modify the Compatibility Ledger directly.
+
+
+The current Compatibility Ledger ends after Investigation 037.
+
+Determine the next available ledger entry number.
+
+Do not create duplicate propositions merely because a lower-level
+mechanism has been explained more fully.
+
+
+17. PROPOSED LEDGER ADDITIONS
+
+Include:
+
+Proposed Compatibility Ledger additions
+
+and:
+
+Proposed existing-entry updates.
+
+
+Each entry must contain:
+
+
+NNNN. Title
+
+    Description.
+
+    Disposition:
+
+    Evidence:
+
+    Conformance:
+
+
+18. REPORT STRUCTURE
+
+Create:
+
+Investigation 038 - CP/M 2.2 Character Device Runtime Semantics.md
+
+
+Include:
+
+
+1. Objective and scope
+
+2. Compatibility standard
+
+3. Relationship to previous investigations
+
+4. Character-device compatibility boundary
+
+5. Documentation findings
+
+6. Source findings
+
+7. Console runtime behavior review
+
+8. Reader behavior review
+
+9. Punch behavior review
+
+10. List-device behavior review
+
+11. Device status behavior
+
+12. Device assignment interaction
+
+13. Blocking and timing behavior
+
+14. Error and failure behavior
+
+15. Software ecosystem findings
+
+16. Experimental results
+
+17. Compatibility conclusions
+
+18. Proposed ledger additions
+
+19. Existing-entry updates
+
+20. Open questions
+
+21. Conformance implications
+
+
+19. FINAL REVIEW
+
+Before completing the investigation, verify:
+
+- character-device compatibility boundaries are identified;
+- previous console and IOBYTE investigations are not duplicated;
+- BDOS and BIOS behavior are distinguished;
+- hardware-specific behavior is separated from compatibility
+  requirements;
+- software dependencies are supported by evidence.
+
+
+Ensure conclusions distinguish:
+
+- documented CP/M behavior;
+- Digital Research implementation behavior;
+- historical software dependencies;
+- vendor or hardware conventions;
+- experimental observations;
+- unresolved policy.
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M device architecture.
+
+Do not replace CP/M character-device semantics with modern device
+models.
+
+Determine the CP/M 2.2 character-device runtime compatibility contract
+only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

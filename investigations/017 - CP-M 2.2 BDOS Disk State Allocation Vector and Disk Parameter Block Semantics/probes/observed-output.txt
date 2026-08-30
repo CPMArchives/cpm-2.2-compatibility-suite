@@ -1,0 +1,49 @@
+Investigation 017 accepted observations
+========================================
+
+Environment: z80pack cpmsim 1.39, CP/M 2.2, Z80 CBIOS 1.2.
+Raw transcript: transcripts/console.txt.
+
+DPB
+  Every snapshot returned FA8D and these 15 bytes:
+  1A00 03 07 00 F200 3F00 C0 00 1000 0200
+  Decoded little-endian: SPT=26, BSH=3, BLM=7, EXM=0, DSM=242,
+  DRM=63, AL0=C0, AL1=00, CKS=16, OFF=2. A and B share the DPB in
+  this BIOS; this geometry and pointer are configuration-specific.
+
+Allocation vectors
+  A returned FCB0; B returned FCCF. With DSM=242 each vector is 31 bytes.
+  The leading FF FF FF FF bits reflect reserved directory blocks and existing
+  files. A and B contents differed according to their directories. Switching
+  away and back restored the drive-specific pointer/content. Marking B
+  read-only did not change the observed bytes, although the Interface Guide
+  warns allocation information may be invalid for a read-only selected disk.
+
+  Make did not allocate a data block. The first sequential Write changed the
+  first non-reserved free bit in A's vector (leading byte sequence C0 -> E0
+  at the relevant byte). Close made no additional vector change. Delete
+  restored the bit. Return values were Make=02, Write=00, Close=02, Delete=00.
+
+Live pointer diagnostic
+  Function 27 re-query returned FCB0 and exposed a temporary first-byte change
+  FF -> FE. Function 31 re-query returned FA8D and exposed a temporary SPT-low
+  change 1A -> 1B. Both bytes were restored before disk activity. This proves
+  live addressable storage on the tested DRI/BIOS system; it does not make
+  arbitrary ALV modification safe. The Interface Guide expressly permits
+  transient programs to change DPB values when disk conditions change.
+
+Login/read-only/reset-drive
+  Reset System: current A, login 0001, read-only 0000.
+  Select B: current B, login 0003, read-only 0000.
+  Select A: current A, login remained 0003.
+  Function 37 DE=0002 cleared B login. DE=0006 then had no additional effect.
+  After selecting/protecting B and returning to A, state was login 0003,
+  read-only 0002. Function 37 DE=0002 cleared both B bits.
+  With A and B logged, Function 37 DE=0003 cleared both login bits while
+  Function 25 still returned A and the current A ALV/DPB pointers persisted.
+  Function 13 then restored login 0001 and read-only 0000.
+
+Disk images
+  B was byte-identical before/after. A changed because the controlled file's
+  directory entry was made, written, closed, and marked deleted. ST017.DAT is
+  absent from the final logical directory. Exact hashes are in transcripts/.

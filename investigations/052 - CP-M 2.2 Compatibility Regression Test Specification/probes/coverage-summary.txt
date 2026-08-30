@@ -1,0 +1,8 @@
+anti-requirement=48
+mapped_entries=652
+missing_primary_tests=0
+positive conformance=445
+profile gate=50
+variability/non-assertion=109
+inventory_tests=62
+bad_field_rows=0

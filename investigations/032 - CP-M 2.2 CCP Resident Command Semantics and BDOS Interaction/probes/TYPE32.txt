@@ -1,0 +1,5 @@
+Purpose: text, empty, control-character, and missing TYPE cases.
+Procedure: TYPE controlled TEXT/EMPTY/BINARY/MISSING files.
+Observed: text and controls were emitted until 1Ah or physical EOF; empty was
+silent after command echo; missing printed MISSING.TXT?.
+Conclusion: TYPE is a sequential reader, not a text decoder or sanitizer.

@@ -1,0 +1,289 @@
+Investigation 049 — CP/M 2.2 Application Compatibility Survey Prompt
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 048 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation 048.
+
+Create Investigation 049 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports or artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Determine whether common CP/M 2.2 applications expose additional
+compatibility requirements not fully captured by previous investigations.
+
+Previous investigations established:
+
+- CP/M interfaces;
+- system behavior;
+- storage behavior;
+- memory behavior;
+- standard utility behavior;
+- development tool behavior.
+
+Investigation 049 examines application software as compatibility
+evidence.
+
+Investigate:
+
+- application runtime assumptions;
+- user-facing software behavior;
+- file and device usage;
+- direct system access;
+- undocumented conventions.
+
+Determine:
+
+- whether applications reveal missing compatibility requirements;
+- whether existing compatibility contracts are sufficient;
+- whether additional investigations are required.
+
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+- documented CP/M 2.2 behavior;
+- Digital Research implementation behavior;
+- common CP/M programming practices;
+- historically significant software dependencies.
+
+Do not assume application behavior is required without evidence.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Review completed investigations through Investigation 048.
+
+Pay particular attention to:
+
+Investigation 041:
+    Direct System Access and Undocumented Application Interface
+    Compatibility Semantics.
+
+Investigation 042:
+    Common Software Compatibility Assumptions.
+
+Investigation 047:
+    Standard Utility Compatibility Survey.
+
+Investigation 048:
+    Development Toolchain Compatibility Survey.
+
+
+SCOPE
+
+Investigate:
+
+- common CP/M application categories;
+- application interface usage;
+- file-system assumptions;
+- memory assumptions;
+- device assumptions;
+- runtime behavior.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- BetterCP/M application design;
+- application rewriting;
+- modern software compatibility;
+- unsupported CP/M versions.
+
+
+INVESTIGATION QUESTIONS
+
+
+1. APPLICATION CATEGORY COVERAGE
+
+Determine compatibility behavior of:
+
+- word processors;
+- spreadsheets;
+- databases;
+- communications programs;
+- business applications;
+- games;
+- other historically significant applications.
+
+
+2. SYSTEM INTERFACE USAGE
+
+Determine:
+
+- BDOS usage;
+- BIOS usage;
+- direct system access;
+- memory assumptions;
+- device assumptions.
+
+
+3. FILE AND STORAGE ASSUMPTIONS
+
+Determine:
+
+- file handling assumptions;
+- directory assumptions;
+- disk assumptions;
+- backup and recovery expectations.
+
+
+4. USER INTERFACE ASSUMPTIONS
+
+Determine:
+
+- console behavior assumptions;
+- keyboard behavior assumptions;
+- display behavior assumptions;
+- terminal assumptions.
+
+
+5. UNDOCUMENTED CONVENTIONS
+
+Determine:
+
+- repeated application behavior;
+- ecosystem-wide assumptions;
+- de facto compatibility requirements.
+
+
+6. EXPERIMENTAL REQUIREMENTS
+
+Create deterministic validation tests covering:
+
+- representative applications;
+- application startup;
+- file operations;
+- device operations;
+- boundary conditions.
+
+Each test must include:
+
+- purpose;
+- procedure;
+- observed behavior;
+- compatibility conclusion.
+
+
+7. CONTROLLED TEST MATRIX
+
+Include:
+
+- normal operation;
+- boundary operation;
+- failure operation;
+- unusual but historically relevant cases.
+
+
+EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+    documented behavior.
+
+B:
+    Digital Research implementation behavior.
+
+I:
+    experimental observation.
+
+D:
+    unresolved policy.
+
+
+Ledger evidence must identify:
+
+I049
+APPLICATION
+ECOSYSTEM
+COMPATIBILITY
+subsystem
+IG
+AG
+
+
+COMPATIBILITY CLASSIFICATION
+
+Classify findings:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Do not require:
+
+- isolated accidental behavior;
+- undocumented behavior without evidence;
+- private implementation details.
+
+
+LEDGER REVIEW
+
+Review affected Compatibility Ledger entries.
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+Do not modify the ledger directly.
+
+
+REPORT STRUCTURE
+
+Create:
+
+Investigation 049 - CP/M 2.2 Application Compatibility Survey.md
+
+Include:
+
+1. Objective and scope
+2. Compatibility standard
+3. Relationship to previous investigations
+4. Application category coverage
+5. Documentation findings
+6. Source findings
+7. System interface usage
+8. Storage assumptions
+9. User interface assumptions
+10. Undocumented convention analysis
+11. Experimental results
+12. Compatibility conclusions
+13. Proposed ledger additions
+14. Existing-entry updates
+15. Open questions
+16. Conformance implications
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M applications.
+
+Do not replace CP/M application behavior with modern abstractions.
+
+Determine the CP/M 2.2 application compatibility contract only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

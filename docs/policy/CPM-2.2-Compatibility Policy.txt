@@ -1,0 +1,96 @@
+BETTERCP/M COMPATIBILITY POLICY
+Version 1.0-rc1
+
+1. Purpose and authority
+
+This policy governs the BetterCP/M CP/M 2.2 Compatibility Standard release
+candidate. Compatibility Ledger 072 is the authoritative proposition record:
+
+    SHA-256 eb16466fdbff8fb2bc07bd02a07198b8426fb6452be3dd1f256cbff4af0547d3
+
+Investigation 070 supplies the adopted policy decisions; Investigation 071
+supplies conformance treatment. If summary prose conflicts with a numbered
+ledger proposition, the ledger controls. This policy does not modify it.
+
+2. Compatibility principle
+
+BetterCP/M compatibility concerns externally observable behavior on which
+CP/M 2.2 programs, users, documented direct-interface callers, and relevant
+ecosystem software may depend. Private algorithms, source organization,
+addresses, residue, timing, and mechanisms are unconstrained unless a ledger
+proposition makes their observable consequence part of a selected claim.
+
+Documentation is primary evidence for the documented contract. DRI source and
+binaries establish implementation behavior; controlled experiments establish
+behavior of identified systems; software evidence establishes consequential
+dependencies. None alone universalizes incidental DRI behavior.
+
+3. Normative treatments
+
+REQUIRED: every generic claim shall satisfy the proposition.
+
+PROFILE REQUIRED: represented in the ledger as REQUIRED with explicit named
+applicability. It is mandatory only when that versioned profile is selected.
+Profiles add requirements and cannot waive generic REQUIRED behavior.
+
+OPTIONAL: represented as NOT REQUIRED with explicit optional applicability.
+It is absent from baseline; when claimed, its mapped cases must pass without
+changing baseline semantics.
+
+NOT GUARANTEED: portable software and generic certification shall not require
+one exact result. A DRI observation is not silently promoted to a promise.
+
+OUTSIDE SCOPE: represented as NOT REQUIRED with explicit outside-scope text.
+It is excluded from BetterCP/M's CP/M compatibility claim.
+
+Ledger 072 contains 458 REQUIRED, 116 NOT GUARANTEED, 53 NOT REQUIRED, and
+zero POLICY PENDING propositions. Its I070-derived conformance view contains
+430 generic REQUIRED, 28 PROFILE REQUIRED, three OPTIONAL, 116 NOT GUARANTEED,
+and 50 OUTSIDE SCOPE cases.
+
+4. Generic baseline
+
+CPM22-BASE includes every generic REQUIRED proposition and the six generic
+I070 decisions: counted command-tail leading blank, uppercase conversion,
+Function 13 user preservation, exact sequential-write full-condition codes,
+random-write allocation-full code 02h, and TAB distinct from CCP SPACE.
+
+The baseline does not promise exact residual registers, private addresses,
+unloaded memory, undocumented processor results, DRI-only presentation, active
+optional device mappings, universal hardware timing, or host implementation
+details unless a generic proposition expressly says otherwise.
+
+5. Profiles and optional features
+
+The public registry is `Compatibility Profile Registry 1.0-rc1`. All named
+profiles inherit CPM22-BASE. The registry preserves ledger applicability and
+assigns stable IDs; it does not add behavior. The standard RC defines profiles
+as AVAILABLE but unselected by default. Product manifests state which are
+selected and may claim only profiles whose complete mapped cases pass.
+
+Function 37 compatibility and structured/headless errors are optional. Exact
+DRI console/editor, CCP, error, diagnostic, resident presentation, IOBYTE,
+LIST, and removable-media behaviors apply only under their named profiles.
+Undocumented wildcard Rename is outside the compatibility claim.
+
+6. Conformance and claims
+
+Claims use the public Conformance Specification 1.0-rc1 and frozen I071 tables.
+Generic REQUIRED cases cannot be waived. A profile failure defeats that profile
+claim. Optional failures defeat only the optional claim. NOT GUARANTEED and
+OUTSIDE SCOPE cases are variation/anti-requirements, not DRI-equality gates.
+BLOCKED or ERROR cannot count as PASS.
+
+Successful applications supplement but never replace narrow proposition
+tests. A claim names the exact ledger, conformance versions, environment,
+level, selected profiles, fixtures, runner, and evidence hashes.
+
+7. Change control
+
+Release assembly may copy, format, index, and cross-reference frozen content.
+It may not renumber propositions, change dispositions/applicability, redefine
+oracles, or silently correct semantics. Such a change requires a separately
+authorized investigation and a new controlled ledger/framework version.
+
+Draft 0.1 policy and strategy documents and earlier ledgers remain historical,
+not current authority for this release candidate.

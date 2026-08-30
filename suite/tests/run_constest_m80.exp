@@ -1,0 +1,21 @@
+#!/usr/bin/expect -f
+# SPDX-License-Identifier: GPL-2.0-or-later
+set timeout 60
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+log_file -noappend $logfile
+source [file join [file dirname [info script]] cpmsim-path.exp]
+spawn $cpmsim -z -d $diskdir
+expect "A>"
+send "B:\r"
+expect "B>"
+send "M80 =CONSTEST\r"
+expect "No Fatal error(s)"
+expect "B>"
+send "L80 CONSTEST,CONSTEST/N/E\r"
+expect "B>"
+send "DIR CONSTEST.*\r"
+expect "CONSTEST  COM"
+expect "B>"
+send "\034"
+expect eof

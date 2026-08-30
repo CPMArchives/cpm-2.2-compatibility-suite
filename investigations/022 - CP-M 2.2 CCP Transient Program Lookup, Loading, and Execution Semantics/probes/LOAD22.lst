@@ -1,0 +1,64 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sat Aug 15 20:55:25 2026	Page 1
+Source file: LOAD22.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Three-record patterned loader probe. Record 0 executes and inspects records
+                       2      2 ; 1 and 2 at their expected addresses.
+                       3      3         ORG 0100H
+0100  11 52 01         4      4         LD DE,MSG
+0103  0e 09            5      5         LD C,9
+0105  cd 05 00         6      6         CALL 5
+0108  3a 00 01         7      7         LD A,(0100H)
+010b  cd 28 01         8      8         CALL HEX
+010e  1e 20            9      9         LD E,' '
+0110  cd 3c 01        10     10         CALL PUTC
+0113  3a 80 01        11     11         LD A,(0180H)
+0116  cd 28 01        12     12         CALL HEX
+0119  1e 20           13     13         LD E,' '
+011b  cd 3c 01        14     14         CALL PUTC
+011e  3a 00 02        15     15         LD A,(0200H)
+0121  cd 28 01        16     16         CALL HEX
+0124  cd 48 01        17     17         CALL CRLF
+0127  c9              18     18         RET
+0128  f5              19     19 HEX:   PUSH AF
+0129  0f              20     20         RRCA
+012a  0f              21     21         RRCA
+012b  0f              22     22         RRCA
+012c  0f              23     23         RRCA
+012d  cd 31 01        24     24         CALL NIB
+0130  f1              25     25         POP AF
+0131  e6 0f           26     26 NIB:   AND 0FH
+0133  c6 30           27     27         ADD A,'0'
+0135  fe 3a           28     28         CP '9'+1
+0137  38 02           29     29         JR C,OUT
+0139  c6 07           30     30         ADD A,7
+013b  5f              31     31 OUT:   LD E,A
+013c  c5              32     32 PUTC:  PUSH BC
+013d  d5              33     33         PUSH DE
+013e  e5              34     34         PUSH HL
+013f  0e 02           35     35         LD C,2
+0141  cd 05 00        36     36         CALL 5
+0144  e1              37     37         POP HL
+0145  d1              38     38         POP DE
+0146  c1              39     39         POP BC
+0147  c9              40     40         RET
+0148  1e 0d           41     41 CRLF:  LD E,13
+014a  cd 3c 01        42     42         CALL PUTC
+014d  1e 0a           43     43         LD E,10
+014f  c3 3c 01        44     44         JP PUTC
+0152  4c 4f 41 44     45     45 MSG:   DB 'LOAD22 bytes at 0100/0180/0200: $'
+0156  32 32 20 62     45     46
+015a  79 74 65 73     45     47
+015e  20 61 74 20     45     48
+0162  30 31 30 30     45     49
+0166  2f 30 31 38     45     50
+016a  30 2f 30 32     45     51
+016e  30 30 3a 20     45     52
+0172  24              45     53
+0173                  46     54         DS 0180H-$,0A1H
+0180  b2              47     55         DB 0B2H
+0181                  48     56         DS 0200H-$,0B2H
+0200  c3              49     57         DB 0C3H
+0201                  50     58         DS 0280H-$,0C3H
+0280                  51     59         END

@@ -1,0 +1,33 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set timeout 90
+log_file -noappend $logfile
+spawn cpmsim -z -d $diskdir
+
+# One-character command plus one SPACE and 125 As = the CCP's 127-byte
+# Function-10 input capacity, producing a 126-byte transient tail.
+expect ">"
+set maxarg [string repeat "A" 125]
+set send_slow {1 .002}
+send -s -- "T $maxarg\r"
+expect "ENTRY23 FORMAT=01"
+expect "A>"
+
+# Attempt one additional graphic character. Preserve exact terminal/BDOS
+# behavior rather than assuming truncation, rejection, or bell semantics.
+set overarg [string repeat "B" 126]
+send -s -- "T $overarg\r"
+expect {
+    "ENTRY23 FORMAT=01" {}
+    timeout { send -- "\r"; expect "ENTRY23 FORMAT=01" }
+}
+expect "DMA OPEN READ DATA="
+# The 128th graphic byte is not part of the 127-byte first command. On this
+# reference console path it remains queued, combines with the already sent
+# CR, and is acquired as the next one-character command.
+expect "A>B"
+expect "B?"
+expect "A>"
+send "\034"
+expect eof

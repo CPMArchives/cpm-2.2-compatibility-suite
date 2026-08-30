@@ -1,0 +1,290 @@
+Investigation 043 — CP/M 2.2 Memory and Execution Edge Case
+Compatibility Semantics Prompt
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 042 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation
+042.
+
+Create Investigation 043 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports or artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+OBJECTIVE
+
+Determine the CP/M 2.2 memory and execution edge-case compatibility
+contract.
+
+Previous investigations established:
+
+-   transient program entry;
+-   memory layout;
+-   page-zero behavior;
+-   program loading;
+-   termination;
+-   direct system access;
+-   software ecosystem assumptions.
+
+Investigation 043 determines which unusual but historically relevant
+memory and execution behaviors are compatibility requirements.
+
+Investigate:
+
+-   unusual COM program behavior;
+-   memory boundary assumptions;
+-   stack usage;
+-   program size assumptions;
+-   execution-state dependencies;
+-   interactions between transient programs and system memory.
+
+Determine:
+
+-   which memory and execution edge cases software depends upon;
+-   which behaviors are implementation-specific;
+-   which behaviors require preservation for CP/M software
+    compatibility.
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+-   documented CP/M 2.2 behavior;
+-   Digital Research implementation behavior;
+-   common CP/M programming practices;
+-   historically significant software dependencies.
+
+Do not assume unusual behavior is required without evidence.
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Investigation 001: CP/M 2.2 Transient Program Entry Environment.
+
+Investigation 023: CP/M 2.2 Transient Entry Environment, Command Tail,
+and Default FCB Semantics.
+
+Investigation 024: CP/M 2.2 Transient Program Lifecycle, Termination,
+and BDOS Return-State Semantics.
+
+Investigation 034: CP/M 2.2 Memory Layout, System Area, and Transient
+Program Boundary Semantics.
+
+Investigation 041: CP/M 2.2 Direct System Access and Undocumented
+Application Interface Compatibility Semantics.
+
+Investigation 042: CP/M 2.2 Common Software Compatibility Assumptions.
+
+SCOPE
+
+Investigate:
+
+-   transient program memory usage;
+-   stack assumptions;
+-   program loading limits;
+-   memory overlap behavior;
+-   page-zero interactions;
+-   execution-state assumptions;
+-   unusual but historically relevant program behavior.
+
+NON-GOALS
+
+Do not investigate:
+
+-   BetterCP/M memory architecture;
+-   modern process models;
+-   memory protection design;
+-   CP/M 3 memory behavior;
+-   MP/M multitasking behavior.
+
+INVESTIGATION QUESTIONS
+
+1.  TRANSIENT MEMORY BOUNDARY
+
+Determine:
+
+-   what memory range transient programs assume is available;
+-   whether programs depend upon specific boundaries;
+-   whether boundary behavior is compatibility-visible.
+
+2.  PROGRAM SIZE AND LOADING ASSUMPTIONS
+
+Determine:
+
+-   maximum practical COM program sizes;
+-   loader behavior near memory limits;
+-   software assumptions about available memory.
+
+3.  STACK AND EXECUTION ASSUMPTIONS
+
+Determine:
+
+-   stack initialization behavior;
+-   stack placement assumptions;
+-   software dependencies on entry state.
+
+4.  PAGE-ZERO INTERACTION
+
+Determine:
+
+-   which page-zero locations are used by software;
+-   which locations are compatibility-visible;
+-   whether unusual page-zero usage is historically significant.
+
+5.  MEMORY OVERLAP AND SELF-MODIFYING BEHAVIOR
+
+Determine:
+
+-   whether software relies upon overwriting its own loaded image;
+-   whether programs use memory beyond documented boundaries;
+-   whether such behavior is common enough to affect compatibility.
+
+6.  SYSTEM MEMORY INTERACTION
+
+Determine:
+
+-   whether applications depend upon CCP, BDOS, BIOS, or system-area
+    memory locations;
+-   whether such dependencies are direct or indirect.
+
+7.  SOFTWARE ECOSYSTEM USAGE
+
+Investigate software categories:
+
+-   assemblers;
+-   compilers;
+-   editors;
+-   debuggers;
+-   games;
+-   utilities;
+-   applications.
+
+Determine:
+
+-   common memory assumptions;
+-   undocumented conventions;
+-   de facto compatibility requirements.
+
+8.  EXPERIMENTAL REQUIREMENTS
+
+Create deterministic probes covering:
+
+-   memory boundaries;
+-   stack state;
+-   program loading limits;
+-   page-zero visibility;
+-   execution-state behavior.
+
+Each probe must include:
+
+-   purpose;
+-   procedure;
+-   observed behavior;
+-   compatibility conclusion.
+
+9.  CONTROLLED TEST MATRIX
+
+Include:
+
+-   normal program execution;
+-   maximum-size programs;
+-   boundary memory conditions;
+-   unusual stack usage;
+-   direct memory access;
+-   termination and restart cases.
+
+EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A: documented behavior.
+
+B: Digital Research implementation behavior.
+
+I: experimental observation.
+
+D: unresolved policy.
+
+Ledger evidence must identify:
+
+I043 MEMORY EXECUTION SYSTEM subsystem IG AG
+
+COMPATIBILITY CLASSIFICATION
+
+Classify findings:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+Do not require:
+
+-   accidental memory contents;
+-   private implementation details;
+-   behavior invisible to software;
+-   undocumented behavior without evidence.
+
+LEDGER REVIEW
+
+Review affected Compatibility Ledger entries.
+
+Determine:
+
+-   evidence strengthening;
+-   corrections;
+-   duplicate avoidance.
+
+Do not modify the ledger directly.
+
+REPORT STRUCTURE
+
+Create:
+
+Investigation 043 - CP/M 2.2 Memory and Execution Edge Case
+Compatibility Semantics.md
+
+Include:
+
+1.  Objective and scope
+2.  Compatibility standard
+3.  Relationship to previous investigations
+4.  Transient memory boundary
+5.  Program loading assumptions
+6.  Stack and execution assumptions
+7.  Page-zero interaction
+8.  Memory overlap behavior
+9.  System memory interaction
+10. Software ecosystem findings
+11. Documentation findings
+12. Source findings
+13. Experimental results
+14. Compatibility conclusions
+15. Proposed ledger additions
+16. Existing-entry updates
+17. Open questions
+18. Conformance implications
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M memory architecture.
+
+Do not replace CP/M execution semantics with modern process models.
+
+Determine the CP/M 2.2 memory and execution edge-case compatibility
+contract only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

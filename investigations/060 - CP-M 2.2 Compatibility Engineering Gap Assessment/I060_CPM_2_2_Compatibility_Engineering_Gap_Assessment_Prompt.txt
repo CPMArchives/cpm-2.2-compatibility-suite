@@ -1,0 +1,314 @@
+Investigation 060 — CP/M 2.2 Compatibility Engineering Gap Assessment Prompt
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 059 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation 059.
+
+Create Investigation 060 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports or artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Perform an independent engineering gap assessment of the completed
+CP/M 2.2 compatibility investigation series.
+
+The purpose of this investigation is to determine whether the current
+compatibility specification work has identified all compatibility
+boundaries required for a high-confidence CP/M 2.2 compatibility claim.
+
+Previous investigations established:
+
+- documented CP/M 2.2 behavior;
+- Digital Research implementation behavior;
+- software ecosystem requirements;
+- practical community compatibility expectations;
+- conformance testing requirements;
+- personality and extension boundaries.
+
+Investigation 060 must challenge the completeness of those conclusions.
+
+Determine:
+
+- whether important compatibility questions remain unanswered;
+- whether additional investigations are required;
+- whether existing conclusions are sufficiently supported;
+- whether the compatibility specification is ready for release.
+
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+- documented CP/M 2.2 behavior;
+- Digital Research implementation behavior;
+- common CP/M programming practices;
+- historically significant software dependencies.
+
+Evaluate compatibility from the perspective of a new implementation
+claiming CP/M 2.2 ecosystem compatibility.
+
+Do not design BetterCP/M architecture.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Review completed investigations through Investigation 059.
+
+Review:
+
+- Compatibility Ledger entries;
+- investigation reports;
+- preserved evidence;
+- software corpus findings;
+- conformance requirements.
+
+Pay particular attention to:
+
+Investigation 045:
+    Cross-Layer Compatibility Boundary Review.
+
+Investigation 046:
+    Compatibility Boundary Closure and Remaining Gap Analysis.
+
+Investigation 053:
+    Software Corpus Validation.
+
+Investigation 054:
+    Undocumented Behavior Validation.
+
+Investigation 055:
+    Community Compatibility Standard.
+
+Investigation 059:
+    Compatibility Conformance Test Suite Design.
+
+
+SCOPE
+
+Investigate:
+
+- completeness of compatibility coverage;
+- missing compatibility boundaries;
+- insufficient evidence;
+- unresolved assumptions;
+- contradictory requirements;
+- missing software categories;
+- missing conformance requirements.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- BetterCP/M implementation;
+- architecture design;
+- new features;
+- optimization decisions;
+- future roadmap planning.
+
+
+INVESTIGATION QUESTIONS
+
+
+1. COMPLETENESS REVIEW
+
+Determine:
+
+- whether all CP/M-visible interfaces have been addressed;
+- whether any subsystem remains insufficiently investigated;
+- whether any compatibility boundary is missing.
+
+
+2. SOFTWARE ECOSYSTEM REVIEW
+
+Determine:
+
+- whether the software corpus is representative;
+- whether important software categories are missing;
+- whether additional validation is required.
+
+
+3. UNDOCUMENTED BEHAVIOR REVIEW
+
+Determine:
+
+- whether undocumented behaviors were adequately evaluated;
+- whether any behavior was incorrectly excluded;
+- whether additional evidence is required.
+
+
+4. CROSS-LAYER REVIEW
+
+Determine:
+
+- whether interactions between subsystems are sufficiently covered;
+- whether interface boundaries contain unresolved assumptions.
+
+
+5. CONFORMANCE REVIEW
+
+Determine:
+
+- whether the conformance model is complete;
+- whether tests adequately validate requirements;
+- whether compatibility claims can be objectively evaluated.
+
+
+6. SPECIFICATION READINESS
+
+Determine:
+
+- whether the CP/M 2.2 compatibility specification is ready for release;
+- what conditions must be satisfied before release;
+- whether additional investigations are required.
+
+
+7. EXPERIMENTAL REQUIREMENTS
+
+Create a gap assessment matrix.
+
+Each identified area must include:
+
+- compatibility area;
+- existing investigation coverage;
+- evidence reviewed;
+- identified gap;
+- severity;
+- recommended action.
+
+
+EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+    documented behavior.
+
+B:
+    DRI implementation behavior.
+
+I:
+    experimental observation.
+
+D:
+    unresolved policy.
+
+
+Ledger evidence must identify:
+
+I060
+ENGINEERING
+GAP
+ASSESSMENT
+subsystem
+IG
+AG
+
+
+COMPATIBILITY CLASSIFICATION
+
+Classify findings:
+
+RELEASE READY
+
+ADDITIONAL INVESTIGATION REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+
+Do not require:
+
+- implementation details;
+- internal architecture;
+- undocumented behavior without evidence.
+
+
+LEDGER REVIEW
+
+Review affected Compatibility Ledger entries.
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+Do not modify the ledger directly.
+
+
+REPORT STRUCTURE
+
+Create:
+
+Investigation 060 - CP/M 2.2 Compatibility Engineering Gap Assessment.md
+
+Include:
+
+1. Objective and scope
+
+2. Relationship to previous investigations
+
+3. Evidence reviewed
+
+4. Compatibility coverage assessment
+
+5. Software ecosystem assessment
+
+6. Undocumented behavior assessment
+
+7. Cross-layer assessment
+
+8. Conformance assessment
+
+9. Identified gaps
+
+10. Recommended additional investigations
+
+11. Release readiness assessment
+
+12. Proposed ledger additions
+
+13. Existing-entry updates
+
+14. Open questions
+
+15. Conformance implications
+
+
+FINAL REVIEW
+
+Before completing the investigation, verify:
+
+- the assessment challenges previous assumptions;
+- evidence gaps are explicitly identified;
+- conclusions are classified;
+- additional investigations are recommended where necessary;
+- compatibility requirements are separated from implementation details.
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M architecture.
+
+Do not assume the compatibility specification is complete.
+
+Determine whether the CP/M 2.2 compatibility investigation series has
+sufficient evidence for specification release.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

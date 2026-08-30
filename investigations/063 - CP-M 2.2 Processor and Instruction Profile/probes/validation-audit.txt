@@ -1,0 +1,6 @@
+PASS: report has exactly 15 required numbered sections.
+PASS: evidence string, classifications, ledger proposals, updates, and open questions are present.
+PASS: all eight experimental records contain every required field.
+PASS: retained transcripts support the stated processor boundaries.
+PASS: all four COM files rebuild byte-identically.
+PASS: all staged before/after disk images are byte-identical.

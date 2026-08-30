@@ -1,0 +1,19 @@
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 07:17:02 2026	Page 1
+Source file: PEND35.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1  ORG 0100H
+0100  11 13 01         2      2  LD DE,MSG
+0103  0e 09            3      3  LD C,9
+0105  cd 05 00         4      4  CALL 0005H
+0108  0e 0b            5      5 POLL: LD C,11
+010a  cd 05 00         6      6  CALL 0005H
+010d  b7               7      7  OR A
+010e  28 f8            8      8  JR Z,POLL
+0110  c3 00 00         9      9  JP 0000H
+0113  50 45 4e 44     10     10 MSG: DB 'PEND35 READY',13,10,'$'
+0117  33 35 20 52     10     11
+011b  45 41 44 59     10     12
+011f  0d 0a 24        10     13
+0122                  11     14  END

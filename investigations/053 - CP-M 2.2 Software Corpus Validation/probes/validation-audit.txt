@@ -1,0 +1,6 @@
+records: 13
+non-PASS records: 0
+unchanged image pairs: adventure communications hardware wumpus
+expected changed image: wordstar
+transcript/evidence files: 42
+validation: PASS

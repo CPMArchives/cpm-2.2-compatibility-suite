@@ -1,0 +1,13 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set timeout 90
+log_file -noappend $logfile
+spawn cpmsim -z -d $diskdir
+expect "A>"
+send "DPB040\r"
+expect "A>"
+send "STAT DSK:\r"
+expect "A>"
+send "\034"
+expect eof

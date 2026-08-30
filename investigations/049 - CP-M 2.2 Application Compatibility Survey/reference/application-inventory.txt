@@ -1,0 +1,24 @@
+Investigation 049 application inventory
+========================================
+
+Executed
+--------
+Word processor: MicroPro WordStar release 3.00, WS.COM and overlay/message
+files from z80pack mosteksim WordStar_VT52.dsk.
+
+Game/runtime: Microsoft BASIC-80 Rev. 5.2 with WUMP.BAS from z80pack
+mosteksim BASIC_Games.dsk.
+
+Game/large multi-file application: Adventure A02, AD.COM plus message and data
+files from the local cpm-advent.zip distribution.
+
+Available but not promoted to category evidence
+-----------------------------------------------
+Other BASIC game sources on BASIC_Games.dsk and development tools on
+BASCOM-80.dsk duplicate the interpreter/toolchain classes already represented.
+
+Not available as adequate runnable local fixtures
+------------------------------------------------
+Spreadsheet; database; communications package; packaged business application.
+Filename mentions in archive manifests are not executable evidence and were
+not counted as coverage.

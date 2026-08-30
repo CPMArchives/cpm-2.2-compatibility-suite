@@ -1,0 +1,20 @@
+Investigation 047 rebuild verification
+======================================
+
+Command: ./build.sh
+Assembler: z80asm
+
+IN42.COM          1e6a394edafd0066feb5552f5e5efffe1d8df3b0590a2feac463f08cc31fffb8
+IN42.rebuilt.COM  1e6a394edafd0066feb5552f5e5efffe1d8df3b0590a2feac463f08cc31fffb8
+
+Result: byte-identical (cmp exit status 0).
+
+HELLO42 was also assembled by DRI ASM and converted by DRI LOAD during the
+controlled CP/M run.  LOAD reported one COM record at 0100h-0113h and the
+result executed to the HELLO42 OK marker.
+
+The eight DRI utilities are preserved distribution binaries.  Their hashes
+are recorded in reference/reference-files.sha256.  No historical-source
+rebuild is claimed because the required original compiler/build environment
+was not established by this investigation.
+

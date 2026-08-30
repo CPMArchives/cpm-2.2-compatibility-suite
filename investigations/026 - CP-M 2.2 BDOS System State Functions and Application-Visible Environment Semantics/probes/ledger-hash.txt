@@ -1,0 +1,6 @@
+Authoritative ledger before investigation:
+fa009b428b776c1d5142ba1d9429a8c3a39de4fac61b258d1737989e381196ef  <project-root>/compatibility/02 Compatibility Ledger - Investigation 025.txt
+
+Authoritative ledger after investigation:
+fa009b428b776c1d5142ba1d9429a8c3a39de4fac61b258d1737989e381196ef  <project-root>/compatibility/02 Compatibility Ledger - Investigation 025.txt
+

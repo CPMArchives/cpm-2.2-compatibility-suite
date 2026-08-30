@@ -1,0 +1,4 @@
+Purpose: valid rename, destination collision, missing source.
+Procedure: REN NEWFILE.DAT=OLDFILE.DAT and two failure cases.
+Observed: valid rename silent; collision FILE EXISTS; absent source NO FILE.
+Conclusion: DRI syntax is new=old (or left-arrow); rename uses Search then BDOS 23.

@@ -1,0 +1,44 @@
+#!/usr/bin/expect -f
+set timeout 60
+if {$argc != 6} {
+    puts stderr "usage: run-xmodem065.exp emulator workdir transcript peerlog output inject_nak"
+    exit 2
+}
+set emulator [lindex $argv 0]
+set work [lindex $argv 1]
+set transcript [lindex $argv 2]
+set peerlog [lindex $argv 3]
+set output [lindex $argv 4]
+set inject [lindex $argv 5]
+file delete -force "/tmp/.z80pack/imsaisim.sio2"
+file delete -force $output
+log_file -noappend $transcript
+spawn -noecho $emulator -z -R -d [file join $work disks] -r [file join $work roms] -c [file join $work system-9600.conf]
+expect "54K CP/M 2.2"
+expect "A: R/W, Space: 8k"
+expect "A>"
+send "b:\r"
+expect "B>"
+send "qt-imsai\r"
+expect "QTERM  V4.3e"
+set cmd [list python3 [file join [file dirname [info script]] peer065.py] xrecv --log $peerlog --output $output]
+if {$inject == "1"} { lappend cmd --corrupt-ack }
+exec {*}$cmd &
+after 700
+send "\036u"
+expect "Enter modem channel A or B:"
+send "a\r"
+after 500
+send "\036S"
+expect "Mode?"
+send "x payld65.txt\r"
+expect {
+    "Transfer complete" {}
+    "File transfer complete" {}
+    timeout { puts stderr "transfer completion timeout"; exit 3 }
+}
+after 700
+send "\036q"
+expect "B>"
+send "\034"
+expect eof

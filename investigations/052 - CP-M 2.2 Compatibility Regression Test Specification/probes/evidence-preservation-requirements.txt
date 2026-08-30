@@ -1,0 +1,25 @@
+EVIDENCE PRESERVATION REQUIREMENTS
+
+Every executable regression run must record:
+
+1. Test identifier and exact ledger entry identifiers.
+2. Baseline or named optional profile and all relevant configuration values.
+3. SHA-256 of probes, applications, system images, and input fixtures.
+4. Deterministic input stream; no undocumented manual keyboard steps.
+5. Raw console/device bytes, not only a rendered screen.
+6. Register, memory, FCB, DMA, BIOS-call, or directory captures required by
+   the specific pass criterion.
+7. Before/after disk hashes and a scoped diff for expected mutations.
+8. Fault injection point and count for every failure test.
+9. Explicit timeout/bounded-halt outcome for a permitted hang or unavailable
+   device; never rewrite it as a returned error.
+10. Classification of every mismatch as product defect, fixture defect,
+    permitted variation, unresolved profile decision, or unsupported test.
+
+For manual/profile tests, preserve screenshots only in addition to raw state
+or device evidence. A screenshot alone is not sufficient for byte-level claims.
+
+Repeated runs must begin from restored fixtures. A deterministic test passes
+repeatability only when required outputs and expected mutated-image hashes are
+identical; volatile timestamps or host presentation must be excluded unless
+the selected profile explicitly requires them.

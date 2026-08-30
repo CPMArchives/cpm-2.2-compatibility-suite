@@ -1,0 +1,67 @@
+
+            DOCUMENTATION FILE FOR ALIENS VERSION 1.1
+
+ALIENS11.COM  is a patchable version of the original ALIENS  game 
+written in BDS C which can be used on most systems with a 24 X 80 
+terminal.  This  version does its console I/O thru calls to  BIOS 
+instead  of thru direct port I/O and therefore can be  used  with 
+most  ported and memory mapped consoles.   There are four strings 
+and  two  other locations that must be patched for  a  particular 
+configuration.  Up to ten bytes are reserved for each string.
+
+CURSOR POSITIONING STRING
+
+This  string starts at location 381DH,  must be null  terminated, 
+and  allows  for  up to ten bytes including  the  null.   At  the 
+position  in this string that the row position is to be  located, 
+put an FF hex.   At the position in the string that the column is 
+to be located, put an FE hex.  This allows for the row and column 
+to  be located anywhere in the cursor positioning string  and  in 
+any order.
+
+
+EXAMPLE:  (For a Heath/Zenith Z-19)
+
+          1B        ;Escape character
+          59        ;'y'
+          FF        ;Position for row
+          FE        ;Position for column
+          00        ;string terminator
+
+For many terminals the row and column values require a bias to be 
+added to them in the cursor positioning string.  These values are 
+located at 3845H and 3846H respectively.
+
+EXAMPLE: 
+        Location   Value
+
+          3845H     20        ;Add 32 to row value
+          3846H     20        ;Add 32 to column value
+
+
+CURSOR ON, CURSOR OFF AND CLEAR SCREEN STRINGS
+
+If your terminal allows turning the cursor on and off and  allows 
+the  clear  screen function,  these strings should be patched  as 
+with the cursor addressing string.  Don't forget to terminate the 
+string with a null(zero).   If your terminal does not support one 
+or more of these functions, these strings should be set to nulls.
+
+Starting Location         String
+
+     3827H               CURSOR ON
+     3831H               CURSOR OFF
+     383BH               CLEAR SCREEN
+
+Use DDT to load the ALIENS11.COM and patch the new strings.
+
+     A>DDT ALIENS.COM
+          Use the S command to change the required locations.
+
+     -^C
+     A>SAVE 56 ALIENS.COM
+
+This should complete the customization of ALIENS.  Enjoy.
+
+                                      Don Wilkes, K4ZYP
+

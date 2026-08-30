@@ -1,0 +1,17 @@
+CONFORMANCE EVIDENCE REQUIREMENTS
+
+For every run preserve:
+- authoritative ledger and test-inventory hashes;
+- implementation build identity and declared conformance/profile manifest;
+- test source and executable hashes;
+- restored before fixtures and after-state hashes;
+- deterministic input and timing/repetition policy;
+- raw console/BIOS transcript;
+- registers, memory, FCB, DMA and call activity where relevant;
+- disk images or byte/sector/directory diffs for mutations;
+- structured result record and failure classification;
+- manual-review record for visual, physical, destructive or profile cases.
+
+Evidence is invalid for certification if expected results are reconstructed from
+source after an unperformed test, mutable fixtures are not restored, raw output is
+discarded, or profile applicability cannot be reproduced.

@@ -1,0 +1,5 @@
+PASS: report has exactly 13 required numbered sections.
+PASS: all five records have every required field.
+PASS: normal, failure, and processor-boundary transcripts support the report.
+PASS: generated FORTRAN COM is present.
+PASS: unresolved categories are explicitly identified without experimental claims.

@@ -1,0 +1,5 @@
+Purpose: DIR listing, wildcard, no-match, conflict, drive/user behavior.
+Procedure: DIR; DIR *.TXT; DIR NOMATCH.ZZZ; DIR.COM; USER 1/DIR SAME.TXT.
+Observed: four-column drive-prefixed directory order; NO FILE on no match;
+DIR.COM still dispatched resident DIR; current-user filtering applied.
+Conclusion: resident DIR is a formatted current-user Search First/Next client.

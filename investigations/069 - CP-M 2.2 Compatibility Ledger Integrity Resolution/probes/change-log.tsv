@@ -1,0 +1,6 @@
+change_id	location	before	after	disposition
+C069-01	Second Investigation 011 block	Second verbatim header and entries 0248-0277	Removed duplicate occurrence; first occurrence unchanged	Structural deduplication; no proposition deleted
+C069-02	Entry 0523	Second broad Function-37 compatibility-status statement	Profile-scope cross-reference to canonical policy entry 0435	Stable ID and POLICY PENDING retained; overlap made explicit
+C069-03	After entry 0622	No numbered processor propositions	Added canonical entries 0623-0627 from I063 proposals	Two REQUIRED, two NOT REQUIRED, one NOT GUARANTEED
+C069-04	Sources catalogue	Investigation reports listed only through I029	Extended catalogue through I069	Reference integrity correction
+C069-05	Cumulative history	Ended at Investigation 068	Added Investigation 069 integrity-resolution section	History preserved and extended

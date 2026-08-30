@@ -1,0 +1,32 @@
+Investigation 062 pilot result summary
+======================================
+
+Records: 18 (nine selected I059 test identifiers on two implementations)
+
+Overall:
+  PASS     9
+  FAIL     2
+  BLOCKED  7
+
+DRI CP/M 2.2:
+  PASS     5
+  FAIL     0
+  BLOCKED  4
+
+CDOS 2.58:
+  PASS     4
+  FAIL     2
+  BLOCKED  3
+
+The CDOS failures are BDOS-CALL-001 (selector 41 diagnostic instead of zero)
+and BIOS-001 (native slots 0F/10 are not the documented JMP entries).
+
+BLOCKED means the compound I059 test identifier was not fully executable from
+the available fixture/criterion, not that an implementation necessarily failed.
+No partial observation was promoted to PASS.
+
+The selected identifiers cover foundation, interface, command/failure, memory,
+BIOS and ecosystem phases. Storage was observed indirectly through PIP but no
+compound storage identifier was claimed because its narrow fixture matrix was
+not executed.
+

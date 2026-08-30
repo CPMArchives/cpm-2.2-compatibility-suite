@@ -1,0 +1,89 @@
+Investigation 011 observed results
+==================================
+
+Accepted run: 14 August 2026
+System: DRI CP/M 2.2, z80pack cpmsim 1.39, Z80 CBIOS 1.2
+Probe SHA-256: e6b82840d94f65b856da73fcd5c16a810b4d8e169d63f4ae32194974def60060
+
+Pre-run image hashes
+--------------------
+
+A 3142714de47ca9b8452c48900ceeaca00ef610adaae0224923ff3e98998a0b19
+B 30b2955f8879b9121f1ca2f8ce0e11efbf2665b7adb64e9e8637aa68f33df967
+C 74a864722c0dddb9d352887cad8c837272aecd3812f3cb31abec62386991ff62
+D 659a932c46c2841d9e475f92a9b01d6c271761f69657320bfa8a4cc0ccf05388
+
+Post-run image hashes
+---------------------
+
+A 10f6c4f484846c7fc01b020024271d8a40214c2e15e9205dcad41f11f3411f4f
+B 8ef2b0b1d217a719729901506124914c661364516fbc4e970e0d466534095fd3
+C 74a864722c0dddb9d352887cad8c837272aecd3812f3cb31abec62386991ff62
+D 24c1868dadb63bcb92284e30a4fc39f1f3cc85aadf89a726da1c79422e17d175
+
+A and B changed through successful creates/writes. C remained byte-identical
+because directory-full Make failed. D changed only by creation of the empty
+NOSPACE.DAT entry; its record allocation failed.
+
+Decoded observations
+--------------------
+
+1. MAKE-NEW returned directory code 01. The activated FCB had EX=0, S1=0,
+   S2=80h (DRI private write flag), RC=0, empty allocation map, and CR=0.
+2. SEARCH-MADE immediately found NEW.DAT as a zero-record directory entry.
+   Make therefore made the empty file visible before Close.
+3. WRITE-ONE returned 00, copied the complete 128-byte A/zero record from DMA,
+   set CR=1 and RC=1, allocated block 04h, and cleared DRI's private write flag.
+4. SEARCH-PRECLOSE still found RC=0 and no allocation: the working FCB had
+   changed, but its new length/allocation metadata had not yet reached the
+   directory. CLOSE-ONE succeeded (directory code 01), after which
+   SEARCH-CLOSED showed RC=1/block 04h. Reopen/Read returned marker A.
+5. MAKE-EXISTING returned success and created a duplicate NEW.DAT entry.
+   MAKE-WILDCARD likewise created a literal W?LD.DAT entry. Both calls violate
+   the manual's unique, nonambiguous-name precondition and are not portable.
+6. MULTI writes returned 00, advanced CR/RC to 1 and 3, closed successfully,
+   and reopened with markers M, N, O confirmed in the extracted 384 bytes.
+7. BIG record 128 returned 00 and automatically transitioned to EX=1, CR=0,
+   RC=0 with a fresh extent FCB. Record 129 returned 00 and left EX=1, CR=1,
+   RC=1. Close persisted both extents. Extracted size was 16,512 bytes, with
+   marker Z at offset 16,256 and Q at 16,384.
+8. ALTDMA was written from the Function-26-selected buffer, closed, reopened,
+   and read back with marker D. All 128 source bytes, including trailing zeros,
+   were written; there is no application-level partial-record count.
+9. Explicit B: Make returned success without changing default A. The first and
+   all 128 records wrote successfully from an FCB with drive byte 2. The full
+   extent was persisted as 16,384 bytes. Because no second directory slot was
+   available, the automatic next-extent open failed; the 128th write still
+   returned 00, while the next write returned 01 and did not add a record.
+10. NOCLOSE.DAT was visible immediately after Make and remained a zero-record
+    directory entry after a successful working-FCB write. After warm restart,
+    external inspection found size zero. The written record was not part of the
+    persistent file because Close had been omitted.
+11. INVALID-WRITE on an unactivated FCB returned 00 and allocated/wrote a block
+    in DRI memory, but no directory entry identified it. This is destructive
+    out-of-contract behavior, not an activation substitute.
+12. DIRFULL-MAKE on C returned FFh and C remained byte-identical.
+13. DISKFULL-MAKE on D returned success (03) and created an empty file without
+    allocating a data block. Its first write returned 02 and left RC/CR and the
+    allocation map zero. D remained allocation-full with NOSPACE.DAT size zero.
+
+Post-run directory summary
+--------------------------
+
+A: ALTDMA 1 record; BIG 129; MULTI 3; two NEW entries; NOCLOSE 0;
+   literal W?LD 0; WRITE011.COM. 22K allocated, 219K free.
+B: 63 zero-record fixtures plus BFILE 128 records. 16K allocated, 225K free.
+C: 64 zero-record fixtures. 0K allocated, 241K free; byte-identical.
+D: 17 allocation fixtures plus NOSPACE 0. 241K allocated, 0K free.
+
+Interpretation limits
+---------------------
+
+- Successful Make/Close results are directory slot codes 0-3, not a Boolean
+  zero-only convention. Function 21 success is specifically zero.
+- The exact allocated block numbers and DRI S2 high-bit write flag are internal
+  consequences of this disk geometry and are not compatibility requirements.
+- Physical BIOS write errors and write-protected media were not forced; the DRI
+  source routes those through its disk-error/write-protection handling.
+- The preserved pre-run images permit exact reruns; only disposable copies were
+  mutated by the accepted experiment.

@@ -1,0 +1,14 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set timeout 90
+log_file -noappend $logfile
+spawn cpmsim -z -d $diskdir
+expect "A>"
+foreach cmd {B:SEARCH29 B:MATCH29 B:DMA29 B:STATE29 B:USER29} {
+ send -- "$cmd\r"
+ expect -re {[AB]>}
+}
+send "\034"
+expect eof
+

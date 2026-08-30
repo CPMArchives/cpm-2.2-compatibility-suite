@@ -1,0 +1,122 @@
+#!/usr/bin/expect -f
+# SPDX-License-Identifier: GPL-2.0-or-later
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set cpu [lindex $argv 2]
+if {$cpu eq ""} { set cpu "-z" }
+set timeout 60
+log_file -noappend $logfile
+source [file join [file dirname [info script]] cpmsim-path.exp]
+spawn $cpmsim $cpu -d $diskdir
+expect "A>"
+send -- "B:\r"
+expect "B>"
+
+# Aggregates execute the eleven directly observable baseline cases, record the
+# two return-value diagnostics, and list asynchronous/profile cases as manual.
+send -- "CONSTEST /ALL\r"
+expect "0051  ----"
+expect "OUT OF SCOPE"
+expect "Outside executable scope; no runtime test"
+foreach item {0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062} {
+    expect "Probe $item:"
+    expect "Do OBSERVED and EXPECTED match? (Y/N; no Enter) "
+    send -- "Y"
+    expect "$item  PASS"
+}
+foreach item {0063 0064 0065 0066} {
+    expect "$item  ----"
+    expect "Run item individually; interactive setup required"
+}
+foreach item {0067 0068} {
+    expect "Probe $item:"
+    expect "$item  OBSERVATION"
+}
+foreach item {0069 0070 0071} {
+    expect "$item  ----"
+    expect "Run item individually; interactive setup required"
+}
+foreach item {0072 0073} {
+    expect "$item  ----"
+    expect "Run item individually; interactive setup required"
+}
+expect "0074  ----"
+expect "OUT OF SCOPE"
+expect "Outside executable scope; no runtime test"
+foreach item {0075 0076} {
+    expect "Probe $item:"
+    expect "Do OBSERVED and EXPECTED match? (Y/N; no Enter) "
+    send -- "Y"
+    expect "$item  PASS"
+}
+foreach item {0077 0078 0079} {
+    expect "$item  ----"
+    expect "Run item individually; interactive setup required"
+}
+expect "Probe 0080:"
+expect "0080  OBSERVATION"
+foreach item {0081 0082} {
+    expect "Probe $item:"
+    expect "Do OBSERVED and EXPECTED match? (Y/N; no Enter) "
+    send -- "Y"
+    expect "$item  PASS"
+}
+expect "Summary: 15 pass, 0 fail, 0 error, 3 observations"
+expect "B>"
+
+# OUTSIDE SCOPE rows remain selectable catalog evidence, but execute no probe
+# and do not alter conformance or diagnostic counters.
+foreach item {0051 0074} {
+    send -- "CONSTEST /$item\r"
+    expect "$item  ----"
+    expect "OUT OF SCOPE"
+    expect "Outside executable scope; no runtime test"
+    expect "Summary: 0 pass, 0 fail, 0 error, 0 observations"
+    expect "B>"
+}
+
+# Exercise both asynchronous scrolling paths to completion. Ctrl-S pause and
+# resume remain a human oracle: z80pack's simulated BIOS uses a HALT path for
+# injected Ctrl-S, so automation must not pretend that behavior is portable.
+foreach item {0063 0064} {
+    send -- "CONSTEST /$item\r"
+    expect "Probe $item:"
+    expect "Do OBSERVED and EXPECTED match? (Y/N; no Enter) "
+    send -- "Y"
+    expect "$item  PASS"
+    expect "Summary: 1 pass, 0 fail, 0 error, 0 observations"
+    expect "B>"
+}
+
+# Items 0065 and 0066 intentionally remain human-operated. Ctrl-P itself
+# completes Function 1 while toggling printer echo on the reference systems;
+# adding a printable character would leave that character queued for the later
+# Y/N oracle. Automated injection also cannot observe a physical printer path.
+
+foreach item {0069 0070 0071} {
+    send -- "CONSTEST /$item\r"
+    expect "Probe $item:"
+    expect "Do OBSERVED and EXPECTED match? (Y/N; no Enter) "
+    send -- "Y"
+    expect "$item  PASS"
+    expect "Summary: 1 pass, 0 fail, 0 error, 0 observations"
+    expect "B>"
+}
+
+send -- "CONSTEST /0052 /REPORT\r"
+expect -exact {OBSERVED: [A]}
+expect -exact {EXPECTED: [A]}
+expect "Do OBSERVED and EXPECTED match? (Y/N; no Enter) "
+send -- "Y"
+expect "CASE BDOS-CON-001-P0052"
+expect "RESULT PASS"
+expect "B>"
+send -- "CONSTEST /LIST\r"
+expect "Executable coverage: 30 of 80; remaining 50"
+expect "Catalog rows represented: 32 of 87; remaining 55"
+expect "B>"
+send -- "CONSTEST /H\r"
+expect "CONSTEST 0.1.0-dev3"
+expect "B>"
+send "\034"
+expect eof

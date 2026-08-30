@@ -1,0 +1,8 @@
+z80pack source checkout: 91fd28eb04e675c2127df88ed3f40675e15282e2
+cpmsim binary: Mach-O 64-bit executable arm64
+cpmsim SHA-256: 30374c2df2f44118d2b36a8bfef651a9f2d0ee9b9ddd0039c044b9f06df4708d
+Invocation: cpmsim -z -d <isolated-disk-directory>
+
+The checkout had unrelated local changes and untracked files. The executable
+hash, preserved disk images, command corpus, and transcripts identify the
+actual experimental environment rather than claiming a pristine checkout.

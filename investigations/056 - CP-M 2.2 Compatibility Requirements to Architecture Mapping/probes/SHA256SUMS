@@ -1,0 +1,16 @@
+1b5a0b25f19e40cb9f2f5e01d42623737db3fea30f853b74095311ee16069ffc  ./Investigation 056 - CP-M 2.2 Compatibility Requirements to Architecture Mapping.md
+c0a49894b91ea6bec98afc6ea69d72682928b75e851bb72bad88a28577faec18  ./probes/README.txt
+13befef5f5e02bcb9d06dda98506607c62bdb44ffafa858e635b55ef221fd5f9  ./probes/architecture-mapping-review.tsv
+2e55bb937f6f44dafad6c1fbf1c6a360f5857d43249ee5299788e4ba64a43cd2  ./probes/community-standard-review.tsv
+d314c059c8fb88234069d740adb9fa35c50bddb760859ec6d6e724d97e7c76c1  ./probes/generate-responsibility-map.awk
+27bda7bb4c9af74a37683ca9ce4a853362b19ae30fac6510dc04bd412a793203  ./probes/implementation-independence.txt
+20e19110ebc0b68761430b90ba0daf29c4c661479aa0aaaa591bdb7d02c060d5  ./probes/ledger-sha256-after.txt
+20e19110ebc0b68761430b90ba0daf29c4c661479aa0aaaa591bdb7d02c060d5  ./probes/ledger-sha256-before.txt
+518cd166ec46e3946c247dd9ebaf29f5de4e060eaba07fcc366992c0552e5b22  ./probes/ledger-test-traceability.tsv
+a0e979b541ea7a27e18876fdb2728c11b5d666327b63a548546cc5aa1abf3a0d  ./probes/protected-files-audit.txt
+f7aecd5bb6681f4dfb0202e8adea0aab703595397f4c2567049bb446d73771c7  ./probes/regression-test-inventory.tsv
+767f32077e064d371064113392d73f94862f5824df91ad7a5d638e0fed367e51  ./probes/requirement-responsibility-map.tsv
+8b5e29be1bd0c0aa177d3381e81af3eef565cb006bbb0be5f4e520b6009131bd  ./probes/responsibility-boundaries.tsv
+0740b17c544d51b46d39942d7a3940e7cd734bfc1cac4614061d1fd386d4af7e  ./probes/responsibility-summary.txt
+30cf7e54360e6b0c73e1981f7b364161a6b0384b601fb02f433ceb0ccfc13ac2  ./probes/validate056.sh
+5aedd62fbf65b1fe4ec8596661df34e93c05b20836cbe2a3c9a29070a3b797ec  ./probes/validation-audit.txt

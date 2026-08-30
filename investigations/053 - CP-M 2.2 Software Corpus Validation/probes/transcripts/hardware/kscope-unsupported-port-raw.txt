@@ -1,0 +1,48 @@
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+Mostek AID-80F and SYS-80FT Emulator Release 1.1
+by Mike Douglas
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Drive 0: CPM/system.dsk
+Drive 1: CPM/comms.dsk
+
+Boot ROM: MostekROM.bin
+
+Loader statistics for file <local-workspace>/g-p-6a682f002be881918281554d644daf48/stage053/work/051/work/roms/MostekROM.bin:
+START : E000H
+END   : EFFFH
+PC    : E000H
+LOADED: 1000H (4096)
+
+Type CTRL-\ to halt emulation
+
+
+
+56K CP/M 2.2 Ver 1.1
+ for Mostek AID-80F
+
+A>b:
+B>kscope
+
+Cromemco Dazzler KSCOPE Program. Hit some key to return to CP/M
+
+
+[0;31mE (8262) core: I/O output Trap at 0x0110, port 0x0e[0m
+I/O ran for 3 ms, waited for 0 ms
+CPU executed 2360661 t-states in 1 ms
+clock frequency = 1340.52 MHz
+q
+
+PC   A  SZHPNC I  R  IFF BC   DE   HL   A'F' B'C' D'E' H'L' IX   IY   SP
+0110 81 010100 00 3a 00  00dc cef0 0000 716b 0000 0002 e9db 1ecd dc12 0100
+>>> 

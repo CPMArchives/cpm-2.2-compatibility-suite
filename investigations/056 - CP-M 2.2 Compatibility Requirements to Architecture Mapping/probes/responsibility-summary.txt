@@ -1,0 +1,8 @@
+291 BDOS file/directory/storage boundary
+90 BDOS console-service boundary
+65 Transient runtime / memory boundary
+60 CCP / command-environment boundary
+44 BDOS system/disk-state boundary
+39 BIOS configured-platform boundary
+38 Cross-layer error/recovery boundary
+25 BDOS public-call boundary

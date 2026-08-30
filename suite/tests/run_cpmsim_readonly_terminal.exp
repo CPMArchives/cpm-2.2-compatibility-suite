@@ -1,0 +1,45 @@
+#!/usr/bin/expect -f
+# SPDX-License-Identifier: GPL-2.0-or-later
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set cpu [lindex $argv 2]
+if {$cpu eq ""} { set cpu "-z" }
+set timeout 30
+log_file -noappend $logfile
+source [file join [file dirname [info script]] cpmsim-path.exp]
+spawn $cpmsim $cpu -d $diskdir
+expect "A>"
+
+foreach {ledger cmd} {
+    0368 "FILETEST /0368"
+    0368 "FILETEST /CASE:BDOS-FILE-006-P0368"
+    0369 "FILETEST /0369"
+    0369 "FILETEST /CASE:BDOS-FILE-007-P0369"
+} {
+    send -- "B:\r"
+    expect "B>"
+    send -- "$cmd\r"
+    expect {
+        "Bdos Err On B: File R/O" {
+            send_log "\nHARNESS_OBSERVED LEDGER:$ledger TERMINAL_OUTCOME FILE_R/O\n"
+        }
+        timeout {
+            send_log "\nHARNESS_FAIL LEDGER:$ledger REASON expected File R/O outcome absent\n"
+            exit 1
+        }
+    }
+    send -- "\r"
+    expect {
+        -re {[AB]>} {
+            send_log "HARNESS_RECOVERY LEDGER:$ledger CCP_RETURN YES\n"
+        }
+        timeout {
+            send_log "HARNESS_FAIL LEDGER:$ledger REASON CCP recovery absent\n"
+            exit 1
+        }
+    }
+}
+
+send_log "HARNESS_SUMMARY 4 PASS, 0 FAIL, TERMINAL_CASES 0368,0369\n"
+send "\034"
+expect eof

@@ -1,0 +1,114 @@
+Investigation 061 accepted observations
+=======================================
+
+Environment
+-----------
+
+The primary pair ran on the same 64K Cromemco Z-1 simulator and ROM/FDC
+configuration. Only the boot disk/system implementation changed. The simulator
+reported Z80SIM 1.39 and Cromemco Z-1 simulation 1.19. Source revision:
+91fd28eb04e675c2127df88ed3f40675e15282e2.
+
+DRI image sign-on: 64k CP/M version 2.2; prompt A>.
+CDOS image sign-on: CDOS version 02.58; prompt A.
+
+Accepted main transcripts are transcripts/dri-cpm22-cromemco.txt and
+transcripts/cromemco-cdos258.txt. BASE61 was repeated once per system with
+identical result lines. Files whose names contain rejected-pilot, bind-failure,
+or iobyte-isolation are diagnostics and are not evidence for the main sequence.
+
+Results
+-------
+
+1. VECTOR41
+
+   DRI:  C3 03 FA 80 00 C3 06 EC
+   CDOS: C3 03 E8 00 00 C3 00 C8
+
+   Both supply JMP gateways at 0000h and 0005h. Numeric targets and byte 0003h
+   differ.
+
+2. ZERO41 ALPHA.TXT BETA.BIN
+
+   Both show default-FCB prefix 00 41 4C 50 and command-tail count/prefix
+   13 20 41 4C. Both leave the sampled bytes stable across Function 12 and
+   return 0022h.
+
+3. BASE61 (two identical runs per implementation)
+
+   DRI:  0022 00 00 0001 0000 EBA9 EB5F
+   CDOS: 0022 00 00 0022 0000 F8AA D048
+
+   Fields are version, current drive, user, login vector, read-only vector,
+   entry SP, and entry return word. Function 24 is the substantive documented
+   mismatch; exact SP and return address are permitted to differ.
+
+4. STATE61 selector 41
+
+   DRI prints the same baseline state plus F41=0000.
+   CDOS prints: Illegal system call 29H at 013EH, then returns to its CCP.
+   29H is hexadecimal selector 41 decimal.
+
+5. EDGE43
+
+   DRI:  entry SP/RET EBA9/EB5F, private ceiling EC05, old byte 00.
+   CDOS: entry SP/RET F8AA/D048, private ceiling C7FF, old byte F8.
+   Both write/read/restore the ceiling byte, execute a self-modified immediate
+   value 5A, return version 0022, and return to the CCP with RET.
+
+6. BIOS41
+
+   DRI derives FA00 and observes C3 in all 17 slots 00-10.
+   CDOS derives E800 and observes C3 in slots 00-0E, then 79 and EE in slots
+   0F and 10. The test's temporary deterministic character fixtures produce
+   the expected raw service values on both, but the native CDOS table does not
+   expose the complete documented 17-JMP CP/M 2.2 shape.
+
+7. Identical DRI PIP
+
+   PIP COPY61.TXT=SRC61.TXT returns normally and creates COPY61.TXT on both.
+   The first 53 payload bytes match SRC61.TXT on both. cpmtools extracts the
+   DRI copy as 128 bytes with zero padding and the CDOS copy as exactly 53
+   bytes. This is a representation/extension difference outside the 128-byte
+   BDOS transfer contract, not an ordinary PIP failure.
+
+8. Missing command and directory presentation
+
+   DRI reports NOFILE61? and formats DIR in CP/M columns. CDOS reports Program
+   not found and includes sizes/count totals. Both recover to their prompt.
+
+9. IOBYTE isolation
+
+   BDOS41 writes A5h with Function 8. DRI continues on the visible console;
+   CDOS visible output stops immediately. Because the selected CDOS physical
+   route was not captured, the only accepted conclusion is that configured
+   routing is observably different; no claim is made about unseen output.
+
+10. CDOS 2.36 screening
+
+   CDOS 2.36 returns 0084 from Function 12, rejects decimal Function 32 with
+   Illegal system call 20H, and the identical DRI PIP fails at that call.
+   It is retained as version-boundary evidence but excluded from the primary
+   CP/M 2.2-compatible comparison.
+
+Media and payload hashes
+------------------------
+
+Pristine DRI CP/M 2.2 image:
+b1b3245029a19948ec04dff915595c3369a9f2d0f6bd028e8883ab7f2a53c5b2
+
+Prepared/after DRI image:
+5a4e72df896d2abbf473d02f5c26ed7bf780b9f331f0a3fdbf2ec3a0fbf29977
+
+Pristine CDOS 2.58 image:
+7ad2d79c859f28e5deee787a2e0d6f3aef24d62b1d65a64a307afc9d88acf754
+
+Prepared/after CDOS 2.58 image:
+1b666b8edfcbba23518d8754988910261006a2f3f954101d867350af7978a213
+
+SRC61.TXT and extracted CDOS copy (53 bytes):
+37b9ac371512cdc77c90ec9939ef0ea49fdf9212b31edc6a646609b7cf18a991
+
+Extracted DRI copy (128 bytes, zero padded):
+ccbdd6ae5db71db3583581861cf5fa9ecaa1523088d26e84c51e6225f0435f5f
+

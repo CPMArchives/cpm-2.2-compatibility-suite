@@ -1,0 +1,8 @@
+evidence_area	principal_investigations	strength	limitation
+Documentation and DRI source	I001-I046	Broad primary-interface and implementation-path review	Source is predominantly DRI and cannot prove ecosystem dependency alone
+Narrow behavioral probes	I001-I044	Strong register/memory/FCB/DMA/BIOS/image observations	Mostly a small number of emulated reference configurations
+Cross-layer workflows	I045,I047-I054	Strong healthy composition and selected failures	Timing, late fault and independent implementation breadth limited
+Software corpus	I047-I053	Utilities, development tools, three applications, Kermit and mismatch traps	Major application classes, paired communications and matching hardware absent
+Undocumented behavior	I041-I043,I054	Conservative classification with fresh validation	Rare software dependencies and cross-implementation variation incompletely sampled
+Conformance mapping	I052,I055-I059	Complete proposition-to-test/design traceability	No full pilot execution/result corpus yet
+Personality/extensions	I056-I058	Complete responsibility and preservation mapping	Analytical only; intentionally no implementation evidence

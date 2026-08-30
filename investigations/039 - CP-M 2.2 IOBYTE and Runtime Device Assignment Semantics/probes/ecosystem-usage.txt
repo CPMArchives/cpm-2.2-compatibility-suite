@@ -1,0 +1,19 @@
+IOBYTE / DEVICE-ASSIGNMENT SOFTWARE EVIDENCE
+
+Documented interface
+  The Alteration Guide defines location 0003h as four two-bit fields, explicitly
+  says assignments may be altered during CP/M processing, and points to STAT.
+
+DRI STAT.PLM
+  Reads/writes 0003h directly. DEV: displays all four fields. Assignment parsing
+  recognizes CON/RDR/PUN/LST and the DRI physical names TTY/CRT/BAT/UC1,
+  TTY/PTR/UR1/UR2, TTY/PTP/UP1/UP2, and TTY/CRT/LPT/UL1. It masks only the chosen
+  field and prints Invalid Assignment for an unknown name.
+
+Ecosystem boundary
+  Batch/console switching, printer routing, reader/punch transfer, and terminal or
+  communications utilities have a documented reason to inspect or change IOBYTE.
+  The byte/field semantics are portable; exact DRI names and actual attached devices
+  are machine/profile conventions. No quantitative local corpus supports additional
+  vendor names or private routing caches.
+

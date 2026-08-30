@@ -1,0 +1,18 @@
+EXTENSION VALIDATION POLICY
+
+1. Declare the baseline/strict CP/M personality, configured platform and every
+   optional/hardware/extension profile before testing.
+2. Run all applicable narrow I052 tests before and after enabling the extension.
+3. Run the I053 corpus workflows applicable to the affected surfaces.
+4. Compare raw registers, memory, FCB/DMA, console/BIOS activity, files and images;
+   do not accept semantic drift merely because a modern abstraction seems better.
+5. For REQUIRED entries, demand observational equivalence.
+6. For POLICY PENDING entries, keep tests inactive/diagnostic unless the profile is
+   selected, then require its explicit expected result.
+7. For NOT GUARANTEED entries, verify the extension does not advertise one observed
+   result as a new baseline guarantee.
+8. For NOT REQUIRED entries, ensure acceptance does not depend on reproducing DRI
+   internals; alternate extension mechanisms must pass.
+9. Test disabled and enabled extension states. Returning to CP/M must restore a
+   coherent personality state and must not leave hidden namespace/device mutations.
+10. Preserve exact extension/version/profile manifests and artifact hashes.

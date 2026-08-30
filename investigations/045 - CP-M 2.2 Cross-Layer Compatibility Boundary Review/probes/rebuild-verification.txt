@@ -1,0 +1,7 @@
+Investigation 045 byte-identical rebuild verification
+=====================================================
+
+  IDENTICAL CROSS45.COM
+  IDENTICAL PHYS015.COM
+
+Result: PASS

@@ -1,0 +1,345 @@
+# Investigation 014: CP/M 2.2 BDOS Read-Only State and Protection Semantics (Revised)
+
+## Objective
+
+Complete Investigation 014 into CP/M 2.2 BDOS read-only handling and write protection behavior.
+
+Initial source review has identified an important implementation issue:
+
+Protected writes, deletes, and renames may enter DRI's fatal BDOS error handler rather than returning normally through the BDOS call interface.
+
+Do not assume that protected operations return a BDOS error code.
+
+This investigation must determine the observable CP/M 2.2 compatibility behavior of:
+
+- file read-only attributes;
+- disk software write protection;
+- BDOS read-only vectors;
+- protected file operations;
+- fatal BDOS error handling paths.
+
+This follows:
+
+- Investigation 008: FCB/Open/Close lifecycle
+- Investigation 009: Directory search and DMA semantics
+- Investigation 010: Sequential read
+- Investigation 011: Sequential write/make
+- Investigation 012: Delete/rename
+- Investigation 013: Random access/file size
+
+---
+
+# Scope
+
+Investigate:
+
+- BDOS Function 30 — Set File Attributes
+- BDOS Function 28 — Write Protect Disk
+- BDOS Function 29 — Get Read-Only Vector
+- File read-only attribute handling
+- Disk read-only state
+- Protected operation behavior
+
+Protected operations to test:
+
+- Write Sequential
+- Write Random
+- Delete File
+- Rename File
+- Close File after attempted modification
+
+Do not assume any operation returns normally.
+
+---
+
+# Required Questions
+
+## File Attributes
+
+1. Determine the exact FCB attribute bits:
+
+- type byte 9 high bit;
+- type byte 10 high bit;
+- type byte 11 high bit.
+
+2. Determine which attributes are preserved by:
+
+- Open;
+- Make;
+- Close;
+- Rename;
+- Delete.
+
+3. Determine whether Function 30:
+
+- sets read-only;
+- clears read-only;
+- applies to all extents;
+- modifies only one directory entry.
+
+---
+
+# Function 30 — Set File Attributes
+
+Determine:
+
+4. Calling convention.
+
+5. FCB requirements.
+
+6. Behavior when:
+
+- setting read-only;
+- clearing read-only;
+- modifying multi-extent files.
+
+7. Return behavior.
+
+---
+
+# Function 28 — Write Protect Disk
+
+Determine:
+
+8. Calling convention.
+
+9. Scope:
+
+- current drive only;
+- logged drives;
+- future drive selections.
+
+10. Interaction with:
+
+- Function 13 Reset Disk System;
+- Function 14 Select Disk;
+- Function 25 Current Disk.
+
+11. Return behavior.
+
+---
+
+# Function 29 — Get Read-Only Vector
+
+Determine:
+
+12. Calling convention.
+
+13. Returned bit format.
+
+14. Relationship between:
+
+- Function 28;
+- disk reset;
+- media changes.
+
+---
+
+# Protected Operation Behavior
+
+## IMPORTANT
+
+Each protected operation must be tested independently.
+
+Do not run multiple fatal-path tests in a single boot session.
+
+Use a reboot/reset harness.
+
+Each test case should:
+
+1. Boot clean CP/M image.
+2. Establish the required protection state.
+3. Perform exactly one protected operation.
+4. Capture:
+
+   - normal BDOS return;
+   - warm boot;
+   - fatal error handler entry;
+   - console output;
+   - disk image changes.
+
+5. Reboot before the next test.
+
+---
+
+# Required Protected Operation Tests
+
+## File Read-Only
+
+Create a file.
+
+Set read-only.
+
+Test:
+
+- sequential write;
+- random write;
+- delete;
+- rename;
+- close after attempted modification.
+
+Determine:
+
+- Does BDOS return?
+- Does it invoke fatal error handling?
+- Is data changed?
+- Is metadata changed?
+
+---
+
+## Disk Write Protection
+
+Protect a disk.
+
+Test:
+
+- Make File;
+- Write Sequential;
+- Write Random;
+- Delete;
+- Rename;
+- Close.
+
+Determine:
+
+- operation result;
+- error path;
+- read-only vector changes.
+
+---
+
+# Fatal Error Handler Investigation
+
+If DRI enters the fatal error handler:
+
+Determine:
+
+1. How control leaves BDOS.
+
+2. Whether the operation:
+
+- returns a value;
+- warm boots;
+- loops;
+- waits for operator response.
+
+3. What observable behavior CP/M applications see.
+
+4. Whether the fatal handler behavior is a compatibility requirement or DRI implementation detail.
+
+---
+
+# Experimental Requirements
+
+Create deterministic probes.
+
+Use disposable disk images.
+
+Do not rely on manually typed keyboard input.
+
+Because protected operations may terminate execution, create separate test programs or boot images as necessary.
+
+Capture:
+
+- console output;
+- BDOS call sequence where possible;
+- FCB state;
+- directory entries;
+- allocation state;
+- disk image hashes.
+
+Required artifacts should include:
+
+- isolated test programs;
+- boot/restart harness if needed;
+- decoded results.
+
+---
+
+# Compatibility Classification
+
+Classify findings as:
+
+- REQUIRED
+- POLICY PENDING
+- NOT GUARANTEED
+- NOT REQUIRED
+
+Pay particular attention to separating:
+
+Required:
+- protection prevents unauthorized modification.
+
+Not automatically required:
+- exact DRI fatal handler path;
+- exact console message;
+- exact internal error routine;
+- exact return behavior if DRI never returns.
+
+---
+
+# Ledger Requirements
+
+Do not modify the Compatibility Ledger.
+
+Produce proposed additions only.
+
+The current ledger ends at:
+
+Entry 355 — Investigation 013
+
+Investigation 014 proposals begin:
+
+356. ...
+
+Each proposition must represent one independently testable compatibility statement.
+
+---
+
+# Output Requirements
+
+Continue the existing investigation directory:
+
+~/gopher/bettercpm/investigations/
+
+    014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics/
+
+Containing:
+
+    Investigation 014 - CP-M 2.2 BDOS Read-Only State and Protection Semantics.md
+
+    probes/
+
+        PROT014.ASM
+        PROT014.COM
+        observed-output.txt
+        README.txt
+
+Additional supporting files are acceptable.
+
+Do not create ZIP archives.
+
+Do not modify any existing BetterCP/M files outside Investigation 014.
+
+---
+
+# Completion Audit
+
+Before reporting completion:
+
+Verify:
+
+- all artifacts exist;
+- all protected-operation tests were isolated;
+- probe rebuilds byte-identically;
+- SHA-256 recorded;
+- disk images are preserved;
+- existing Compatibility Ledger hash is unchanged;
+- no existing BetterCP/M files outside Investigation 014 were modified.
+
+Report must contain:
+
+- principal findings;
+- proposed ledger additions 356+;
+- unresolved policy questions;
+- recommended future investigations.

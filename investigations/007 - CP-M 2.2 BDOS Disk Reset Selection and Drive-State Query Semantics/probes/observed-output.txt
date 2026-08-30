@@ -1,0 +1,69 @@
+Investigation 007 raw observed output
+=====================================
+
+Reference environment
+---------------------
+
+z80pack cpmsim Release 1.39, Z80 mode, with byte-identified DRI CP/M 2.2
+CCP+BDOS and z80pack Z80 CBIOS V1.2. Disposable copies of cpm22-1.dsk and
+cpm22-2.dsk were mounted as A and B.
+
+Record format
+-------------
+
+  function-25 current disk
+  function-24 login-vector low byte
+  function-24 login-vector high byte
+  page-zero byte 0004h
+  function-29 read-only-vector low byte
+  function-29 read-only-vector high byte
+
+Run 1: launched from A
+----------------------
+
+A>DSK007
+DSK007 cur loglo loghi pz04 rolo rohi
+ENTRY  00 01 00 00 00 00
+RESET1 00 01 00 00 00 00
+SELECTB01 03 00 00 00 00
+SELECTA00 03 00 00 00 00
+RO-A   00 03 00 00 01 00
+RESET2 00 01 00 00 00 00
+IMPL-B 00 03 00 00 00 00
+DMA80 ALT SEARCHRC 00 E2 00
+
+Run 2: launched from B
+----------------------
+
+A>B:
+B>DSK007
+DSK007 cur loglo loghi pz04 rolo rohi
+ENTRY  01 03 00 01 00 00
+RESET1 00 01 00 01 00 00
+SELECTB01 03 00 01 00 00
+SELECTA00 03 00 01 00 00
+RO-A   00 03 00 01 01 00
+RESET2 00 01 00 01 00 00
+IMPL-B 00 03 00 01 00 00
+DMA80 ALT SEARCHRC 00 E2 00
+
+Decoded observations
+--------------------
+
+1. Function 13 left A current, A alone logged, and no disk read-only.
+2. Explicit B selection made B current and added B to the login vector.
+3. Explicit A selection restored A as current without removing B's login bit.
+4. Function 28 set A's read-only bit; function 13 cleared it.
+5. An explicit-drive-B wildcard search added B to the login vector but the
+   common BDOS return path restored A as current.
+6. Byte 0004h remained the CCP-provided launch drive throughout each run. It
+   did not follow function 13 or function 14 changes to BDOS current-disk
+   state.
+7. Before function 13, the probe selected an alternate DMA and placed E1h at
+   0080h and E2h at the alternate buffer. The later B-directory search changed
+   0080h to 00h while the alternate buffer remained E2h, consistent with
+   function 13 restoring DMA 0080h. Function-17 matching semantics and the
+   returned 00h are not conclusions of this investigation.
+
+The two runs were clean and mutually consistent. No development run is used
+as evidence.

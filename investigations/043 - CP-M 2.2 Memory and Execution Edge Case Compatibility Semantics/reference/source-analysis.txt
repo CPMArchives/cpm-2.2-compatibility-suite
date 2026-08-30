@@ -1,0 +1,32 @@
+Investigation 043 source and ecosystem notes
+=============================================
+
+OS2CCP.ASM
+  The DRI CCP loads 128-byte records upward from 0100h. Before requesting the
+  next record it compares the next DMA address with tranm, its own lower
+  address, and enters BAD LOAD on collision. It invokes the accepted transient
+  with CALL 0100h and resets its private stack if control returns.
+
+OS3BDOS.ASM
+  The DRI BDOS saves the caller's SP in entsp, switches to lstack for dispatch,
+  and restores the caller SP on a normal returning path. The storage locations
+  and stack size are private implementation details.
+
+DDT2MON.ASM
+  DDT installs a restart vector in page zero and implements software
+  breakpoints by replacing a target instruction byte with an RST instruction,
+  recognizing the trap, and restoring the original byte. This is direct DRI
+  ecosystem evidence that already-loaded transient code is writable and that
+  subsequent instruction fetch observes the modification.
+
+CPMOVE.ASM
+  The relocation utility copies and patches executable system-image bytes,
+  including changing an instruction form and fixing address operands. It
+  corroborates a writable/executable flat-memory execution model, but its
+  private layout and relocation algorithm are not an application ABI.
+
+XSUB1.ASM
+  XSUB replaces operands of the public page-zero WBOOT and BDOS gateways,
+  retains the original targets, uses its own stack, and later restores WBOOT.
+  I042 already records the strict-profile compatibility requirement for the
+  standard XSUB utility; this investigation does not propose a duplicate.

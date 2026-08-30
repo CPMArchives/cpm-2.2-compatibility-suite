@@ -1,0 +1,280 @@
+Investigation 064 — CP/M 2.2 Expanded Software Corpus Validation Prompt
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 063 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation
+063.
+
+Create Investigation 064 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports or artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+OBJECTIVE
+
+Expand the CP/M 2.2 software validation corpus to determine whether the
+current compatibility contract adequately represents the historical CP/M
+software ecosystem.
+
+Previous investigations established:
+
+-   the CP/M 2.2 compatibility standard;
+-   software ecosystem compatibility requirements;
+-   conformance requirements;
+-   cross-implementation validation methods;
+-   processor compatibility boundaries.
+
+Investigation 064 determines whether important software categories,
+usage patterns, or compatibility assumptions remain insufficiently
+represented.
+
+Determine:
+
+-   which software categories require additional validation;
+-   whether existing compatibility requirements explain observed
+    behavior;
+-   whether new compatibility boundaries are revealed;
+-   whether additional investigation is required.
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+-   documented CP/M 2.2 behavior;
+-   Digital Research implementation behavior;
+-   common CP/M programming practices;
+-   historically significant software dependencies.
+
+The objective is ecosystem compatibility validation.
+
+Do not assume that a software dependency becomes a compatibility
+requirement without evidence.
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Review completed investigations through Investigation 063.
+
+Pay particular attention to:
+
+Investigation 047: CP/M 2.2 Standard Utility Compatibility Survey.
+
+Investigation 048: CP/M 2.2 Development Toolchain Compatibility Survey.
+
+Investigation 049: CP/M 2.2 Application Compatibility Survey.
+
+Investigation 050: CP/M 2.2 Communications Software Compatibility
+Survey.
+
+Investigation 053: CP/M 2.2 Software Corpus Validation.
+
+Investigation 062: CP/M 2.2 Compatibility Conformance Pilot Execution.
+
+SCOPE
+
+Investigate:
+
+-   additional historical CP/M software categories;
+-   software assumptions;
+-   ecosystem coverage;
+-   compatibility validation gaps;
+-   software-visible behavior.
+
+NON-GOALS
+
+Do not investigate:
+
+-   BetterCP/M implementation;
+-   software rewriting;
+-   feature additions;
+-   unsupported operating systems.
+
+INVESTIGATION QUESTIONS
+
+1.  SOFTWARE CORPUS EXPANSION
+
+Identify additional representative CP/M software.
+
+Record:
+
+-   software name;
+-   version where available;
+-   source/archive location;
+-   category;
+-   platform assumptions;
+-   evidence collected.
+
+2.  SOFTWARE CATEGORY COVERAGE
+
+Determine whether additional coverage is required for categories such
+as:
+
+-   business applications;
+-   databases;
+-   spreadsheets;
+-   word processors;
+-   programming languages;
+-   development tools;
+-   printer-oriented software;
+-   BBS software;
+-   other historically significant software.
+
+3.  COMPATIBILITY ASSUMPTIONS
+
+Determine:
+
+-   interfaces used by software;
+-   undocumented assumptions;
+-   hardware dependencies;
+-   ecosystem conventions.
+
+4.  SOFTWARE VALIDATION
+
+Determine:
+
+-   whether software operates within the established compatibility
+    model;
+-   whether failures reveal missing requirements;
+-   whether failures are implementation-specific.
+
+5.  COMPATIBILITY IMPACT
+
+For each finding determine:
+
+-   software dependency;
+-   evidence strength;
+-   compatibility classification;
+-   required action.
+
+6.  EXPERIMENTAL REQUIREMENTS
+
+Create software validation records.
+
+Each record must include:
+
+-   software tested;
+-   purpose;
+-   environment;
+-   procedure;
+-   observed behavior;
+-   compatibility conclusion.
+
+7.  CONTROLLED TEST MATRIX
+
+Include:
+
+-   common software;
+-   specialized software;
+-   normal operation;
+-   boundary operation;
+-   failure cases.
+
+EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A: documented behavior.
+
+B: Digital Research implementation behavior.
+
+I: experimental observation.
+
+D: unresolved policy.
+
+Ledger evidence must identify:
+
+I064 SOFTWARE CORPUS VALIDATION subsystem IG AG
+
+COMPATIBILITY CLASSIFICATION
+
+Classify findings:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+Do not require:
+
+-   isolated software quirks;
+-   undocumented behavior without evidence;
+-   implementation details invisible to applications.
+
+LEDGER REVIEW
+
+Review affected Compatibility Ledger entries.
+
+Determine:
+
+-   evidence strengthening;
+-   corrections;
+-   duplicate avoidance.
+
+Do not modify the ledger directly.
+
+REPORT STRUCTURE
+
+Create:
+
+Investigation 064 - CP/M 2.2 Expanded Software Corpus Validation.md
+
+Include:
+
+1.  Objective and scope
+
+2.  Relationship to previous investigations
+
+3.  Software corpus
+
+4.  Category coverage analysis
+
+5.  Documentation findings
+
+6.  Source findings
+
+7.  Experimental results
+
+8.  Compatibility impact analysis
+
+9.  Compatibility conclusions
+
+10. Proposed ledger additions
+
+11. Existing-entry updates
+
+12. Open questions
+
+13. Conformance implications
+
+FINAL REVIEW
+
+Before completing the investigation, verify:
+
+-   software coverage gaps are identified;
+-   evidence supports compatibility conclusions;
+-   software behavior is separated from implementation details;
+-   additional requirements are justified.
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M architecture.
+
+Do not assume software behavior is required without evidence.
+
+Determine the CP/M 2.2 expanded software corpus compatibility boundary
+only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

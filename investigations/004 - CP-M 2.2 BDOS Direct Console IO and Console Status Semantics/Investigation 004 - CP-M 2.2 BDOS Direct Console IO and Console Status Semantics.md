@@ -1,0 +1,209 @@
+# Investigation 004 - CP/M 2.2 BDOS Direct Console I/O and Console Status Semantics
+
+Date: 14 August 2026  
+Status: evidence report only; no Compatibility Ledger or BetterCP/M implementation modified
+
+## 1. Investigation question and scope
+
+This investigation defines the narrow raw/nonblocking console boundary formed by BDOS function 6 (Direct Console I/O) and function 11 (Get Console Status):
+
+1. How does function 6 select direct output and nonblocking input?
+2. What output byte is sent, and what values represent an available character or no input?
+3. Which formatted-console features are bypassed by function 6?
+4. What ready/not-ready values does function 11 return?
+5. How does DRI BDOS's pending console byte affect functions 6 and 11?
+
+Function 1 character interpretation, function 10 line editing, Ctrl-S timing, printer-echo lifetime, IOBYTE assignment, and physical console implementation are out of scope except where needed to distinguish the interface boundary.
+
+Evidence classes are **A** documented CP/M 2.2 requirement, **B** DRI implementation behavior, **C** possible de facto dependency, **I** incidental behavior, and **D** unresolved.
+
+## 2. Why Investigation 004 is next
+
+Investigation 003 established that functions 2 and 9 are formatted logical-console output services with TAB expansion, scrolling checks, printer echo, and shared column state. The DRI manual expressly contrasts function 6 with that path: function 6 exists for unadorned input and output and bypasses normal control-character functions. Establishing that adjacent boundary is foundational for console conformance tests and provides nonblocking primitives needed before later investigations of blocking input and control-character state.
+
+This investigation depends on ledger entries 008 (BDOS gateway), 035-043 (common ABI and return aliases), 045-051 (no generic preservation or residual-result guarantees), 059-066 (formatted output and control behavior), and 072-073 (pending-key and pause questions). It proposes no silent correction to them.
+
+## 3. Primary evidence
+
+### 3.1 Digital Research documentation
+
+1. Digital Research, *CP/M 2.0 Interface Guide*, copyright 1979, `<reference-archive>/CPM_2_0_Interface_Guide.pdf`, SHA-256 `e10f525fcf399897fa86703eb930e21ba59fa54c0708c1cf5909e92beaf7a279`:
+   - function 6, printed p. 10 / PDF p. 16;
+   - function 11, printed p. 13 / PDF p. 19;
+   - System Function Summary, printed p. 46 / PDF p. 52.
+2. Digital Research, *CP/M 2.2 Alteration Guide*, copyright 1979, `<reference-archive>/CPM_2.2_Alteration_Guide_1979.pdf`, SHA-256 `98a176be191c68207b5859371cf3d95eb90f517a72bdeb3b3699833e7c368891`. Section 9 identifies 0005h as the primary BDOS entry and refers to the Interface Guide.
+
+The Interface Guide is explicitly version 2.0. It applies here for the same bounded reason established in Investigations 002-003: the 2.2 Alteration Guide incorporates the interface, and the February 1980 2.2 source implements these function numbers. The relevant scanned pages were rendered and visually inspected; exact FFh/00h values were not taken from OCR.
+
+### 3.2 Original DRI source
+
+3. `<reference-archive>/cpm2-plm/OS3BDOS.ASM`, “Bdos Interface, Bdos, Version 2.2 Feb, 1980,” SHA-256 `a22b7dd0f8adaa8dd9affe2cbb0f5749ddf278bf36ca9f94e38f9acf335a44d8`: console handlers at lines 161-258; functions 6 and 11 at 442-479; common return at 2090-2104.
+4. `OS3BDOS1.ASM`, the Caldera variant in the same archive. Its function-6, function-11, pending-key, and common-return paths are substantively identical; its known difference in function-10 editing does not affect this report.
+5. DRI distribution BIOS source (`CBIOS.ASM`, `BIOS.ASM`, and `OS4BIOS.ASM`) for the BIOS CONST contract: A=FFh when a console character is ready and A=00h otherwise.
+
+No DRI application caller found in the available source supplied stronger semantics for the function-11 ready value or the undocumented E=FEh branch.
+
+### 3.3 Reference environment
+
+The reference remains that identified by Investigations 001-003:
+
+- z80pack commit `91fd28eb04e675c2127df88ed3f40675e15282e2`;
+- `cpmsim` Release 1.39 in Z80 mode, executable SHA-256 `30374c2df2f44118d2b36a8bfef651a9f2d0ee9b9ddd0039c044b9f06df4708d`;
+- disposable copy of `cpmsim/disks/library/cpm22-1.dsk`, original SHA-256 `bb06534599e7167547563096217d775bcd073464408dbae0927a010604d03443`;
+- byte-identified DRI CP/M 2.2 CCP+BDOS with z80pack Z80 CBIOS V1.2.
+
+The z80pack CBIOS, terminal, and printer-file sink are not DRI distribution devices. Conclusions below distinguish DRI BDOS transformations from BIOS and host rendering.
+
+## 4. Documented requirements (A)
+
+### 4.1 Function 6 mode and direct output
+
+**A:** C=06h selects Direct Console I/O.
+
+**A:** E=FFh requests console input. If E is not FFh and contains a valid ASCII character, function 6 sends that character to the logical console.
+
+**A:** Direct output is unadorned and bypasses CP/M's normal control-character functions. The manual specifically names Ctrl-S and Ctrl-P. Consequently function 6 does not apply function-2 TAB expansion, does not conduct formatted-output scrolling checks, and does not duplicate output merely because BDOS printer echo is active.
+
+The contract is for a valid ASCII output character. It does not define every non-FFh byte as valid character input; in particular it does not establish semantics for E=FEh.
+
+**A:** No function-specific output result is defined. The common A=L and B=H return aliases still apply, but software is not entitled to a meaningful value after direct output.
+
+### 4.2 Function 6 nonblocking input
+
+**A:** With E=FFh, function 6 is nonblocking. It returns A=00h immediately if no console character is ready; otherwise A contains the next console input character.
+
+**A:** This is unadorned input. Function 6 does not echo the character and does not apply CP/M's normal control-character interpretation to it.
+
+The documentation specifies the returned character, not a separate Boolean ready value. Therefore a returned NUL is inherently indistinguishable from “no character”; no alternative escape is documented.
+
+### 4.3 Function 11 status
+
+**A:** C=0Bh selects Get Console Status. The documented result is A=FFh if a character is ready and A=00h otherwise.
+
+**D, conflict:** the identified DRI 2.2 implementation returns 01h, not FFh, on its ready path. This conflict is not silently reconciled. The not-ready value 00h agrees across documentation, source, and experiment; the exact ready value requires an explicit BetterCP/M compatibility decision or software-dependency evidence.
+
+## 5. DRI implementation behavior
+
+### 5.1 Function 6
+
+For E=FFh, DRI calls BIOS CONST. If zero is returned, BDOS returns its initialized zero result without waiting. If nonzero, DRI calls BIOS CONIN directly, stores that byte as the BDOS result, and returns it. It does not call the formatted console, pending-key, echo, column, Ctrl-S, or printer-echo paths. This is **B** supporting the documented boundary.
+
+For direct output, DRI jumps straight to BIOS CONOUT with the input byte. The handler leaves the common result word unchanged at zero. The observed zero is **I/NOT GUARANTEED**, not a function-specific result.
+
+DRI contains a special source branch for E=FEh that transfers to BIOS CONST. Because the returned A is not stored in the BDOS common result word, the application still receives zero through the common epilogue. E=FEh is outside the documented valid-ASCII/FFh input forms. This branch is **I/NOT REQUIRED**, not a portable status extension.
+
+### 5.2 Function 11 and the pending byte
+
+Function 11 calls DRI's `conbrk` routine rather than exposing BIOS CONST directly. If DRI's private `kbchar` is already nonzero, `conbrk` returns 01h. Otherwise it checks BIOS CONST; if ready, it consumes the byte through BIOS CONIN, interprets Ctrl-S specially, or stores an ordinary byte in `kbchar`, then returns 01h. Not ready returns 00h.
+
+Thus the exact ready result 01h is **B** and contradicts the documented FFh. Consuming an ordinary key from BIOS while retaining it for later formatted input is **B/C, policy pending** because it is externally observable but no software-dependency evidence was established.
+
+Function-6 E=FFh bypasses `kbchar`: it can return 00h while function 11 continues to report that the retained byte is ready. This asymmetry is **B/C, policy pending**, not an inferred documented requirement.
+
+DRI's storage address, one-byte variable, and call organization are **I/NOT REQUIRED**.
+
+## 6. Experiments
+
+### 6.1 Probe and deterministic harness
+
+Artifacts are `DIO004.ASM`, `DIO004.COM`, `observed-output.txt`, `printer-echo.txt`, and `README.txt`. The binary SHA-256 is `375e2e7196808c7f9b9ee29fb8086ce6bf94d565a531aa6fb7bb9b3e3ecb7c4f`.
+
+Build and run:
+
+```text
+z80asm -fb -oDIO004.COM DIO004.ASM
+cpmcp -f ibm-3740 drivea.dsk DIO004.COM 0:DIO004.COM
+cpmsim -z -d <disposable-disk-directory>
+```
+
+A PTY attempt showed that bytes written beside the command were not deterministically visible during the transient and was rejected. Ready-input cases instead temporarily replace the running disposable BIOS's CONST and CONIN jump vectors with probe-local stubs: CONST reports FFh until CONIN supplies one `Z`, then reports 00h. The original six vector bytes are restored before reporting. This controls the BIOS input presented to DRI BDOS; it does not claim that the stub is reference BIOS behavior.
+
+### 6.2 Results
+
+| Question | Expected | Observed | Interpretation |
+|---|---|---|---|
+| Function 11 with no input | 00h | 00h | Documentation, DRI source, and reference agree. |
+| Function 6/FF with no input | 00h without waiting | 00h | Documented nonblocking behavior confirmed. |
+| Function 6/FF with one scripted `Z` | `5Ah`, then 00h | `5A 00` | Returns and consumes the raw BIOS character. |
+| Function 11 with one scripted ordinary key | Manual says FFh | `01 01` on two calls | DRI consumes it into `kbchar` and reports 01h persistently, contradicting the documented exact value. |
+| Function 6/FF after function 11 buffered `Z` | Source predicts no access to `kbchar` | 00h | Confirms DRI's status/direct-input asymmetry. |
+| Function 6/FE with scripted ready then not ready | No documented expectation | `00 00` | Source branch exists, but BIOS status is lost through the common result word. |
+| Direct output of `A`, TAB, `$`, Ctrl-P, `B` | Same raw bytes | `41 09 24 10 42` | No TAB expansion or Ctrl-P interpretation. |
+| Direct output while printer echo active | Raw bytes absent from LIST | Formatted frame copied; inside brackets empty | Function 6 bypasses printer echo. |
+
+The z80pack terminal and printer sink establish captured device bytes, not physical display or printer rendering. Its printer file discards CR, which does not affect the empty-bracket discriminator.
+
+## 7. Documentation/source difference
+
+The important difference is exact and unresolved:
+
+```text
+Function 11 ready result
+    DRI Interface Guide: FFh
+    DRI CP/M 2.2 source: 01h
+    controlled DRI CP/M 2.2 experiment: 01h
+```
+
+Tests that merely branch on zero/nonzero would accept both. Tests comparing with FFh would not. No evidence examined here shows which form significant existing software requires. BetterCP/M should not accidentally settle this through an implementation convenience.
+
+## 8. Proposed Compatibility Ledger findings
+
+Each row is one independently testable proposition. The authoritative ledger was not modified.
+
+| Proposition | Evidence class | Proposed disposition |
+|---|---|---|
+| Function 6 direct output is selected by C=06h with E not FFh and a valid ASCII character. | A | REQUIRED |
+| Function 6 sends the character in E to the logical console. | A + experiment | REQUIRED |
+| Function 6 direct output does not expand TAB. | A + source + experiment | REQUIRED |
+| Function 6 direct output does not perform Ctrl-S scrolling control. | A + source | REQUIRED |
+| Function 6 direct output does not apply Ctrl-P printer-echo control or duplication. | A + source + experiment | REQUIRED |
+| Function 6 direct output defines no function-specific result. | A | NOT GUARANTEED |
+| Function 6 nonblocking input is selected by E=FFh. | A | REQUIRED |
+| Function 6 input returns immediately with A=00h when no character is ready. | A + source + experiment | REQUIRED |
+| Function 6 input returns the next ready console byte in A. | A + source + experiment | REQUIRED |
+| Function 6 input does not echo or interpret the returned byte. | A + source | REQUIRED |
+| Function 11 returns A=00h when no character is ready. | A + source + experiment | REQUIRED |
+| Exact function-11 ready value: documented FFh versus DRI 01h. | A/B conflict, D | POLICY PENDING |
+| Function 11 may consume an ordinary BIOS byte and retain it for later formatted input. | B/C | POLICY PENDING |
+| DRI function-6 input ignores a byte retained in DRI `kbchar`. | B/C | POLICY PENDING |
+| DRI's E=FEh branch and its zero application result. | I | NOT REQUIRED |
+| DRI's private pending-byte representation and addresses. | I | NOT REQUIRED |
+
+## 9. Existing ledger reconsideration
+
+No existing entry requires correction, splitting, merging, or reclassification.
+
+Entries 039-040 still require A=L and B=H on normal return. They do not resolve the new function-11 conflict: a BetterCP/M choice of FFh implies `HL=00FFh`, `A=FFh`, `B=00h`; reproducing DRI's 01h implies `HL=0001h`, `A=01h`, `B=00h`.
+
+Entry 072 should remain policy pending. Investigation 004 strengthens its evidence by showing deterministic ordinary-key retention and the function-6 asymmetry, but supplies no software-dependency evidence requiring DRI's mechanism.
+
+## 10. Proposed conformance tests
+
+Mandatory tests corresponding to documented propositions:
+
+1. Function 6 outputs representative valid ASCII bytes from E through the logical console.
+2. Function 6 emits a literal TAB byte rather than spaces.
+3. With printer echo active, function-6 bytes do not reach logical LIST.
+4. Function 6/FF returns 00h immediately under a deterministic not-ready BIOS.
+5. Function 6/FF returns and consumes a deterministic ready byte without echo.
+6. Function 11 returns 00h under a deterministic not-ready BIOS.
+
+Diagnostic/policy tests:
+
+7. Under a deterministic ready BIOS, record whether function 11 returns FFh or 01h; do not make either a mandatory BetterCP/M result until policy resolves the conflict.
+8. Call function 11 twice around one ordinary input byte and then function 6/FF; diagnose pending-buffer retention and asymmetry.
+
+Observations that must not become mandatory tests:
+
+9. Do not require DRI's E=FEh branch or its zero result.
+10. Do not inspect DRI private variable addresses or exact internal call paths.
+
+## 11. Unresolved questions and implications
+
+1. Does significant CP/M 2.x software compare function-11 ready status with FFh, compare it with 01h, or only test nonzero? This should be answered by targeted software/source-corpus evidence before the ledger chooses the exact ready byte.
+2. Is DRI's pending-key retention and its invisibility to function 6 relied upon? Investigation 004 establishes the behavior, not the dependency.
+3. Ctrl-S pause/resume and Ctrl-C-after-pause remain deferred until a deterministic harness is designed for the formatted-output path; they were not forced into this investigation.
+
+Later BetterCP/M engineering must preserve a clean distinction between formatted BDOS console services and direct logical-console access. The Hardware Abstraction must offer status, input, and output primitives sufficient to implement the accepted behavior, but BetterCP/M need not copy DRI's `kbchar` mechanism.
+
+The next investigation should not automatically expand to all console input. A suitable narrow successor would examine function 1's blocking character input, echo eligibility, and control-character state, using the deterministic vector technique where it answers a specific question; function 10 line editing should remain separate.

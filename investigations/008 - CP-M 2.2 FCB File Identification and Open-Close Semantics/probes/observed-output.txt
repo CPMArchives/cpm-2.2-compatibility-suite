@@ -1,0 +1,108 @@
+Investigation 008 raw observations
+==================================
+
+Question tested
+---------------
+
+What FCB fields do DRI CP/M 2.2 functions 15 and 16 consume, return, preserve,
+or persist for successful, failed, wildcard, explicit-drive, and extent cases?
+
+Environment
+-----------
+
+z80pack commit 91fd28eb04e675c2127df88ed3f40675e15282e2;
+cpmsim Release 1.39, Z80 mode, executable SHA-256
+30374c2df2f44118d2b36a8bfef651a9f2d0ee9b9ddd0039c044b9f06df4708d;
+byte-identified DRI CP/M 2.2 CCP+BDOS; z80pack Z80 CBIOS V1.2.
+
+Disposable images began as copies of:
+
+  cpm22-1.dsk bb06534599e7167547563096217d775bcd073464408dbae0927a010604d03443
+  cpm22-2.dsk 30d3f145e86179801a72963f7ddd59ef83a1c045d3d19901d0a4a697b26a8a7a
+
+The file areas were cleared with cpmrm, leaving the system tracks intact.
+The following controlled files were added with cpmcp (ibm-3740 format):
+
+  A:OPENME.DAT   19 host bytes
+  A:CLOSE.DAT    18 host bytes
+  A:LARGE.DAT    20000 host bytes / 157 CP/M records
+  B:BFILE.DAT    18 host bytes
+  A:FCB008.COM    probe
+
+Immediately before boot, image hashes were:
+
+  A c795bd2036d75eb03f6a2011e3e6c5f3372ebc43d23cee797e29488e8e1cefc6
+  B 91306c2f4067f974b001df5cfd174ecbfd710746cb9a076b7d75e086f8b9ee73
+
+Probe
+-----
+
+Source: FCB008.ASM
+Binary SHA-256: b42b6416579a25b849af29d2001bb239cd4a49853b8dd85e5bae0170e709d95e
+
+Expected behavior
+-----------------
+
+Documented expectations were: existing files open with directory code 0-3;
+missing files return FFh; wildcard open activates the first match; directory
+metadata fills the FCB; explicit B selection is temporary; an unchanged file
+need not be closed; a dirty close persists FCB directory information; and a
+missing dirty close returns FFh. Caller CR was expected to remain AA because
+DRI source copies only bytes 0-31 during open.
+
+Raw output
+----------
+
+Each line is the BDOS result followed by FCB bytes 0 through 32.
+
+A>FCB008
+FCB008 result then FCB[0..32]
+OPEN-A  00 00 4F 50 45 4E 4D 45 20 20 44 41 54 00 13 80 01 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 AA
+MISSING FF 00 41 42 53 45 4E 54 20 20 44 41 54 00 00 00 55 AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA
+WILD    00 00 4F 50 45 4E 4D 45 20 20 44 41 54 00 13 80 01 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 AA
+OPEN-B  00 02 42 46 49 4C 45 20 20 20 44 41 54 00 12 80 01 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 AA
+EXTENT1 03 00 4C 41 52 47 45 20 20 20 44 41 54 01 20 80 1D 14 15 16 17 00 00 00 00 00 00 00 00 00 00 00 00 AA
+CLEANCL 00 00 43 4C 4F 53 45 20 20 20 44 41 54 00 12 80 01 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 AA
+DIRTYCL 01 00 43 4C 4F 53 45 20 20 20 44 41 54 00 12 00 02 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 AA
+REOPEN  01 00 43 4C 4F 53 45 20 20 20 44 41 54 00 12 80 02 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 AA
+MISSCL  FF 00 41 42 53 45 4E 54 20 20 44 41 54 00 00 00 55 AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA AA
+
+Observed behavior and interpretation
+------------------------------------
+
+1. OPEN-A returned directory code 0 and replaced directory-derived bytes
+   through byte 31 while preserving caller CR=AA at byte 32.
+2. MISSING returned FF. DRI cleared input S2 before the failed match; the
+   name, extent, S1, RC, allocation sentinels, and CR otherwise survived.
+3. WILD activated OPENME.DAT and replaced '?' with the actual matched name.
+4. OPEN-B succeeded, retained FCB drive code 2 after DRI restored A as the
+   current default, and copied B's directory metadata.
+5. EXTENT1 returned directory code 3, retained requested EX=1, and returned
+   extent-specific RC/allocation state for the 20000-byte file.
+6. CLEANCL returned 0. The DRI private high S2 no-write bit remained set, so
+   source analysis shows that no directory search/write was performed.
+7. DIRTYCL cleared that private bit and changed RC to 2. Close returned the
+   actual directory code 1. REOPEN also returned 1 and recovered RC=2,
+   proving persistence.
+8. MISSCL returned FF for a dirty FCB whose name had no directory match.
+
+After execution, image hashes were:
+
+  A 8e128b0ce28d54a7967e0d02f3596d27b0adb677a8c6d7d68857b888ce8793bc
+  B 91306c2f4067f974b001df5cfd174ecbfd710746cb9a076b7d75e086f8b9ee73
+
+B was unchanged. Host-side cpmtools displayed CLOSE.DAT as 146 bytes after
+RC changed to 2 because cpmcp had placed an exact-byte-count extension in the
+reserved S1 field. That convention is not DRI CP/M 2.2 evidence. DRI's manual
+reserves S1 for internal use, and DRI BDOS ignores S1 when matching.
+
+Limitations
+-----------
+
+The experiment used a single-byte allocation-map disk format and drives A/B.
+It does not establish double-byte allocation-map representation, directory
+ordering across other formats, or exact host-tool S1 conventions. It did not
+perform BDOS write calls; the dirty-close condition was established directly
+in the in-memory FCB on a disposable copy. It does not investigate make,
+delete, search enumeration, sequential I/O, media errors, disk-full behavior,
+or close allocation-map conflicts.

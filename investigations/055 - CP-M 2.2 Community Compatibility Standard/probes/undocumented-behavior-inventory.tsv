@@ -1,0 +1,22 @@
+id	behavior	kind	frequency/dependency	evidence	ledger	classification	validation
+U054-01	CALL 0005h gateway and word at 0006h as configured ceiling	documented but often treated as convention	widespread DRI and independent tools	A,B,I041,I042,I054	0004,0008	REQUIRED	T054-01
+U054-02	normal BDOS word-result aliases A=L and B=H	de facto externally visible return convention	broad BDOS callers may consume aliases	B,I002,I027	0039-0040	REQUIRED	existing narrow probes
+U054-03	exact transient-entry SP and CCP return address	DRI instance characteristic	no widespread dependency shown	I001,I043,I054	0029-0030	NOT REQUIRED	T054-06
+U054-04	general/alternate register and flag state at transient entry	unspecified residue	rare probes; no dependency case	I001,I043	0031-0033	NOT GUARANTEED	T054-06
+U054-05	DRI private BDOS stack and dispatcher residue C=input E	private implementation	no justified software dependency	B,I002,I027	0044,0050-0051	NOT REQUIRED	existing narrow probes
+U054-06	calling the current target behind JMP 0005h	private-target bypass	rare; no portable dependency established	B,I041,I054	0619	NOT GUARANTEED	T054-02
+U054-07	reversible page-zero gateway interposition	de facto shipped DRI mechanism	standard XSUB dependency	B,I041,I042,I047,I054	0591,0621	REQUIRED strict profile	T054-03,T054-04
+U054-08	A:$$$.SUB counted command stream across transients	DRI ecosystem protocol	standard SUBMIT dependency	B,I042,I047,I048,I054	0620	REQUIRED strict profile	T054-04
+U054-09	XSUB supplies Function 10 from submission stream	DRI ecosystem protocol	standard XSUB dependency	B,I042,I047,I054	0621	REQUIRED strict profile	T054-04
+U054-10	writable/executable self-modifying TPA	de facto flat-memory property	debuggers, overlays, shipped tools	A,B,I043,I048,I054	0622	REQUIRED strict profile	T054-05
+U054-11	fixed numeric private CCP/BDOS/BIOS bases and vector targets	configuration artifact	software using them is configuration-bound	A,B,I034,I041,I054	0034,0619	NOT REQUIRED / NOT GUARANTEED	T054-01,T054-02
+U054-12	contents of reserved/scratch page-zero and bytes beyond returned data	unspecified residue	no general dependency	A,B,I041	0009-0010,0022,0110	NOT GUARANTEED	T054-01
+U054-13	Function 6 E=FEh DRI branch	rare undocumented branch	no evidenced common software dependency	B,I005	0089	NOT REQUIRED	existing narrow probe
+U054-14	pending-key interaction, exact ready value and console editing bytes	observable DRI console behavior	possible software/terminal dependency not adequately surveyed	B,I004-I006,I016	0069,0086,0088,0128-0129	POLICY PENDING	future console profile tests
+U054-15	directory enumeration/physical order and failed-search residue	implementation/media consequence	software must not rely on universal order/residue	B,I009,I029	0213,0215-0218,0311	NOT GUARANTEED / NOT REQUIRED	existing directory probes
+U054-16	exact FCB state after failure, boundary EX drift, allocation/free choice	private storage working state	no widespread dependency established	B,I010-I013	0240-0241,0270,0293	NOT GUARANTEED / NOT REQUIRED	existing storage probes
+U054-17	exact write error codes beyond documented cases	observable but incompletely specified	possible application dependency unquantified	A,B,I011,I013	0276	POLICY PENDING	future capacity/error differential
+U054-18	exact close update order and DRI deletion/rename algorithms	private storage implementation	invisible absent fault injection	B,I011-I012	0282,0297,0313	NOT REQUIRED	existing image/fault probes
+U054-19	Function 35 A and Function 30 success slot	unspecified return residue	no demonstrated software dependency	B,I013-I014	0352,0365	NOT GUARANTEED	existing narrow probes
+U054-20	exact fatal disk-error wording/accepted response details	DRI presentation behavior	operator/script dependency unresolved	A,B,I015,I033	0387,0411-0412	POLICY PENDING	future presentation profile
+U054-21	exact CPU undocumented instructions	processor-profile behavior	hardware-dependent software only when demonstrated	I042,I051,I053	CPU/profile entries	POLICY PENDING	named CPU/software profile only

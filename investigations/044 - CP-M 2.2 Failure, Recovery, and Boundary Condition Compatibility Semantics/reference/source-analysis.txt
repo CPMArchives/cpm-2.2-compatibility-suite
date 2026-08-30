@@ -1,0 +1,38 @@
+Investigation 044 source findings
+=================================
+
+OS3BDOS.ASM
+-----------
+
+The BDOS initializes a default result, dispatches selectors inside its table,
+and returns function-specific status through the common epilogue. Selectors
+outside the table bypass dispatch and retain zero.
+
+rdbuff and wrbuff call BIOS READ/WRITE. diocomp returns only for zero; nonzero
+routes through the permanent-error vector. persub prints Bad Sector, reads a
+console character, reboots on Control-C, and otherwise returns to the
+interrupted higher-level path. The select and read-only handlers instead wait
+for a character and reboot. Exact routines, vectors, private flags, and stack
+paths are implementation details.
+
+Resource exhaustion is detected at distinct directory/allocation stages.
+Logical status construction is function-specific. Source contains no general
+transaction rollback for already completed directory or allocation changes.
+
+OS2CCP.ASM
+----------
+
+The CCP interprets the documented BDOS results in context: missing command,
+load failure, full/read-only save failure, and syntax errors take different
+resident-command paths, then return to command acquisition. BAD LOAD and NO
+FILE presentation are CCP behavior, not a universal BDOS exception system.
+
+CBIOS.ASM
+---------
+
+Disk READ/WRITE return success/error status and implement retry policy. The
+character-device entries CONST, CONIN, CONOUT, LIST, PUNCH, and READER do not
+define a corresponding general physical-device error return. CONST expresses
+ready/not-ready; blocking input waits; output calls provide no success/failure
+result to BDOS. Consequently a host or device failure cannot be standardized
+as a BDOS code from this implementation alone.

@@ -1,0 +1,25 @@
+gap	area	I060 status	closure evidence through I067	remaining concern	I068 release classification
+G060-01	Documented public interfaces	RELEASE READY	I061-I067 found no missing public subsystem	None for baseline	RELEASE READY
+G060-02	CCP command/launch/lifecycle	RELEASE READY	No closure campaign contradicted boundary; I062 pilot and I064 workflows compose it	Malformed/cancellation strict details remain optional	RELEASE READY
+G060-03	BDOS Functions 0-40	RELEASE READY	I061 differential and I062 pilot reinforce documented selector behavior	Policy-scoped edge presentation remains selected by release manifest	RELEASE READY
+G060-04	Console edge behavior	POLICY PENDING	No new universal dependency found	Exact editing/pending/presentation profile applicability unresolved	POLICY PENDING
+G060-05	FCB/DMA/file/storage	RELEASE READY	I061/I064 workflows and I066 fault boundary fit existing propositions	No baseline semantic gap	RELEASE READY
+G060-06	BIOS/configured platform	RELEASE READY	I061 differential, I065 communications and I067 profiles validate layering	Named untested devices cannot be claimed	RELEASE READY
+G060-07	Processor/instruction profile	ADDITIONAL INVESTIGATION REQUIRED	I063 experimentally established 8080 baseline and Z80/profile exclusions; I064/I067 reinforced	Five I063 propositions are absent from numbered ledger	TARGETED FOLLOW-UP REQUIRED
+G060-08	Logical file errors	RELEASE READY	I061/I062/I064 found expected documented failures	Exact presentation remains profile/policy	RELEASE READY
+G060-09	Physical errors/late mutation	ADDITIONAL INVESTIGATION REQUIRED	I066 directly demonstrated pre-transfer and completion-before-error, ignore/abort and recovery	Torn sectors and operation-specific device profiles remain unclaimed	RELEASE READY
+G060-10	Cross-layer late failure	ADDITIONAL INVESTIGATION REQUIRED	I065 endpoint failure and I066 recovery cover representative late/provider failures	No universal asynchronous guarantee identified	RELEASE READY
+G060-11	Standard utilities	RELEASE READY	I061/I062 retain utility composition evidence	None for baseline	RELEASE READY
+G060-12	Development toolchains	ADDITIONAL INVESTIGATION REQUIRED	I064 Turbo Pascal and FORTRAN/LINK workflows close high-level compiler gap	Fixture choice remains ecosystem-tier policy	RELEASE READY
+G060-13	Application categories	ADDITIONAL INVESTIGATION REQUIRED	I064 expanded compilers but not spreadsheet/database/business/BBS/printer	Blocks unrestricted ecosystem endorsement, not narrow semantic baseline	TARGETED FOLLOW-UP REQUIRED
+G060-14	Communications	ADDITIONAL INVESTIGATION REQUIRED	I065 paired QTERM/XMODEM, retry, disconnect and unavailable endpoint close named profile	BBS, physical UART, receive-side disk-full and broader protocols unclaimed	RELEASE READY
+G060-15	Hardware-dependent software	POLICY PENDING	I067 validates layered profiles; I065 supplies one matched IMSAI serial profile	Dazzler/VIO/controller/printer and other named claims untested	POLICY PENDING
+G060-16	Undocumented/de facto behavior	RELEASE READY	I061 differential and later corpus found no omitted consequential baseline behavior	Rare dependencies cannot be exhaustively disproved	RELEASE READY
+G060-17	Cross-implementation portability	ADDITIONAL INVESTIGATION REQUIRED	I061 compares DRI CP/M and CDOS on common hardware; I062 uses same pair in pilot	Breadth is modest but sufficient to challenge DRI equality for baseline draft	RELEASE READY
+G060-18	Ledger normative quality	ADDITIONAL INVESTIGATION REQUIRED	No normalization occurred; current audit still finds 652 lines, 622 unique IDs and 30 duplicates	Duplicate 0248-0277 block and Function-37 overlap require authorized editorial correction	TARGETED FOLLOW-UP REQUIRED
+G060-19	Contradiction review	RELEASE READY	Current duplicate audit finds identical dispositions; closure reports found no semantic contradiction	Normalize without changing meaning	RELEASE READY
+G060-20	Policy definition	POLICY PENDING	Current audit still finds 50 POLICY PENDING lines (45 unique IDs)	Release applicability/profile manifest absent	POLICY PENDING
+G060-21	Conformance design/pilot	ADDITIONAL INVESTIGATION REQUIRED	I062 executed 18 records across DRI/CDOS and validated framework	Stable subcases, executable oracles, aggregation/dependency links remain incomplete	TARGETED FOLLOW-UP REQUIRED
+G060-22	Evidence preservation/release manifest	POLICY PENDING	I061-I067 each preserve strong local hashes	No release-wide content-addressed ledger/test/profile/evidence manifest	TARGETED FOLLOW-UP REQUIRED
+G060-23	Extension/personality separation	NOT REQUIRED	I063-I067 continue to separate processor/device/machine/application layers	Implementation isolation remains future implementation evidence, not spec behavior	RELEASE READY
+G060-24	Overall normative specification	ADDITIONAL INVESTIGATION REQUIRED	Behavioral boundary is substantially closed	Ledger normalization, processor entries, policy selection, conformance granularity and release manifest remain	TARGETED FOLLOW-UP REQUIRED

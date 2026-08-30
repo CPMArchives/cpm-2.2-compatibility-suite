@@ -1,0 +1,39 @@
+BETTERCP/M CP/M 2.2 COMPATIBILITY STANDARD 1.0-rc1
+RELEASE NOTES
+
+Purpose
+  RC1 publishes the frozen BetterCP/M CP/M 2.2 compatibility contract and
+  validation framework for review as a coherent specification package.
+
+Compatibility scope
+  Ledger 072 contains 627 propositions: 458 REQUIRED, 116 NOT GUARANTEED,
+  53 NOT REQUIRED, and no POLICY PENDING. The conformance view contains
+  430 generic REQUIRED, 28 PROFILE REQUIRED, three OPTIONAL,
+  116 NOT GUARANTEED, and 50 OUTSIDE SCOPE cases.
+
+Included
+  Compatibility Standard 1.0-rc1; Compatibility Policy 1.0-rc1;
+  byte-identical Ledger 072; Conformance Specification 1.0-rc1;
+  nine frozen conformance tables 1.0.0; Profile Registry 1.0-rc1;
+  profile-case mapping; manifest, publication index, source map, hashes,
+  and validation report.
+
+Profiles
+  CPM22-BASE is included in the specification. Seventeen named profiles are
+  defined as AVAILABLE but unselected by default. AVAILABLE does not mean a
+  BetterCP/M implementation provides or passes a profile.
+
+Known limitations
+  No BetterCP/M implementation is included or assessed. Executable runners,
+  complete fixtures, certificate generation, and a candidate campaign remain
+  deferred implementation/certification work. Expanded corpus and scarce-
+  hardware endorsements are not part of RC1.
+
+Non-certification status
+  This package is a specification release candidate only. It grants no
+  compatibility certificate and makes no product conformance claim.
+
+Historical supersession
+  Draft 0.1 policy/strategy files and ledgers before 072 remain historical.
+  They are not current authority for RC1. They are not copied into the package
+  as normative artifacts.

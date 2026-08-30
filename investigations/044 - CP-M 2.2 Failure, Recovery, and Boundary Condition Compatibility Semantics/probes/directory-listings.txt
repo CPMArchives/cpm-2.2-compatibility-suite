@@ -1,0 +1,53 @@
+--- allocfull-drivea.dsk
+fileerr2
+filler25.dat
+new25.dat
+one25.dat
+open25.com
+read25.com
+search25.com
+write25.com
+
+1:
+console2
+user1.dat
+--- dirfull-drivea.dsk
+check24.com
+cons24.com
+console2
+dmachk.dat
+entry23.com
+file24.com
+jump24.com
+obs24.com
+state24.com
+term24.com
+user1.dat
+who22.com
+--- fatal-drivea.dsk
+0:
+attr.dat
+big.dat
+closeme.dat
+dskfile.dat
+fail44.com
+open25.com
+phys015.com
+rofile.dat
+--- physical-drivea.dsk
+0:
+attr.dat
+big.dat
+closeme.dat
+dskfile.dat
+phys015.com
+rofile.dat
+--- returning-drivea.dsk
+0:
+attr.dat
+big.dat
+closeme.dat
+dskfile.dat
+fail44.com
+phys015.com
+rofile.dat

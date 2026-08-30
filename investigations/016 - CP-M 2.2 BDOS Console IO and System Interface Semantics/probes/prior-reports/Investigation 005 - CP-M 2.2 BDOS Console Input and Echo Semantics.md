@@ -1,0 +1,243 @@
+# Investigation 005 - CP/M 2.2 BDOS Console Input and Echo Semantics
+
+Date: 14 August 2026  
+Status: evidence report only; no Compatibility Ledger or BetterCP/M implementation modified
+
+## 1. Investigation question and scope
+
+This investigation asks what a transient program may observe when it calls BDOS function 1, Console Input:
+
+1. Does the call wait for a console character, and where is that character returned?
+2. Which input characters are echoed and which are returned without echo?
+3. How are TAB and the specifically documented control characters echoed?
+4. Does function-1 echo participate in formatted-output column, scrolling, and active printer-echo behavior?
+5. Does a Ctrl-P received as the function-1 character itself change printer-echo state?
+6. Does function 1 consume an ordinary byte retained by function 11?
+
+Function 10 buffered line editing is excluded. Function 6 nonblocking/direct input and function 11 status were completed in Investigation 004. Exact Ctrl-S pause/resume timing is not forced into this investigation; no manually timed input is used.
+
+Evidence classes are **A** documented CP/M 2.2 requirement, **B** DRI implementation behavior, **C** possible de facto dependency, **I** incidental behavior, and **D** unresolved.
+
+## 2. Why the question matters to BetterCP/M
+
+Function 1 is the simplest blocking, echoed input service. It joins three compatibility boundaries already established separately: the common BDOS ABI (Investigation 002), formatted output and printer echo (Investigation 003), and console readiness/pending input (Investigation 004). Defining it before function 10 prevents the much larger line editor from obscuring the single-character contract.
+
+The result constrains externally visible behavior, not a BetterCP/M input-buffer implementation.
+
+## 3. Relationship to the Compatibility Ledger
+
+This investigation depends on:
+
+- entries 35-43: selector, byte result, aliases, and balanced return;
+- entries 45-49: no generic register-preservation guarantee;
+- entries 59-66: formatted output, TAB, scrolling, and active printer echo;
+- entries 69-74: unresolved exact column and pending-key behavior;
+- entries 81-88: nonblocking input, status, and DRI pending-byte behavior; and
+- entry 90: DRI's private pending representation is not required.
+
+No ledger entry yet defines function 1. Investigation 005 overlaps earlier work only to test the new function-1 connections to already-established formatted output and function-11 retention.
+
+## 4. Sources examined
+
+### 4.1 Digital Research documentation
+
+1. Digital Research, *CP/M 2.0 Interface Guide*, copyright 1979, `<reference-archive>/CPM_2_0_Interface_Guide.pdf`, SHA-256 `e10f525fcf399897fa86703eb930e21ba59fa54c0708c1cf5909e92beaf7a279`:
+   - function 1, printed p. 8 / PDF p. 14;
+   - function 2 on the same page for the formatted-output relationship;
+   - System Function Summary, printed p. 46 / PDF p. 52.
+2. Digital Research, *CP/M 2.2 Alteration Guide*, copyright 1979, `<reference-archive>/CPM_2.2_Alteration_Guide_1979.pdf`, SHA-256 `98a176be191c68207b5859371cf3d95eb90f517a72bdeb3b3699833e7c368891`. Section 9 identifies 0005h as the primary BDOS entry and refers to the Interface Guide.
+
+The Interface Guide is explicitly 2.0. As in Investigations 002-004, it is applied only because the 2.2 Alteration Guide incorporates the interface and the February 1980 2.2 source implements the same function. The scanned function-1 page was rendered and visually inspected; exact control characters were not inferred from OCR.
+
+### 4.2 Original DRI implementation
+
+3. `<reference-archive>/cpm2-plm/OS3BDOS.ASM`, “Bdos Interface, Bdos, Version 2.2 Feb, 1980,” SHA-256 `a22b7dd0f8adaa8dd9affe2cbb0f5749ddf278bf36ca9f94e38f9acf335a44d8`:
+   - `conin`, `conech`, and `echoc`, lines 161-184;
+   - formatted `conout` and `tabout`, lines 204-258;
+   - function 1, lines 422-425;
+   - function 10 Ctrl-P handling, lines 339-345, used only to distinguish that separate service;
+   - common return, lines 2090-2104.
+4. `OS3BDOS1.ASM`, the archive's Caldera variant. Its damage/difference lies in function-10 control-X editing. The function-1 and shared echo paths relevant here are otherwise unchanged.
+5. DRI distribution BIOS sources for the blocking BIOS CONIN and logical CONOUT/LIST boundaries.
+
+No relevant DRI application caller added a stronger function-1 control-character convention than the interface manual.
+
+### 4.3 Reference environment
+
+The reference environment is unchanged:
+
+- z80pack commit `91fd28eb04e675c2127df88ed3f40675e15282e2`;
+- `cpmsim` Release 1.39 in Z80 mode, executable SHA-256 `30374c2df2f44118d2b36a8bfef651a9f2d0ee9b9ddd0039c044b9f06df4708d`;
+- disposable copy of `cpmsim/disks/library/cpm22-1.dsk`, original SHA-256 `bb06534599e7167547563096217d775bcd073464408dbae0927a010604d03443`;
+- byte-identified DRI CP/M 2.2 CCP+BDOS with z80pack Z80 CBIOS V1.2.
+
+The experiment replaces selected BIOS vectors with documented probe stubs. It tests the identified DRI BDOS logic under controlled BIOS inputs; it does not classify the stubs as CP/M or z80pack behavior.
+
+## 5. Documented CP/M 2.2 requirements
+
+### 5.1 Selection, blocking, and result
+
+**A:** C=01h selects Console Input.
+
+**A:** Function 1 reads the next logical-console character and returns it in A.
+
+**A:** If no character is ready, function 1 does not return to the caller until one has been typed. The blocking wait may be provided through BIOS CONIN; no polling algorithm is prescribed.
+
+The common Investigation-002 aliases remain required on return: A=L and B=H.
+
+### 5.2 Echo eligibility
+
+**A:** Graphic characters are echoed to the logical console.
+
+**A:** CR (0Dh), LF (0Ah), backspace/Ctrl-H (08h), and TAB/Ctrl-I (09h) are also echoed. The manual identifies these separately from graphic characters.
+
+**A:** TAB echo expands in columns of eight. It is formatted output, not a literal TAB sent to BIOS CONOUT.
+
+By enumeration, ordinary control bytes other than the four named echo controls are not documented as echoed. The DRI source implements that boundary: it returns them without console output. This report proposes that distinction as REQUIRED but tests it independently from their returned-byte value.
+
+### 5.3 Formatted-output participation
+
+**A:** The manual says function 1 checks start/stop scrolling (Ctrl-S) and start/stop printer echo (Ctrl-P). Together with its TAB rule and the function-2 definition on the same page, this establishes that eligible echo participates in formatted console state.
+
+**A:** When printer echo is already active, eligible function-1 echo is copied to logical LIST after formatting. Thus an echoed TAB produces spaces on both logical devices.
+
+The manual does not unambiguously say whether the particular Ctrl-P returned by function 1 must itself toggle printer echo, or whether the stated check describes formatted echo's participation in existing console-control state. DRI function 1 does not toggle it. That narrower proposition is classified separately as B/C rather than silently read into the documented wording.
+
+## 6. Relevant DRI implementation behavior
+
+DRI function 1 calls `conech`, which calls `conin`. If the private pending byte is nonzero, `conin` returns and clears it; otherwise it jumps to blocking BIOS CONIN. This mechanism is **B**, not a required structure.
+
+`conech` asks `echoc` whether the returned byte is graphic, CR, LF, TAB, or backspace. Eligible bytes pass through `tabout` and `conout` while the original input byte is preserved for return. Other controls return without echo.
+
+Consequences:
+
+- graphics, CR, LF, and backspace cause one BIOS CONOUT call;
+- TAB causes enough space calls to reach the next eight-column boundary;
+- echo updates the shared logical column and checks formatted scrolling;
+- active `listcp` duplicates every processed echo byte to BIOS LIST; and
+- the returned byte itself is unchanged by echo formatting.
+
+DRI function 1 does not interpret its returned Ctrl-P as a printer-echo toggle. That toggle exists in function 10's line editor. A function-1 Ctrl-P is therefore returned without echo and without changing `listcp`. This is **B/C, policy pending** because the manual's “check” wording is not explicit enough to resolve whether software is entitled to the DRI distinction.
+
+An ordinary byte retained by function 11 is consumed by function 1 before BIOS CONIN is called again. This makes Investigation-004 entry 87's retention observable across services. The exact DRI buffer is **I/NOT REQUIRED**; the cross-call behavior is **B/C, policy pending** absent software-dependency evidence.
+
+Because zero represents “no private pending byte,” DRI cannot retain an actual NUL in that slot. This source consequence was not probed and is not proposed as a requirement.
+
+## 7. Experimental method and results
+
+### 7.1 Probe and contamination controls
+
+Artifacts are in `probes/IN005.ASM`, `IN005.COM`, `observed-output.txt`, and `README.txt`. The final binary SHA-256 is `08044cb19feaa9cabd7904130968b680109c899ff3592712b227cae85966a0e5`.
+
+The probe derives the BIOS base from page-zero WBOOT, saves the CONST, CONIN, CONOUT, and LIST vectors, and redirects them temporarily to probe-local routines. These routines supply exactly one scripted input byte, capture exact console bytes, count LIST bytes, and count BIOS CONIN calls. Original vectors are restored before reporting.
+
+This avoids manually timed keyboard input and terminal rendering as evidence. Two development runs with identified report-pointer/input-setup defects were rejected before the final binary; they are documented as non-evidence in the raw-output file.
+
+### 7.2 Inactive-printer-echo results
+
+| Input/case | Function-1 result | Captured CONOUT | LIST count | BIOS CONIN calls | Interpretation |
+|---|---:|---|---:|---:|---|
+| `A` | 41h | `41` | 0 | 1 | Graphic returned and echoed. |
+| TAB at column 0 | 09h | eight `20` bytes | 0 | 1 | Original TAB returned; echo expanded to eight spaces. |
+| CR | 0Dh | `0D` | 0 | 1 | Returned and echoed unchanged. |
+| LF | 0Ah | `0A` | 0 | 1 | Returned and echoed unchanged. |
+| Backspace | 08h | `08` | 0 | 1 | Returned and echoed unchanged. |
+| Ctrl-A | 01h | none | 0 | 1 | Returned without echo. |
+| Ctrl-P, then function-2 `Q` | 10h | only `51` from `Q` | 0 | 1 | Ctrl-P not echoed and did not activate printer echo. |
+| Function 11 then function 1 with `Z` | status 01h; result 5Ah | `5A` | 0 | 1 total | Function 1 consumed and echoed the retained byte without another BIOS CONIN. |
+
+### 7.3 Active-printer-echo results
+
+Printer echo was enabled before program entry through the already-established DRI CCP buffered-input path. Every eligible echo byte caused the same number of LIST calls as CONOUT calls: one for `A`, CR, LF, backspace, and retained `Z`; eight for expanded TAB. Ctrl-A and Ctrl-P caused neither output. The formatted `Q` after Ctrl-P still reached LIST, confirming that function-1 Ctrl-P did not turn the pre-existing state off.
+
+The active-state setup relies on established Investigation-003 behavior. It is not new evidence about how function 10 toggles the state.
+
+### 7.4 Limitations
+
+The harness proves DRI BDOS behavior given controlled BIOS calls. It does not measure physical keyboard latency or establish a BetterCP/M internal buffering design. Blocking itself rests principally on the explicit manual contract and source path; deliberately withholding a stub response would only hang the probe, not add useful compatibility evidence.
+
+Exact Ctrl-S pause/resume behavior was not tested. It needs a harness that deterministically presents Ctrl-S during formatted echo and controls the subsequent resume byte without conflating it with the function-1 input byte.
+
+## 8. Compatibility analysis
+
+Function 1 is neither raw input nor a one-byte version of function 10. It blocks like BIOS CONIN but adds selective formatted echo. The input byte and its echo representation are independently variable: TAB returns 09h while emitting spaces, and ordinary controls can return without emitting anything.
+
+BetterCP/M must preserve the accepted observable results but need not copy `conech`, `echoc`, `kbchar`, `column`, or `listcp`. Tests should observe returned bytes and logical device streams rather than private state.
+
+The Ctrl-P wording should remain unresolved at the narrow point actually in conflict: whether receiving Ctrl-P through function 1 changes printer-echo state. It should not weaken the documented requirement that eligible echo honors an already-active state.
+
+## 9. Unresolved questions
+
+1. Does contemporary documentation or significant software require function-1 Ctrl-P itself to toggle printer echo, or is DRI's no-toggle behavior the practical contract?
+2. Must a function-11-retained ordinary byte be consumed by function 1 before new BIOS input, or is that only DRI buffering behavior?
+3. What happens to a NUL consumed by function 11, given DRI's zero sentinel? No compatibility dependency is established.
+4. Exact deterministic Ctrl-S pause/resume and Ctrl-C-after-pause behavior remains unresolved from Investigation 003.
+
+## 10. Proposed conformance tests
+
+Mandatory tests:
+
+1. Supply a deterministic graphic byte; verify function 1 returns it in A and echoes it once.
+2. Supply TAB at known logical columns; verify A=09h and echo expands to the next eight-column boundary.
+3. Independently verify CR, LF, and backspace are returned and echoed.
+4. Supply an ordinary non-echo control such as Ctrl-A; verify it is returned without console output.
+5. With printer echo active, verify eligible echo reaches CONOUT and LIST after identical formatting.
+6. Verify function 1 satisfies the common A=L, B=H result aliases.
+
+Diagnostic/policy tests:
+
+7. Supply Ctrl-P through function 1, then output a formatted character; diagnose whether printer-echo state changed.
+8. Retain an ordinary byte through function 11, then call function 1; diagnose the returned byte, echo, and BIOS-input call count.
+9. Under a future deterministic scroll harness, test Ctrl-S handling without manual timing.
+
+Must-not-require observations:
+
+10. Do not inspect private variable addresses or require DRI's exact call graph.
+11. Do not require the internal buffer's inability to retain NUL without software-dependency evidence.
+
+## 11. Proposed Compatibility Ledger findings
+
+One row is one independently testable proposition. The authoritative ledger was not modified.
+
+| Proposition | Evidence class | Proposed disposition |
+|---|---|---|
+| Function 1 is selected by C=01h. | A | REQUIRED |
+| Function 1 waits until a logical-console character is available. | A + source | REQUIRED |
+| Function 1 returns the input character in A. | A + source + experiment | REQUIRED |
+| Function 1 echoes graphic characters. | A + source + experiment | REQUIRED |
+| Function 1 echoes CR. | A + source + experiment | REQUIRED |
+| Function 1 echoes LF. | A + source + experiment | REQUIRED |
+| Function 1 echoes backspace/Ctrl-H. | A + source + experiment | REQUIRED |
+| Function 1 expands echoed TAB to the next eight-column stop. | A + source + experiment | REQUIRED |
+| Function 1 returns ordinary controls outside the documented echo set without echo. | A inference + source + experiment | REQUIRED |
+| Eligible function-1 echo participates in shared formatted-console state. | A + source + experiment | REQUIRED |
+| Eligible function-1 echo participates in Ctrl-S scrolling control. | A + source | REQUIRED |
+| Active printer echo duplicates eligible function-1 echo to logical LIST. | A + source + experiment | REQUIRED |
+| Function-1 Ctrl-P does not itself toggle DRI printer-echo state. | B/C; documentation ambiguous | POLICY PENDING |
+| Function 1 consumes an ordinary byte retained by DRI function 11. | B/C + experiment | POLICY PENDING |
+| DRI private function-1 echo/pending implementation details. | I | NOT REQUIRED |
+
+Proposed new entries: **15**.
+
+## 12. Proposed corrections or reclassifications
+
+No existing ledger entry should be corrected, split, merged, or reclassified on this evidence.
+
+Entry 87 should remain POLICY PENDING. Investigation 005 adds deterministic evidence that function 1 is one later consumer of DRI's retained ordinary byte, but it does not establish a portable software dependency.
+
+Entry 86's exact function-11 ready value remains unresolved. The pending experiment again observed DRI's 01h, but that does not resolve the documented FFh conflict.
+
+Entries 63-64 and 73 concerning deterministic scrolling remain unchanged; this investigation deliberately did not use timed Ctrl-S input.
+
+## 13. Implications for later BetterCP/M engineering
+
+Later engineering needs a way to provide blocking logical-console input and to route eligible echo through the accepted formatted-output behavior. It also needs a deliberate policy for interaction between readiness observation and later formatted input. These are boundary requirements, not mandates to reproduce DRI variables or routines.
+
+Function 1 and function 10 must remain distinct services even if they share internal helpers: function 1 returns one byte with selective echo, while function 10 owns line editing and control-state changes not established here.
+
+## 14. Recommended later investigations
+
+1. **BDOS Buffered Console Input and Line Editing Semantics** - function 10 buffer format, termination, editing controls, maximum-length behavior, and its explicit Ctrl-P toggle.
+2. **BDOS Formatted Console Pause and Pending-Key Semantics** - deterministic Ctrl-S/resume/Ctrl-C behavior and interaction with entries 63-64 and 72-73.
+3. **Logical Character Devices and IOBYTE Semantics** - functions 3-8 and BIOS logical-device mapping, excluding already-completed function-6 semantics except where mapping requires comparison.
+4. **BDOS Disk Reset and Selection State** - functions 13-14, current disk, login vector, and page-zero drive state before file operations.

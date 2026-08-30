@@ -1,0 +1,131 @@
+Investigation 043 observed output
+=================================
+
+Environment
+-----------
+
+z80pack cpmsim 1.39, DRI CP/M 2.2, Z80 CBIOS 1.2. Input was supplied by
+run043.exp; no test depended on manually typed input. Each case used restored
+copies of the same two disk images.
+
+EDGE43.COM
+----------
+
+Purpose: Exercise entry-stack visibility, application-owned stack use, the
+advertised last TPA byte, coherent self-modifying execution, and a returning
+BDOS call in one deterministic probe.
+
+Procedure: Capture entry SP and its return word; obtain the 0006h word and use
+the preceding address as the advertised last TPA byte; write/read/restore that
+byte; change the immediate operand of a local instruction from its assembled
+value to 5Ah and execute it; adopt a local stack; call Function 12; capture SP
+before and after the call.
+
+Observed behavior (four executions were identical):
+
+  EDGE43 ENTRYSP RET PRIVATE_PRE/POST TPA_LAST OLD/TEST PATCH VER EBA9 EB5F 02F5 02F5 EC05 00 A5 5A 0022
+
+Conclusion: On this reference system, the entry return word was usable, a
+private stack remained balanced across BDOS, EC05h was writable/readable, and
+an instruction fetch observed the modified byte. The printed addresses and
+old byte are instance values, not portable constants.
+
+ZRET43.COM
+----------
+
+Purpose: Separate processor RET-to-zero behavior from dependence on the CCP's
+original entry stack.
+
+Procedure: Put 0000h on an application-owned stack and execute RET.
+
+Observed behavior:
+
+  ZERORET43 RET TO 0000H
+  A>
+
+The following EDGE43 command ran normally.
+
+Conclusion: On this system a deliberately supplied zero return word composes
+RET with the public 0000h WBOOT gateway. This does not mean CP/M must supply
+0000h as the transient's entry return word.
+
+FN043.COM
+---------
+
+Purpose: Test Function 0 termination while using an application-owned stack.
+
+Procedure: Print a marker, adopt a local stack, call BDOS Function 0, and leave
+an unreachable failure marker after the call.
+
+Observed behavior:
+
+  FN043 PRIVATE STACK FUNCTION 0
+  A>
+
+No failure marker appeared; the following EDGE43 command ran normally.
+
+Conclusion: Function 0 did not return to the caller and restored command
+processing. The private stack address and DRI recovery implementation are not
+requirements.
+
+OVER43.COM
+----------
+
+Purpose: Recheck controlled system-area overlap and restart recovery without
+ordinary RET.
+
+Procedure: On this DRI reference image only, derive the CCP base from the
+known source layout, adopt a private stack, overwrite its first byte and the
+saved entry return word, print through resident BDOS, and jump to 0000h.
+
+Observed behavior:
+
+  OVER43 CCP AND RET OVERWRITTEN; WBOOT
+  A>
+
+The following EDGE43 command ran normally.
+
+Conclusion: The reference WBOOT path restored a usable command environment.
+The address derivation, overwritten byte, CCP layout, and reload mechanism are
+DRI implementation evidence, not portable interfaces.
+
+MAXOK43.COM and MAXBAD43.COM
+---------------------------
+
+Purpose: Confirm repeatability of the configured CCP loader boundary.
+
+Procedure: Give two files an identical executable prefix. Pad MAXOK43 to 453
+records (57,984 bytes) and MAXBAD43 to 454 records (58,112 bytes), then invoke
+each by name.
+
+Observed behavior:
+
+  A>MAXOK43
+  MAXOK43 EXECUTED
+  A>MAXBAD43
+  BAD LOAD
+
+Conclusion: The first file executed and the second was rejected before its
+marker. This corroborates the configuration-specific boundary already found
+by I022, I028, and I034; it establishes no universal maximum COM size.
+
+Controlled matrix summary
+-------------------------
+
+  Normal execution:             EDGE43 returned normally.
+  Maximum-size program:         453 records executed; 454 produced BAD LOAD.
+  Boundary memory condition:    advertised last TPA byte wrote/read/restored.
+  Unusual stack usage:          private-stack BDOS, RET-to-zero, Function 0.
+  Direct memory access:         self-patch executed; controlled CCP overwrite.
+  Termination/restart:          RET, Function 0, and JMP 0000h all reprompted.
+
+Disk preservation
+-----------------
+
+  drivea.dsk before: a0a16d505e7ec481a3498c4657761b196006a62add202b1174ae349a0fe311e5
+  drivea.dsk after:  a0a16d505e7ec481a3498c4657761b196006a62add202b1174ae349a0fe311e5
+  driveb.dsk before: 30d3f145e86179801a72963f7ddd59ef83a1c045d3d19901d0a4a697b26a8a7a
+  driveb.dsk after:  30d3f145e86179801a72963f7ddd59ef83a1c045d3d19901d0a4a697b26a8a7a
+
+The terminal I/O warning after the scripted interrupt is an emulator shutdown
+artifact, not CP/M behavior.

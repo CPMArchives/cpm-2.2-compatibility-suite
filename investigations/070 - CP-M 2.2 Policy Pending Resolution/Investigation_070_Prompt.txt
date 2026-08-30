@@ -1,0 +1,217 @@
+INVESTIGATION 070 — CP/M 2.2 Cross-Layer Compatibility Boundary
+Validation and Consolidation
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 069 is complete.
+
+The authoritative Compatibility Ledger currently incorporates findings
+through Investigation 069.
+
+Create Investigation 070 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+This is a compatibility validation investigation, not BetterCP/M
+implementation work.
+
+Do not modify: - the Compatibility Ledger; - previous investigation
+reports; - previous investigation artifacts; - architecture documents; -
+roadmap documents; - specifications.
+
+The purpose of Investigation 070 is to validate that the accumulated
+ledger propositions describe a coherent externally visible CP/M 2.2
+compatibility boundary after the canonical Ledger 069 consolidation.
+
+OBJECTIVE
+
+Determine whether the compatibility contracts established through
+Investigations 001-069 compose correctly across subsystem boundaries.
+
+The investigation should not discover new behavior merely for
+completeness. It should identify:
+
+-   contradictions between existing propositions;
+-   missing cross-layer assumptions;
+-   duplicate or overlapping requirements;
+-   propositions whose evidence boundaries need clarification;
+-   areas where application-visible behavior differs from internal
+    implementation behavior.
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read and use:
+
+Investigation 045: Cross-layer system compatibility.
+
+Investigation 046-047: Ecosystem and standard utility compatibility.
+
+Investigation 069: Canonical Compatibility Ledger consolidation.
+
+Review earlier investigations as needed when validating specific chains.
+
+Do not duplicate subsystem investigations unless required to resolve a
+cross-layer conflict.
+
+SCOPE
+
+Investigate:
+
+-   CCP -> transient program execution boundary;
+-   transient program -> BDOS calling boundary;
+-   BDOS -> BIOS boundary;
+-   BIOS -> logical storage boundary;
+-   lifecycle transitions across warm start, termination, and recovery;
+-   interaction of drive, user, DMA, FCB, directory, and storage state;
+-   consistency of REQUIRED / NOT GUARANTEED / NOT REQUIRED / POLICY
+    PENDING classifications.
+
+Validate representative application-visible workflows:
+
+-   boot to CCP prompt;
+-   execute transient program;
+-   perform BDOS operations;
+-   change drive/user state;
+-   terminate and return to CCP;
+-   recover from logical and physical failures.
+
+NON-GOALS
+
+Do not investigate:
+
+-   new CP/M 2.2 subsystem semantics already covered by prior
+    investigations;
+-   CP/M 3;
+-   MP/M;
+-   BetterCP/M implementation design;
+-   internal optimization;
+-   private DRI algorithms unless they expose a contradiction with the
+    compatibility contract.
+
+KEY QUESTIONS
+
+1.  COMPATIBILITY CHAIN INTEGRITY
+
+Determine:
+
+-   whether CCP, BDOS, BIOS, and application contracts compose;
+-   whether one layer assumes undocumented behavior from another;
+-   whether any existing proposition conflicts with another.
+
+2.  APPLICATION WORKFLOW VALIDATION
+
+Test representative complete workflows:
+
+-   command acquisition;
+-   transient loading;
+-   execution;
+-   BDOS calls;
+-   file operations;
+-   termination;
+-   return to CCP.
+
+Identify failures caused by missing contract definitions rather than
+implementation bugs.
+
+3.  STATE TRANSITION VALIDATION
+
+Validate:
+
+-   current drive;
+-   user area;
+-   DMA address;
+-   FCB state;
+-   directory state;
+-   allocation state;
+-   page-zero state.
+
+Determine whether state ownership and persistence rules are consistent.
+
+4.  ERROR AND RECOVERY BOUNDARIES
+
+Validate separation between:
+
+-   logical BDOS failures;
+-   BIOS/media failures;
+-   operator recovery;
+-   application-visible results.
+
+Determine whether recovery propositions preserve a coherent public
+model.
+
+5.  LEDGER QUALITY REVIEW
+
+Review the authoritative Compatibility Ledger.
+
+Identify:
+
+-   duplicate propositions;
+-   overly broad propositions;
+-   propositions needing narrower wording;
+-   evidence classifications needing refinement.
+
+Do not edit the ledger.
+
+Produce proposed updates only.
+
+ARTIFACT REQUIREMENTS
+
+Create:
+
+Investigation 070/
+
+with:
+
+probes/
+
+Preserve:
+
+-   probe source;
+-   binaries;
+-   listings;
+-   harness scripts;
+-   transcripts;
+-   disk images;
+-   memory dumps where useful;
+-   build instructions;
+-   SHA-256 manifests.
+
+PRESERVATION AUDIT
+
+Before investigation:
+
+-   hash the authoritative Compatibility Ledger;
+-   record emulator/version information;
+-   hash fixture disk images.
+
+After investigation:
+
+-   verify the Compatibility Ledger is unchanged;
+-   verify previous investigations are unchanged;
+-   hash new artifacts;
+-   preserve raw evidence separately.
+
+COMPLETION REPORT
+
+Report:
+
+-   files created;
+-   artifacts preserved;
+-   validation workflows performed;
+-   cross-layer compatibility findings;
+-   contradictions found or ruled out;
+-   proposed ledger updates;
+-   unresolved POLICY PENDING issues;
+-   authoritative Ledger 069 SHA-256 before and after;
+-   confirmation that protected files were unchanged;
+-   documentation reviewed.
+
+FINAL GOAL
+
+Investigation 070 should answer:
+
+    Do the accumulated CP/M 2.2 compatibility propositions form a
+    consistent externally visible contract across the complete system?
+
+The result should establish confidence that BetterCP/M can be
+implemented against the compatibility boundary without reproducing
+unnecessary DRI implementation details.

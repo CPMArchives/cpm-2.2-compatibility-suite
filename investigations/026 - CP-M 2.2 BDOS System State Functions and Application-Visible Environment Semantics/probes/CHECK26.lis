@@ -1,0 +1,84 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 18:17:47 2026	Page 1
+Source file: CHECK26.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1         ORG 100H
+0100  21 39 01         2      2         LD HL,MSG
+0103  cd d4 01         3      3         CALL PUTS
+0106  0e 19            4      4         LD C,25
+0108  cd 05 00         5      5         CALL 5
+010b  cd 00 02         6      6         CALL HEXB
+010e  cd ec 01         7      7         CALL SPACE
+0111  1e ff            8      8         LD E,0FFH
+0113  0e 20            9      9         LD C,32
+0115  cd 05 00        10     10         CALL 5
+0118  cd 00 02        11     11         CALL HEXB
+011b  cd ec 01        12     12         CALL SPACE
+011e  0e 18           13     13         LD C,24
+0120  cd 05 00        14     14         CALL 5
+0123  cd fb 01        15     15         CALL HEXW
+0126  cd ec 01        16     16         CALL SPACE
+0129  0e 1d           17     17         LD C,29
+012b  cd 05 00        18     18         CALL 5
+012e  cd fb 01        19     19         CALL HEXW
+0131  cd f1 01        20     20         CALL CRLF
+0134  0e 00           21     21         LD C,0
+0136  c3 05 00        22     22         JP 5
+0139  43 48 45 43     23     23 MSG:    DB 'CHECK26 cur user login ro ',0
+013d  4b 32 36 20     23     24
+0141  63 75 72 20     23     25
+0145  75 73 65 72     23     26
+0149  20 6c 6f 67     23     27
+014d  69 6e 20 72     23     28
+0151  6f 20 00        23     29
+0154                  24     30         DS 128
+01d4                  25     31 STACK:
+01d4  7e              26     32 PUTS:   LD A,(HL)
+01d5  23              27     33         INC HL
+01d6  b7              28     34         OR A
+01d7  c8              29     35         RET Z
+01d8  5f              30     36         LD E,A
+01d9  cd de 01        31     37         CALL PUTC
+01dc  18 f6           32     38         JR PUTS
+01de  f5              33     39 PUTC:   PUSH AF
+01df  c5              34     40         PUSH BC
+01e0  d5              35     41         PUSH DE
+01e1  e5              36     42         PUSH HL
+01e2  0e 02           37     43         LD C,2
+01e4  cd 05 00        38     44         CALL 5
+01e7  e1              39     45         POP HL
+01e8  d1              40     46         POP DE
+01e9  c1              41     47         POP BC
+01ea  f1              42     48         POP AF
+01eb  c9              43     49         RET
+01ec  1e 20           44     50 SPACE:  LD E,' '
+01ee  c3 de 01        45     51         JP PUTC
+01f1  1e 0d           46     52 CRLF:   LD E,13
+01f3  cd de 01        47     53         CALL PUTC
+01f6  1e 0a           48     54         LD E,10
+01f8  c3 de 01        49     55         JP PUTC
+01fb  7c              50     56 HEXW:   LD A,H
+01fc  cd 00 02        51     57         CALL HEXB
+01ff  7d              52     58         LD A,L
+0200  f5              53     59 HEXB:   PUSH AF
+0201  0f              54     60         RRCA
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 18:17:47 2026	Page 2
+Source file: CHECK26.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0202  0f              55     61         RRCA
+0203  0f              56     62         RRCA
+0204  0f              57     63         RRCA
+0205  cd 09 02        58     64         CALL NIB
+0208  f1              59     65         POP AF
+0209  e6 0f           60     66 NIB:    AND 0FH
+020b  c6 30           61     67         ADD A,'0'
+020d  fe 3a           62     68         CP '9'+1
+020f  38 02           63     69         JR C,NOUT
+0211  c6 07           64     70         ADD A,7
+0213  5f              65     71 NOUT:   LD E,A
+0214  c3 de 01        66     72         JP PUTC
+                      67     73
+0217                  68     74         END

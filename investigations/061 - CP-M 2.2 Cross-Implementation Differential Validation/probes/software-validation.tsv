@@ -1,0 +1,8 @@
+case	binary	DRI_CP_M_2_2	CDOS_2_58	impact
+portable-probes	VECTOR41 ZERO41 EDGE43	complete	complete	Public gateways, command preparation, RET and ordinary BDOS calls compose on both.
+documented-state	BASE61	complete; F24=0001	complete; F24=0022	CDOS deviation can affect drive-discovery software.
+out-of-range	STATE61	selector 41 returns zero	CCP diagnostic Illegal system call 29H	CDOS deviation affects feature probes and violates documented strict result.
+direct-BIOS	BIOS41	17-entry table	last two documented JMP slots absent	Direct BIOS software is not fully portable to CDOS.
+file-copy	DRI PIP.COM	copy succeeds	copy succeeds	Ordinary CP/M file utility is portable across the primary pair.
+missing-command	CCP	NOFILE61?	Program not found	Presentation varies without affecting program execution.
+

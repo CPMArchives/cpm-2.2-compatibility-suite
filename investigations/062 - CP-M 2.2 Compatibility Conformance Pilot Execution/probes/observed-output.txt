@@ -1,0 +1,43 @@
+Investigation 062 accepted experimental observations
+====================================================
+
+Fresh restored images were prepared with identical probes and the same DRI
+PIP.COM. Each implementation ran the same scripted sequence.
+
+DRI CP/M 2.2
+------------
+
+- Public gateways and transient-entry objects were present.
+- BASE61: version=0022, drive=00, user=00, login=0001, RO=0000.
+- Selector 41 returned 0000.
+- Writable/self-modifying TPA produced patched value 5A.
+- RET, RET-to-zero/JMP 0000h, and Function 0 each restored A>.
+- BIOS base FA00 exposed C3 in all 17 slots 00-10.
+- PIP created COPY62.TXT; DIR found it; a missing command produced NOFILE62?.
+
+CDOS 2.58
+---------
+
+- Public gateways, sampled transient-entry objects and ordinary RET were present.
+- BASE61: version=0022, drive=00, user=00, login=0022, RO=0000.
+- Selector 41 produced `Illegal system call 29H at 013EH` and reprompted.
+- Writable/self-modifying TPA produced patched value 5A.
+- RET, RET-to-zero/JMP 0000h, and Function 0 each restored A.
+- Derived BIOS base E800 exposed C3 through slot 0E; slots 0F/10 began 79/EE.
+- The identical PIP created COPY62.TXT; DIR found it; a missing command produced
+  `Program not found`.
+
+Payload result
+--------------
+
+The source is 53 bytes. The CDOS-extracted copy is byte-identical and 53 bytes.
+The DRI-extracted copy has the same first 53 bytes and is 128 bytes with zero
+padding, reproducing the I061 extension/representation difference.
+
+Pilot classification
+--------------------
+
+Nine selected I059 identifiers yielded 18 implementation records: 9 PASS,
+2 FAIL and 7 BLOCKED. The two FAILs are evidence-based CDOS conformance
+failures. BLOCKED compound tests preserve incomplete coverage honestly.
+

@@ -1,0 +1,51 @@
+Investigation 023 accepted observations
+=======================================
+
+Accepted evidence: transcripts/console-main.txt, console-repeat.txt,
+console-max.txt, and console-usercheck.txt.
+
+1. Tail layout
+   - no arguments: 0080=00 and 0081=00;
+   - `ENTRY23 ARG`: 04, SPACE, ARG, NUL;
+   - `ENTRY23 ARG1 ARG2`: 0A, SPACE, ARG1, SPACE, ARG2, NUL;
+   - three separators before ARG are preserved and counted;
+   - CR is neither counted nor copied;
+   - bytes after the NUL are residual and differ between fresh runs.
+
+2. Case and character handling
+   Lowercase input is visibly echoed as entered, but ASCII a-z in both tail and
+   FCBs is uppercase at entry. Digits, hyphen, underscore, `*`, and `?` survive.
+
+3. Tail capacity
+   With the one-character alias `T`, a 127-byte input line (`T`, space, 125
+   argument bytes) produces tail count 7Eh (126). An attempted 128th byte is not
+   included; it remains queued and becomes the next command (`B?`). No bell is
+   present in the captured transcript. This is a CCP input-line limit, not an
+   independent 127-byte tail guarantee.
+
+4. FCB construction
+   The first two operands form uppercase, space-padded prefixes at 005Ch and
+   006Ch. Unprefixed operands have drive 0 even on current drive B; A: and B:
+   encode 1 and 2. `*` fills the remaining name/type positions with `?`, while
+   literal `?` remains. Long names are truncated to eight characters in the FCB
+   but remain complete in the tail.
+
+5. FCB residual state
+   EX/S1/S2 and the first CR byte at 007Ch are zero. First-FCB byte 15 is 08 for
+   ENTRY23 and 14h for 20-record BIG23, exposing loader/Open state rather than a
+   constructed zero. Bytes 007Dh-007Fh and bytes after the tail NUL vary or
+   retain prior contents. The second operand supplies only a 16-byte prefix;
+   its position necessarily overlays the first FCB allocation area.
+
+6. Drive and user
+   Page-zero 0004h is 00 for user 0/drive A, 10h for user 1/drive A, and 01h
+   for user 0/drive B. BDOS Functions 32 and 25 independently report matching
+   user and drive. The command's explicit lookup drive (`B:ENTRY23`) does not
+   change current drive and does not become an argument FCB drive.
+
+7. DMA, stack, vectors, registers
+   Reading DMACHK.DAT without Function 26 succeeds and deposits its signature
+   at 0080h, confirming initial DMA 0080h. Entry SP EBA9h contains EB5Fh and RET
+   returns to CCP in this configuration. Exact SP/return/vector targets and
+   initial registers vary or are configuration-specific and are not portable.
+

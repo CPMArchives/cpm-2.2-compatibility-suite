@@ -1,0 +1,70 @@
+Investigation 016 accepted observations
+========================================
+
+Environment: z80pack cpmsim 1.39, CP/M 2.2, Z80 CBIOS 1.2.
+Every named case used fresh copies of images-before/drivea.dsk and driveb.dsk.
+Raw console evidence is cases/<case>/console.txt.
+
+OUT
+  Function 2 emitted '$' as ordinary data and expanded TAB at column 5 to
+  three spaces.  Function 9 expanded TAB, stopped at the first '$' without
+  emitting it, handled an empty string, and continued across embedded CR/LF.
+
+DIOE / DIO6 / DIOS / DIOF / DIOO
+  Functions 11 and 6 input returned 00 with no input.  Function 6 returned
+  scripted Z (5A), then 00.  Function 11 returned 01 when a scripted Z was
+  ready and retained it across repeated status calls; Function 6 did not
+  consume that private pending byte.  E=FE behavior was zero in this DRI
+  build but is outside the documented Function 6 interface.  Direct output
+  passed A, TAB, '$', Ctrl-P, B as raw bytes 41 09 24 10 42.
+
+IN
+  Function 1 returned A/TAB/CR/LF/BS as 41/09/0D/0A/08.  Graphic input was
+  echoed; TAB echoed eight spaces at column zero; CR/LF/BS were echoed.
+  Ctrl-A and Ctrl-P returned but were not echoed.  A character retained by
+  Function 11 was subsequently returned and echoed by Function 1.
+
+BUF
+  Function 10 wrote count then data at DE+1/DE+2.  CR and LF terminated input
+  but were excluded from the count and stored data.  An empty line counted
+  zero.  Reaching max=3 terminated immediately after three bytes.  BS and DEL
+  removed the prior byte; Ctrl-E continued the logical line on a new physical
+  line; Ctrl-U and Ctrl-X erased the line; Ctrl-R redisplayed it; Ctrl-P was
+  excluded from data and toggled DRI printer echo.  Exact captured bytes and
+  BIOS call counts are in cases/BUF/console.txt.
+
+SYS
+  Result row:
+  51 52 01 54 05 01 53 22 00 00 01 00 00 05 00 00 41 82 00 00
+  Function 1 returned Q; Function 6 returned R; Function 11 reported ready
+  and Function 1 later returned retained T; Function 10 stored one S.
+  Function 12 returned HL=0022.  Function 25 reported A:, B:, A: around
+  controlled selections.  Function 32 queried user 0, set/query returned 5,
+  then restored 0.  Two 128-byte DMA sentinels had zero mismatches.  A later
+  sequential read placed marker 41 at the alternate DMA address, proving the
+  DMA selection survived the console/system calls.  Function 35 placed
+  000082 (130 records) in the FCB random-record field without using DMA.
+
+SCROLL
+  A deterministic BIOS substitute supplied Ctrl-S then Q while Function 2
+  emitted X.  The probe recorded two console-input calls, one output call,
+  and byte 58: formatted output consumed stop/resume before emitting X.
+
+BLOCKQ
+  Function 1 did not return during a one-second no-input interval.  After Q,
+  it returned 51.  DMA sentinels at 0080 and the alternate buffer remained
+  A5 and 5A.
+
+BLOCK1C
+  Function 1 did not return during a one-second no-input interval.  Ctrl-C
+  returned normally as 03, did not warm restart, and left DMA sentinels intact.
+
+BLOCK10C
+  Function 10 did not return during a one-second no-input interval.  Ctrl-C
+  at the beginning of the line printed ^C and warm restarted to A>; the probe
+  never printed its RETURNED marker.
+
+Disk state
+  For all 13 cases both post-run images compare byte-for-byte equal to their
+  respective before images.  before.sha256 and after.sha256 are retained in
+  every case directory.

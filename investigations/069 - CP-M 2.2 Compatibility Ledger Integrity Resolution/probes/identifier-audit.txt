@@ -1,0 +1,37 @@
+Investigation 069 identifier integrity audit
+============================================
+
+Input ledger:
+  02 Compatibility Ledger - Investigation 068.txt
+  Numbered lines: 652
+  Unique identifiers: 622
+  Duplicate identifiers: 30
+  Duplicate range: 0248-0277, each occurring twice
+  Missing identifiers within 0001-0622: none
+
+Canonical output ledger:
+  02 Compatibility Ledger - Investigation 069.txt
+  Numbered lines: 627
+  Unique identifiers: 627
+  Duplicate identifiers: none
+  Missing identifiers within 0001-0627: none
+  Sequence: contiguous 0001-0627
+
+Resolution:
+  The second complete Investigation-011 header and verbatim 0248-0277 block
+  were removed.  The first occurrence is retained byte-for-byte.  No unique
+  proposition, evidence citation, disposition, or stable identifier was lost.
+
+  Existing identifiers 0001-0622 were not renumbered.  The five I063
+  processor propositions were assigned the next available canonical IDs,
+  0623-0627.  Provisional report labels 0766-0770 were not reused because
+  they would create an unexplained gap 0623-0765.
+
+  Entry 0523 was retained to preserve stable references, but was rewritten as
+  an explicit profile-scope cross-reference to canonical Function-37 policy
+  entry 0435.  Its POLICY PENDING disposition and evidence scope remain.
+
+Cross-references:
+  Every explicit entry/range reference in the output resolves.  The source
+  catalogue now lists I001-I069.  Investigation 069 itself is represented by
+  this archive directory and the cumulative history section in the ledger.

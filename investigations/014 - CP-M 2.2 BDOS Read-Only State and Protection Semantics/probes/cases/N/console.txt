@@ -1,0 +1,37 @@
+spawn cpmsim -z -d /private/tmp/inv014-runs/N
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>PROT014 N
+NORMAL initial
+VECTOR 0000
+NORMAL after28
+VECTOR 0001
+NORMAL after13
+VECTOR 0000
+ATTR-SET 00 00 00 41 54 54 52 20 20 20 20 C4 C1 54 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ATTR-CLEAR 00 00 00 41 54 54 52 20 20 20 20 44 41 54 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+BIG-SET 00 00 00 42 49 47 20 20 20 20 20 C4 41 54 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ATTR-MISS FF 00 00 4E 4F 41 54 54 52 20 20 C4 41 54 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+MAKE-ATTR 03 00 00 4D 41 44 45 41 54 54 52 C4 C1 54 00 00 80 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+A>[0;31mE (7531) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 11 ms, waited for 0 ms
+CPU executed 1299418 t-states in 0 ms
+Clock frequency 1541.42 MHz

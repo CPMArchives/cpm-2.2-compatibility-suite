@@ -1,0 +1,54 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set timeout 60
+log_file -noappend $logfile
+spawn cpmsim -z -d $diskdir
+expect "A>"
+
+# DRI assembler/load/CCP lifecycle using explicit-drive source and output.
+send "ASM B:HELLO42\r"
+expect "A>"
+send "LOAD B:HELLO42\r"
+expect "A>"
+send "B:HELLO42\r"
+expect "A>"
+
+# DRI file and directory utilities: explicit drives, FCB parsing, search/copy.
+send "PIP B:COPY42.ASM=B:HELLO42.ASM\r"
+expect "A>"
+send "STAT B:COPY42.ASM\r"
+expect "A>"
+send "DUMP B:COPY42.ASM\r"
+expect "A>"
+
+# DRI editor: create a text file through buffered console editing and close it.
+send "ED B:EDIT42.TXT\r"
+expect "*"
+send "I\rALPHA42\r\032"
+expect "*"
+send "E\r"
+expect "A>"
+send "DUMP B:EDIT42.TXT\r"
+expect "A>"
+
+# Failure cases return to the CCP rather than supplying invented data.
+send "ASM B:MISSING\r"
+expect "A>"
+send "PIP B:NOFILE.TXT=B:MISSING.TXT\r"
+expect "A>"
+
+# DDT uses the public transient/page-zero environment and programmed restart.
+send "DDT\r"
+expect -- "-"
+send "D0,7\r"
+expect -- "-"
+send "G0\r"
+expect "A>"
+
+# SUBMIT/XSUB is the historically important gateway-interposition workflow.
+send "SUBMIT RUN42\r"
+expect "HELLO42 OK"
+expect "A>"
+send "\034"
+expect eof

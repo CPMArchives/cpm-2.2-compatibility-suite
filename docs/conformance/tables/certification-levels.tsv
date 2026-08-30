@@ -1,0 +1,7 @@
+level	scope	gate	allowed_claim
+BASELINE	Generic transient, BDOS, CCP-visible and processor-baseline commitments without direct BIOS conformance.	Every applicable generic REQUIRED case in the declared baseline scope PASS; none BLOCKED; profile and optional cases are excluded unless claimed.	CP/M 2.2 baseline compatible for the declared environment.
+INTERFACE	BASELINE plus documented BDOS and BIOS public interfaces selected by the claim.	BASELINE passes and every applicable interface REQUIRED case passes.	CP/M 2.2 interface compatible for the declared interfaces.
+FULL-SYSTEM	INTERFACE plus boot, CCP, BIOS-visible, disk-structure, recovery and selected generic ecosystem commitments.	All applicable generic REQUIRED cases across the frozen inventory pass; none are blocked.	Full-system CP/M 2.2 compatible for the declared hardware environment.
+PROFILE	Any base level plus one or more explicitly named profiles.	Underlying base level passes and every PROFILE REQUIRED case for each selected profile passes.	The underlying level plus the exact named profile list.
+OPTIONAL	A separately declared optional extension.	The underlying base level passes and claimed OPTIONAL cases pass without weakening baseline behavior.	Optional feature support, never a substitute for base certification.
+DEVELOPMENT	Incomplete diagnostic campaign.	No certification gate; all PASS, FAIL, BLOCKED, ERROR and NOT_APPLICABLE results are reported.	Development status only; no compatibility certification.

@@ -1,0 +1,10 @@
+ledger_pending=49
+matrix_rows=49 unique_ids=49
+NOT GUARANTEED=11
+OPTIONAL=3
+OUTSIDE SCOPE=1
+PROFILE REQUIRED=28
+REQUIRED=6
+identifier_coverage=PASS
+field_validation=PASS
+I070 policy matrix validation PASS

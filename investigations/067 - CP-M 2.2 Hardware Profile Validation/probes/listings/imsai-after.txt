@@ -1,0 +1,48 @@
+     Name    Bytes   Recs  Attr     update             create
+------------ ------ ------ ---- -----------------  -----------------
+ASM     .COM     8K     64    
+AUTO    .SUB     1K      2    
+BASE051 .COM     1K      0    
+BIOS    .ASM    25K    195    
+BIOS    .HEX     3K     20    
+BIOS    .PRN    36K    283    
+BIOS    .SYM     2K     10    
+BOOT    .ASM     3K     24    
+BOOT    .HEX     1K      3    
+BOOT    .PRN     5K     35    
+BYE     .COM     1K      1    
+CLS     .COM     1K      1    
+CLSV    .COM     1K      2    
+CPM54   .SYS     9K     68    
+DDT     .COM     5K     38    
+DUMP    .ASM     5K     33    
+DUMP    .COM     1K      3    
+ED      .COM     7K     52    
+LOAD    .COM     2K     14    
+MAC     .COM    12K     92    
+MEMMAP  .COM     1K      2    
+MODEM   .SUB     1K      2    
+MOVCPM  .COM    10K     75    
+PIP     .COM     8K     58    
+PROFILE .SUB     1K      1    
+R       .COM     1K      4    
+SDIR    .COM    15K    119    
+SERIAL  .SUB     1K      2    
+SID     .COM     8K     61    
+STAT    .COM     5K     40    
+SUBMIT  .COM     2K     10    
+SURVEY  .COM     2K      9    
+SURVEY  .MAC    15K    113    
+SYSGEN  .COM     1K      8    
+SYSGEN54.SUB     1K      2    
+SYSGEN60.SUB     1K      3    
+SYSGEN64.SUB     1K      3    
+VIEW    .COM     1K      4    
+VMODE   .COM     1K      8    
+W       .COM     1K      4    
+WM-ANSI .COM    11K     82    
+WM-LSI  .COM    10K     76    
+WM      .HLP     3K     23    
+XDIR    .COM     2K     12    
+XSUB    .COM     1K      6    
+   45 Files occupying    233K,       8K Free.

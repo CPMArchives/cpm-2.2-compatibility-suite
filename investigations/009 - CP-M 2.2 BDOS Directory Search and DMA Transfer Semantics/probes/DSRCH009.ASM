@@ -1,0 +1,308 @@
+; Investigation 009: BDOS directory search and DMA transfer probe
+; Build: z80asm -fb -oDSRCH009.COM DSRCH009.ASM
+
+	ORG	0100H
+
+START:
+	LD	SP,STACKTOP
+	LD	DE,HEADER
+	LD	C,9
+	CALL	0005H
+
+	; Exact match and exhausted continuation at default DMA buffer 1.
+	CALL	RESETA
+	LD	HL,FEXACT
+	CALL	LOADFCB
+	LD	C,17
+	CALL	0005H
+	LD	DE,LEXACT
+	CALL	REPORT
+	LD	C,18
+	CALL	0005H
+	LD	DE,LEXNEXT
+	CALL	REPORT
+
+	; Missing search: DMA is prefilled EE to diagnose failure behavior.
+	CALL	RESETA
+	LD	HL,FMISS
+	CALL	LOADFCB
+	LD	HL,BUF1
+	LD	A,0EEH
+	CALL	FILL128
+	LD	C,17
+	CALL	0005H
+	LD	DE,LMISS
+	CALL	REPORT
+
+	; Wildcard enumeration in physical directory order.
+	CALL	RESETA
+	LD	HL,FWILD
+	CALL	LOADFCB
+	LD	C,17
+	CALL	0005H
+	LD	DE,LW1
+	CALL	REPORT
+	LD	C,18
+	CALL	0005H
+	LD	DE,LW2
+	CALL	REPORT
+	LD	C,18
+	CALL	0005H
+	LD	DE,LW3
+	CALL	REPORT
+	LD	C,18
+	CALL	0005H
+	LD	DE,LW4
+	CALL	REPORT
+	LD	C,18
+	CALL	0005H
+	LD	DE,LWEND
+	CALL	REPORT
+
+	; Repeat from Search First to show stable order on unchanged media.
+	LD	HL,FWILD
+	CALL	LOADFCB
+	LD	C,17
+	CALL	0005H
+	LD	DE,LR1
+	CALL	REPORT
+	LD	C,18
+	CALL	0005H
+	LD	DE,LR2
+	CALL	REPORT
+
+	; Change DMA between first and next; continuation must survive function 26.
+	CALL	RESETA
+	LD	HL,FWILD
+	CALL	LOADFCB
+	LD	C,17
+	CALL	0005H
+	LD	DE,LDM1
+	CALL	REPORT
+	LD	HL,BUF2
+	LD	A,0D2H
+	CALL	FILL128
+	LD	DE,BUF2
+	CALL	SETDMA
+	LD	C,18
+	CALL	0005H
+	LD	DE,LDM2
+	CALL	REPORT
+
+	; Alternate DMA exact search; page-zero 0080 is a sentinel.
+	CALL	RESETA
+	LD	A,0E1H
+	LD	(0080H),A
+	LD	HL,BUF2
+	LD	A,0E2H
+	CALL	FILL128
+	LD	DE,BUF2
+	CALL	SETDMA
+	LD	HL,FDELTA
+	CALL	LOADFCB
+	LD	C,17
+	CALL	0005H
+	LD	DE,LALT
+	CALL	REPORT
+
+	; Explicit B search and continuation, with current A restored each call.
+	CALL	RESETA
+	LD	HL,FBWILD
+	CALL	LOADFCB
+	LD	C,17
+	CALL	0005H
+	LD	DE,LB1
+	CALL	REPORT
+	LD	C,18
+	CALL	0005H
+	LD	DE,LB2
+	CALL	REPORT
+	LD	C,18
+	CALL	0005H
+	LD	DE,LBEND
+	CALL	REPORT
+
+	; Default-drive search followed by a drive change: diagnostic only.
+	CALL	RESETA
+	LD	HL,FWILD
+	CALL	LOADFCB
+	LD	C,17
+	CALL	0005H
+	LD	DE,LCH1
+	CALL	REPORT
+	LD	E,1
+	LD	C,14
+	CALL	0005H
+	LD	C,18
+	CALL	0005H
+	LD	DE,LCH2
+	CALL	REPORT
+
+	; dr='?' special search: no auto-select and entries from any user number.
+	CALL	RESETA
+	LD	HL,FANYU
+	CALL	LOADFCB
+	LD	C,17
+	CALL	0005H
+	LD	DE,LU1
+	CALL	REPORT
+	LD	B,7
+ULOOP:
+	PUSH	BC
+	LD	C,18
+	CALL	0005H
+	LD	DE,LUN
+	CALL	REPORT
+	POP	BC
+	DJNZ	ULOOP
+	RET
+
+; Function 13, then set A current and BUF1 as DMA.
+RESETA:
+	LD	C,13
+	CALL	0005H
+	LD	E,0
+	LD	C,14
+	CALL	0005H
+	LD	DE,BUF1
+	CALL	SETDMA
+	RET
+
+SETDMA:
+	LD	(ACTDMA),DE
+	LD	C,26
+	CALL	0005H
+	RET
+
+LOADFCB:
+	LD	DE,FCB
+	LD	BC,16
+	LDIR
+	LD	DE,FCB
+	RET
+
+; HL buffer, A fill
+FILL128:
+	LD	B,128
+FILL0:
+	LD	(HL),A
+	INC	HL
+	DJNZ	FILL0
+	RET
+
+; A result, DE zero-terminated label. Print result, current disk, byte 0080,
+; then all 128 bytes at the active DMA address.
+REPORT:
+	LD	(RESULT),A
+	PUSH	DE
+	LD	C,25
+	CALL	0005H
+	LD	(CURDISK),A
+	POP	HL
+	CALL	PUTS
+	LD	A,(RESULT)
+	CALL	HEXBYTE
+	LD	E,' '
+	CALL	PUTC
+	LD	A,(CURDISK)
+	CALL	HEXBYTE
+	LD	E,' '
+	CALL	PUTC
+	LD	A,(0080H)
+	CALL	HEXBYTE
+	LD	E,' '
+	CALL	PUTC
+	LD	HL,(ACTDMA)
+	LD	B,128
+DUMP0:
+	LD	A,(HL)
+	INC	HL
+	PUSH	HL
+	CALL	HEXBYTE
+	LD	E,' '
+	CALL	PUTC
+	POP	HL
+	DJNZ	DUMP0
+	CALL	CRLF
+	RET
+
+PUTC:
+	PUSH	BC
+	PUSH	DE
+	PUSH	HL
+	LD	C,2
+	CALL	0005H
+	POP	HL
+	POP	DE
+	POP	BC
+	RET
+PUTS:
+	LD	A,(HL)
+	INC	HL
+	OR	A
+	RET	Z
+	LD	E,A
+	CALL	PUTC
+	JR	PUTS
+CRLF:
+	LD	E,13
+	CALL	PUTC
+	LD	E,10
+	JP	PUTC
+HEXBYTE:
+	PUSH	AF
+	RRCA
+	RRCA
+	RRCA
+	RRCA
+	CALL	NIBBLE
+	POP	AF
+NIBBLE:
+	AND	0FH
+	ADD	A,'0'
+	CP	'9'+1
+	JR	C,NIBOUT
+	ADD	A,7
+NIBOUT:
+	LD	E,A
+	JP	PUTC
+
+; Search FCBs use bytes dr,f1-f8,t1-t3,ex,s1,s2,rc (16 bytes).
+FEXACT: DB 0,'BETA    ','TXT',0,0,0,0
+FMISS:  DB 0,'ABSENT  ','TXT',0,0,0,0
+FWILD:  DB 0,'????????','TXT','?',0,0,0
+FDELTA: DB 0,'DELTA   ','TXT',0,0,0,0
+FBWILD: DB 2,'????????','TXT','?',0,0,0
+FANYU:  DB '?','????????','???','?',0,0,0
+
+HEADER: DB 'DSRCH009 result current byte0080 dma[128]',13,10,'$'
+LEXACT: DB 'EXACT   ',0
+LEXNEXT: DB 'EX-NEXT ',0
+LMISS: DB 'NO-MATCH',0
+LW1: DB 'WILD-1  ',0
+LW2: DB 'WILD-2  ',0
+LW3: DB 'WILD-3  ',0
+LW4: DB 'WILD-4  ',0
+LWEND: DB 'WILD-END',0
+LR1: DB 'REPEAT-1',0
+LR2: DB 'REPEAT-2',0
+LDM1: DB 'DMA-FIRST',0
+LDM2: DB 'DMA-NEXT ',0
+LALT: DB 'ALT-DMA  ',0
+LB1: DB 'B-WILD-1',0
+LB2: DB 'B-WILD-2',0
+LBEND: DB 'B-END   ',0
+LCH1: DB 'CHANGE-1',0
+LCH2: DB 'CHANGE-2',0
+LU1: DB 'ANYUSER-1',0
+LUN: DB 'ANYUSER-N',0
+
+ACTDMA: DW BUF1
+RESULT: DB 0
+CURDISK: DB 0
+FCB: DS 36,0
+BUF1: DS 128,0
+BUF2: DS 128,0
+	DS 96
+STACKTOP:
+	END	START

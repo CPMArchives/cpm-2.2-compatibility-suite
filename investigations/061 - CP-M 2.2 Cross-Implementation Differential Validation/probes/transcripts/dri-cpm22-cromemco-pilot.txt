@@ -1,0 +1,126 @@
+spawn /tmp/i061-z80pack/cromemcosim/cromemcosim -M1 -R
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+Cromemco Z-1 Simulation Release 1.19
+Copyright (C) 2014-2025 by Udo Munk & 2021-2022 by David McNaughton
+
+CPU speed is 4 MHz, CPU executes undocumented instructions
+
+Web server builtin, but disabled
+
+RAM 0000H - FFFFH
+ROM C000H - DFFFH rdos0308.hex
+Power-on jump address at C000H
+MMU has 7 additional RAM banks of 64 KB
+
+FDC Banked ROM enabled
+
+DISK MAP: [./disks/disk.map]
+A:DSK:='drivea.dsk'
+[0;33mW (331554) diskmanager: Failed to stat disk image: driveb.dsk, error: 2[0m
+[0;33mW (331563) diskmanager: B:DSK: Image file 'driveb.dsk' is invalid[0m
+[0;33mW (331573) diskmanager: Failed to stat disk image: drivec.dsk, error: 2[0m
+[0;33mW (331576) diskmanager: C:DSK: Image file 'drivec.dsk' is invalid[0m
+[0;33mW (331581) diskmanager: Failed to stat disk image: drived.dsk, error: 2[0m
+[0;33mW (331583) diskmanager: D:DSK: Image file 'drived.dsk' is invalid[0m
+Loader statistics for file ./roms/rdos0308.hex:
+START : C000H
+END   : DFFFH
+PC    : C000H
+LOADED: 2000H (8192)
+
+
+telnet console listening on port 4010
+telnet console listening on port 4011
+
+TU-ART DEVICE MAP:
+TUART0.deviceA = WEBTTY STDIO  
+TUART1.deviceA = SCKTSRV1 WEBTTY2  
+TUART1.deviceB = SCKTSRV2 WEBTTY3  
+
+HARD DISK MAP: [./disks]
+HD0: OFFLINE - NO FILE 'hd0.hdd'
+HD1: OFFLINE - NO FILE 'hd1.hdd'
+HD2: OFFLINE - NO FILE 'hd2.hdd'
+
+
+Preparing to boot, ESC to abort
+
+Standby
+
+
+64k CP/M version 2.2
+
+A>VECTOR41
+VECTOR41 PZ00-07: C3 03 FA 80 00 C3 06 EC 
+
+A>ZERO41 ALPHA.TXT BETA.BIN
+ZERO41 before 0000-07 005C-5F 0080-83 
+C3 03 FA 80 00 C3 06 EC 00 41 4C 50 13 20 41 4C 
+ZERO41 after-fn12 
+C3 03 FA 80 00 C3 06 EC 00 41 4C 50 13 20 41 4C 
+ZERO41 fn12-HL 0022
+
+A>BDOS41
+BDOS41 
+0CA7EBA7EB4422B200B2A12200F6E55713AA8EAD48BE5ACF6C07A7EBA7EB44A534003412A500F6E55713AA8EAD48BE5ACF6C18A7EBA7EB4401780078560100F6E55713AA8EAD48BE5ACF6C1AA7EBA7EB4400800002F90000F6E55713AA8EAD48BE5ACF6C29A7EBA7EB44002900BC9A0000F6E55713AA8EAD48BE5ACF6C
+
+A>EDGE43
+EDGE43 ENTRYSP RET PRIVATE_PRE/POST TPA_LAST OLD/TEST PATCH VER EBA9 EB5F 02F5 02F5 EC05 00 A5 5A 0022
+
+A>BIOS41
+BIOS41 PZ00-07: C3 03 FA 80 00 C3 06 EC 
+BIOS BASE: FA00
+VECTORS index opcode target:
+00 C3 FC82
+01 C3 FC31
+02 C3 FCD0
+03 C3 FCD8
+04 C3 FCE3
+05 C3 FCF7
+06 C3 FD0B
+07 C3 FD16
+08 C3 FB4F
+09 C3 FAD7
+0A C3 FBAD
+0B C3 FAF3
+0C C3 FAF8
+0D C3 FB00
+0E C3 FB18
+0F C3 FCEE
+10 C3 FAEB
+DIRECT CONST0 CONST1 CONIN READER LISTST0 LISTST1 OUTN: 00 FF 41 52 00 FF 06 
+OUTPUT PAIRS device-byte: 43 09 4C 10 50 1A 
+
+A>PIP COPY61.TXT=SRC61.TXT
+
+A>DIR *.*
+A: CROBIOS  ASM : CROBOOT  ASM : CROBOOT  PRN : CROBOOT  HEX
+A: CROBOOT  SYM : CROBIOS  PRN : CROBIOS  HEX : PIP      COM
+A: MAC      COM : CROBIOS  SYM : SYSGEN   SUB : ASM      COM
+A: DDT      COM : MOVCPM   COM : SYSGEN   COM : CPM64    SYS
+A: SUBMIT   COM : XSUB     COM : CLS      COM : DUMP     COM
+A: ED       COM : LOAD     COM : SDIR     COM : STAT     COM
+A: XDIR     COM : WM       HLP : SURVEY   MAC : SURVEY   COM
+A: CDOSCPM  COM : CDOSCPM  DOC : CDOSCPM  Z80 : RDOS     COM
+A: INIT     COM : WM       COM : VIEW     COM : BYE      COM
+A: R        COM : W        COM : VECTOR41 COM : ZERO41   COM
+A: BDOS41   COM : BIOS41   COM : EDGE43   COM : SRC61    TXT
+A: COPY61   TXT
+A>NOFILE61
+NOFILE61?
+
+A>
+
+User Interrupt at 0xfcd2
+I/O ran for 297 ms, waited for 0 ms
+CPU executed 93129430 t-states in 25154 ms
+Clock frequency 3.70 MHz

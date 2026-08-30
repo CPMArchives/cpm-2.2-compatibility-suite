@@ -1,0 +1,195 @@
+; Investigation 027: CP/M 2.2 BDOS call/return ABI probe.
+; z80pack z80asm 2.1: z80asm -fb -oABI002.COM ABI002.ASM
+;
+; Each case seeds registers, records SP immediately before CALL 0005H,
+; calls BDOS, and records state immediately after return.  Direct stores do
+; not change flags.  AF is saved after all main pairs.  R is deliberately
+; omitted: it necessarily changes while the probe records other state.
+
+	ORG	0100H
+
+START:
+	LD	A,(0003H)
+	LD	(OLDIO),A
+	LD	E,0A5H
+	LD	C,8
+	CALL	0005H		; establish a nonzero byte-return test value
+
+	LD	A,12
+	LD	(CASEFUNC),A
+	LD	DE,0A1B2H
+	CALL	RUNCASE
+	LD	HL,TEMP
+	LD	DE,REC12
+	LD	BC,RECLEN
+	LDIR
+
+	LD	A,7
+	LD	(CASEFUNC),A
+	LD	DE,01234H
+	CALL	RUNCASE
+	LD	HL,TEMP
+	LD	DE,REC07
+	LD	BC,RECLEN
+	LDIR
+
+	LD	A,24
+	LD	(CASEFUNC),A
+	LD	DE,05678H
+	CALL	RUNCASE
+	LD	HL,TEMP
+	LD	DE,REC24
+	LD	BC,RECLEN
+	LDIR
+
+	LD	A,26
+	LD	(CASEFUNC),A
+	LD	DE,0080H		; keep/restore default DMA
+	CALL	RUNCASE
+	LD	HL,TEMP
+	LD	DE,REC26
+	LD	BC,RECLEN
+	LDIR
+
+	LD	A,41		; first number beyond DRI 2.2 table (0..40)
+	LD	(CASEFUNC),A
+	LD	DE,09ABCH
+	CALL	RUNCASE
+	LD	HL,TEMP
+	LD	DE,REC41
+	LD	BC,RECLEN
+	LDIR
+
+	LD	A,(OLDIO)
+	LD	E,A
+	LD	C,8
+	CALL	0005H		; restore IOBYTE
+
+	LD	DE,HEADER
+	LD	C,9
+	CALL	0005H
+	LD	DE,REC12
+	LD	BC,RECLEN*5
+	CALL	DUMP
+	LD C,0
+	JP 0005H
+
+; Input: CASEFUNC and DE argument.  Values deliberately make clobbers clear.
+RUNCASE:
+	LD	(CASEDE),DE
+	LD	HL,07D55H
+	PUSH	HL
+	POP	AF
+	EX	AF,AF'
+	LD	HL,08EAAH
+	PUSH	HL
+	POP	AF
+	EX	AF,AF'
+	LD	HL,0C3D4H
+	LD	IX,0E5F6H
+	LD	IY,01357H
+	LD	BC,02468H
+	LD	DE,0369CH
+	EXX
+	LD	BC,048ADH
+	LD	DE,05ABEH
+	LD	HL,06CCFH
+	EXX
+	LD	DE,(CASEDE)
+	LD	A,(CASEFUNC)
+	LD	C,A
+	LD	B,0B1H
+	LD	(T_PRESP),SP
+	CALL	0005H
+	LD	(T_POSTSP),SP
+	LD	(T_BC),BC
+	LD	(T_DE),DE
+	LD	(T_HL),HL
+	LD	(T_IX),IX
+	LD	(T_IY),IY
+	PUSH	AF
+	POP	HL
+	LD	(T_AF),HL
+	EXX
+	LD	(T_BCX),BC
+	LD	(T_DEX),DE
+	LD	(T_HLX),HL
+	EXX
+	EX	AF,AF'
+	PUSH	AF
+	POP	HL
+	LD	(T_AFX),HL
+	EX	AF,AF'
+	LD	A,(CASEFUNC)
+	LD	(T_FUNC),A
+	RET
+
+DUMP:
+	LD	A,(DE)
+	PUSH	BC
+	PUSH	DE
+	CALL	HEXBYTE
+	POP	DE
+	POP	BC
+	INC	DE
+	DEC	BC
+	LD	A,B
+	OR	C
+	JR	NZ,DUMP
+	LD	E,13
+	LD	C,2
+	CALL	0005H
+	LD	E,10
+	LD	C,2
+	JP	0005H
+
+HEXBYTE:
+	PUSH	AF
+	RRCA
+	RRCA
+	RRCA
+	RRCA
+	CALL	HEXNIB
+	POP	AF
+HEXNIB:
+	AND	0FH
+	ADD	A,'0'
+	CP	'9'+1
+	JR	C,HEXOUT
+	ADD	A,7
+HEXOUT:
+	LD	E,A
+	LD	C,2
+	JP	0005H
+
+HEADER:	DB 'CALL27 ',13,10,'$'
+OLDIO:	DB 0
+CASEFUNC: DB 0
+CASEDE:	DW 0
+
+; Record: function, pre-SP, post-SP, AF, BC, DE, HL, IX, IY,
+;         AF', BC', DE', HL' (all words little-endian).
+TEMP:
+T_FUNC:	DB 0
+T_PRESP: DW 0
+T_POSTSP: DW 0
+T_AF:	DW 0
+T_BC:	DW 0
+T_DE:	DW 0
+T_HL:	DW 0
+T_IX:	DW 0
+T_IY:	DW 0
+T_AFX:	DW 0
+T_BCX:	DW 0
+T_DEX:	DW 0
+T_HLX:	DW 0
+TEMPEND:
+RECLEN	EQU TEMPEND-TEMP
+
+REC12:	DS RECLEN
+REC07:	DS RECLEN
+REC24:	DS RECLEN
+REC26:	DS RECLEN
+REC41:	DS RECLEN
+
+	END

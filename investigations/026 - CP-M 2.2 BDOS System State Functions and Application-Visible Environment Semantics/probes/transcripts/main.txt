@@ -1,0 +1,48 @@
+spawn cpmsim -z -d cases/main
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>STATE26
+STATE26 cur user login ro
+00 00 0001 0000
+AFTER 01 07 0003 0000
+VERSION 0022
+SEARCH rc dma[0] 0080[0] 01 01 00
+
+A>A:DPB26
+DPB26 drive alv dpb bytes
+A FCB0 FA8D 1A00030700F2003F00C00010000200
+B FCCF FA8D 1A00030700F2003F00C00010000200
+F39/F41 0000 0000
+
+A>A:RESET26
+BEFORE 00 0003 0002 FCB0 FA8D
+RESETB 00 0001 0000 FCB0 FA8D
+RESETA 00 0000 0000 FCB0 FA8D
+
+A>A:PROTEC26
+RO initial 0000
+RO after F28 0001
+F40 result/ro 0006 0001
+RO after F37 0000
+
+A>[0;31mE (10489) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 11 ms, waited for 0 ms
+CPU executed 4761990 t-states in 3 ms
+Clock frequency 1511.74 MHz

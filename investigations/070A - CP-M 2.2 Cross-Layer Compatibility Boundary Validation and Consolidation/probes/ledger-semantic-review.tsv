@@ -1,0 +1,11 @@
+chain	ledger scope	validation result	conflict/update
+CCP-to-transient	0001-0034,0475-0512,0571-0580	CROSS70A loaded by CCP, observed public gateways, returned by RET, and reprompted	coherent; exact targets remain NOT GUARANTEED
+transient-to-BDOS	0035-0051 plus function-specific entries	Functions 12,14,17,25,26,32,13 returned through CALL 0005h and composed with file state	coherent; public result requirements do not imply register-residue guarantees
+BDOS-to-BIOS	0392-0459	configured BIOS CONST call and fault-injected BIOS READ status composed with BDOS behavior	coherent; public error presentation does not require DRI private dispatch
+BIOS-to-storage	0414-0459,0598-0618	logical directory/data operations used configured IBM-3740 profile; injected pre-transfer failure left images unchanged	coherent; profile geometry remains separate from generic CP/M contract
+drive-user-DMA-directory	0131-0158,0185-0217,0382-0384	alternate DMA, explicit A:, current B:, user 1/0 filtering, reset, and directory transfer composed	coherent; raw slot/order and failed-DMA contents remain nonportable
+FCB-file-allocation	0159-0184,0218-0370,0518-0541	FAULT066 opened/read known file; SAVE created/wrote/closed one record; ERA removed it and free space returned	coherent; internal allocation selection is not application contract
+lifecycle	0025-0030,0492-0505,0571-0580	RET, logical return, physical-ignore return, and Control-C warm recovery each reached usable CCP	coherent; exact SP/address/residue and reconstruction algorithm remain excluded
+logical-versus-physical-failure	0233-0247,0276-0284,0334,0354,0385-0413	logical EOF returned 01 without console fatal path; physical failure entered Bad Sector path; ignore/abort remained distinct	coherent; ignored status-looking return does not certify DMA data
+policy-classification	all 627 entries	424 REQUIRED, 105 NOT GUARANTEED, 49 NOT REQUIRED, 49 POLICY PENDING; no exact duplicate propositions	coherent; 0435/0523 are explicitly canonical/conditional, not contradictory duplicates
+

@@ -1,0 +1,84 @@
+Investigation 047 experimental results
+======================================
+
+Test 1 - ASM, LOAD, and transient execution
+Purpose: Cover development-utility execution and a one-record COM boundary.
+Procedure: Run ASM B:HELLO42, LOAD B:HELLO42, then B:HELLO42.
+Observed: ASM ended without errors; LOAD reported 0100h-0113h, 14h bytes and
+one record; the program printed HELLO42 OK and returned to A>.
+Conclusion: DRI ASM/LOAD depend on the established explicit-drive FCB, HEX,
+0100h load, COM execution, BDOS output and normal-return contracts (REQUIRED).
+
+Test 2 - PIP exact file copy
+Purpose: Cover a multi-record file operation and byte preservation.
+Procedure: Copy B:HELLO42.ASM to B:COPY47.ASM; extract it as text and compare.
+Observed: PIP returned silently to A>; STAT reported 2 records; the extracted
+136-byte logical text was byte-identical to HELLO42.ASM.
+Conclusion: The established search/open/read/make/write/close, alternate-DMA,
+128-byte-record and explicit-drive behavior is sufficient (REQUIRED).  PIP's
+silence and allocation placement are NOT REQUIRED.
+
+Test 3 - STAT file and disk state
+Purpose: Cover directory lookup, record accounting and allocation-vector/DPB
+consumption.
+Procedure: Run STAT on B:COPY47.ASM and on B: before and after creating a file.
+Observed: STAT reported 2 records/1K and 163K remaining; after ED created one
+record it reported 162K remaining.
+Conclusion: Coherent configured directory, DPB, ALV, current/explicit drive and
+file-size interfaces are REQUIRED.  Exact display spacing and reference-disk
+capacity are profile-specific and NOT REQUIRED universally.
+
+Test 4 - ED buffered input and close persistence
+Purpose: Cover console editing and a one-record text-file boundary.
+Procedure: ED B:EDIT47.TXT; insert ALPHA47; terminate insertion with Ctrl-Z;
+exit with E; query with STAT and extract the file.
+Observed: ED announced NEW FILE, accepted the scripted edit, returned to A>,
+STAT reported one record, and extraction yielded ALPHA47 plus newline.
+Conclusion: Established console, FCB/DMA, create/write/close and byte-preserving
+text conventions are REQUIRED.  Exact prompts and private temporary names are
+NOT REQUIRED.
+
+Test 5 - Missing-input error recovery
+Purpose: Cover normal utility-level errors without physical disk failure.
+Procedure: Run ASM B:MISSING and PIP B:NOFILE.TXT=B:MISSING.TXT.
+Observed: ASM printed NO SOURCE FILE PRESENT; PIP printed NO FILE; both returned
+normally to A> and the later tests ran.
+Conclusion: Underlying documented no-match/open failures and a usable command
+environment are REQUIRED.  Exact utility diagnostics are NOT REQUIRED.
+
+Test 6 - DDT page-zero and restart
+Purpose: Cover debugger use of the public execution environment.
+Procedure: Start DDT, issue D0,7, then G0.
+Observed: DDT displayed the configured JMP bytes at 0000h and 0005h; G0 returned
+to A>.
+Conclusion: Visible page-zero gateways, programmed restart, writable/executable
+TPA and standard loading are REQUIRED.  Display format and literal target
+addresses are NOT GUARANTEED.
+
+Test 7 - SUBMIT command stream
+Purpose: Cover ordered command acquisition across transient completions.
+Procedure: Run SUBMIT RUN42 and wait for the unique final HELLO42 OK marker.
+Observed: The CCP executed XSUB, IN42, STAT, PIP, DUMP and B:HELLO42 in order,
+returning to A> after the final marker.
+Conclusion: This independently repeats ledger entry 0620 (REQUIRED); no new
+proposition is needed.
+
+Test 8 - XSUB Function-10 interposition
+Purpose: Cover the standard DRI gateway-interposition boundary.
+Procedure: Within RUN42, XSUB precedes IN42 and the next submitted record is
+BATCH42; IN42 reports its Function-10 counted buffer.
+Observed: XSUB became active; IN42 printed count=07 data=BATCH42 without manual
+input; ordinary later BDOS/file calls continued successfully.
+Conclusion: This independently repeats ledger entry 0621 (REQUIRED).  Exact
+patch addresses and XSUB's private implementation are NOT REQUIRED.
+
+Repeatability and media effects
+-------------------------------
+run047.sh restores both case disks from images-before before every run.  Two
+complete invocations produced the same semantic transcript.  Expected image
+changes were confined to private A:/B: copies: generated ASM/LOAD files, PIP
+copies, ED output, and the created/consumed submission stream.  Before/after
+SHA-256 values are recorded in transcripts.  Emulator timing, CPU-frequency,
+addresses, and final harness "User Interrupt" text are nondeterministic or
+harness-specific and are NOT GUARANTEED.
+

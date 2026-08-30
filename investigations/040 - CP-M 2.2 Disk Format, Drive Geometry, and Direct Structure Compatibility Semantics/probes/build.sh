@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eu
+Z80ASM=${Z80ASM:-z80asm}
+"$Z80ASM" -fb -oDPB040.COM DPB040.ASM > DPB040.lis
+"$Z80ASM" -fb -oBIOS040.COM BIOS040.ASM > BIOS040.lis

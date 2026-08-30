@@ -1,0 +1,303 @@
+Investigation 052 — CP/M 2.2 Compatibility Regression Test Specification Prompt
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 051 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation 051.
+
+Create Investigation 052 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports or artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Define a CP/M 2.2 compatibility regression test specification based on
+the compatibility requirements identified by previous investigations.
+
+Previous investigations established:
+
+- CCP behavior;
+- BDOS behavior;
+- BIOS behavior;
+- storage behavior;
+- memory behavior;
+- execution behavior;
+- failure behavior;
+- software ecosystem assumptions;
+- application compatibility requirements;
+- hardware boundary considerations.
+
+Investigation 052 determines how those compatibility requirements can
+be validated through repeatable tests.
+
+Determine:
+
+- required compatibility test categories;
+- expected observations;
+- validation procedures;
+- missing test coverage.
+
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+- documented CP/M 2.2 behavior;
+- Digital Research implementation behavior;
+- common CP/M programming practices;
+- historically significant software dependencies.
+
+The objective is to create a validation framework for the CP/M 2.2
+compatibility contract.
+
+Do not assume every historical behavior should become a required test.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Review completed investigations through Investigation 051.
+
+Pay particular attention to:
+
+Investigation 045:
+    Cross-Layer Compatibility Boundary Review.
+
+Investigation 046:
+    Compatibility Boundary Closure and Remaining Gap Analysis.
+
+Investigation 047:
+    Standard Utility Compatibility Survey.
+
+Investigation 048:
+    Development Toolchain Compatibility Survey.
+
+Investigation 049:
+    Application Compatibility Survey.
+
+Investigation 050:
+    Communications Software Compatibility Survey.
+
+Investigation 051:
+    Hardware-Dependent Software Compatibility Survey.
+
+
+SCOPE
+
+Investigate:
+
+- compatibility test categories;
+- deterministic probes;
+- regression test requirements;
+- expected results;
+- evidence traceability;
+- coverage gaps.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- BetterCP/M implementation;
+- test framework software design;
+- modern operating-system testing methods;
+- unrelated compatibility targets.
+
+
+INVESTIGATION QUESTIONS
+
+
+1. COMPATIBILITY REQUIREMENT MAPPING
+
+Determine:
+
+- which Compatibility Ledger entries require validation tests;
+- which behaviors need automated verification;
+- which behaviors require manual validation.
+
+
+2. TEST CATEGORY DESIGN
+
+Define test categories covering:
+
+- CCP;
+- BDOS;
+- BIOS;
+- storage;
+- memory;
+- execution;
+- error handling;
+- utilities;
+- applications;
+- communications;
+- hardware boundaries.
+
+
+3. TEST CASE REQUIREMENTS
+
+Determine:
+
+- required inputs;
+- expected observations;
+- pass/fail criteria;
+- evidence preservation requirements.
+
+
+4. SOFTWARE-BASED VALIDATION
+
+Determine:
+
+- which preserved software artifacts should become regression tests;
+- which utilities and applications provide useful coverage;
+- how software corpus evidence maps to compatibility requirements.
+
+
+5. PROBE REQUIREMENTS
+
+Define deterministic probes covering:
+
+- normal behavior;
+- boundary behavior;
+- failure behavior;
+- cross-layer interactions.
+
+Each probe must include:
+
+- purpose;
+- procedure;
+- expected observation;
+- compatibility requirement validated.
+
+
+6. TEST COVERAGE REVIEW
+
+Determine:
+
+- missing compatibility areas;
+- duplicate tests;
+- insufficient evidence;
+- unresolved validation requirements.
+
+
+7. EXPERIMENTAL REQUIREMENTS
+
+Create a proposed regression test inventory.
+
+Each test entry must include:
+
+- test identifier;
+- compatibility area;
+- requirement validated;
+- procedure;
+- expected result;
+- evidence source.
+
+
+EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+    documented behavior.
+
+B:
+    Digital Research implementation behavior.
+
+I:
+    experimental observation.
+
+D:
+    unresolved policy.
+
+
+Ledger evidence must identify:
+
+I052
+TESTING
+VALIDATION
+COMPATIBILITY
+subsystem
+IG
+AG
+
+
+COMPATIBILITY CLASSIFICATION
+
+Classify findings:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Do not require:
+
+- implementation-specific tests without compatibility value;
+- undocumented behavior without evidence;
+- tests that validate internal design rather than observable behavior.
+
+
+LEDGER REVIEW
+
+Review affected Compatibility Ledger entries.
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+Do not modify the ledger directly.
+
+
+REPORT STRUCTURE
+
+Create:
+
+Investigation 052 - CP/M 2.2 Compatibility Regression Test Specification.md
+
+Include:
+
+1. Objective and scope
+2. Compatibility standard
+3. Relationship to previous investigations
+4. Compatibility requirement mapping
+5. Test category definitions
+6. Regression test inventory
+7. Software-based validation
+8. Probe specifications
+9. Coverage analysis
+10. Documentation findings
+11. Source findings
+12. Compatibility conclusions
+13. Proposed ledger additions
+14. Existing-entry updates
+15. Open questions
+16. Conformance implications
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M test software architecture.
+
+Do not replace CP/M compatibility requirements with modern testing
+assumptions.
+
+Determine the CP/M 2.2 compatibility regression test contract only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

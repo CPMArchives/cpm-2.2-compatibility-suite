@@ -1,0 +1,48 @@
+spawn cpmsim -z -d cases/main
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>B:MIN28
+
+A>B:MEM28
+MEM28 [3000 4000 8000] 87 7F 83
+
+A>B:LOAD28
+LOAD28 immediate-version entry-SP 0022 EBA9
+
+A>B:MEM28
+MEM28 [3000 4000 8000] 87 5A 83
+
+A>B:ENTRY28 ONE TWO
+ENTRY28 SP PZ0 IOBYTE PZ4 PZ5 VER EBA9 03C3 00 00 06C3 0022
+FCB32 004F4E452020202020202020000000040054574F202020202020202000000000
+TAIL count/first16 08 20 4F 4E 45 20 54 57 4F 00 5B 84 4F 8B B4 F2 25
+
+A>B:ERROR28
+ERROR28 EXECUTED
+
+A>B:NOFILE28
+B:NOFILE28?
+
+A>B:BIGERR28
+BAD LOAD
+A>[0;31mE (13126) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 12 ms, waited for 0 ms
+CPU executed 6281334 t-states in 3 ms
+Clock frequency 1584.99 MHz

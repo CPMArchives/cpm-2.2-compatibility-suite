@@ -1,0 +1,423 @@
+0001	.COM load origin	PRESERVED
+0002	Transient entry point	PRESERVED
+0003	TPA lower boundary	PRESERVED
+0004	TPA upper-bound discovery	PRESERVED
+0005	Warm-start gateway at 0000h	PRESERVED
+0006	IOBYTE location	PRESERVED
+0007	Command-entry default-drive byte	PRESERVED
+0008	BDOS gateway at 0005h	PRESERVED
+0009	Reserved restart/interrupt region roles	PRESERVED
+0010	CBIOS scratch-area role	PRESERVED
+0011	First default FCB location	PRESERVED
+0013	Default FCB drive-prefix parsing	PRESERVED
+0014	Default FCB wildcard expansion	PRESERVED
+0015	Default FCB case and padding	PRESERVED
+0017	Command-tail count location	PRESERVED
+0018	Command-tail character location	PRESERVED
+0023	Default DMA address	PRESERVED
+0024	Command-tail/default-DMA overlap	PRESERVED
+0025	Program termination through JMP 0000h	PRESERVED
+0026	Program termination through BDOS function 0	PRESERVED
+0027	RET termination	PRESERVED
+0028	Valid entry return word	PRESERVED
+0035	BDOS function selector in C	PRESERVED
+0036	BDOS function-specific input in DE/E	PRESERVED
+0037	Byte result in A	PRESERVED
+0038	Word result in HL	PRESERVED
+0039	Normal-return alias A=L	PRESERVED
+0040	Normal-return alias B=H	PRESERVED
+0041	CP/M 2.2 BDOS selector range	PRESERVED
+0042	Out-of-range BDOS result	PRESERVED
+0043	Caller SP restored on returning BDOS calls	PRESERVED
+0052	Function 2 character source	PRESERVED
+0053	Function 2 treats '$' as ordinary data	PRESERVED
+0054	Function 9 string address	PRESERVED
+0055	Function 9 '$' termination	PRESERVED
+0056	Function 9 terminator is not emitted	PRESERVED
+0057	Function 9 empty string	PRESERVED
+0058	Function 9 scans across ordinary control characters	PRESERVED
+0059	Function 2 uses formatted console output	PRESERVED
+0060	Function 9 uses formatted console output	PRESERVED
+0061	Shared formatted-output state	PRESERVED
+0062	TAB expansion	PRESERVED
+0063	Function 2 participates in scrolling control	PRESERVED
+0064	Function 9 participates in scrolling control	PRESERVED
+0065	Function 2 participates in active printer echo	PRESERVED
+0066	Function 9 participates in active printer echo	PRESERVED
+0075	Function 6 direct-output selection	PRESERVED
+0076	Function 6 direct-output character source	PRESERVED
+0077	Function 6 direct output does not expand TAB	PRESERVED
+0078	Function 6 direct output bypasses Ctrl-S scrolling control	PRESERVED
+0079	Function 6 direct output bypasses Ctrl-P printer echo	PRESERVED
+0081	Function 6 nonblocking-input selection	PRESERVED
+0082	Function 6 no-input result	PRESERVED
+0083	Function 6 ready-input result	PRESERVED
+0084	Function 6 input is unadorned	PRESERVED
+0085	Function 11 not-ready result	PRESERVED
+0091	Function 1 selector	PRESERVED
+0092	Function 1 blocking behavior	PRESERVED
+0093	Function 1 result character	PRESERVED
+0094	Function 1 echoes graphic characters	PRESERVED
+0095	Function 1 echoes CR	PRESERVED
+0096	Function 1 echoes LF	PRESERVED
+0097	Function 1 echoes backspace	PRESERVED
+0098	Function 1 TAB echo expansion	PRESERVED
+0099	Function 1 ordinary controls are not echoed	PRESERVED
+0100	Function 1 echo uses shared formatted-console state	PRESERVED
+0101	Function 1 echo participates in scrolling control	PRESERVED
+0102	Function 1 echo participates in active printer echo	PRESERVED
+0106	Function 10 selector and buffer address	PRESERVED
+0107	Function 10 maximum byte	PRESERVED
+0108	Function 10 returned count	PRESERVED
+0109	Function 10 returned data location	PRESERVED
+0111	Function 10 CR termination	PRESERVED
+0112	Function 10 LF termination	PRESERVED
+0113	Function 10 capacity termination	PRESERVED
+0114	Function 10 ordinary-character storage and echo	PRESERVED
+0115	Function 10 backspace editing	PRESERVED
+0116	Function 10 DEL editing	PRESERVED
+0117	Function 10 initial Ctrl-C warm restart	PRESERVED
+0118	Function 10 Ctrl-E line continuation	PRESERVED
+0119	Function 10 Ctrl-R redisplay	PRESERVED
+0120	Function 10 Ctrl-U line deletion	PRESERVED
+0121	Function 10 Ctrl-X line deletion	PRESERVED
+0122	Function 10 starting-column-relative editing	PRESERVED
+0123	Function 10 stores no line terminator	PRESERVED
+0132	Function 13 selector	PRESERVED
+0133	Function 13 read/write reset	PRESERVED
+0134	Function 13 selects drive A	PRESERVED
+0135	Function 13 restores default DMA	PRESERVED
+0136	Function 13 resets login vector	PRESERVED
+0138	Function 14 selector	PRESERVED
+0139	Function 14 drive numbering	PRESERVED
+0140	Function 14 changes current disk	PRESERVED
+0141	Function 14 logs selected drive	PRESERVED
+0142	Login vector is cumulative	PRESERVED
+0143	Standard media-change read-only behavior	PRESERVED
+0144	FCB drive code zero uses current disk	PRESERVED
+0145	Explicit FCB drive selection	PRESERVED
+0146	Explicit FCB selection does not permanently change current disk	PRESERVED
+0147	Function 24 login vector result	PRESERVED
+0148	Login vector bit mapping	PRESERVED
+0149	Login bit meaning	PRESERVED
+0150	Function 25 current disk result	PRESERVED
+0156	Investigation 008 finding	PRESERVED
+0157	Investigation 008 finding	PRESERVED
+0158	Investigation 008 finding	PRESERVED
+0159	Investigation 008 finding	PRESERVED
+0160	Investigation 008 finding	PRESERVED
+0161	Investigation 008 finding	PRESERVED
+0162	Investigation 008 finding	PRESERVED
+0164	Investigation 008 finding	PRESERVED
+0165	Investigation 008 finding	PRESERVED
+0166	Investigation 008 finding	PRESERVED
+0167	Investigation 008 finding	PRESERVED
+0168	Investigation 008 finding	PRESERVED
+0169	Investigation 008 finding	PRESERVED
+0170	Investigation 008 finding	PRESERVED
+0171	Investigation 008 finding	PRESERVED
+0172	Investigation 008 finding	PRESERVED
+0173	Investigation 008 finding	PRESERVED
+0174	Investigation 008 finding	PRESERVED
+0175	Investigation 008 finding	PRESERVED
+0176	Investigation 008 finding	PRESERVED
+0177	Investigation 008 finding	PRESERVED
+0178	Investigation 008 finding	PRESERVED
+0179	Investigation 008 finding	PRESERVED
+0180	Investigation 008 finding	PRESERVED
+0181	Investigation 008 finding	PRESERVED
+0188	Search First call convention	PRESERVED
+0189	Search First initial directory scan position	PRESERVED
+0190	Search First successful result code	PRESERVED
+0191	Search First unsuccessful result code	PRESERVED
+0192	Search First DMA record transfer	PRESERVED
+0193	Search result entry offset	PRESERVED
+0194	Search transfer record layout	PRESERVED
+0195	Directory entry user number	PRESERVED
+0196	Directory entry FCB field layout	PRESERVED
+0197	Search wildcard matching	PRESERVED
+0198	Type attribute comparison	PRESERVED
+0199	Default-drive FCB search	PRESERVED
+0200	Explicit-drive search	PRESERVED
+0201	Search First S2 handling	PRESERVED
+0202	All-user search wildcard drive	PRESERVED
+0203	Search Next call convention	PRESERVED
+0204	Search Next continuation semantics	PRESERVED
+0205	Search Next result and DMA relationship	PRESERVED
+0206	Search Next unsuccessful result code	PRESERVED
+0207	Search First restart behavior	PRESERVED
+0208	Set DMA Address call convention	PRESERVED
+0209	DMA address persistence	PRESERVED
+0210	DMA change during search continuation	PRESERVED
+0211	Directory enumeration order	PRESERVED
+0212	Repeat-search ordering stability	PRESERVED
+0219	Function 20 call convention	PRESERVED
+0220	Activated-FCB precondition	PRESERVED
+0221	Sequential position source	PRESERVED
+0222	Successful result	PRESERVED
+0223	Successful transfer size	PRESERVED
+0224	Current DMA destination	PRESERVED
+0226	Advance after success	PRESERVED
+0227	CR progression within an extent	PRESERVED
+0228	Full-extent position	PRESERVED
+0229	Automatic extent transition	PRESERVED
+0230	New-extent first-record state	PRESERVED
+0231	Extent working-state replacement	PRESERVED
+0232	EOF/no-data result	PRESERVED
+0234	Empty-file behavior	PRESERVED
+0235	Partial-final-extent EOF	PRESERVED
+0236	Exact-boundary EOF	PRESERVED
+0237	Repeated EOF indication	PRESERVED
+0239	FCB mutation	PRESERVED
+0242	Explicit-drive read	PRESERVED
+0243	Read-only readability	PRESERVED
+0248	Function 22 convention	PRESERVED
+0249	Make uniqueness precondition	PRESERVED
+0250	New empty file	PRESERVED
+0251	Make activates FCB	PRESERVED
+0252	Make success result	PRESERVED
+0253	Make directory-full result	PRESERVED
+0254	Immediate empty-file visibility	PRESERVED
+0255	Data-full empty Make	PRESERVED
+0259	Function 21 convention	PRESERVED
+0260	Write activation precondition	PRESERVED
+0261	Write source position	PRESERVED
+0262	Successful write result	PRESERVED
+0263	Write transfer size	PRESERVED
+0264	Current DMA source	PRESERVED
+0266	CR advance after write	PRESERVED
+0267	RC extension	PRESERVED
+0268	Existing-record overwrite	PRESERVED
+0269	On-demand allocation	PRESERVED
+0271	Automatic write extent transition	PRESERVED
+0272	Successful transition state	PRESERVED
+0273	Full last record remains successful	PRESERVED
+0274	Next-extent failure result	PRESERVED
+0275	Allocation-full failure	PRESERVED
+0278	Explicit-drive Make/Write	PRESERVED
+0279	Close commits final written metadata	PRESERVED
+0285	Function 19 convention	PRESERVED
+0286	Delete identity	PRESERVED
+0287	Delete wildcards	PRESERVED
+0288	Delete all matches	PRESERVED
+0289	Delete success result	PRESERVED
+0290	Delete no-match result	PRESERVED
+0291	Immediate search disappearance	PRESERVED
+0292	Allocation release	PRESERVED
+0294	Explicit-drive Delete	PRESERVED
+0295	Delete user isolation	PRESERVED
+0298	Function 23 convention	PRESERVED
+0299	Rename FCB layout	PRESERVED
+0300	Same-drive destination	PRESERVED
+0301	Rename all extents	PRESERVED
+0302	Rename success result	PRESERVED
+0303	Rename missing-source result	PRESERVED
+0304	Rename identity transition	PRESERVED
+0305	Rename data preservation	PRESERVED
+0306	Rename user preservation	PRESERVED
+0307	Explicit-drive Rename	PRESERVED
+0317	Random field location	PRESERVED
+0318	Random field byte order	PRESERVED
+0319	CP/M 2.2 random range	PRESERVED
+0320	Random/sequential state distinction	PRESERVED
+0321	Function 36 convention	PRESERVED
+0322	Function 36 direction	PRESERVED
+0323	Function 36 boundary equivalence	PRESERVED
+0324	Function 36 no I/O	PRESERVED
+0326	Function 33 convention	PRESERVED
+0327	Random read destination	PRESERVED
+0328	Random read success	PRESERVED
+0329	Random read position	PRESERVED
+0330	Random read no advance	PRESERVED
+0331	Random read unwritten data	PRESERVED
+0332	Random read missing extent	PRESERVED
+0333	Random overflow	PRESERVED
+0335	Function 34 convention	PRESERVED
+0336	Random write transfer	PRESERVED
+0337	Random write success	PRESERVED
+0338	Random write allocation	PRESERVED
+0339	Random write holes	PRESERVED
+0340	Random write virtual length	PRESERVED
+0341	Random write working fields	PRESERVED
+0342	Random write no advance	PRESERVED
+0343	No automatic random extent switch	PRESERVED
+0344	Random write Close	PRESERVED
+0345	Random write extent failure	PRESERVED
+0347	Function 35 convention	PRESERVED
+0348	Function 35 result location	PRESERVED
+0349	Function 35 unit	PRESERVED
+0350	Function 35 maximum	PRESERVED
+0351	Sparse virtual size	PRESERVED
+0356	Read-only attribute location	PRESERVED
+0357	System attribute location	PRESERVED
+0358	Attribute/type coexistence	PRESERVED
+0360	Function 30 convention	PRESERVED
+0361	Function 30 set/clear	PRESERVED
+0362	Function 30 all extents	PRESERVED
+0363	Function 30 success result	PRESERVED
+0364	Function 30 no-match result	PRESERVED
+0366	Open preserves indicators	PRESERVED
+0367	Make accepts indicators	PRESERVED
+0368	File read-only sequential protection	PRESERVED
+0369	File read-only random protection	PRESERVED
+0370	File read-only delete protection	PRESERVED
+0371	File read-only rename protection	PRESERVED
+0373	Function 28 convention	PRESERVED
+0374	Function 28 transience	PRESERVED
+0375	Function 29 convention	PRESERVED
+0376	Read-only vector mapping	PRESERVED
+0377	Function 28 vector effect	PRESERVED
+0378	Reset clears software protection	PRESERVED
+0379	Protected-disk Make	PRESERVED
+0380	Protected-disk sequential write	PRESERVED
+0381	Protected-disk random write	PRESERVED
+0382	Protected-disk delete	PRESERVED
+0383	Protected-disk rename	PRESERVED
+0384	Protection before mutation	PRESERVED
+0390	CBIOS physical read result	PRESERVED
+0391	CBIOS physical write result	PRESERVED
+0392	BIOS retry responsibility	PRESERVED
+0393	Physical/logical error separation	PRESERVED
+0394	Bad Sector presentation	PRESERVED
+0395	Physical-error ignore choice	PRESERVED
+0396	Physical-error abort choice	PRESERVED
+0397	Abort restart details	PRESERVED
+0404	Sequential read logical result	PRESERVED
+0405	Sequential write logical result	PRESERVED
+0406	Random read logical codes	PRESERVED
+0407	Random write logical codes	PRESERVED
+0408	Make/Delete/Rename/Close logical codes	PRESERVED
+0414	Function 12 CP/M version result	PRESERVED
+0415	Function 32 user-number query	PRESERVED
+0416	Function 32 user-number selection	PRESERVED
+0418	Console functions do not use or overwrite DMA	PRESERVED
+0419	Console and identity calls preserve DMA selection	PRESERVED
+0420	Function 10 DE buffer is not DMA	PRESERVED
+0424	Function 27 allocation-vector pointer	PRESERVED
+0425	Allocation-vector length and bit mapping	PRESERVED
+0426	Reserved directory allocation bits	PRESERVED
+0427	Live allocation state	PRESERVED
+0431	Function 31 DPB pointer and layout	PRESERVED
+0432	DPB configuration and sharing	PRESERVED
+0433	Documented DPB modification	PRESERVED
+0436	Function 3 Reader convention	PRESERVED
+0438	Reader separation from console	PRESERVED
+0439	Function 4 Punch convention	PRESERVED
+0440	Function 5 List convention	PRESERVED
+0442	Function 7 IOBYTE query	PRESERVED
+0443	Function 8 IOBYTE set	PRESERVED
+0444	IOBYTE field encoding	PRESERVED
+0445	IOBYTE routing boundary	PRESERVED
+0448	Character-device DMA independence	PRESERVED
+0449	Stateful BIOS disk setup	PRESERVED
+0450	SELDSK result and deferral	PRESERVED
+0451	Public DPH layout	PRESERVED
+0453	Track mapping and OFF	PRESERVED
+0454	Sector translation chain	PRESERVED
+0456	BIOS DMA state	PRESERVED
+0457	BIOS logical-sector transfer	PRESERVED
+0458	BIOS WRITE type codes	PRESERVED
+0461	BIOS jump-vector structure	PRESERVED
+0463	BIOS-base discovery through WBOOT gateway	PRESERVED
+0464	BOOT control contract	PRESERVED
+0465	WBOOT control contract	PRESERVED
+0466	Warm-start gateway reconstruction	PRESERVED
+0468	BIOS console status contract	PRESERVED
+0469	BIOS console input contract	PRESERVED
+0470	BIOS character output contracts	PRESERVED
+0471	BIOS reader contract	PRESERVED
+0473	Direct BIOS call layering	PRESERVED
+0475	CCP semantic prompt	PRESERVED
+0477	CCP buffered command acquisition	PRESERVED
+0479	CCP empty and SPACE-only commands	PRESERVED
+0481	CCP ASCII case normalization	PRESERVED
+0482	CCP built-in command set	PRESERVED
+0483	Exact built-in-name matching	PRESERVED
+0484	Built-in precedence	PRESERVED
+0485	Drive-only CCP selection	PRESERVED
+0486	Drive-prefixed transient dispatch	PRESERVED
+0487	Primary-name transient command syntax	PRESERVED
+0488	CCP resident/transient preparation boundary	PRESERVED
+0489	Generic command-error recovery	PRESERVED
+0492	CCP executable identity	PRESERVED
+0493	Single-drive transient lookup	PRESERVED
+0494	Current-user transient lookup	PRESERVED
+0495	Explicit-drive lookup context	PRESERVED
+0496	CCP sequential COM loading	PRESERVED
+0497	CCP load completion	PRESERVED
+0499	Resident-system load protection	PRESERVED
+0501	CCP load-failure nonexecution	PRESERVED
+0502	Pre-execution DMA restoration	PRESERVED
+0503	CCP CALL/RET cleanup path	PRESERVED
+0504	Termination-state convergence	PRESERVED
+0509	Transient termination mechanisms	PRESERVED
+0513	File-operation failures are function-specific	PRESERVED
+0516	Directory-full and allocation-full are distinct	PRESERVED
+0518	BDOS system state components	PRESERVED
+0519	BIOS-owned selected-drive resources	PRESERVED
+0520	Function 26 persistence boundary	PRESERVED
+0521	System-state independence	PRESERVED
+0525	CP/M 2.2 selectors 40 and 41	PRESERVED
+0526	Common BDOS gateway and invocation	PRESERVED
+0527	Common selector and parameter carriers	PRESERVED
+0528	Common result and alias convention	PRESERVED
+0529	Strict CP/M 2.2 unsupported selectors	PRESERVED
+0531	Returning-call stack balance	PRESERVED
+0534	Complete transient handoff	PRESERVED
+0537	Immediate BDOS readiness	PRESERVED
+0538	Loader DMA isolation	PRESERVED
+0540	Load rejection suppresses execution	PRESERVED
+0542	Enumeration returns directory entries, not unique filenames	PRESERVED
+0543	Matching extents remain separately visible	PRESERVED
+0545	Search FCB lifetime	PRESERVED
+0546	Harmless state-query calls need not end enumeration	PRESERVED
+0550	Special drive-question search exposes complete directory values	PRESERVED
+0551	Make-to-open lifecycle equivalence	PRESERVED
+0553	Successful Close establishes reopened consistency	PRESERVED
+0555	Extents form one logical record stream	PRESERVED
+0556	Completed extent survives later extension failure	PRESERVED
+0557	Failed growth does not claim a new record	PRESERVED
+0559	User area participates in ordinary file identity	PRESERVED
+0560	Function 32 user-state contract	PRESERVED
+0561	FCB does not carry ordinary user identity	PRESERVED
+0562	Ordinary lookup has no cross-user fallback	PRESERVED
+0563	Make records current-user ownership	PRESERVED
+0564	Delete and Rename are current-user scoped	PRESERVED
+0566	Complete-directory search is not public lookup	PRESERVED
+0567	CCP USER and BDOS user state are shared	PRESERVED
+0569	Resident command semantic set	PRESERVED
+0570	DIR search and visibility	PRESERVED
+0572	ERA wildcard confirmation boundary	PRESERVED
+0574	REN resident syntax and validation	PRESERVED
+0575	SAVE page mapping	PRESERVED
+0577	TYPE byte-stream contract	PRESERVED
+0578	CCP USER accepted range	PRESERVED
+0579	Ordinary resident-command recovery	PRESERVED
+0581	Physical failure suspends the BDOS caller	PRESERVED
+0582	Logical failures return without physical-error intervention	PRESERVED
+0586	Physical-error abort abandons the interrupted caller	PRESERVED
+0587	Abort recovery establishes a usable command environment	PRESERVED
+0589	Loader ceiling and overlay TPA are distinct	PRESERVED
+0590	CCP overlay invalidates ordinary RET assumptions	PRESERVED
+0593	Cold BOOT public postcondition	PRESERVED
+0595	WBOOT command-environment reconstruction	PRESERVED
+0598	BIOS vector is a public runtime ABI	PRESERVED
+0599	DPH structures are compatibility-visible	PRESERVED
+0600	Direct BIOS calls expose raw device behavior	PRESERVED
+0602	Function 40 selector and input	PRESERVED
+0603	Function 40 allocation-block zero fill	PRESERVED
+0605	Function 40 result family	PRESERVED
+0606	BIOS character services are raw device interfaces	PRESERVED
+0607	Character devices remain distinct runtime paths	PRESERVED
+0608	IOBYTE reassignment is runtime visible	PRESERVED
+0609	IOBYTE access coherence	PRESERVED
+0610	Field-preserving assignment changes	PRESERVED
+0612	STAT device-assignment semantics	PRESERVED
+0613	Parameterized disk-structure coherence	PRESERVED
+0614	DPB-dependent directory allocation-map width	PRESERVED
+0615	Logical directory placement	PRESERVED
+0617	Direct-structure caller responsibility	PRESERVED
+0620	DRI submitted-command stream	PRESERVED
+0621	XSUB buffered-input compatibility	PRESERVED
+0622	Self-modifying transient execution	PRESERVED
+entry	title	result

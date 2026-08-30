@@ -1,0 +1,20 @@
+INVESTIGATION 071 COMPLETION AUDIT
+
+Investigation directory prepared: yes
+Required report present: yes
+Prompt preserved: yes
+Frozen top-level identifiers: 62 unique
+Normative proposition cases: 627 unique
+Versioned oracles: 627 unique
+Canonical ledger coverage: 0001-0627, exactly once
+Blank oracles: 0
+POLICY PENDING cases: 0
+Ledger 070 source SHA-256: c835279df858edc752b1393a3bcc3238671885138e1fa4a8df8fc44b518c9dfa
+Ledger 071 built: yes
+Ledger 071 numbered blocks byte-identical to Ledger 070: 627/627
+Compatibility contract modified: no
+BetterCP/M implementation modified: no
+Previous investigation artifacts modified: no
+I071 executes no candidate and claims no experimental observations.
+All preserved I071 artifact hashes are recorded in hashes/SHA256SUMS.
+RESULT: PASS

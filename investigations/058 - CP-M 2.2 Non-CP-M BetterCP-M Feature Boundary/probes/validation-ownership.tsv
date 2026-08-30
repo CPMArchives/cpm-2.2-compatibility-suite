@@ -1,0 +1,13 @@
+test_family	primary_personality_ownership	joint_or_external_ownership	claim_treatment
+CCP-001..008	command environment, launch state and strict submitted-input behavior	BDOS file/console providers where exercised	baseline/strict personality
+BDOS-CALL-001	public gateway and call/return surface	runtime supplies callable low-memory gateway	baseline personality
+BDOS-CON-001..005	formatted/direct/buffered console semantics	BIOS/terminal provider supplies raw configured bytes	baseline plus selected console profile
+BDOS-STATE-001..003	CP/M-visible state and DMA selection	configured disk/provider participates	baseline personality
+BDOS-FILE-001..012	FCB/DMA/directory/file semantics	BIOS/storage provider supplies logical sectors	baseline personality
+ERROR-001..005	CP/M-visible result/recovery	BIOS/device/storage inject and report failure	baseline plus selected error profile
+BIOS-001..007	CP/M BIOS ABI and profile exposure	platform/hardware provider	configured platform or named hardware profile
+MEM-001..006	CP/M CPU/memory/lifecycle view	execution/memory provider	baseline/strict personality
+UTIL-001..004	cross-layer personality composition	fixture and delegated providers	baseline/strict ecosystem acceptance
+APP-001..004	personality plus declared terminal/storage behavior	application fixture and profile providers	declared application/profile acceptance
+COMM-001..004	logical CP/M surface	peer, serial and hardware profile providers	optional communications profile
+HW-001..003	baseline exclusion or named CP/M-visible exposure	hardware/emulator provider	named hardware profile only

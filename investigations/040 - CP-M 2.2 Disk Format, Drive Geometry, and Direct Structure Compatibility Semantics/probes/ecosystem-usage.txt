@@ -1,0 +1,37 @@
+Investigation 040 ecosystem/source observations
+================================================
+
+DRI SYSGEN.ASM
+--------------
+
+SYSGEN discovers the BIOS from the WBOOT vector and computes direct entry
+offsets for SELDSK, SETTRK, SETSEC, SETDMA, READ, and WRITE. It transfers the
+configured system tracks one 128-byte sector at a time and retries failed raw
+transfers. This is evidence that the BIOS vector and the selected drive's
+track/sector conventions form a practical interface for a system utility.
+Its literal retry count and its assumptions for a particular system image are
+DRI utility implementation details, not universal application guarantees.
+
+DRI STAT.PLM
+------------
+
+STAT obtains the current drive DPB and computes record capacity, kilobyte
+capacity, directory entries, checked directory entries, records per extent,
+records per block, sectors per track, and reserved tracks from its fields.
+The accepted native STAT DSK: transcript matches the DPB040 bytes.
+
+DRI DUMP.ASM
+------------
+
+DUMP uses BDOS Open and Sequential Read with the default FCB and DMA buffer.
+It demonstrates that an ordinary disk utility can remain independent of raw
+geometry. This is the contrasting compatibility path to SYSGEN's direct BIOS
+access.
+
+Consequence
+-----------
+
+Historically significant software divides into geometry-independent BDOS
+clients and configured/profile-specific direct BIOS clients. A compatible
+system must support both documented interfaces; it need not make one physical
+raw image layout universal across all CP/M machines.

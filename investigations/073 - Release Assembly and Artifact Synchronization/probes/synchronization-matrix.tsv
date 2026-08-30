@@ -1,0 +1,10 @@
+field	source_authority	required_targets	rule	status
+ledger authority	Ledger 072	STD-001 POL-001 CON-001 PRO-001 MAN-001 IDX-001	All name Ledger 072 and exact SHA-256; no older ledger presented as current.	PLANNED
+proposition identity	Ledger 072 entries 0001-0627	STD-001 CON-001 TST-001 MAN-001	627 unique contiguous IDs; proposition blocks never rewritten by assembly.	VERIFIED AT SOURCE
+disposition totals	Ledger 072	STD-001 POL-001 MAN-001	458 REQUIRED; 116 NOT GUARANTEED; 53 NOT REQUIRED; zero POLICY PENDING.	VERIFIED AT SOURCE
+profile applicability	Ledger 072 + I070	POL-001 PRO-001 CON-001 MAN-001	28 PROFILE REQUIRED and 3 OPTIONAL cases map to stable registry IDs; profiles add and never waive baseline.	REQUIRES PRO-001
+test identity	I071 frozen-test-inventory.tsv	CON-001 TST-001 MAN-001	62 IDs at version 1.0.0; no reassignment.	VERIFIED AT SOURCE
+case/oracle identity	I071 cases/oracles	CON-001 TST-001 MAN-001	627 unique cases and 627 versioned oracles; hashes match I071.	VERIFIED AT SOURCE
+certification claims	I071 certification-levels.tsv	STD-001 CON-001 NOT-001 MAN-001	Separate BASELINE, INTERFACE, FULL-SYSTEM, PROFILE, OPTIONAL, and DEVELOPMENT; no certification without campaign evidence.	PLANNED
+supersession	Release manifest	MAN-001 IDX-001	Draft 0.1 policy/strategy and historical ledgers remain accessible but explicitly non-current.	REQUIRES MAN-001
+publication links	Release manifest paths	IDX-001	Every visible target exists and hash/role agrees with manifest.	REQUIRES IDX-001

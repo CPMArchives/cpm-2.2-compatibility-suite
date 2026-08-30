@@ -1,0 +1,468 @@
+INVESTIGATION 029 — CP/M 2.2 BDOS Directory Search Semantics and FCB/DMA Enumeration Contract
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 028 is complete.
+
+The authoritative Compatibility Ledger currently incorporates findings
+through Investigation 028.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports, architecture documents,
+roadmaps, specifications, or other existing BetterCP/M files.
+
+Create Investigation 029 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+This is an evidence investigation only.
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Define the CP/M 2.2 BDOS directory search contract.
+
+Previous investigations established:
+
+- FCB construction and default FCBs;
+- file operation semantics;
+- failure behavior;
+- DMA behavior;
+- BDOS calling conventions.
+
+Investigation 029 determines the complete application-visible contract
+for:
+
+- Search First;
+- Search Next;
+- directory entry matching;
+- wildcard interpretation;
+- DMA result placement;
+- multi-entry enumeration;
+- interaction with user areas and drives.
+
+The goal is to determine what a CP/M application may rely upon when
+enumerating directory entries.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read and incorporate:
+
+Investigation 008:
+    FCB foundations.
+
+Investigation 009:
+    Directory search foundations.
+
+Investigation 021:
+    CCP command and transient dispatch.
+
+Investigation 023:
+    Default FCB construction.
+
+Investigation 025:
+    Search and failure semantics.
+
+Investigation 026:
+    Drive/user/system state.
+
+Investigation 027:
+    BDOS calling convention.
+
+Investigation 028:
+    CCP transient handoff.
+
+Do not duplicate earlier investigations.
+
+Focus specifically on the directory enumeration contract.
+
+
+SCOPE
+
+Investigate:
+
+BDOS Function 17:
+    Search First
+
+BDOS Function 18:
+    Search Next
+
+Related behavior:
+
+- FCB matching;
+- wildcard expansion;
+- directory entry copying;
+- DMA format;
+- multiple matches;
+- extent handling;
+- user-area filtering;
+- drive selection;
+- returned index values.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- file allocation;
+- file creation;
+- file writing;
+- random access;
+- CP/M 3 extended directory behavior;
+- host filesystem enumeration.
+
+Do not infer modern filesystem semantics.
+
+
+KEY QUESTIONS
+
+
+1. SEARCH FIRST ENTRY CONDITIONS
+
+Determine:
+
+- required FCB contents;
+- wildcard behavior;
+- drive byte interpretation;
+- user area selection;
+- current drive interaction.
+
+
+2. SEARCH NEXT STATE
+
+Determine:
+
+- where search state is maintained;
+- whether Search Next depends on unchanged FCB contents;
+- whether unrelated BDOS calls invalidate search state;
+- whether changing drives/users affects enumeration.
+
+
+3. DIRECTORY MATCHING
+
+Determine:
+
+- filename matching rules;
+- extension matching;
+- wildcard behavior;
+- lowercase/uppercase handling;
+- special directory entries.
+
+
+4. DMA RESULT FORMAT
+
+Determine:
+
+- exact DMA contents after a successful search;
+- directory entry offset;
+- returned entry format;
+- extent information;
+- allocation information.
+
+Cross-check I017.
+
+
+5. MULTIPLE MATCHES
+
+Determine:
+
+- return values;
+- order of returned entries;
+- duplicate extent behavior;
+- whether all matching extents are returned.
+
+
+6. FAILURE CONDITIONS
+
+Determine:
+
+- no match;
+- invalid drive;
+- invalid FCB;
+- end of search;
+- unavailable media.
+
+Separate:
+
+returned failure
+
+from:
+
+fatal DRI behavior.
+
+
+7. USER AREA BEHAVIOR
+
+Determine:
+
+- whether searches include only current user;
+- explicit user selection behavior;
+- interaction with user 0/public files if applicable.
+
+
+8. DRIVE BEHAVIOR
+
+Determine:
+
+- FCB drive prefix;
+- current drive;
+- invalid drives;
+- drive changes during search.
+
+
+9. SEARCH STATE LIFETIME
+
+Determine whether search state survives:
+
+- another BDOS call;
+- disk selection;
+- DMA changes;
+- termination;
+- warm boot.
+
+
+10. DRI SOURCE ANALYSIS
+
+Review BDOS source for:
+
+- search initialization;
+- directory scanning;
+- matching routines;
+- DMA construction;
+- return paths.
+
+Extract compatibility-relevant behavior only.
+
+
+11. EXPERIMENTAL PROGRAMS
+
+Create deterministic probes:
+
+SEARCH29:
+    Basic Search First/Search Next.
+
+MATCH29:
+    Wildcard and matching rules.
+
+DMA29:
+    Search result DMA format.
+
+STATE29:
+    Search persistence under state changes.
+
+USER29:
+    User-area behavior.
+
+ERROR29:
+    Search failure cases.
+
+
+12. CONTROLLED TEST MATRIX
+
+Include:
+
+- exact filename search;
+- extension search;
+- wildcard filename;
+- wildcard extension;
+- multiple matching files;
+- multiple extents;
+- different users;
+- different drives;
+- no matches;
+- invalid drive;
+- Search Next after unrelated BDOS calls.
+
+
+13. EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+    documented behavior.
+
+B:
+    DRI implementation behavior.
+
+I:
+    experimental observation.
+
+D:
+    unresolved policy.
+
+These labels are internal investigation classifications only.
+
+Ledger evidence must use:
+
+    I029
+    BDOS
+    CCP
+    IG
+    AG
+
+
+14. COMPATIBILITY CLASSIFICATION
+
+Classify each conclusion:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Do not require:
+
+- internal directory scanning algorithm;
+- exact DMA construction sequence;
+- DRI-private search variables.
+
+
+15. EXISTING LEDGER REVIEW
+
+Review:
+
+0080-0170
+0190-0247
+0290-0315
+0513-0525
+0534-0541
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+
+16. PROPOSED LEDGER ADDITIONS
+
+The current ledger ends after Investigation 028.
+
+Begin proposed entries at:
+
+0542
+
+Do not modify the Compatibility Ledger.
+
+Include:
+
+Proposed Compatibility Ledger additions
+
+and:
+
+Proposed existing-entry updates.
+
+
+Each entry must contain:
+
+NNNN. Title
+
+    Description.
+
+    Disposition:
+
+    Evidence:
+
+    Conformance:
+
+
+17. REPORT STRUCTURE
+
+Create:
+
+Investigation 029 - CP/M 2.2 BDOS Directory Search Semantics and FCB/DMA Enumeration Contract.md
+
+
+Include:
+
+1. Objective and scope
+2. Relationship to previous investigations
+3. Documentation findings
+4. BDOS source findings
+5. Search First semantics
+6. Search Next semantics
+7. Matching rules
+8. DMA format
+9. Failure behavior
+10. Experimental results
+11. Compatibility conclusions
+12. Proposed ledger additions
+13. Existing-entry updates
+14. Open questions
+15. Artifact preservation audit
+16. Sources
+
+
+18. ARTIFACT REQUIREMENTS
+
+Create:
+
+Investigation 029/
+
+with:
+
+probes/
+
+Preserve:
+
+- source;
+- binaries;
+- listings;
+- harnesses;
+- transcripts;
+- directory images;
+- DMA dumps;
+- memory dumps;
+- build instructions;
+- SHA-256 manifests.
+
+
+19. PRESERVATION AUDIT
+
+Before investigation:
+
+- hash current ledger;
+- record emulator version;
+- hash fixture images.
+
+After investigation:
+
+- verify ledger unchanged;
+- verify previous investigations unchanged;
+- verify protected files unchanged;
+- hash new artifacts.
+
+
+20. COMPLETION REPORT
+
+When complete report:
+
+- files created;
+- artifact count;
+- experiments performed;
+- principal findings;
+- proposed ledger range;
+- ledger hash before/after;
+- confirmation no protected files changed;
+- documentation reviewed.
+
+
+FINAL GOAL
+
+Define the CP/M 2.2 directory enumeration contract:
+
+When a CP/M application asks BDOS to search for files,
+what matching rules apply,
+what information is returned,
+how does enumeration continue,
+and what behavior must a compatible implementation provide?
+
+The result should establish Search First/Search Next as a stable
+application-facing compatibility boundary without requiring reproduction
+of DRI-private directory scanning implementation details.

@@ -1,0 +1,68 @@
+Investigation 045 accepted observations
+=======================================
+
+Environment
+-----------
+
+z80pack cpmsim 1.39, DRI CP/M 2.2, Z80 CBIOS 1.2. No manually typed input.
+
+CROSS45 normal/boundary run
+---------------------------
+
+Purpose: Test combined CCP, page-zero, BDOS, BIOS, storage, DMA, drive, user,
+reset, and lifecycle behavior in one transient.
+
+Procedure: Enter through CCP; capture gateway targets and initial drive/user;
+call Function 12; set an alternate DMA; Search First ATTR.DAT; select B and
+user 1; explicitly search A:ATTR.DAT; change to user 0 and repeat; verify the
+persistent current drive; call configured BIOS CONST; reset disk state; restore
+DMA 0080h; RET.
+
+Observed:
+
+  WBOOT/BDOS TARGET=FA03/EC06
+  VERSION DRIVE USER=00220000
+  ALT-DMA SEARCH RC/ENTRY=0100ATTR    DAT
+  A:ATTR USER1/USER0 RC, CURRENT DRIVE=FF0101
+  DIRECT BIOS CONST=00
+  RESET DRIVE/USER=0000
+  CROSS45 COMPLETE
+
+Interpretation: FA03/EC06 and slot 01 are reference-instance values. The
+alternate DMA received slot-1 directory data for user 0 ATTR.DAT. Explicit A:
+search respected current user: no match in user 1, match in user 0. Temporary
+FCB drive selection left persistent current drive B. Direct BIOS CONST reported
+no pending character. Function 13 returned current drive to A while user was
+already zero. RET restored CCP command processing.
+
+Failure/recovery cross-layer run
+--------------------------------
+
+Purpose: Determine whether physical-error presentation and abort recovery leave
+the public interfaces needed by a new transient coherent.
+
+Procedure: Inject and ignore one pre-transfer sequential read failure; inject
+the same failure again and answer Control-C; at the recovered prompt execute
+CROSS45 unchanged.
+
+Observed: The first physical failure printed Bad Sector, returned 00, advanced
+CR, and left DMA sentinel EE. The second printed Bad Sector and abandoned the
+caller. CROSS45 then produced exactly the normal output above and returned to a
+prompt. The ready disk images were byte-identical before/after both accepted
+runs.
+
+Conclusion: public recovery spans BIOS error status, BDOS presentation, WBOOT,
+CCP reconstruction, page-zero gateways, BDOS state, BIOS vectors, storage/DMA,
+and transient lifecycle. Exact internal reconstruction remains unnecessary.
+
+Controlled matrix
+-----------------
+
+  Normal operation:      version, search, BIOS status, RET.
+  Boundary operation:    alternate DMA, explicit drive, user mismatch/match.
+  Failure operation:     ignored then aborted physical read failure.
+  Subsystem interaction: CCP -> transient -> BDOS -> BIOS/storage -> reset ->
+                         CCP, repeated after recovery.
+
+No cross-layer inconsistency was observed. The run does not prove numeric
+addresses, directory slot, internal stacks/caches, or fault atomicity portable.

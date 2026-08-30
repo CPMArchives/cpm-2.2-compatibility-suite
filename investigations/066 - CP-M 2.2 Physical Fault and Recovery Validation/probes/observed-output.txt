@@ -1,0 +1,30 @@
+Investigation 066 observed result summary
+===========================================
+
+T01 normal read: RETURNED 00, DMA[0]=41, image unchanged.
+T02 pre-transfer read failure + ignore: Bad Sector, RETURNED 00,
+     DMA sentinel EE remained, image unchanged.
+T03 pre-transfer write failure + ignore: Bad Sector, RETURNED 00,
+     image unchanged.
+T04 repeated read/write/read failures: three Bad Sector interventions and
+     three normal-looking 00 returns; later healthy read returned 00/41.
+T05 ignore recovery: caller returned; DIR and normal read succeeded.
+T06 control-C recovery: caller did not return; A> appeared; DIR and normal
+     read succeeded.
+T07 unavailable drive B: two repeated Bad Sector prompts were captured;
+     the automated harness timed out before confirmed abort/recovery.
+T08 physical write then reported error + ignore: RETURNED 00; image changed;
+     CLOSEME.DAT became 128 bytes of 50h.
+T09 same write then control-C: caller did not return; image and file matched
+     T08.  Abort did not roll back the completed media change.
+
+Baseline image:
+  24677b906a0a58ed259892d8f95efa8df3fe32f14bb05ca7cddb5371d6be5e34
+T08/T09 image:
+  e6294c9fdba0abef6ab57ae361dcbb67bb45b9d001a2d757de86f297a4a767c0
+Baseline CLOSEME.DAT:
+  3941d04d249c019df8e2ade684bb894be1b6ad3b17a4378536be3f005088d091
+T08/T09 CLOSEME.DAT:
+  f16ef3e254ffb74b7e3c97d99486ef8c549e4c80bc6dfed7fe8c5e7e76f4fbcd
+
+See fault-validation-records.tsv and cases/Tnn/console.txt for full evidence.

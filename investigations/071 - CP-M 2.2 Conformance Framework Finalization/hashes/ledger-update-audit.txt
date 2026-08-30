@@ -1,0 +1,10 @@
+LEDGER 071 UPDATE AUDIT
+
+Source Ledger 070 SHA-256: c835279df858edc752b1393a3bcc3238671885138e1fa4a8df8fc44b518c9dfa
+Ledger 071 SHA-256: e8e1acd1ddeb74daf9e2a3642abf3ab8917eff48058ff217f42152abf48e15d5
+Entries: 627 contiguous unique identifiers 0001-0627
+Numbered proposition blocks byte-identical: yes (627/627)
+Disposition counts: REQUIRED 458; NOT GUARANTEED 116; NOT REQUIRED 53; POLICY PENDING 0
+Changes: I071 source catalogue line, global conformance-framework note, I071 history section
+Compatibility contract changes: none
+RESULT: PASS

@@ -1,0 +1,10 @@
+risk_surface	must_remain_unchanged_in_cpm_claim	unsafe_transparent_change	safe_boundary_condition	primary_tests
+entry/memory	0100h, page zero, configured ceiling, TPA/lifecycle	new origin, hidden vectors, protected writes in strict profile	separate declared personality/profile	MEM-001..006,CCP-003/006/007
+CCP	parsing, FCB/tail, lookup, resident commands, command cycle	modern paths, quoting, search fallback, extra resident precedence	separate shell/namespace or opt-in profile	CCP-001..008
+BDOS calls	0005h, selectors, registers, results/side effects	selector collision, new preservation promise, changed out-of-range result	separate gateway/profile	BDOS-CALL-001
+console	formatted/direct/buffered distinctions and classified controls	host editing/Unicode/control normalization	out-of-band transport or named console profile	BDOS-CON-001..005
+state	current drive/user/DMA/login/read-only semantics	background or convenience state changes	explicit profile with isolated state	BDOS-STATE-001..003
+files/directories	FCB names, 128-byte records, extents, user namespace, persistence	host filenames/order/errors, transparent larger records	separate API or observationally exact translation	BDOS-FILE-001..012
+BIOS/platform	jump table, boot, raw devices, logical sectors and structures	hiding table, changing sector ABI, universal hardware assumptions	configured/named platform profile	BIOS-001..007
+errors/recovery	classified result/fatal/restart and visible mutation state	host exceptions/messages, invented rollback/atomicity	out-of-band detail or selected error profile	ERROR-001..005
+ecosystem	SUBMIT/XSUB, self-modifying TPA in strict claim	protection or state changes breaking shipped tools	distinct reduced/non-strict personality	CCP-008,MEM-003,UTIL-001..004

@@ -1,0 +1,32 @@
+Investigation 063 source analysis
+
+Digital Research source corpus
+------------------------------
+The preserved reconstructed CP/M 2.2 corpus at cpm2-plm uses Intel 8080
+mnemonics throughout the inspected CCP, BDOS, BIOS, assembler, debugger and
+utility modules. A case-insensitive mnemonic-boundary scan of all *.ASM files
+for IX, IY, EXX, DJNZ, JR, LDIR, LDDR, CPIR, CPDR, INIR, INDR, OTIR and OTDR
+returned no matches. This supports an 8080-compatible DRI implementation
+baseline. It does not prove the absence of encoded data or characterize every
+third-party program.
+
+z80pack execution implementation
+--------------------------------
+cpmsim 1.39 exposes separate -8 (Intel 8080) and -z (Zilog Z80) execution
+modes, an optional -u trap for undocumented instructions, and -f clock-rate
+selection. These controls allow the same CP/M image and program bytes to be
+compared without substituting source reconstruction for observation.
+
+Boundary interpretation
+-----------------------
+8080 instruction semantics are CPU-visible binary semantics, distinct from
+BDOS residual register state. The ledger's existing entries 0032, 0033, 0049,
+and 0051 correctly reject initial/residual Z80 registers and flags as CP/M
+call-contract guarantees. They do not excuse an advertised processor profile
+from implementing its own documented instruction results and flags.
+
+Z80 documented extensions are consequential for Z80-targeted software, but
+the available DRI CP/M source and T01-T03 do not justify making them universal
+CP/M requirements. Undocumented opcodes, precise instruction timing, interrupt
+topology, and peripheral response belong to named profiles unless separately
+promoted by evidence and policy.

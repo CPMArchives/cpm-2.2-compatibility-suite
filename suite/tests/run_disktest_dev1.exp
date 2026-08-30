@@ -1,0 +1,52 @@
+#!/usr/bin/expect -f
+# SPDX-License-Identifier: GPL-2.0-or-later
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set cpu [lindex $argv 2]
+if {$cpu eq ""} { set cpu "-z" }
+set timeout 40
+log_file -noappend $logfile
+source [file join [file dirname [info script]] cpmsim-path.exp]
+spawn $cpmsim $cpu -d $diskdir
+expect "A>"
+send -- "B:\r"
+expect "B>"
+send -- "DISKTEST /SAFE\r"
+expect "0155  PASS      REQUIRED      Function 13 preserved user number"
+expect "0378  PASS      REQUIRED      Function 13 cleared R/O vector"
+expect "Summary: 7 pass, 0 fail, 0 error, 0 observations"
+expect "B>"
+send -- "DISKTEST /ALL\r"
+expect "0255  UNTESTED  REQUIRED      Run: DISKTEST /0255 with full D:"
+expect "0293  UNTESTED  NOT GUAR.     Run: DISKTEST /0293 on scratch D:"
+expect "0558  UNTESTED  OUT SCOPE     Allocation order is not portable"
+expect "Summary: 7 pass, 0 fail, 0 error, 0 observations"
+expect "B>"
+send -- "DISKTEST /LIST\r"
+expect "0155  Function 13 user-number preservation"
+expect "0558  Allocation order is outside lifecycle compatibility"
+expect "B>"
+send -- "DISKTEST /INFO\r"
+expect "Catalog rows represented: 20 of 20; remaining 0"
+expect "B>"
+send -- "DISKTEST /H\r"
+expect "Show this command summary"
+expect "B>"
+send -- "DISKTEST /H:RESULTS\r"
+expect "DISKTEST result terminology"
+expect "B>"
+send -- "DISKTEST /H:PROFILES\r"
+expect "No named compatibility profiles are defined."
+expect "B>"
+send -- "DISKTEST /0255\r"
+expect "EXPECTED: Make succeeds because an empty file needs no data block."
+expect "RESTORE: discard changes and remount the supplied D: image."
+expect "B>"
+send -- "DISKTEST /0383\r"
+expect "EXPECTED: BDOS rejects rename and returns a usable CCP prompt."
+expect "B>"
+send -- "DISKTEST /0355\r"
+expect "DISKTEST cannot assign a portable PASS or FAIL to this item."
+expect "B>"
+send "\034"
+expect eof

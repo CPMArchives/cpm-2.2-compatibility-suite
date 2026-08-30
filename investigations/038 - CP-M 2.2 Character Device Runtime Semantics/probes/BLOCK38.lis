@@ -1,0 +1,290 @@
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 09:10:32 2026	Page 1
+Source file: BLOCK38.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Investigation 004: BDOS function 6 and 11 probe.
+                       2      2 ; Assemble: z80asm -fb -oDIO004.COM DIO004.ASM
+                       3      3 ;
+                       4      4 ; Modes are selected by the first command-tail operand:
+                       5      5 ;   E  no queued key: record functions 11, 6/FF, and 6/FE results
+                       6      6 ;   6  scripted BIOS makes one byte ready: function 6/FF consumes it
+                       7      7 ;   S  scripted BIOS makes one byte ready: function 11 observes and buffers it,
+                       8      8 ;      a second function 11 re-observes it, then function 6/FF tests whether
+                       9      9 ;      direct input consumes the BDOS pending-key buffer.
+                      10     10 ;   F  scripted BIOS makes one byte ready: undocumented function 6/FE status.
+                      11     11 ;   O  emit framed direct-output bytes including TAB, '$', and Ctrl-P.
+                      12     12
+                      13     13 	ORG	0100H
+                      14     14
+0100                  15     15 START:
+0100  3a 80 00        16     16 	LD	A,(0080H)
+0103  b7              17     17 	OR	A
+0104  28 14           18     18 	JR	Z,MODEE
+0106  3a 82 00        19     19 	LD	A,(0082H)	; tail begins with blank, operand at 0082h
+0109  fe 36           20     20 	CP	'6'
+010b  28 2f           21     21 	JR	Z,MODE6
+010d  fe 53           22     22 	CP	'S'
+010f  28 4f           23     23 	JR	Z,MODES
+0111  fe 4f           24     24 	CP	'O'
+0113  28 71           25     25 	JR	Z,MODEO
+0115  fe 46           26     26 	CP	'F'
+0117  ca ac 01        27     27 	JP	Z,MODEF
+                      28     28
+011a                  29     29 MODEE:
+011a  0e 0b           30     30 	LD	C,11
+011c  cd 05 00        31     31 	CALL	0005H
+011f  32 8d 02        32     32 	LD	(R1),A
+0122  1e ff           33     33 	LD	E,0FFH
+0124  0e 06           34     34 	LD	C,6
+0126  cd 05 00        35     35 	CALL	0005H
+0129  32 8e 02        36     36 	LD	(R2),A
+012c  1e fe           37     37 	LD	E,0FEH
+012e  0e 06           38     38 	LD	C,6
+0130  cd 05 00        39     39 	CALL	0005H
+0133  32 8f 02        40     40 	LD	(R3),A
+0136  11 9b 02        41     41 	LD	DE,LABE
+0139  c3 41 02        42     42 	JP	REPORT
+                      43     43
+013c                  44     44 MODE6:
+013c  cd d0 01        45     45 	CALL	PATCHBIOS
+013f  1e ff           46     46 	LD	E,0FFH
+0141  0e 06           47     47 	LD	C,6
+0143  cd 05 00        48     48 	CALL	0005H
+0146  32 8d 02        49     49 	LD	(R1),A
+0149  1e ff           50     50 	LD	E,0FFH
+014b  0e 06           51     51 	LD	C,6
+014d  cd 05 00        52     52 	CALL	0005H
+0150  32 8e 02        53     53 	LD	(R2),A
+0153  cd 19 02        54     54 	CALL	RESTBIOS
+0156  af              55     55 	XOR	A
+0157  32 8f 02        56     56 	LD	(R3),A
+015a  11 b0 02        57     57 	LD	DE,LAB6
+015d  c3 41 02        58     58 	JP	REPORT
+                      59     59
+0160                  60     60 MODES:
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 09:10:32 2026	Page 2
+Source file: BLOCK38.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0160  cd d0 01        61     61 	CALL	PATCHBIOS
+0163  0e 0b           62     62 	LD	C,11
+0165  cd 05 00        63     63 	CALL	0005H
+0168  32 8d 02        64     64 	LD	(R1),A
+016b  0e 0b           65     65 	LD	C,11
+016d  cd 05 00        66     66 	CALL	0005H
+0170  32 8e 02        67     67 	LD	(R2),A
+0173  1e ff           68     68 	LD	E,0FFH
+0175  0e 06           69     69 	LD	C,6
+0177  cd 05 00        70     70 	CALL	0005H
+017a  32 8f 02        71     71 	LD	(R3),A
+017d  cd 19 02        72     72 	CALL	RESTBIOS
+0180  11 c7 02        73     73 	LD	DE,LABS
+0183  c3 41 02        74     74 	JP	REPORT
+                      75     75
+0186                  76     76 MODEO:
+0186  11 fc 02        77     77 	LD	DE,OUTPRE
+0189  cd 71 02        78     78 	CALL	PRINT9
+018c  1e 41           79     79 	LD	E,'A'
+018e  cd 6c 02        80     80 	CALL	PUT6
+0191  1e 09           81     81 	LD	E,9
+0193  cd 6c 02        82     82 	CALL	PUT6
+0196  1e 24           83     83 	LD	E,'$'
+0198  cd 6c 02        84     84 	CALL	PUT6
+019b  1e 10           85     85 	LD	E,16		; Ctrl-P must be emitted, not toggle echo
+019d  cd 6c 02        86     86 	CALL	PUT6
+01a0  1e 42           87     87 	LD	E,'B'
+01a2  cd 6c 02        88     88 	CALL	PUT6
+01a5  11 09 03        89     89 	LD	DE,OUTPOST
+01a8  cd 71 02        90     90 	CALL	PRINT9
+01ab  c9              91     91 	RET
+                      92     92
+01ac                  93     93 MODEF:
+01ac  cd d0 01        94     94 	CALL	PATCHBIOS
+01af  1e fe           95     95 	LD	E,0FEH
+01b1  0e 06           96     96 	LD	C,6
+01b3  cd 05 00        97     97 	CALL	0005H
+01b6  32 8d 02        98     98 	LD	(R1),A
+01b9  1e fe           99     99 	LD	E,0FEH
+01bb  0e 06          100    100 	LD	C,6
+01bd  cd 05 00       101    101 	CALL	0005H
+01c0  32 8e 02       102    102 	LD	(R2),A
+01c3  cd 19 02       103    103 	CALL	RESTBIOS
+01c6  af             104    104 	XOR	A
+01c7  32 8f 02       105    105 	LD	(R3),A
+01ca  11 e3 02       106    106 	LD	DE,LABF
+01cd  c3 41 02       107    107 	JP	REPORT
+                     108    108
+                     109    109 ; Replace only BIOS CONST and CONIN jump vectors in the running disposable
+                     110    110 ; image. The warm-boot target at 0001h is BIOS+3, hence BIOS=target-3.
+                     111    111 ; Original six bytes are restored before any diagnostic output.
+01d0                 112    112 PATCHBIOS:
+01d0  2a 01 00       113    113 	LD	HL,(0001H)
+01d3  2b             114    114 	DEC	HL
+01d4  2b             115    115 	DEC	HL
+01d5  2b             116    116 	DEC	HL
+01d6  11 06 00       117    117 	LD	DE,6
+01d9  19             118    118 	ADD	HL,DE		; BIOS CONST vector
+01da  22 90 02       119    119 	LD	(CONSTADR),HL
+01dd  11 94 02       120    120 	LD	DE,SAVECONST
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 09:10:32 2026	Page 3
+Source file: BLOCK38.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+01e0  01 03 00       121    121 	LD	BC,3
+01e3  ed b0          122    122 	LDIR
+01e5  2a 90 02       123    123 	LD	HL,(CONSTADR)
+01e8  36 c3          124    124 	LD	(HL),0C3H
+01ea  23             125    125 	INC	HL
+01eb  11 32 02       126    126 	LD	DE,HCONST
+01ee  7b             127    127 	LD	A,E
+01ef  77             128    128 	LD	(HL),A
+01f0  23             129    129 	INC	HL
+01f1  7a             130    130 	LD	A,D
+01f2  77             131    131 	LD	(HL),A
+01f3  2a 90 02       132    132 	LD	HL,(CONSTADR)
+01f6  11 03 00       133    133 	LD	DE,3
+01f9  19             134    134 	ADD	HL,DE		; BIOS CONIN vector
+01fa  22 92 02       135    135 	LD	(CONINADR),HL
+01fd  11 97 02       136    136 	LD	DE,SAVECONIN
+0200  01 03 00       137    137 	LD	BC,3
+0203  ed b0          138    138 	LDIR
+0205  2a 92 02       139    139 	LD	HL,(CONINADR)
+0208  36 c3          140    140 	LD	(HL),0C3H
+020a  23             141    141 	INC	HL
+020b  11 3a 02       142    142 	LD	DE,HCONIN
+020e  7b             143    143 	LD	A,E
+020f  77             144    144 	LD	(HL),A
+0210  23             145    145 	INC	HL
+0211  7a             146    146 	LD	A,D
+0212  77             147    147 	LD	(HL),A
+0213  3e 01          148    148 	LD	A,1
+0215  32 9a 02       149    149 	LD	(HREADY),A
+0218  c9             150    150 	RET
+                     151    151
+0219                 152    152 RESTBIOS:
+0219  21 94 02       153    153 	LD	HL,SAVECONST
+021c  ed 5b 90 02    154    154 	LD	DE,(CONSTADR)
+0220  01 03 00       155    155 	LD	BC,3
+0223  ed b0          156    156 	LDIR
+0225  21 97 02       157    157 	LD	HL,SAVECONIN
+0228  ed 5b 92 02    158    158 	LD	DE,(CONINADR)
+022c  01 03 00       159    159 	LD	BC,3
+022f  ed b0          160    160 	LDIR
+0231  c9             161    161 	RET
+                     162    162
+0232                 163    163 HCONST:
+0232  3a 9a 02       164    164 	LD	A,(HREADY)
+0235  b7             165    165 	OR	A
+0236  c8             166    166 	RET	Z
+0237  3e ff          167    167 	LD	A,0FFH
+0239  c9             168    168 	RET
+                     169    169
+023a                 170    170 HCONIN:
+023a  af             171    171 	XOR	A
+023b  32 9a 02       172    172 	LD	(HREADY),A
+023e  3e 5a          173    173 	LD	A,'Z'
+0240  c9             174    174 	RET
+                     175    175
+0241                 176    176 REPORT:
+0241  cd 71 02       177    177 	CALL	PRINT9
+0244  3a 8d 02       178    178 	LD	A,(R1)
+0247  cd 76 02       179    179 	CALL	HEXBYTE
+024a  1e 20          180    180 	LD	E,' '
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 09:10:32 2026	Page 4
+Source file: BLOCK38.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+024c  cd 67 02       181    181 	CALL	PUT2
+024f  3a 8e 02       182    182 	LD	A,(R2)
+0252  cd 76 02       183    183 	CALL	HEXBYTE
+0255  1e 20          184    184 	LD	E,' '
+0257  cd 67 02       185    185 	CALL	PUT2
+025a  3a 8f 02       186    186 	LD	A,(R3)
+025d  cd 76 02       187    187 	CALL	HEXBYTE
+0260  11 14 03       188    188 	LD	DE,CRLF
+0263  cd 71 02       189    189 	CALL	PRINT9
+0266  c9             190    190 	RET
+                     191    191
+0267                 192    192 PUT2:
+0267  0e 02          193    193 	LD	C,2
+0269  c3 05 00       194    194 	JP	0005H
+                     195    195
+026c                 196    196 PUT6:
+026c  0e 06          197    197 	LD	C,6
+026e  c3 05 00       198    198 	JP	0005H
+                     199    199
+0271                 200    200 PRINT9:
+0271  0e 09          201    201 	LD	C,9
+0273  c3 05 00       202    202 	JP	0005H
+                     203    203
+0276                 204    204 HEXBYTE:
+0276  f5             205    205 	PUSH	AF
+0277  0f             206    206 	RRCA
+0278  0f             207    207 	RRCA
+0279  0f             208    208 	RRCA
+027a  0f             209    209 	RRCA
+027b  cd 7f 02       210    210 	CALL	HEXNIB
+027e  f1             211    211 	POP	AF
+027f                 212    212 HEXNIB:
+027f  e6 0f          213    213 	AND	0FH
+0281  c6 30          214    214 	ADD	A,'0'
+0283  fe 3a          215    215 	CP	'9'+1
+0285  38 02          216    216 	JR	C,HEXOUT
+0287  c6 07          217    217 	ADD	A,7
+0289                 218    218 HEXOUT:
+0289  5f             219    219 	LD	E,A
+028a  c3 67 02       220    220 	JP	PUT2
+                     221    221
+028d  00             222    222 R1:	DB 0
+028e  00             223    223 R2:	DB 0
+028f  00             224    224 R3:	DB 0
+0290  00 00          225    225 CONSTADR: DW 0
+0292  00 00          226    226 CONINADR: DW 0
+0294                 227    227 SAVECONST: DS 3
+0297                 228    228 SAVECONIN: DS 3
+029a  00             229    229 HREADY: DB 0
+029b  0d 0a 45 4d    230    230 LABE:	DB 13,10,'EMPTY 11,6FF,6FE: $'
+029f  50 54 59 20    230    231
+02a3  31 31 2c 36    230    232
+02a7  46 46 2c 36    230    233
+02ab  46 45 3a 20    230    234
+02af  24             230    235
+02b0  0d 0a 50 45    231    236 LAB6:	DB 13,10,'PEND6 first,second: $'
+02b4  4e 44 36 20    231    237
+02b8  66 69 72 73    231    238
+02bc  74 2c 73 65    231    239
+02c0  63 6f 6e 64    231    240
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 09:10:32 2026	Page 5
+Source file: BLOCK38.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+02c4  3a 20 24       231    241
+02c7  0d 0a 50 45    232    242 LABS:	DB 13,10,'PEND11 first,second,6FF: $'
+02cb  4e 44 31 31    232    243
+02cf  20 66 69 72    232    244
+02d3  73 74 2c 73    232    245
+02d7  65 63 6f 6e    232    246
+02db  64 2c 36 46    232    247
+02df  46 3a 20 24    232    248
+02e3  0d 0a 50 45    233    249 LABF:	DB 13,10,'PEND6FE first,second: $'
+02e7  4e 44 36 46    233    250
+02eb  45 20 66 69    233    251
+02ef  72 73 74 2c    233    252
+02f3  73 65 63 6f    233    253
+02f7  6e 64 3a 20    233    254
+02fb  24             233    255
+02fc  0d 0a 52 41    234    256 OUTPRE:	DB 13,10,'RAW-BEGIN[','$'
+0300  57 2d 42 45    234    257
+0304  47 49 4e 5b    234    258
+0308  24             234    259
+0309  5d 52 41 57    235    260 OUTPOST: DB ']RAW-END',13,10,'$'
+030d  2d 45 4e 44    235    261
+0311  0d 0a 24       235    262
+0314  0d 0a 24       236    263 CRLF:	DB 13,10,'$'
+                     237    264
+0317                 238    265 	END

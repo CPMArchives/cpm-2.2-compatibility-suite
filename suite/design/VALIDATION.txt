@@ -1,0 +1,13 @@
+PASS	catalog has 627 rows
+PASS	ledger entries unique
+PASS	ledger entries contiguous 0001-0627
+PASS	case IDs unique
+PASS	oracle IDs unique
+PASS	oracle versions are 1.0.0
+PASS	FILETEST executable ownership is 93 cases
+PASS	RANDTEST executable ownership is 49 cases
+PASS	DIRTEST authoritative ownership is 72 cases
+PASS	DISKTEST authoritative ownership is 20 cases
+PASS	FILE/DIR/DISK ownership accounts for 234 non-error cases
+INFO	probe artifacts inventoried: 640
+INFO	module counts: {'BDOSTEST.COM': 86, 'BIOSTEST.COM': 46, 'CCPTEST.COM': 59, 'CONSTEST.COM': 87, 'CPUTEST.COM': 5, 'DIRTEST.COM': 72, 'DISKTEST.COM': 20, 'ECOTEST.COM': 8, 'ENTRYTST.COM': 59, 'ERRTEST.COM': 43, 'FILETEST.COM': 93, 'RANDTEST.COM': 49}

@@ -1,0 +1,8 @@
+condition	why required	kind	completion evidence	blocks
+Normalize ledger	Remove duplicate 0248-0277 block and resolve/cross-reference Function-37 overlap without semantic renumbering	Editorial	Machine audit: one occurrence per stable ID; unchanged dispositions/test mapping	Normative freeze
+Integrate processor propositions	Number and add I063 8080/profile/Z80/undocumented/timing propositions or explicitly map them to existing numbered propositions	Normative	Ledger diff plus traceability rows and review proving no duplication	Normative freeze
+Select policy applicability	Assign each of 45 unique pending IDs to baseline, strict, named profile, deferred, or excluded scope	Policy	Versioned applicability manifest with no unclassified pending ID	Unambiguous release claim
+Refine conformance subcases	Split compound inventory rows into stable cases with exact oracles, aggregation and dependency links	Conformance	Audited vertical slice on DRI and independent implementation with no false PASS from partial cases	Normative certification readiness
+Create release manifest	Bind ledger, applicability, test inventory, oracles, profiles, fixtures, reports and artifact hashes	Release process	Immutable content-addressed manifest verified by clean-room script	Auditable freeze
+Define release claim	State whether release is narrow baseline, strict ecosystem, and/or named profiles	Policy	Normative front matter and conformance scope	All public claims
+Limit ecosystem wording	Do not claim untested spreadsheet/database/business/BBS/printer or unnamed hardware profiles	Scope	Release text names inclusions and exclusions	Broad ecosystem endorsement only

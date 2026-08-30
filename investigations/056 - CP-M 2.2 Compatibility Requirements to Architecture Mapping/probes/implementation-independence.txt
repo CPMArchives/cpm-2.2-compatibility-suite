@@ -1,0 +1,27 @@
+IMPLEMENTATION-INDEPENDENCE REVIEW
+
+Architectural constraints imposed by compatibility
+- There must be an ownership boundary capable of producing every REQUIRED external
+  observation and coordinating cross-layer state where the observation spans calls.
+- Strict claims must expose the flat application memory/gateway behavior and the
+  standard SUBMIT/XSUB behavior already required by the ledger.
+- Configured BIOS/platform and optional profiles must be named so applicability is
+  explicit and testable.
+- Error/recovery ownership must preserve the observable boundary across mutation,
+  failure and restart; it need not use DRI's handler path.
+
+Implementation freedom preserved
+- Number of modules, privilege levels, processes, tasks, address spaces or services.
+- Kernel organization, language, internal APIs, scheduling and concurrency model.
+- Dispatch tables, private stacks, buffer/cache representation and algorithms.
+- Host filesystem, image, emulator and device integration beneath required behavior.
+- Internal allocation, directory scanning and update strategy where exact choices
+  are NOT GUARANTEED or NOT REQUIRED.
+- Test runner and instrumentation architecture.
+
+Isolation guidance (responsibility, not design)
+- Private/platform-specific behavior can be confined behind a named profile boundary.
+- Presentation policy can be isolated from fundamental file/memory semantics when
+  all cross-effects required by the ledger remain observable.
+- Host abstractions are acceptable only when they do not leak changed CP/M semantics.
+- NOT GUARANTEED state should be deliberately varied at the owning boundary.

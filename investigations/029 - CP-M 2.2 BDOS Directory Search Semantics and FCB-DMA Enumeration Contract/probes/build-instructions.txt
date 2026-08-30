@@ -1,0 +1,14 @@
+Prerequisites:
+  z80asm (Release 2.1)
+  cpmtools with ibm-3740 format
+  expect
+  cpmsim (Release 1.39)
+
+Commands from probes/:
+  ./build.sh
+  ./make-fixtures.sh cases/recreated
+  ./run-main029.exp cases/main transcripts/main.txt
+  ./run-error029.exp cases/error transcripts/error.txt
+
+build.sh expands COMMON29.INC into temporary assembler input and preserves
+the original ASM, binary COM, and assembler listing (.lis) for every probe.

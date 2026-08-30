@@ -1,0 +1,43 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set timeout 30
+log_file -noappend $logfile
+spawn cpmsim -z -d $diskdir
+
+proc cmd {bytes} {
+    expect ">"
+    send -- "$bytes\r"
+}
+
+cmd ""
+cmd " "
+cmd "   "
+cmd "\t"
+cmd " \t "
+cmd "dir"
+cmd "DiR"
+cmd "   DIR"
+cmd "DIR    NOEXIST.*"
+cmd "A:"
+cmd "B:"
+cmd "A:"
+cmd "B:DIR"
+cmd "B:NOEXIST"
+cmd "DIR"
+cmd "DIR.COM"
+cmd "TYPE.COM"
+cmd "DI"
+cmd "DIRX"
+cmd "NOEXIST"
+cmd "FOO.TXT"
+cmd ":FOO"
+cmd "AA:"
+cmd "FOO:BAR"
+cmd "FOO;BAR"
+cmd "PARSE21 one two"
+cmd "parse21   a:b *.com"
+cmd "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+expect ">"
+send "\034"
+expect eof

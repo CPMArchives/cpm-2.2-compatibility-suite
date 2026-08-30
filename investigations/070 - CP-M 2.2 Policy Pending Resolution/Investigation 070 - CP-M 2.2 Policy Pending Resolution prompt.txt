@@ -1,0 +1,291 @@
+Investigation 070 — CP/M 2.2 Policy Pending Resolution Prompt
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 069 is complete.
+
+The authoritative Compatibility Ledger is now the Investigation 069
+canonical ledger.
+
+Create Investigation 070 as a new evidence report with its own directory
+and preserved artifacts.
+
+Do not modify the Compatibility Ledger directly.
+
+Do not modify previous investigation reports or artifacts.
+
+This investigation may recommend ledger disposition changes, but the
+controlled ledger update remains a separate workflow step.
+
+This is a compatibility policy investigation only.
+
+Do not implement BetterCP/M changes.
+
+OBJECTIVE
+
+Resolve the remaining POLICY PENDING compatibility propositions and
+determine the compatibility commitments BetterCP/M will make.
+
+Previous investigations established:
+
+-   the observable CP/M 2.2 compatibility boundary;
+-   the historical software ecosystem;
+-   implementation and hardware boundaries;
+-   profile layering;
+-   conformance concepts;
+-   the canonical Compatibility Ledger.
+
+Investigation 069 resolved ledger integrity issues and intentionally
+left policy decisions unresolved.
+
+Investigation 070 determines:
+
+-   which POLICY PENDING propositions become release requirements;
+-   which belong only to compatibility profiles;
+-   which remain optional;
+-   which are not guaranteed;
+-   which are outside the BetterCP/M compatibility claim.
+
+COMPATIBILITY STANDARD
+
+Evaluate policy decisions using:
+
+-   documented CP/M 2.2 behavior;
+-   Digital Research implementation evidence;
+-   historical software ecosystem expectations;
+-   compatibility impact;
+-   implementation responsibility boundaries.
+
+The question is not:
+
+    "Did this behavior ever exist?"
+
+The question is:
+
+    "What compatibility does BetterCP/M promise to provide?"
+
+Do not expand the compatibility claim merely because a historical
+behavior was observed.
+
+Do not remove compatibility requirements merely because implementation
+is inconvenient.
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Review completed investigations through Investigation 069.
+
+Pay particular attention to:
+
+Investigation 055: CP/M 2.2 Community Compatibility Standard.
+
+Investigation 056: CP/M 2.2 Compatibility Requirements to Architecture
+Mapping.
+
+Investigation 057: CP/M 2.2 Required CP/M Personality Boundary.
+
+Investigation 058: CP/M 2.2 Non-CP/M BetterCP/M Feature Boundary.
+
+Investigation 059: CP/M 2.2 Compatibility Conformance Test Suite Design.
+
+Investigation 068: CP/M 2.2 Final Engineering Gap Assessment.
+
+Investigation 069: CP/M 2.2 Compatibility Ledger Integrity Resolution.
+
+SCOPE
+
+Investigate:
+
+-   all remaining POLICY PENDING propositions;
+-   release applicability;
+-   compatibility commitments;
+-   profile boundaries;
+-   conformance implications.
+
+NON-GOALS
+
+Do not investigate:
+
+-   ledger identifier cleanup;
+-   conformance framework design;
+-   BetterCP/M implementation;
+-   architecture decisions;
+-   new CP/M behavior discovery.
+
+INVESTIGATION QUESTIONS
+
+1.  POLICY INVENTORY
+
+Identify all POLICY PENDING propositions.
+
+For each item record:
+
+-   proposition identifier;
+-   title;
+-   originating investigation;
+-   evidence basis;
+-   compatibility significance.
+
+2.  RELEASE APPLICABILITY
+
+Determine whether each policy item is:
+
+-   Required for BetterCP/M baseline compatibility;
+-   Required only for a compatibility profile;
+-   Optional compatibility feature;
+-   Not guaranteed;
+-   Outside the compatibility claim.
+
+3.  COMPATIBILITY PHILOSOPHY
+
+Determine:
+
+-   whether BetterCP/M promises exact CP/M behavior;
+-   whether profiles extend the baseline;
+-   where implementation freedom remains;
+-   what historical behaviors are intentionally excluded.
+
+4.  PROFILE BOUNDARIES
+
+Evaluate whether policy items belong to:
+
+-   Generic CP/M compatibility;
+-   Processor profiles;
+-   BIOS/device profiles;
+-   Hardware profiles;
+-   Application/ecosystem profiles.
+
+5.  SOFTWARE ECOSYSTEM IMPACT
+
+Determine:
+
+-   whether historical software depends on the behavior;
+-   whether excluding the behavior affects practical compatibility;
+-   whether profile support is sufficient.
+
+6.  CONFORMANCE IMPACT
+
+Determine:
+
+-   which policy decisions require conformance tests;
+-   which tests must be updated;
+-   which behaviors are explicitly outside certification.
+
+7.  EXPERIMENTAL REQUIREMENTS
+
+Create a policy resolution matrix.
+
+Each entry must include:
+
+-   proposition identifier;
+-   current POLICY PENDING status;
+-   evidence reviewed;
+-   decision;
+-   rationale;
+-   conformance impact.
+
+EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A: documented behavior.
+
+B: Digital Research implementation behavior.
+
+I: experimental observation.
+
+D: unresolved policy.
+
+Ledger evidence must identify:
+
+I070 POLICY PENDING RESOLUTION subsystem IG AG
+
+COMPATIBILITY CLASSIFICATION
+
+Classify resolved policies as:
+
+REQUIRED
+
+PROFILE REQUIRED
+
+OPTIONAL
+
+NOT GUARANTEED
+
+OUTSIDE SCOPE
+
+Do not classify based only on:
+
+-   historical existence;
+-   implementation convenience;
+-   personal preference.
+
+Classifications must be justified by compatibility impact.
+
+LEDGER REVIEW
+
+Review affected Compatibility Ledger entries.
+
+Determine:
+
+-   recommended disposition changes;
+-   rationale;
+-   conformance implications.
+
+Do not modify the canonical ledger directly.
+
+REPORT STRUCTURE
+
+Create:
+
+Investigation 070 - CP/M 2.2 Policy Pending Resolution.md
+
+Include:
+
+1.  Objective and scope
+
+2.  Relationship to previous investigations
+
+3.  Policy inventory
+
+4.  Evidence review
+
+5.  Resolution methodology
+
+6.  Policy resolution matrix
+
+7.  Compatibility commitment analysis
+
+8.  Profile boundary analysis
+
+9.  Conformance impact analysis
+
+10. Recommended ledger updates
+
+11. Existing-entry impacts
+
+12. Open questions
+
+13. Release implications
+
+FINAL REVIEW
+
+Before completing the investigation, verify:
+
+-   every POLICY PENDING item was reviewed;
+-   decisions are evidence-based;
+-   policy decisions are separated from technical facts;
+-   compatibility commitments are explicit;
+-   unresolved issues are clearly identified.
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not redesign CP/M compatibility.
+
+Do not alter the canonical ledger directly.
+
+Determine what compatibility BetterCP/M promises only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

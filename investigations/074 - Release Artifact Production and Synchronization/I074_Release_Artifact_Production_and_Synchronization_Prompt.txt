@@ -1,0 +1,113 @@
+Investigation 074 — Release Artifact Production and Synchronization
+
+## Objective
+
+Produce the controlled release artifacts required for the BetterCP/M CP/M 2.2 Compatibility Standard Release Candidate.
+
+I074 continues from Investigation 073, which established the release assembly plan, authoritative sources, artifact inventory, synchronization rules, missing components, and ownership model.
+
+This investigation converts identified release requirements into completed normative publication artifacts.
+
+## Scope
+
+I074 shall produce and synchronize:
+
+1. Final Compatibility Standard
+- Assemble the normative compatibility standard from frozen sources.
+- Preserve compatibility commitments already established.
+- Do not introduce new compatibility requirements.
+
+2. Final Compatibility Policy
+- Produce the synchronized public policy document.
+- Ensure policy statements match Investigation 070 decisions.
+- Ensure release applicability is explicit.
+
+3. Public Conformance Specification
+- Promote the Investigation 071 framework into a release-facing specification.
+- Preserve frozen test identifiers, proposition mappings, and oracle definitions.
+- Do not redesign conformance.
+
+4. Profile Registry
+- Create the first release profile registry.
+- Assign stable profile identifiers and versions.
+- Define first-release applicability.
+- Preserve existing profile meanings.
+- Do not weaken or expand compatibility propositions.
+
+## Authoritative Inputs
+
+Use:
+
+- Compatibility Ledger 072
+- Investigation 070 policy resolution artifacts
+- Investigation 071 conformance framework
+- Investigation 072 readiness assessment
+- Investigation 073 release-content plan and synchronization matrix
+
+These artifacts define authority.
+
+## Non-Goals
+
+Do not:
+
+- discover new CP/M behavior;
+- modify ledger propositions;
+- change dispositions;
+- alter conformance requirements;
+- redesign architecture;
+- implement certification tooling.
+
+Any requested semantic change must become a separate investigation.
+
+## Synchronization Requirements
+
+Verify consistency among:
+
+- compatibility standard;
+- policy;
+- ledger;
+- conformance specification;
+- profile registry.
+
+Maintain:
+
+- proposition identifiers;
+- profile references;
+- test identifiers;
+- oracle versions;
+- terminology;
+- release applicability.
+
+## Required Outputs
+
+Create:
+
+Investigation 074 - Release Artifact Production and Synchronization.md
+
+Include:
+
+1. Objective and scope
+2. Authoritative inputs
+3. Artifact production status
+4. Compatibility standard status
+5. Policy publication status
+6. Conformance specification status
+7. Profile registry status
+8. Synchronization validation
+9. Remaining issues
+10. Completion assessment
+
+## Completion Criteria
+
+I074 is complete when:
+
+- required normative documents are produced;
+- cross-document synchronization is verified;
+- frozen compatibility decisions remain unchanged;
+- remaining work is limited to package assembly, manifest creation, and publication activities.
+
+## Ledger Requirement
+
+I074 does not automatically modify the Compatibility Ledger.
+
+If ledger changes are required, document them explicitly and perform a separate controlled Codex ledger update from Ledger 072.

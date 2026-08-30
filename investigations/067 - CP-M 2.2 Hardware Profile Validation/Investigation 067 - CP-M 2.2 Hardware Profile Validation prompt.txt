@@ -1,0 +1,322 @@
+Investigation 067 — CP/M 2.2 Hardware Profile Validation Prompt
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 066 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation 066.
+
+Create Investigation 067 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports or artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Validate hardware compatibility profiles to determine the boundary
+between generic CP/M 2.2 compatibility and machine-specific behavior.
+
+Previous investigations established:
+
+- the CP/M 2.2 compatibility standard;
+- hardware-dependent software boundaries;
+- processor and instruction assumptions;
+- communications profiles;
+- storage fault behavior;
+- conformance requirements.
+
+Investigation 067 determines whether hardware-specific compatibility
+claims can be defined and validated separately from the general CP/M
+compatibility contract.
+
+Determine:
+
+- which hardware behaviors belong to compatibility profiles;
+- which behaviors remain outside the CP/M contract;
+- what evidence is required to claim compatibility with a specific
+  hardware environment.
+
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+- documented CP/M 2.2 behavior;
+- Digital Research implementation behavior;
+- common CP/M programming practices;
+- historically significant hardware dependencies.
+
+Distinguish between:
+
+- generic CP/M compatibility;
+- BIOS-level compatibility;
+- machine-profile compatibility;
+- implementation-specific behavior.
+
+Do not assume a hardware feature is required without evidence.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Review completed investigations through Investigation 066.
+
+Pay particular attention to:
+
+Investigation 051:
+    CP/M 2.2 Hardware-Dependent Software Compatibility Survey.
+
+Investigation 056:
+    CP/M 2.2 Compatibility Requirements to Architecture Mapping.
+
+Investigation 057:
+    CP/M 2.2 Required CP/M Personality Boundary.
+
+Investigation 063:
+    CP/M 2.2 Processor and Instruction Profile.
+
+Investigation 066:
+    CP/M 2.2 Physical Fault and Recovery Validation.
+
+
+SCOPE
+
+Investigate:
+
+- historical CP/M hardware environments;
+- BIOS variations;
+- peripheral assumptions;
+- machine-specific software;
+- hardware profile definitions;
+- compatibility evidence requirements.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- BetterCP/M hardware architecture;
+- emulator design;
+- new hardware support;
+- unsupported hardware platforms.
+
+
+INVESTIGATION QUESTIONS
+
+
+1. HARDWARE PROFILE CORPUS
+
+Identify representative CP/M hardware environments.
+
+Record:
+
+- hardware name;
+- processor;
+- BIOS characteristics;
+- storage devices;
+- peripherals;
+- software dependencies;
+- evidence collected.
+
+
+2. HARDWARE-SPECIFIC BEHAVIOR
+
+Determine dependencies involving:
+
+- display hardware;
+- keyboard behavior;
+- storage controllers;
+- serial devices;
+- printers;
+- memory configuration;
+- peripheral interfaces.
+
+
+3. CP/M VERSUS HARDWARE BOUNDARY
+
+Determine:
+
+- which behaviors are required for CP/M compatibility;
+- which behaviors belong to a hardware profile;
+- which behaviors are optional capabilities.
+
+
+4. SOFTWARE IMPACT
+
+Determine:
+
+- whether software depends on specific hardware behavior;
+- whether those dependencies are widespread;
+- whether profile support affects conformance claims.
+
+
+5. BIOS PROFILE VALIDATION
+
+Determine:
+
+- whether BIOS behavior can represent hardware differences;
+- which BIOS characteristics are externally observable;
+- which differences affect software compatibility.
+
+
+6. PROFILE CONFORMANCE
+
+Determine:
+
+- evidence required for a hardware profile claim;
+- tests required for profile validation;
+- relationship between generic conformance and profile conformance.
+
+
+7. EXPERIMENTAL REQUIREMENTS
+
+Create hardware profile validation records.
+
+Each record must include:
+
+- hardware profile;
+- software tested;
+- environment;
+- procedure;
+- observed behavior;
+- compatibility conclusion.
+
+
+8. CONTROLLED TEST MATRIX
+
+Include:
+
+- generic CP/M tests;
+- hardware profile tests;
+- peripheral tests;
+- software compatibility tests;
+- boundary cases.
+
+
+EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+    documented behavior.
+
+B:
+    Digital Research implementation behavior.
+
+I:
+    experimental observation.
+
+D:
+    unresolved policy.
+
+
+Ledger evidence must identify:
+
+I067
+HARDWARE
+PROFILE
+VALIDATION
+subsystem
+IG
+AG
+
+
+COMPATIBILITY CLASSIFICATION
+
+Classify findings:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Do not require:
+
+- hardware-specific behavior without evidence;
+- implementation details;
+- machine quirks invisible to software.
+
+
+LEDGER REVIEW
+
+Review affected Compatibility Ledger entries.
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+Do not modify the ledger directly.
+
+
+REPORT STRUCTURE
+
+Create:
+
+Investigation 067 - CP/M 2.2 Hardware Profile Validation.md
+
+Include:
+
+1. Objective and scope
+
+2. Relationship to previous investigations
+
+3. Hardware profile corpus
+
+4. Hardware dependency analysis
+
+5. CP/M versus hardware boundary analysis
+
+6. Software impact analysis
+
+7. BIOS profile analysis
+
+8. Profile conformance analysis
+
+9. Experimental results
+
+10. Compatibility conclusions
+
+11. Proposed ledger additions
+
+12. Existing-entry updates
+
+13. Open questions
+
+14. Conformance implications
+
+
+FINAL REVIEW
+
+Before completing the investigation, verify:
+
+- hardware profiles are separated from generic CP/M compatibility;
+- evidence supports all profile requirements;
+- machine-specific behavior is not incorrectly promoted to a universal
+  requirement;
+- conformance implications are identified.
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M hardware architecture.
+
+Do not assume hardware behavior is required without evidence.
+
+Determine the CP/M 2.2 hardware profile compatibility boundary only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

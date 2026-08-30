@@ -1,0 +1,30 @@
+INVESTIGATION 035 COMPLETION AUDIT
+
+Probe rebuild
+  Nine COM artifacts rebuilt byte-identically: PASS
+  Custom fault emulator rebuilt; SHA-256:
+  55c26df111af31e99cecdeeffd0a774ea71c6e0555d618e074e9ef954b303461
+
+Controlled images
+  Seven cases used fresh A/B image copies: PASS
+  All fourteen after-images match their corresponding before-images: PASS
+
+Artifact presence
+  Required report, BOOT35, WARM35, COLD35, STATE35, RECOVER35, sources,
+  binaries, README, observed output, transcripts, images, harnesses, source
+  references, and hashes: PASS
+
+Protected BetterCP/M tree
+  Baseline manifest: protected-before.sha256 (1,751 files)
+  Matching files: 1,749
+  External differences observed during execution:
+    compatibility/02 Compatibility Ledger - Investigation 034.txt
+      before: e199cfb104bb3f9b675a08e579ef7562bbed7ea34286853fe42dfda42827fb09
+      after:  62e6614d59ef63cd391e05e273c35fbed8ab9d9be1ea83e79083a0933fd8d9c9
+      still ends at entry 0592
+    investigations/033 .../.DS_Store
+      Finder metadata changed independently of Investigation 035
+
+  Investigation 035 did not write either file. No other baseline file changed.
+  No Compatibility Ledger modification was made by Investigation 035.
+

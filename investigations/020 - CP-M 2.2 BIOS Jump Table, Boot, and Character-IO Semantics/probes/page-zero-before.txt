@@ -1,0 +1,5 @@
+BIOS020 initial PZ00-07:       C3 03 FA 00 00 C3 06 EC
+WBOOT20 immediately before:   C3 03 FA 00 00 C3 06 EC
+
+WBOOT20 then set only byte 0000h and byte 0005h to 00h. The saved operands
+FA03h and EC06h were not altered. It invoked the saved FA03h target directly.

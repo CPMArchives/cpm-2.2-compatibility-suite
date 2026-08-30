@@ -1,0 +1,1306 @@
+INVESTIGATION 022 — CP/M 2.2 CCP Transient Program Lookup, Loading,
+and Execution Semantics
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 021 is complete.
+
+The authoritative Compatibility Ledger is now:
+
+    02 Compatibility Ledger - Investigation 021.txt
+
+It incorporates findings through Investigation 021 and currently ends at
+entry 0491.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify any previous investigation report, architecture document,
+roadmap, source archive, or other pre-existing BetterCP/M file.
+
+Create Investigation 022 as a new evidence report with its own directory
+and associated probe/harness artifacts.
+
+This is an EVIDENCE INVESTIGATION, not BetterCP/M implementation work.
+
+
+OBJECTIVE
+
+Establish the CP/M 2.2 Console Command Processor transient-program lookup,
+loading, execution, and immediate return/error contract.
+
+Investigation 021 established the common CCP command-processing path through:
+
+    command acquisition
+        |
+        v
+    normalization and parsing
+        |
+        v
+    built-in recognition
+        |
+        +----------------------+
+        |                      |
+        v                      v
+    built-in command       transient candidate
+
+Investigation 001 established the transient environment after successful
+loading and immediately before/at transfer to 0100h.
+
+Investigation 022 must characterize the path between those two established
+boundaries:
+
+    transient candidate
+        |
+        v
+    executable file specification
+        |
+        v
+    drive/user context
+        |
+        v
+    Open / lookup
+        |
+        v
+    sequential load into TPA
+        |
+        v
+    EOF / size / capacity handling
+        |
+        v
+    final transient-entry preparation
+        |
+        v
+    transfer to 0100h
+        |
+        v
+    transient termination / CCP recovery
+
+The investigation should determine the smallest externally observable
+contract BetterCP/M must reproduce without turning the DRI CCP's particular
+internal loader implementation into a compatibility requirement.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read the current Compatibility Ledger and relevant previous investigations
+before designing experiments.
+
+In particular, use:
+
+    Investigation 001
+        COM load origin, transient entry point, page-zero state, default
+        FCBs, command tail, default DMA, entry stack, RET termination,
+        JMP 0000h termination, and BDOS Function 0 termination.
+
+    Investigation 002
+        BDOS calling convention.
+
+    Investigation 007
+        Current drive, disk selection, login state, and drive queries.
+
+    Investigation 008
+        FCB identification and Open/Close semantics.
+
+    Investigation 009
+        Directory search and DMA transfer semantics.
+
+    Investigation 010
+        Sequential Read semantics.
+
+    Investigation 013
+        Random access and file-size semantics where relevant to comparison
+        with the CCP loader.
+
+    Investigation 015
+        Physical disk errors and error presentation.
+
+    Investigation 019
+        BIOS logical-sector and disk-I/O boundary.
+
+    Investigation 020
+        WBOOT and return to the command environment.
+
+    Investigation 021
+        CCP command parsing, built-in recognition, drive-only commands,
+        drive-prefixed command behavior, resident/transient dispatch
+        boundary, generic errors, and transient preparation.
+
+Do not duplicate propositions already established by those investigations.
+
+In particular, Investigation 001 already establishes the successful
+transient-entry result. Investigation 022 should explain how CCP gets there
+and establish any new compatibility-visible behavior along the way.
+
+Investigation 021 already establishes that after built-in recognition fails,
+the DRI CCP attempts transient lookup. Do not reinvestigate the general
+parser except where necessary to establish loader input.
+
+
+SCOPE BOUNDARY
+
+Investigation 022 includes:
+
+    transient executable name formation
+    COM extension handling
+    drive selection for lookup
+    user-area context for lookup
+    file Open behavior used by CCP
+    sequential loading
+    load address progression
+    record-size behavior
+    EOF handling
+    TPA capacity behavior
+    zero-length and malformed executable cases where meaningful
+    execution transfer
+    immediate loader failure behavior
+    transient termination back to CCP where needed to establish the
+        complete execution cycle
+
+Investigation 022 does NOT attempt to investigate the detailed semantics of:
+
+    DIR
+    ERA
+    REN
+    SAVE
+    TYPE
+    USER
+
+Those remain separate CCP resident-command subjects.
+
+It also does not re-investigate the general BDOS Open, Read Sequential,
+DMA, or error contracts already established. It should determine how the
+CCP uses those contracts to implement transient execution.
+
+
+QUESTIONS TO RESOLVE
+
+
+1. TRANSIENT-CANDIDATE INPUT TO THE LOADER
+
+Begin at the boundary established by Investigation 021.
+
+Determine exactly what information the loader receives when the command is
+not recognized as a built-in.
+
+Establish:
+
+- representation of the parsed command name;
+- whether the name is already uppercase;
+- whether a drive prefix has already been resolved;
+- whether the extension field is empty, explicit, or synthesized;
+- whether default FCBs have already been constructed;
+- whether the transient command tail has already been constructed;
+- what current drive is in effect;
+- what user number is in effect.
+
+Do not duplicate Investigation 021 findings. Record them only insofar as
+they define the loader's inputs.
+
+
+2. EXECUTABLE FILE SPECIFICATION
+
+Determine precisely how DRI CCP constructs the executable file
+specification.
+
+Establish:
+
+- whether `.COM` is inserted by CCP;
+- whether the executable type is always COM;
+- whether the caller may explicitly type `.COM`;
+- what happens with an explicit non-COM extension;
+- whether a command with an explicit extension is transformed before Open;
+- whether the filename is represented as an FCB;
+- exact filename/type fields passed to BDOS Open;
+- drive-byte treatment.
+
+Trace DRI CCP source rather than assuming behavior from modern shell
+conventions.
+
+
+3. COMMAND NAME LENGTH AND 8.3 INTERACTION
+
+Determine how the command token maps onto CP/M's 8.3 filename model.
+
+Establish:
+
+- maximum executable basename length;
+- behavior of names shorter than eight characters;
+- behavior of names exactly eight characters;
+- behavior of names longer than eight characters;
+- whether excess characters are rejected, truncated, or parsed differently;
+- interaction with an explicit period/type;
+- whether malformed executable names reach BDOS Open.
+
+Cross-check Investigation 021's command-token parsing findings and
+Investigation 008's FCB filename semantics.
+
+
+4. CURRENT-DRIVE TRANSIENT LOOKUP
+
+For an unprefixed transient command such as:
+
+    FOO
+
+determine:
+
+- which drive is searched;
+- whether only the current drive is searched;
+- whether any automatic multi-drive search exists;
+- whether any system drive is searched;
+- whether user 0 receives special search treatment;
+- whether lookup remains within the current user area;
+- what happens when FOO.COM exists elsewhere but not in the active
+  drive/user context.
+
+Do not import later ZCPR/Z-System path-search behavior into CP/M 2.2.
+
+
+5. EXPLICIT-DRIVE TRANSIENT LOOKUP
+
+For a command such as:
+
+    B:FOO
+
+determine:
+
+- whether FOO.COM is looked up on B:;
+- whether the current drive is temporarily or persistently changed;
+- whether BDOS Function 14 is used;
+- whether page-zero 0004h reflects the command drive during execution;
+- what default FCB drive bytes reflect;
+- what happens after the transient terminates;
+- whether the original drive is restored;
+- whether behavior differs after RET, Function 0, and JMP 0000h
+  termination.
+
+Cross-check Investigation 021's drive-prefixed command behavior.
+
+Do not assume that lookup drive, command-entry default drive, and persistent
+CCP current drive are necessarily the same concept.
+
+
+6. USER-AREA LOOKUP
+
+Determine the role of the current CP/M user number in transient lookup.
+
+Establish:
+
+- whether CCP searches only the current user area;
+- whether user 0 receives any fallback or privileged search;
+- whether a program in another user area can be executed without first
+  changing user;
+- whether an explicit drive prefix affects user-area lookup;
+- what user number the transient sees during execution;
+- whether termination preserves the user number.
+
+Use controlled copies of disks with uniquely marked COM files in different
+user areas if necessary.
+
+Do not infer later CP/M variants' search behavior.
+
+
+7. BDOS OPEN USED BY CCP
+
+Trace the DRI CCP executable Open operation.
+
+Determine:
+
+- which BDOS function is called;
+- exact FCB state supplied;
+- expected success/failure result;
+- whether extent/module fields are initialized in a particular way;
+- whether the CCP depends upon undocumented Open side effects;
+- what state from the opened FCB is subsequently used by the loader.
+
+Do not duplicate Investigation 008's general Open contract.
+
+Create a new ledger proposition only if CCP imposes an independently
+observable requirement not already captured there.
+
+
+8. LOADER DMA STRATEGY
+
+Determine how CCP uses DMA while loading a COM file.
+
+Establish:
+
+- initial DMA address used for the first program record;
+- whether DMA is set to 0100h before the first read;
+- how DMA advances for successive records;
+- whether DMA advances in 128-byte increments;
+- whether the CCP resets DMA to 0080h before transferring control to the
+  transient;
+- relationship to Investigation 001's REQUIRED default-DMA-at-entry
+  proposition;
+- what happens to command-tail data at 0080h while loading.
+
+This is a key boundary question.
+
+Investigation 001 established that the transient begins with default DMA at
+0080h and the command tail in the same buffer. Investigation 022 should
+determine how CCP preserves/restores that state while loading program data.
+
+
+9. LOAD ORIGIN
+
+Confirm from loader behavior, not merely final observation, that the first
+128-byte executable record is placed beginning at:
+
+    0100h
+
+Cross-check existing ledger entries rather than duplicating them.
+
+Determine whether the loader computes this address from a symbolic TPA base
+or uses a fixed 0100h assumption.
+
+Only the externally required result belongs in the Compatibility Ledger.
+
+
+10. SUCCESSIVE RECORD PLACEMENT
+
+Determine how subsequent 128-byte records are placed.
+
+Establish:
+
+- exact address progression;
+- whether records are contiguous;
+- whether any gaps are inserted;
+- whether every successful sequential read advances the destination by
+  0080h;
+- what happens to the final partial logical record;
+- whether CCP clears bytes beyond physical EOF inside the final 128-byte
+  record.
+
+Be careful: CP/M files are record-oriented, and directory length metadata
+does not generally preserve an arbitrary byte-precise host-file EOF.
+
+Do not impose modern byte-stream semantics on COM loading.
+
+
+11. SEQUENTIAL READ LOOP
+
+Trace the DRI CCP load loop.
+
+Determine:
+
+- use of BDOS Function 20;
+- interpretation of A=00h success;
+- interpretation of A=01h EOF;
+- handling of other return values;
+- whether the loader closes the executable before execution;
+- whether Close is necessary;
+- whether the loader uses random access or file-size calls at any point.
+
+Cross-check Investigations 008, 010, and 015.
+
+The objective is CCP loader behavior, not re-documentation of Function 20.
+
+
+12. END-OF-FILE HANDLING
+
+Determine what terminates successful loading.
+
+Establish:
+
+- whether the first sequential-read EOF ends the load;
+- whether EOF itself is considered successful;
+- whether a file containing exactly N records produces N loaded records;
+- whether a zero-record executable can be opened and what happens next;
+- whether the loader distinguishes logical EOF from a physical read error.
+
+If zero-length COM files cannot be represented straightforwardly in the
+reference CP/M file system, document that limitation rather than inventing a
+test.
+
+
+13. FINAL PARTIAL RECORD SEMANTICS
+
+Investigate the last CP/M record carefully.
+
+Because CP/M files are represented in 128-byte records, determine:
+
+- what bytes are loaded for the final record;
+- whether CCP has any byte-count information below the 128-byte level;
+- whether unused bytes are whatever is physically stored in the final
+  record;
+- whether any clearing or padding is performed by CCP;
+- whether a transient may observe bytes beyond the intended program's
+  logical machine-code end.
+
+Classify any stale/padding behavior conservatively.
+
+Do not require exact residual bytes unless CP/M actually defines them.
+
+
+14. MAXIMUM LOADABLE TRANSIENT SIZE
+
+Determine how CCP prevents a COM file from overwriting resident CP/M.
+
+Establish:
+
+- how the upper load boundary is determined;
+- relationship to the BDOS entry address at page-zero 0005h;
+- relationship to the TPA upper boundary established in Investigation 001;
+- whether CCP checks destination before each read;
+- whether it permits a record whose end exactly reaches the allowed
+  boundary;
+- whether the check is record-granular;
+- maximum loadable COM size in the reference configuration;
+- which part is configuration-specific versus universally semantic.
+
+Do not turn the reference system's numeric BDOS address or TPA size into a
+portable requirement.
+
+
+15. OVERSIZE COM FILE
+
+Construct a controlled executable larger than the available transient
+program area.
+
+Determine:
+
+- whether CCP detects the condition before overwriting BDOS;
+- exact point at which it detects it;
+- whether the excessive record is read;
+- whether resident memory is preserved;
+- whether execution is suppressed;
+- error presentation;
+- recovery to the command loop;
+- disk/current-drive/user state after failure.
+
+Use a safe deterministic fixture.
+
+Do not risk the authoritative reference disk or project files.
+
+
+16. EXACT-BOUNDARY COM FILE
+
+If practical, construct controlled COM files near the maximum loadable size.
+
+Test at least:
+
+    largest clearly valid size
+    first clearly invalid size
+
+and, if the source reveals an interesting boundary:
+
+    exactly one record below limit
+    exactly at limit
+    one record beyond limit
+
+The purpose is to establish comparison semantics and record granularity, not
+merely the approximate maximum size.
+
+
+17. LOAD FAILURE FROM MISSING FILE
+
+Investigation 021 established generic unrecognized-command behavior.
+
+Investigation 022 should now trace the missing transient through the actual
+Open attempt.
+
+Determine:
+
+- exact FCB presented to Open;
+- Open return value;
+- whether any additional lookup is attempted;
+- whether another drive or user area is searched;
+- transition to the generic CCP error path;
+- whether DMA or other state is restored before the next prompt.
+
+Do not duplicate I021's presentation proposition unless new evidence changes
+it.
+
+
+18. READ ERROR DURING LOAD
+
+Where safely testable, force a read failure after successful Open.
+
+Determine:
+
+- whether CCP distinguishes physical/read failure from ordinary EOF;
+- whether BDOS itself intercepts the physical error under the semantics
+  established by Investigation 015;
+- whether CCP receives control again;
+- whether partial program contents are ever executed;
+- recovery behavior.
+
+If Investigation 015 already makes the result inevitable and a new
+experiment adds no value, use source analysis instead and state why.
+
+
+19. PROGRAM EXECUTION TRANSFER
+
+Trace the final successful loader steps immediately before execution.
+
+Determine:
+
+- restoration of DMA to 0080h;
+- final default-FCB state;
+- final command-tail state;
+- stack setup;
+- creation of the valid RET return word;
+- CALL versus JP transfer to 0100h;
+- relationship to Investigation 001's observed entry SP and return address;
+- whether any registers are deliberately established;
+- whether interrupts are deliberately changed.
+
+Do not duplicate Investigation 001's entry propositions.
+
+Instead, use I022 to strengthen their evidence where appropriate.
+
+
+20. CALL 0100h AND RET RETURN PATH
+
+Investigation 001/I002 established that RET termination is valid.
+
+Trace the CCP mechanism beneath it.
+
+Determine:
+
+- whether DRI CCP executes CALL 0100h;
+- where the return address leads;
+- what CCP does immediately after RET;
+- whether RET returns directly to the command loop or through cleanup;
+- whether drive/user/DMA state is repaired;
+- whether CCP invokes warm boot after RET;
+- whether the command is re-prompted without WBOOT.
+
+This is likely to provide stronger evidence for existing transient-return
+ledger entries.
+
+Do not require the exact numeric CCP return address.
+
+
+21. BDOS FUNCTION 0 TERMINATION PATH
+
+Trace a transient that terminates through BDOS Function 0.
+
+Determine:
+
+- whether Function 0 invokes BIOS WBOOT;
+- whether CCP is reloaded/re-entered;
+- whether the path differs observably from RET;
+- whether command environment state differs;
+- what drive/user state survives;
+- what page-zero/DMA state is reconstructed.
+
+Cross-check Investigations 001, 007, and 020.
+
+Only create new propositions for genuinely new externally visible
+distinctions.
+
+
+22. JMP 0000h TERMINATION PATH
+
+Likewise trace:
+
+    JMP 0000h
+
+Determine its relationship to:
+
+    page-zero WBOOT vector
+    BIOS WBOOT
+    CCP re-entry
+    disk/login state
+    DMA restoration
+    prompt recovery
+
+Cross-check existing ledger entries rather than duplicating them.
+
+
+23. RETURN-PATH COMPARISON
+
+Using small deterministic marker programs, compare:
+
+    RET
+    BDOS Function 0
+    JMP 0000h
+
+Record externally visible post-termination state, including where useful:
+
+    current drive
+    user number
+    prompt
+    page-zero vectors
+    DMA behavior
+    disk login state
+
+The purpose is not to prove they are internally identical. Determine which
+observable consequences are required to be equivalent and which differ.
+
+
+24. PROGRAM THAT FALLS THROUGH
+
+Construct, only if safe and diagnostically useful, a controlled program whose
+execution does not terminate normally but falls beyond its intended bytes.
+
+Determine whether CP/M defines any protection against this.
+
+Most likely this is simply erroneous application behavior.
+
+Do not turn crash behavior into a compatibility requirement unless primary
+evidence establishes one.
+
+This test may be omitted if it adds no compatibility information.
+
+
+25. EMPTY OR MINIMAL TRANSIENT
+
+Test the smallest meaningful transient programs.
+
+Examples:
+
+    RET
+
+and, where representable:
+
+    a one-record file beginning with RET
+
+Use these to verify:
+
+    load origin
+    execution transfer
+    return path
+    final DMA
+    command-tail preservation
+
+Do not duplicate existing propositions merely because the fixture confirms
+them.
+
+
+26. PROGRAM SELF-OBSERVATION PROBE
+
+Create or reuse a small transient probe that records the entry environment
+after being loaded through the ordinary CCP path.
+
+Where useful capture:
+
+    SP and return word
+    0000h vector
+    0003h IOBYTE
+    0004h command-entry drive
+    0005h BDOS vector
+    default FCB 1
+    default FCB 2
+    0080h command-tail count
+    0081h onward
+    initial DMA behavior
+
+Use this primarily to connect loader findings to Investigation 001.
+
+Do not re-open settled questions unless I022 evidence conflicts with them.
+
+
+27. LOAD-MEMORY OBSERVATION
+
+Construct deterministic COM images containing recognizable per-record
+patterns.
+
+For example, use distinct markers in successive 128-byte records so the
+loaded memory can demonstrate:
+
+    record 0 -> 0100h
+    record 1 -> 0180h
+    record 2 -> 0200h
+    ...
+
+Choose a safe observation technique that does not itself overwrite the
+memory being measured.
+
+Preserve source/generator and exact binary hashes.
+
+
+28. USER-AREA FIXTURE
+
+If needed, create identical command names with distinct marker programs in
+different user areas.
+
+Use this to determine exactly which program CCP executes under different
+current-user settings.
+
+Preserve:
+
+    before image
+    after image
+    directory listings by user
+    command transcript
+    marker output
+    hashes
+
+
+29. DRIVE-LOOKUP FIXTURE
+
+Likewise, where needed, create same-named marker programs on different
+drives.
+
+Determine:
+
+    unprefixed lookup
+    explicit-drive lookup
+    persistent current drive after return
+    command-entry drive byte
+    default-FCB drive interpretation
+
+Use copies of reference disks and preserve before/after evidence.
+
+
+30. CCP RELOAD VERSUS PERSISTENCE
+
+Determine what happens to CCP itself across transient execution.
+
+Distinguish:
+
+    ordinary CALL 0100h / RET
+        from
+    WBOOT-based termination
+
+Establish from source and experiment:
+
+- whether CCP remains resident during ordinary transient execution;
+- whether transient loading can overwrite any portion of CCP;
+- whether WBOOT reloads CCP in the reference system;
+- whether the requirement is that CCP be restored, rather than that a
+  particular physical reload mechanism be used.
+
+This distinction is important for BetterCP/M.
+
+Do not require historical floppy-sector reload mechanics if only the
+resulting command-environment restoration is compatibility-visible.
+
+
+31. CCP/BDOS MEMORY BOUNDARY
+
+Determine how the loader protects the resident system.
+
+Establish whether the CCP loader's upper-bound calculation is tied to:
+
+    BDOS entry address
+    CCP location
+    BIOS location
+    another system variable
+
+Separate:
+
+    portable semantic requirement:
+        transient loading must not destroy the resident system
+
+from:
+
+    DRI implementation mechanism:
+        exact arithmetic/address comparison used by CCP
+
+Do not turn an implementation technique into a compatibility proposition
+unless software can observe it.
+
+
+32. SOURCE ANALYSIS
+
+Trace DRI `OS2CCP.ASM` sufficiently to identify:
+
+    transient dispatch entry
+    executable FCB construction
+    COM type insertion
+    drive handling
+    Open
+    DMA setup
+    sequential Read loop
+    destination advancement
+    upper-bound check
+    EOF handling
+    load-error handling
+    DMA restoration
+    stack/return setup
+    CALL 0100h
+    RET recovery
+    WBOOT interaction
+
+Trace BDOS source only where necessary to understand the CCP's assumptions.
+
+Do not produce a general line-by-line CCP commentary.
+
+
+33. DOCUMENTATION ANALYSIS
+
+Consult primary DRI documentation for the documented transient-program
+execution model.
+
+Determine what is explicitly promised concerning:
+
+    command invocation
+    COM naming
+    current drive
+    user area
+    load address
+    TPA
+    program entry
+    termination
+    maximum program size
+    default FCBs
+    command tail
+    DMA
+
+Separate documented application contract from behavior discoverable only in
+DRI CCP source.
+
+
+34. DIRECT CCP BEHAVIOR VERSUS BDOS SEMANTICS
+
+For every finding, identify the layer responsible.
+
+For example:
+
+    CCP chooses executable FCB
+    BDOS Open interprets FCB
+    CCP chooses DMA destination
+    BDOS Read transfers record
+    CCP advances destination
+    BDOS reports EOF
+    CCP restores DMA
+    CCP establishes return stack
+    CCP CALLs 0100h
+
+This layering should be explicit in the report.
+
+Do not create redundant ledger propositions for BDOS behavior already
+covered by earlier investigations.
+
+
+EVIDENCE DISCIPLINE
+
+Use the established evidence hierarchy and terminology inside the
+investigation report.
+
+Where useful, distinguish:
+
+    A - documented CP/M 2.2 application/CCP interface
+    B - DRI CP/M 2.2 CCP/source behavior
+    I - incidental/reference-environment observation
+    D - unresolved BetterCP/M policy
+
+These are evidence CLASSES inside the investigation report.
+
+They are NOT Compatibility Ledger source abbreviations.
+
+Do not put bare A, B, I, or D evidence-class labels into proposed ledger
+Evidence fields.
+
+For proposed ledger entries identify actual sources such as:
+
+    I022
+    CCP
+    IG
+    AG
+
+and other specifically identified sources where appropriate.
+
+
+PRIMARY SOURCES
+
+At minimum consult, where relevant:
+
+- Digital Research CP/M 2.0 Interface Guide;
+- Digital Research CP/M 2.2 Alteration Guide;
+- Introduction to CP/M Features and Facilities where applicable;
+- original DRI CP/M 2.2 CCP source (`OS2CCP.ASM`);
+- original DRI CP/M 2.2 BDOS source where loader/BDOS interaction matters;
+- existing BetterCP/M Investigations, especially I001, I007-I010, I013,
+  I015, I019-I021;
+- current Compatibility Ledger 021.
+
+Do not use later CP/M 3, MP/M, ZCPR, Z-System, or third-party CCP behavior
+as evidence for baseline CP/M 2.2 unless explicitly identified as
+comparative evidence.
+
+
+REFERENCE-ENVIRONMENT LIMITATIONS
+
+The reference z80pack environment has a particular:
+
+    TPA size
+    CCP address
+    BDOS address
+    BIOS address
+    disk geometry
+    set of available drives
+    set of installed COM files
+    user-area contents
+    WBOOT implementation
+
+None of those numeric or physical details becomes a universal CP/M 2.2
+requirement merely because it is observed.
+
+Prefer symbolic/relative conclusions such as:
+
+    first transient byte is loaded at 0100h
+    successive records occupy successive 128-byte locations
+    loader must not overwrite the resident system
+
+rather than:
+
+    maximum COM size is exactly N bytes on every CP/M system
+
+unless documentation actually establishes a universal value.
+
+
+EXPERIMENTAL REQUIREMENTS
+
+All experiments must be deterministic and reproducible.
+
+Prefer scripted command input and automatically captured output.
+
+Use generated marker COM files where useful.
+
+For load-boundary experiments:
+
+- work only from copied disk images;
+- preserve original images;
+- use deterministic generated COM contents;
+- record exact file record counts and sizes;
+- hash every fixture;
+- verify the reference system remains intact after failure tests.
+
+For user/drive lookup experiments:
+
+- preserve directory listings;
+- use uniquely identifiable marker programs;
+- record user number and selected drive explicitly.
+
+For memory observations:
+
+- use recognizable patterns;
+- avoid observation techniques that overwrite the memory under test;
+- preserve raw dumps separately from interpretation.
+
+Verify byte-identical probe rebuilds where practical.
+
+
+COMPATIBILITY CLASSIFICATION
+
+For every proposed compatibility proposition classify it as:
+
+    REQUIRED
+    POLICY PENDING
+    NOT REQUIRED
+    NOT GUARANTEED
+
+Apply these conservatively.
+
+Be especially cautious about:
+
+    exact CCP loader addresses
+    exact CCP return address
+    exact numeric SP
+    exact BDOS base
+    exact maximum COM size on one configuration
+    exact internal FCB address
+    exact internal DMA-variable address
+    exact number/order of BDOS calls where externally irrelevant
+    exact WBOOT reload sectors
+    exact error punctuation
+    residual memory after the final loaded record
+    residual register values
+    exact bytes in unused portions of a final CP/M record
+
+Do not classify DRI implementation mechanics as REQUIRED merely because the
+source uses them.
+
+
+EXISTING LEDGER ENTRIES
+
+Investigation 022 should explicitly review existing propositions affected by
+the stronger loader evidence.
+
+At minimum inspect entries concerning:
+
+    0001  COM load origin
+    0002  transient entry point
+    0003  lower TPA boundary
+    0004  upper TPA boundary discoverability
+    0005  warm-start vector
+    0008  BDOS gateway
+    0010-0018 default FCB environment
+    0019-0022 command-tail environment
+    0023-0024 default DMA
+    0025-0030 termination/return behavior
+    0034 exact BIOS/BDOS vector targets
+
+Also inspect relevant I021 CCP propositions.
+
+For each affected entry conclude one of:
+
+    - no change;
+    - stronger evidence only;
+    - disposition change;
+    - wording correction;
+    - new independent proposition required.
+
+Do not duplicate existing entries simply because I022 observes the same
+behavior from the loader side.
+
+
+BETTERCP/M RELEVANCE
+
+Investigation 022 will eventually constrain BetterCP/M's program loader.
+
+Nevertheless, do NOT design the BetterCP/M loader here.
+
+Do not decide:
+
+    internal loader data structures
+    whether BetterCP/M literally uses an FCB internally
+    whether BetterCP/M physically performs sequential BDOS calls internally
+    internal memory-copy strategy
+    loader optimization
+    executable caching
+    HyperCP/M session integration
+    bank-switching behavior
+    future executable formats
+    path search
+    command aliases
+
+First establish what CP/M 2.2 software can observe.
+
+BetterCP/M may later implement that contract differently internally.
+
+
+PROPOSED COMPATIBILITY LEDGER ADDITIONS
+
+The authoritative Ledger 021 currently ends at:
+
+    0491
+
+Therefore Investigation 022 proposals, if any, begin at:
+
+    0492
+
+Do not modify the Compatibility Ledger.
+
+Include a report section:
+
+    Proposed Compatibility Ledger additions
+
+containing only genuinely new compatibility propositions established by
+Investigation 022.
+
+If Investigation 022 strengthens or changes an existing entry, identify it
+under a separate section:
+
+    Proposed corrections/evidence/disposition updates to existing entries
+
+State:
+
+    ledger entry number
+    existing disposition where relevant
+    proposed change
+    reason
+    new evidence
+
+Do not silently rewrite existing propositions.
+
+Each proposed new entry should be suitable for later conversion to the
+established ledger format:
+
+    NNNN. Short title
+
+        Description.
+
+        Disposition: REQUIRED / POLICY PENDING /
+                     NOT REQUIRED / NOT GUARANTEED
+
+        Evidence:    I022; CCP; IG; ...
+
+        Conformance: Independently testable statement.
+
+Use actual source references in Evidence.
+
+Do not use A/B/I/D evidence-class letters as ledger source abbreviations.
+
+
+REPORT STRUCTURE
+
+Create:
+
+    Investigation 022 - CP-M 2.2 CCP Transient Program Lookup, Loading,
+    and Execution Semantics.md
+
+Use the organization and evidentiary discipline of Investigations 015-021.
+
+Include at least:
+
+1. Objective and scope
+2. Method and evidence classification
+3. Relationship to I001 and I021 boundaries
+4. Documentation findings
+5. DRI CCP loader source findings
+6. Executable-name and FCB construction
+7. Drive and user lookup semantics
+8. Open and loader initialization
+9. DMA and sequential-load mechanics
+10. EOF and final-record semantics
+11. TPA boundary and oversize-program handling
+12. Successful execution-transfer preparation
+13. RET, Function 0, and JMP 0000h return paths
+14. Loader failure and recovery behavior
+15. Experimental design
+16. Experimental results
+17. Compatibility conclusions
+18. Proposed Compatibility Ledger additions (not applied)
+19. Proposed corrections/evidence/disposition updates to existing entries
+20. Incomplete and unresolved cases
+21. Artifact and preservation audit
+22. Sources
+
+Add subsections where useful.
+
+
+ARTIFACT DIRECTORY
+
+Create a new Investigation 022 directory and an appropriate probes/
+subdirectory.
+
+Preserve all newly created material necessary to reproduce the investigation,
+including as applicable:
+
+- marker COM source and binaries;
+- patterned multi-record COM generators/files;
+- entry-state probes;
+- RET / Function-0 / JMP-0000 termination probes;
+- oversize/exact-boundary test files;
+- assembler listings;
+- deterministic command harness;
+- command corpus;
+- raw console transcripts;
+- memory dumps;
+- before/after disk images;
+- user-area directory listings;
+- drive directory listings;
+- build instructions;
+- run instructions;
+- SHA-256 records;
+- emulator/version/commit identification.
+
+Do not overwrite previous investigation artifacts.
+
+
+PRESERVATION AUDIT
+
+Before beginning:
+
+- hash the authoritative Compatibility Ledger 021;
+- record the hash;
+- identify the reference emulator/version/commit;
+- hash any pre-existing disk/system images that will be copied or used.
+
+At completion:
+
+- hash the authoritative Compatibility Ledger again;
+- verify byte-for-byte identity;
+- verify no previous investigation was modified;
+- verify no architecture or roadmap document was modified;
+- record hashes of all new source/binary artifacts;
+- rebuild probes where practical;
+- verify byte-identical rebuilds;
+- preserve raw evidence separately from interpretation.
+
+If the authoritative ledger hash changes, stop and investigate rather than
+accepting the change.
+
+
+COMPLETION REPORT
+
+When Investigation 022 is complete, report succinctly:
+
+- files created;
+- number and kinds of preserved artifacts;
+- experiments performed;
+- principal executable-name/lookup findings;
+- principal drive/user lookup findings;
+- principal load-loop/DMA findings;
+- principal TPA-boundary findings;
+- principal execution-transfer findings;
+- return-path findings;
+- loader error/recovery findings;
+- any POLICY PENDING questions;
+- proposed updates to existing ledger entries;
+- proposed new ledger-entry range;
+- authoritative Ledger 021 SHA-256 before and after;
+- confirmation that the Compatibility Ledger and all other pre-existing
+  BetterCP/M files remained unchanged;
+- primary documentation reviewed.
+
+
+IMPORTANT CONSTRAINTS
+
+Do not modify the Compatibility Ledger.
+
+Do not modify BetterCP/M implementation code.
+
+Do not modify earlier investigations.
+
+Do not modify architecture or roadmap documents.
+
+Do not create or update a project ZIP unless explicitly requested.
+
+Do not reinvestigate general CCP parsing from I021.
+
+Do not reinvestigate the transient entry environment from I001 except where
+new loader evidence strengthens it.
+
+Do not duplicate general BDOS Open/Read/DMA propositions.
+
+Do not investigate resident-command semantics.
+
+Do not import ZCPR/Z-System path-search behavior into CP/M 2.2.
+
+Do not assume CP/M searches multiple drives.
+
+Do not assume user 0 fallback behavior.
+
+Do not assume byte-precise EOF semantics for COM files.
+
+Do not assume exact maximum COM size is portable across CP/M configurations.
+
+Do not turn DRI loader internal addresses into compatibility requirements.
+
+Do not require the historical WBOOT physical reload mechanism where only the
+resulting state is externally relevant.
+
+Do not use A/B/I/D evidence-class letters as Compatibility Ledger source
+abbreviations.
+
+
+FINAL GOAL
+
+Investigation 022 should answer this question precisely:
+
+    Once the CP/M 2.2 CCP has classified a command as a transient-program
+    candidate, how does it locate the executable, load its CP/M records
+    into the TPA, protect the resident system, establish the already-defined
+    transient entry environment, transfer control to 0100h, and recover
+    from successful termination or loader failure?
+
+Together, Investigations 021 and 022 should define the principal CCP path:
+
+    command line
+        |
+        v
+    parse and classify                  I021
+        |
+        v
+    transient candidate
+        |
+        v
+    locate and load                     I022
+        |
+        v
+    transient entry                     I001
+        |
+        v
+    execution
+        |
+        v
+    termination / command recovery      I001 / I020 / I022
+
+without requiring BetterCP/M to reproduce the DRI CCP's private internal
+implementation.

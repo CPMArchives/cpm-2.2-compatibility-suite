@@ -1,0 +1,28 @@
+COMMUNICATIONS CORPUS INVENTORY
+
+Kermit-80 4.11, Generic CP/M-80
+  Category: terminal connection and Kermit file transfer
+  Origin: local YAZE kermit_szrz.ydsk; corroborated by z80pack comms.dsk
+  Platform: 8080-compatible CP/M 2.2 using BIOS logical devices and IOBYTE
+  Evidence: official Kermit manual, executable runs T01-T05
+
+QTERM 4.3e, IMSAI 8080 / VT100 patch
+  Category: terminal, modem control, chat scripts, capture, Kermit/XMODEM
+  Origin: z80pack imsaisim/disks/library/comms.dsk
+  Platform: Z80 and IMSAI SIO-2 direct-port patch
+  Evidence: QTERM.DOC, QTCHAT.DOC, QT-IMSAI.ASM, executable run T06
+
+XMODEM 2.7 by M. Eberhard
+  Category: XMODEM checksum/CRC file transfer
+  Origin: z80pack imsaisim/disks/library/comms.dsk
+  Platform: CP/M CON, BIOS RDR/PUN, configured direct ports, or patched routines
+  Evidence: XMODEM.ASM, XMODEM.CFG, executable run T07
+
+Kermit-80 CP/M 3 build, RZ, and SZ
+  Category: cross-version comparison only
+  Origin: local communications disks
+  Platform: CP/M 3, explicitly outside the CP/M 2.2 execution target
+  Evidence: inventory/source documentation only; not used as CP/M 2.2 behavior
+
+BBS/remote-access server
+  No adequate executable and controlled peer corpus was available. Not tested.

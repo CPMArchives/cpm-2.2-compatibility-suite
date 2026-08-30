@@ -1,0 +1,310 @@
+INVESTIGATION 017 — CP/M 2.2 BDOS Disk State, Allocation Vector,
+and Disk Parameter Block Semantics
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Perform Investigation 017 as an EVIDENCE REPORT ONLY.
+
+Do not modify the Compatibility Ledger or any existing BetterCP/M file.
+Do not rewrite, clean up, normalize, or otherwise alter previous
+investigation reports.
+
+Create a new Investigation 017 directory containing the report and all
+new probes, scripts, transcripts, hashes, disk images, and other evidence
+required to reproduce the investigation.
+
+OBJECTIVE
+
+Determine the externally observable CP/M 2.2 compatibility semantics of
+the remaining BDOS disk-state and disk-description interfaces, with
+particular attention to:
+
+    Function 24 — Return Login Vector
+    Function 27 — Get Address (Alloc)
+    Function 31 — Get Disk Parameters
+
+Also investigate any directly relevant interaction with:
+
+    Function 13 — Reset Disk System
+    Function 14 — Select Disk
+    Function 25 — Return Current Disk
+    Function 28 — Write Protect Disk
+    Function 29 — Get Read-Only Vector
+    Function 37 — Reset Drive
+
+Do not unnecessarily repeat behavior already established by earlier
+investigations. Where an earlier investigation already establishes a
+proposition, cite it and investigate only the additional behavior needed
+to understand Functions 24, 27, 31, and 37.
+
+QUESTIONS TO RESOLVE
+
+1. Function 24 — Return Login Vector
+
+   Establish:
+
+   - calling convention;
+   - return register(s);
+   - bit-to-drive mapping;
+   - meaning of a set versus clear bit;
+   - whether the current drive is necessarily logged in;
+   - when drives become logged in;
+   - effects of Select Disk;
+   - effects of Reset Disk System;
+   - effects of Reset Drive;
+   - interaction, if any, with the read-only vector;
+   - whether the returned vector is a snapshot or exposes any live
+     internal object;
+   - which observed DRI details are implementation-specific.
+
+2. Function 27 — Get Address (Alloc)
+
+   Establish:
+
+   - calling convention;
+   - returned address/register convention;
+   - what object the returned address identifies;
+   - relationship of that object to the currently selected disk;
+   - documented allocation-vector representation;
+   - meaning of individual allocation bits;
+   - relationship between allocation bits, blocks, directory entries,
+     and existing files;
+   - whether reserved directory blocks appear allocated;
+   - whether allocation state changes after Make, Write, Delete, Close,
+     or other relevant operations;
+   - whether the returned address remains valid after disk selection,
+     reset, warm start, or other BDOS operations;
+   - whether applications may modify the allocation vector;
+   - whether exact address, storage location, or internal construction
+     algorithm is part of the compatibility contract.
+
+3. Function 31 — Get Disk Parameters
+
+   Establish:
+
+   - calling convention;
+   - returned address/register convention;
+   - the exact public DPB layout visible to applications;
+   - field meanings and byte order;
+   - relationship to the currently selected disk;
+   - whether different drives may return different DPBs;
+   - lifetime and validity of the returned pointer;
+   - effects of Select Disk, Reset Disk System, and Reset Drive;
+   - which DPB values are configuration-dependent rather than universal
+     CP/M 2.2 requirements;
+   - whether applications may modify the returned DPB;
+   - whether the exact memory address is guaranteed.
+
+4. Function 37 — Reset Drive
+
+   Establish the documented CP/M 2.2 semantics of Function 37, including:
+
+   - calling convention and drive-vector input;
+   - bit-to-drive mapping;
+   - effect on logged-in state;
+   - effect on read-only state;
+   - effect on current-drive state;
+   - effect on allocation and DPB state;
+   - behavior when one versus several drives are selected in the vector;
+   - behavior for drives that are not currently logged in;
+   - application-visible return value, if any;
+   - relationship to Function 13 Reset Disk System.
+
+5. POINTER AND STORAGE SEMANTICS
+
+   Functions 27 and 31 expose addresses into CP/M-maintained state.
+
+   Distinguish carefully between:
+
+   A. the requirement that a valid object be accessible through the
+      returned pointer;
+
+   B. the documented representation of that object;
+
+   C. the lifetime for which the pointer/object remains valid;
+
+   D. DRI's particular address, buffer placement, construction method,
+      or internal data structure.
+
+   Do not classify a DRI memory address or private storage arrangement as
+   REQUIRED merely because an application can observe it on the reference
+   system.
+
+6. CROSS-FUNCTION STATE
+
+   Construct deterministic experiments that show how the relevant state
+   changes across controlled sequences such as:
+
+       Reset Disk System
+       Select A:
+       query login vector
+       query allocation-vector address/content
+       query DPB address/content
+       Select B:
+       repeat queries
+       return to A:
+       repeat queries
+
+   Also test Reset Drive where appropriate.
+
+   Determine whether returned pointers, vector contents, or disk state
+   change, and distinguish documented requirements from DRI implementation
+   behavior.
+
+EVIDENCE
+
+Use and distinguish at least:
+
+A — documented CP/M 2.2 application/BIOS interface;
+B — DRI CP/M 2.2 source behavior;
+I — incidental behavior of the tested DRI/z80pack configuration;
+D — unresolved BetterCP/M compatibility policy.
+
+Primary sources should include, where relevant:
+
+- Digital Research CP/M 2.0 Interface Guide;
+- Digital Research CP/M 2.2 Alteration Guide;
+- DRI CP/M 2.2 BDOS source;
+- prior BetterCP/M investigations, especially Investigations 007, 008,
+  011, 012, 014, 015, and 016;
+- the current Compatibility Ledger for identifying already-established
+  propositions and avoiding duplicates.
+
+Use source analysis to design experiments, but do not claim externally
+observable behavior from source alone where a deterministic experiment
+can reasonably test it.
+
+EXPERIMENTAL REQUIREMENTS
+
+Create small deterministic CP/M probes as necessary.
+
+Prefer probes that record raw numeric values and memory contents rather
+than interpreting the result inside the probe.
+
+For pointer-returning functions, capture:
+
+- returned pointer;
+- bytes of the referenced object;
+- relevant state before and after drive selection/reset;
+- repeated calls;
+- results after switching away from and back to a drive.
+
+For allocation-vector testing, use controlled disk images whose directory
+and allocation state are known. Where useful, create/delete/write a
+controlled file and compare the allocation vector before and after.
+
+Preserve before/after disk images and hashes whenever an experiment can
+modify disk state.
+
+Every experimental case must be reproducible without manually timed
+keyboard input.
+
+Do not infer general CP/M behavior from a z80pack-specific address,
+controller value, disk geometry, BIOS implementation, or memory layout.
+
+COMPATIBILITY CLASSIFICATION
+
+For every resulting proposition classify it as one of:
+
+    REQUIRED
+    NOT REQUIRED
+    NOT GUARANTEED
+    POLICY PENDING
+
+Be especially conservative about:
+
+- exact returned pointer values;
+- exact in-memory locations;
+- DRI private tables;
+- internal BDOS flags;
+- allocation-vector construction machinery;
+- DPB placement;
+- BIOS-specific disk geometry;
+- residual register values.
+
+PROPOSED LEDGER ADDITIONS
+
+Investigation 016 proposed entries 414-423.
+
+Therefore Investigation 017 proposals, if any, begin at:
+
+    424
+
+Do not modify the Compatibility Ledger.
+
+Include a section:
+
+    Proposed Compatibility Ledger additions
+
+containing only genuinely new compatibility propositions established by
+Investigation 017.
+
+Do not duplicate propositions already present in the ledger or proposed
+by Investigation 016 merely to give this investigation a complete-looking
+list.
+
+Each proposed entry must contain enough information eventually to be
+converted into the established ledger form:
+
+    NNNN. Title
+
+        Description.
+
+        Disposition: ...
+
+        Evidence: ...
+
+        Conformance: ...
+
+The report itself may retain the investigation-series proposal notation
+if that is the established report convention. The Compatibility Ledger
+must remain untouched.
+
+REPORT STRUCTURE
+
+Produce a report broadly consistent with Investigations 015 and 016,
+including:
+
+1. Objective and method
+2. Documentation findings
+3. DRI source findings
+4. Experimental design and results
+5. Compatibility conclusions
+6. Proposed Compatibility Ledger additions (not applied)
+7. Incomplete/unresolved cases
+8. Artifact and preservation audit
+9. Sources
+
+Do not force this exact organization if the evidence requires a clearer
+subdivision.
+
+PRESERVATION AND AUDIT REQUIREMENTS
+
+Before and after the investigation:
+
+- hash the current Compatibility Ledger;
+- verify that its hash is unchanged;
+- do not modify any pre-existing BetterCP/M file;
+- preserve probe source and resulting COM binaries;
+- preserve raw transcripts;
+- preserve before/after disk images for disk-modifying cases;
+- record SHA-256 hashes;
+- record the emulator/version/commit used;
+- verify rebuilt probes byte-for-byte where practical.
+
+At completion, explicitly state:
+
+- what was tested;
+- what was established only from documentation;
+- what was established from DRI source;
+- what was experimentally observed;
+- what remains policy pending;
+- what remains untested;
+- that the Compatibility Ledger was not modified.
+
+Do not create or update a ZIP archive unless explicitly requested.
+
+The goal is not to describe how DRI happened to implement these functions.
+The goal is to determine the smallest externally observable CP/M 2.2
+contract that BetterCP/M must reproduce while clearly separating that
+contract from DRI implementation details.

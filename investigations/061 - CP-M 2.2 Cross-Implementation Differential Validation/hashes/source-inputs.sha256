@@ -1,0 +1,12 @@
+Ledger baseline
+8bf7d57d636b66a1d4bf2e08553c1bc462ca08a313214f3e9a413a38313e22d2  <project-root>/compatibility/02 Compatibility Ledger - Investigation 059.txt
+Source images
+b1b3245029a19948ec04dff915595c3369a9f2d0f6bd028e8883ab7f2a53c5b2  <local-home>/z80pack/cromemcosim/disks/library/cpm22.dsk
+7ad2d79c859f28e5deee787a2e0d6f3aef24d62b1d65a64a307afc9d88acf754  <local-home>/z80pack/cromemcosim/disks/library/cdos258_8.dsk
+5018cbf0b4346084812465e9b9d5e64ddc8e2f30b7d345b9c4d7095e432bd7d2  <local-home>/z80pack/cromemcosim/disks/library/cdos236_8.dsk
+Documentation
+e10f525fcf399897fa86703eb930e21ba59fa54c0708c1cf5909e92beaf7a279  <reference-archive>/CPM_2_0_Interface_Guide.pdf
+98a176be191c68207b5859371cf3d95eb90f517a72bdeb3b3699833e7c368891  <reference-archive>/CPM_2.2_Alteration_Guide_1979.pdf
+Simulator metadata
+z80pack git 91fd28eb04e675c2127df88ed3f40675e15282e2
+63c894d8375fdc7233432ed5b1160696b5f21836388d2c03d9a29f14e5b08e31  <local-home>/z80pack/cromemcosim/README

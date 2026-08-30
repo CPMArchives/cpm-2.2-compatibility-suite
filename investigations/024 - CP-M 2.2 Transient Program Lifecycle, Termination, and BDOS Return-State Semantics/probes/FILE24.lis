@@ -1,0 +1,90 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:02:55 2026	Page 1
+Source file: FILE24.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Make and write one record, deliberately omit Close, then terminate R/F/J.
+                       2      2         ORG 100H
+0100  3a 82 00         3      3         LD A,(0082H)
+0103  32 94 01         4      4         LD (MODE),A
+0106  21 98 01         5      5         LD HL,FNAME
+0109  fe 46            6      6         CP 'F'
+010b  20 04            7      7         JR NZ,NOTF
+010d  36 46            8      8         LD (HL),'F'
+010f  18 06            9      9         JR NAMED
+0111  fe 4a           10     10 NOTF:   CP 'J'
+0113  20 02           11     11         JR NZ,NAMED
+0115  36 4a           12     12         LD (HL),'J'
+0117  11 bb 01        13     13 NAMED:  LD DE,DATA
+011a  0e 1a           14     14         LD C,26
+011c  cd 05 00        15     15         CALL 5
+011f  11 97 01        16     16         LD DE,FCB
+0122  0e 16           17     17         LD C,22
+0124  cd 05 00        18     18         CALL 5
+0127  32 95 01        19     19         LD (MAKERC),A
+012a  11 97 01        20     20         LD DE,FCB
+012d  0e 15           21     21         LD C,21
+012f  cd 05 00        22     22         CALL 5
+0132  32 96 01        23     23         LD (WRITERC),A
+0135  11 7e 01        24     24         LD DE,MSG
+0138  0e 09           25     25         LD C,9
+013a  cd 05 00        26     26         CALL 5
+013d  3a 95 01        27     27         LD A,(MAKERC)
+0140  cd 65 01        28     28         CALL HEX
+0143  3a 96 01        29     29         LD A,(WRITERC)
+0146  cd 65 01        30     30         CALL HEX
+0149  1e 0d           31     31         LD E,13
+014b  cd 79 01        32     32         CALL OUT
+014e  1e 0a           33     33         LD E,10
+0150  cd 79 01        34     34         CALL OUT
+0153  3a 94 01        35     35         LD A,(MODE)
+0156  fe 46           36     36         CP 'F'
+0158  28 06           37     37         JR Z,DOF0
+015a  fe 4a           38     38         CP 'J'
+015c  ca 00 00        39     39         JP Z,0
+015f  c9              40     40         RET
+0160  0e 00           41     41 DOF0:   LD C,0
+0162  c3 05 00        42     42         JP 5
+0165  f5              43     43 HEX:    PUSH AF
+0166  0f              44     44         RRCA
+0167  0f              45     45         RRCA
+0168  0f              46     46         RRCA
+0169  0f              47     47         RRCA
+016a  cd 6e 01        48     48         CALL NIB
+016d  f1              49     49         POP AF
+016e  e6 0f           50     50 NIB:    AND 0FH
+0170  c6 30           51     51         ADD A,'0'
+0172  fe 3a           52     52         CP '9'+1
+0174  38 02           53     53         JR C,HOUT
+0176  c6 07           54     54         ADD A,7
+0178  5f              55     55 HOUT:   LD E,A
+0179  0e 02           56     56 OUT:    LD C,2
+017b  c3 05 00        57     57         JP 5
+017e  46 49 4c 45     58     58 MSG:    DB 'FILE24 MAKE/WRITE RC=','$'
+0182  32 34 20 4d     58     59
+0186  41 4b 45 2f     58     60
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:02:55 2026	Page 2
+Source file: FILE24.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+018a  57 52 49 54     58     61
+018e  45 20 52 43     58     62
+0192  3d 24           58     63
+0194  00              59     64 MODE:   DB 0
+0195  00              60     65 MAKERC: DB 0
+0196  00              61     66 WRITERC:DB 0
+0197  00              62     67 FCB:    DB 0
+0198  52 4f 50 45     63     68 FNAME:  DB 'ROPEN24 '
+019c  4e 32 34 20     63     69
+01a0  44 41 54 00     64     70         DB 'DAT',0,0,0,0
+01a4  00 00 00        64     71
+01a7                  65     72         DS 16
+01b7  00 00 00 00     66     73         DB 0,0,0,0
+01bb  49 30 32 34     67     74 DATA:   DB 'I024-UNCLOSED-RECORD'
+01bf  2d 55 4e 43     67     75
+01c3  4c 4f 53 45     67     76
+01c7  44 2d 52 45     67     77
+01cb  43 4f 52 44     67     78
+01cf                  68     79         DS 128-20,024H
+023b                  69     80         END

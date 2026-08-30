@@ -1,0 +1,6 @@
+Before:
+126131a96608ab7fa4516be3b8f838dfb925dfb204da8576a7dd85280c62c06c  <project-root>/compatibility/02 Compatibility Ledger - Investigation 027.txt
+
+After:
+126131a96608ab7fa4516be3b8f838dfb925dfb204da8576a7dd85280c62c06c  <project-root>/compatibility/02 Compatibility Ledger - Investigation 027.txt
+

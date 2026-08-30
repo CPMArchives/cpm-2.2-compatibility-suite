@@ -1,0 +1,35 @@
+SOURCE ANALYSIS
+
+QTERM IMSAI patch
+  Ports 23h/22h are channel-A status/data; 25h/24h are channel-B status/data.
+  The patch polls readiness, performs direct IN/OUT, and records a 4 MHz CPU
+  setting. T02 executed the IN 23h path.
+
+KSCOPE
+  Disables interrupts because their behavior is unknown, writes a Dazzler
+  picture base to port 0Eh and mode to port 0Fh, then updates display memory.
+  T03 executed the OUT 0Eh path.
+
+VI/Open
+  Defines VIO=F000h, writes VIO+7FFh for initialization, uses the VIO memory
+  window for screen data, dynamically derives the BIOS page through page zero,
+  and accesses ports 6Eh/6Fh. It combines portable BIOS discovery with private
+  display hardware rather than replacing one with the other.
+
+PROMMER patch
+  Defines IOBASE=14h, compiles for a selected terminal, chooses 4 MHz or 2.5 MHz
+  delay constants, and has different interrupt-enabled/disabled paths. It calls
+  BDOS for console services while controlling the EPROM board directly.
+
+Altair utilities
+  FDCT1 writes/reads controller ports 8 and 9. KILLBITS reads front-panel sense
+  switches at port FFh. These are machine diagnostics, not portable CP/M calls.
+
+IMSAI BIOS
+  Maps standard BIOS services onto fixed device ports and VIO firmware, but
+  also uses controller-specific command blocks, interrupt-controller setup,
+  firmware signatures, and device-specific status encodings. Those mechanisms
+  implement a CP/M profile; they are not additions to the generic BIOS ABI.
+
+Source identified test targets. Only behavior explicitly listed in
+observed-output.txt is classified as experimental observation.

@@ -1,0 +1,9 @@
+b4c6110955ab55a5f80900b83035fc8163a36beadc7335efa88df24eb9c145b2  /tmp/i063-rebuild.b9k7He/CPU8080.accepted.COM
+b4c6110955ab55a5f80900b83035fc8163a36beadc7335efa88df24eb9c145b2  /tmp/i063-rebuild.b9k7He/CPU8080.COM
+130ed1bc164a12b7adf356949316288764dae437fb4b8c1f6dbffac6fbf0b6a3  /tmp/i063-rebuild.b9k7He/CPUZ80.accepted.COM
+130ed1bc164a12b7adf356949316288764dae437fb4b8c1f6dbffac6fbf0b6a3  /tmp/i063-rebuild.b9k7He/CPUZ80.COM
+f99304a6a8a7a9c49041e99dc0dc1fe22995cb43c9abe3ec6325ae86e6002226  /tmp/i063-rebuild.b9k7He/UNDOC63.accepted.COM
+f99304a6a8a7a9c49041e99dc0dc1fe22995cb43c9abe3ec6325ae86e6002226  /tmp/i063-rebuild.b9k7He/UNDOC63.COM
+c11e32453285b8fe0966a9fef9db2c97cf674f8a5d2594550be1a498905bb6ba  /tmp/i063-rebuild.b9k7He/TIMING63.accepted.COM
+c11e32453285b8fe0966a9fef9db2c97cf674f8a5d2594550be1a498905bb6ba  /tmp/i063-rebuild.b9k7He/TIMING63.COM
+All four COM files rebuilt byte-identically.

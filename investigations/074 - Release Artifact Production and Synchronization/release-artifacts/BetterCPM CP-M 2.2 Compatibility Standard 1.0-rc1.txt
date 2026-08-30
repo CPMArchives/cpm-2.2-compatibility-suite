@@ -1,0 +1,90 @@
+BETTERCP/M CP/M 2.2 COMPATIBILITY STANDARD
+Release Candidate 1 — Version 1.0-rc1
+
+1. Status and authority
+
+This is the normative compatibility-standard release candidate produced from
+the frozen BetterCP/M investigation record. It specifies compatibility; it is
+not a claim that a BetterCP/M implementation has passed certification.
+
+Normative authorities are:
+  - Compatibility Ledger 072, SHA-256 eb16466fdbff8fb2bc07bd02a07198b8426fb6452be3dd1f256cbff4af0547d3;
+  - Compatibility Policy 1.0-rc1;
+  - Conformance Specification 1.0-rc1 and frozen tables 1.0.0;
+  - Compatibility Profile Registry 1.0-rc1.
+
+The ledger controls proposition meaning and disposition. Policy defines claim
+treatment. The conformance specification defines validation. The registry
+defines stable profile identity and release applicability.
+
+2. Compatibility target
+
+The target is the externally observable CP/M 2.2 environment required by the
+canonical ledger: transient execution and memory conventions, BDOS and CCP,
+FCB/DMA and disk behavior, documented BIOS interfaces, boot/restart, processor
+baseline, error/recovery boundaries, and consequential ecosystem conventions.
+Compatibility does not require DRI source structure or private mechanisms.
+
+3. Normative proposition set
+
+Ledger 072 contains 627 unique contiguous propositions 0001-0627:
+  REQUIRED          458
+  NOT GUARANTEED    116
+  NOT REQUIRED       53
+  POLICY PENDING       0
+
+The release-facing conformance classification is 430 generic REQUIRED,
+28 PROFILE REQUIRED, three OPTIONAL, 116 NOT GUARANTEED, and 50 OUTSIDE SCOPE.
+These are treatments of the same ledger, not new propositions.
+
+4. Baseline claim
+
+A CPM22-BASE claim satisfies every applicable generic REQUIRED proposition in
+the declared certification level and environment. It preserves documented
+interface predicates while allowing values and mechanisms the ledger marks
+variable. A lower or profile-qualified claim must be named exactly; “CP/M 2.2
+compatible” without scope means no more than the evidence-backed declared
+level and cannot imply untested profiles.
+
+5. Profiles
+
+All profiles inherit CPM22-BASE and add requirements. The registry's AVAILABLE
+status means defined for selection, not implemented, enabled, or certified.
+A product claim identifies selected profile IDs and versions. Every mapped
+PROFILE REQUIRED case then becomes mandatory. Optional profiles are excluded
+unless claimed. No profile can convert NOT GUARANTEED residue into a promise
+without an existing mapped profile proposition.
+
+6. Exclusions and variation
+
+NOT GUARANTEED propositions permit implementation variation and prohibit a
+portable exact assertion. OUTSIDE SCOPE behavior is not a compatibility gate.
+Optional features do not burden baseline implementations. Hardware-, machine-,
+device-, presentation-, and application-specific behavior applies only through
+documented generic interfaces or an explicitly selected profile.
+
+7. Conformance
+
+The frozen system comprises 62 top-level identifiers and 627 proposition cases
+and versioned oracles. Parent PASS is conjunctive over all applicable required
+children. FAIL defeats the gated claim. BLOCKED and ERROR prevent PASS.
+NOT_APPLICABLE is allowed only where the campaign manifest proves an unselected
+profile or optional feature.
+
+Evidence binds candidate, ledger, inventory, cases, oracles, profiles,
+fixtures, runners, environment, dependencies, raw observations, and artifacts
+by hash. Source inspection alone cannot replace a required experiment.
+
+8. Certification status
+
+This specification RC contains no BetterCP/M candidate campaign and grants no
+implementation certificate. Certification requires a complete campaign under
+Conformance Specification 1.0-rc1. Application and corpus results are
+supplemental evidence and cannot conceal a failed proposition case.
+
+9. Change and supersession
+
+Ledger propositions, dispositions, applicability, test IDs, and oracle
+semantics are frozen for this RC. Editorial assembly cannot change them.
+Earlier ledgers and Draft 0.1 public documents are retained as history and are
+superseded for current release use by the versioned authority set above.

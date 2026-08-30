@@ -1,0 +1,9 @@
+id	behavior_tested	software_tested	processor_environment	procedure	observed_behavior	compatibility_conclusion	evidence
+T01	CP/M and DRI utility execution	DRI CP/M 2.2 plus STAT.COM	z80pack cpmsim 1.39, Intel 8080 mode	Boot fresh image; run STAT	CP/M booted; STAT reported drive space and returned normally	8080-compatible execution is a valid generic CP/M processor baseline	I
+T02	8080 arithmetic, data movement, stack, call, and documented flags	CPU8080.COM	z80pack cpmsim 1.39, Intel 8080 mode	Run deterministic self-check	CPU8080 PASS	8080 instruction semantics used by binaries are REQUIRED in the generic binary profile	I
+T03	Same 8080 subset on Z80	CPU8080.COM	z80pack cpmsim 1.39, Z80 mode	Run identical executable	CPU8080 PASS	Z80 profile must retain 8080-compatible subset	I
+T04	Documented Z80 extensions	CPUZ80.COM	z80pack cpmsim 1.39, Z80 mode	Exercise IX/IY, EXX, JR, DJNZ, BIT, LDIR	CPUZ80 PASS	Required only for a declared Z80 processor profile	I
+T05	Z80 binary on 8080 processor	CPUZ80.COM	z80pack cpmsim 1.39, Intel 8080 mode	Run identical Z80 executable	No PASS; execution reached HALT at 0049h and did not return	Z80 extensions are NOT REQUIRED by generic CP/M but incompatible with an 8080-only profile	I
+T06	Undocumented Z80 SLL opcode	UNDOC63.COM	z80pack cpmsim 1.39, Z80 mode with undocumented execution enabled	Execute CB 30h and verify B	UNDOC63 OBSERVED	Single implementation observation; behavior NOT GUARANTEED generically	I
+T07	Undocumented Z80 SLL opcode disabled	UNDOC63.COM	z80pack cpmsim 1.39, Z80 mode with -u trap	Execute same binary	Explicit opcode trap at 0105h on CB 30h	Undocumented opcode behavior is processor-profile policy, not CP/M semantics	I
+T08	Configured clock-rate independence	TIMING63.COM	z80pack cpmsim 1.39, Z80 at 2 MHz and 4 MHz	Run identical counted loop	TIMING63 DONE in both; measured about 1.64 and 3.31 MHz	Exact clock and elapsed time are NOT GUARANTEED by generic CP/M	I

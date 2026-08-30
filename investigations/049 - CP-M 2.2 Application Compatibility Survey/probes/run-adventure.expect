@@ -1,0 +1,26 @@
+#!/usr/bin/expect -f
+set timeout 20
+set send_slow {1 0.04}
+set root [file normalize [file join [file dirname [info script]] ..]]
+set emu [file join $root build z80pack mosteksim mosteksim]
+set work [file join $root work]
+log_file -noappend [file join $root probes transcripts adventure-raw.txt]
+spawn -noecho $emu -z -d [file join $work disks] -r [file join $work roms] -c [file join $work config-adventure.txt]
+expect "A>"
+send -s "b:\r"
+expect "B>"
+send -s "ad\r"
+expect "Type 3 digits, please."
+send -s "123\r"
+expect "Would you like instructions?"
+send -s "no\r"
+expect "You are standing at the end of a road"
+expect -- "->"
+send -s "quit\r"
+expect "Do you really want to quit now?"
+send -s "yes\r"
+expect "B>"
+send "\034"
+expect ">>>"
+send "q\n"
+expect eof

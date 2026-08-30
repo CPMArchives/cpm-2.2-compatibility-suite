@@ -1,0 +1,294 @@
+Investigation 053 — CP/M 2.2 Software Corpus Validation Prompt
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 052 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation 052.
+
+Create Investigation 053 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports or artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Validate the CP/M 2.2 compatibility contract against a representative
+software corpus.
+
+Previous investigations established:
+
+- CP/M interfaces;
+- system behavior;
+- storage behavior;
+- memory behavior;
+- execution behavior;
+- failure behavior;
+- utility compatibility;
+- development tool compatibility;
+- application compatibility;
+- communications compatibility;
+- hardware compatibility boundaries;
+- regression test requirements.
+
+Investigation 053 determines whether those compatibility requirements
+are sufficient to explain observed behavior across representative CP/M
+software.
+
+Determine:
+
+- whether representative software operates within the established
+  compatibility contract;
+- which compatibility requirements are exercised;
+- whether software reveals missing compatibility boundaries;
+- whether additional investigation is required.
+
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+- documented CP/M 2.2 behavior;
+- Digital Research implementation behavior;
+- common CP/M programming practices;
+- historically significant software dependencies.
+
+The objective is ecosystem compatibility validation.
+
+Do not assume software failure indicates a compatibility requirement
+without analysis.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Review completed investigations through Investigation 052.
+
+Pay particular attention to:
+
+Investigation 047:
+    Standard Utility Compatibility Survey.
+
+Investigation 048:
+    Development Toolchain Compatibility Survey.
+
+Investigation 049:
+    Application Compatibility Survey.
+
+Investigation 050:
+    Communications Software Compatibility Survey.
+
+Investigation 051:
+    Hardware-Dependent Software Compatibility Survey.
+
+Investigation 052:
+    Compatibility Regression Test Specification.
+
+
+SCOPE
+
+Investigate:
+
+- representative CP/M software corpus;
+- software execution results;
+- compatibility coverage;
+- failures and unexpected behavior;
+- missing compatibility requirements.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- BetterCP/M implementation;
+- software rewriting;
+- new compatibility features;
+- unsupported operating systems.
+
+
+INVESTIGATION QUESTIONS
+
+
+1. SOFTWARE CORPUS
+
+Identify the validation corpus.
+
+Record:
+
+- software name;
+- version or release where available;
+- source/archive location;
+- software category;
+- platform assumptions;
+- evidence collected.
+
+
+2. CORPUS COVERAGE
+
+Determine:
+
+- whether the corpus represents major CP/M software categories;
+- whether important categories are missing;
+- whether additional samples are required.
+
+
+3. EXECUTION VALIDATION
+
+Determine:
+
+- which software executes successfully;
+- which compatibility areas are exercised;
+- which behaviors are observed.
+
+
+4. FAILURE ANALYSIS
+
+For software that fails, determine:
+
+- failure location;
+- affected subsystem;
+- whether failure indicates missing compatibility requirements;
+- whether failure is due to hardware-specific assumptions.
+
+
+5. COMPATIBILITY REQUIREMENT MAPPING
+
+Map observed software behavior to:
+
+- Compatibility Ledger entries;
+- regression tests;
+- evidence classifications.
+
+
+6. EXPERIMENTAL REQUIREMENTS
+
+Create deterministic validation records.
+
+Each record must include:
+
+- software tested;
+- purpose;
+- environment;
+- procedure;
+- observed behavior;
+- compatibility conclusion.
+
+
+7. CONTROLLED TEST MATRIX
+
+Include:
+
+- standard software;
+- development software;
+- applications;
+- communications software;
+- hardware-dependent software;
+- normal operation;
+- boundary operation;
+- failure operation.
+
+
+EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+    documented behavior.
+
+B:
+    Digital Research implementation behavior.
+
+I:
+    experimental observation.
+
+D:
+    unresolved policy.
+
+
+Ledger evidence must identify:
+
+I053
+VALIDATION
+SOFTWARE
+COMPATIBILITY
+subsystem
+IG
+AG
+
+
+COMPATIBILITY CLASSIFICATION
+
+Classify findings:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Do not require:
+
+- isolated software quirks;
+- undocumented behavior without evidence;
+- implementation-specific details.
+
+
+LEDGER REVIEW
+
+Review affected Compatibility Ledger entries.
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+Do not modify the ledger directly.
+
+
+REPORT STRUCTURE
+
+Create:
+
+Investigation 053 - CP/M 2.2 Software Corpus Validation.md
+
+Include:
+
+1. Objective and scope
+2. Compatibility standard
+3. Relationship to previous investigations
+4. Software corpus
+5. Corpus coverage analysis
+6. Documentation findings
+7. Source findings
+8. Validation results
+9. Failure analysis
+10. Compatibility requirement mapping
+11. Compatibility conclusions
+12. Proposed ledger additions
+13. Existing-entry updates
+14. Open questions
+15. Conformance implications
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M software architecture.
+
+Do not replace CP/M compatibility requirements with modern assumptions.
+
+Determine the CP/M 2.2 software corpus validation results only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

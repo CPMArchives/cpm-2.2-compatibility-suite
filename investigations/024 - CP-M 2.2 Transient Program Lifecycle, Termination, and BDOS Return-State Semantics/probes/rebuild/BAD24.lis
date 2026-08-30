@@ -1,0 +1,42 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:10:35 2026	Page 1
+Source file: BAD24.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Out-of-range BDOS function 41: record return and terminate normally.
+                       2      2         ORG 100H
+0100  0e 29            3      3         LD C,41
+0102  cd 05 00         4      4         CALL 5
+0105  32 4c 01         5      5         LD (RC),A
+0108  11 3a 01         6      6         LD DE,MSG
+010b  0e 09            7      7         LD C,9
+010d  cd 05 00         8      8         CALL 5
+0110  3a 4c 01         9      9         LD A,(RC)
+0113  cd 21 01        10     10         CALL HEX
+0116  1e 0d           11     11         LD E,13
+0118  cd 35 01        12     12         CALL OUT
+011b  1e 0a           13     13         LD E,10
+011d  cd 35 01        14     14         CALL OUT
+0120  c9              15     15         RET
+0121  f5              16     16 HEX:    PUSH AF
+0122  0f              17     17         RRCA
+0123  0f              18     18         RRCA
+0124  0f              19     19         RRCA
+0125  0f              20     20         RRCA
+0126  cd 2a 01        21     21         CALL NIB
+0129  f1              22     22         POP AF
+012a  e6 0f           23     23 NIB:    AND 0FH
+012c  c6 30           24     24         ADD A,'0'
+012e  fe 3a           25     25         CP '9'+1
+0130  38 02           26     26         JR C,HOUT
+0132  c6 07           27     27         ADD A,7
+0134  5f              28     28 HOUT:   LD E,A
+0135  0e 02           29     29 OUT:    LD C,2
+0137  c3 05 00        30     30         JP 5
+013a  42 41 44 32     31     31 MSG:    DB 'BAD24 F41 RETURN=','$'
+013e  34 20 46 34     31     32
+0142  31 20 52 45     31     33
+0146  54 55 52 4e     31     34
+014a  3d 24           31     35
+014c  ff              32     36 RC:     DB 0FFH
+014d                  33     37         END

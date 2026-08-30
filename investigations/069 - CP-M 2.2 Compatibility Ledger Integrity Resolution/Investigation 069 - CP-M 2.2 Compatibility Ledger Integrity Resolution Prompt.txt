@@ -1,0 +1,98 @@
+Investigation 069 — CP/M 2.2 Compatibility Ledger Integrity Resolution
+
+Objective:
+Resolve remaining structural integrity issues in the Compatibility Ledger
+before normative release preparation.
+
+Scope:
+Audit the current authoritative Compatibility Ledger and produce a clean,
+canonical ledger state suitable for subsequent policy resolution,
+conformance finalization, and release-candidate preparation.
+
+Required Activities:
+
+1. Ledger Identifier Integrity
+
+   Audit all numbered ledger identifiers.
+
+   Identify and resolve:
+   - duplicated ledger identifiers;
+   - missing identifiers;
+   - inconsistent numbering;
+   - references to identifiers that do not exist.
+
+   Preserve the meaning and history of existing compatibility
+   propositions.
+
+   Do not silently delete, merge, or rewrite propositions without
+   documenting the disposition.
+
+2. Investigation 063 Processor Propositions
+
+   Review the five proposed processor-profile propositions from
+   Investigation 063:
+
+   - proposed entries 0766–0770.
+
+   Determine the appropriate ledger disposition for each proposition:
+
+   Possible outcomes:
+   - add as numbered ledger propositions;
+   - classify as profile requirements outside the generic CP/M baseline;
+   - classify as POLICY PENDING;
+   - classify as NOT REQUIRED or NOT GUARANTEED.
+
+   The decision must preserve the layered compatibility model:
+
+       Generic CP/M
+           |
+       Processor Profile
+           |
+       BIOS/Device Profile
+           |
+       Machine Profile
+           |
+       Application/Ecosystem Profile
+
+   A machine or processor profile may add requirements but may not waive
+   generic CP/M compatibility requirements.
+
+3. Ledger Consistency Review
+
+   Verify that:
+   - all existing required propositions remain represented;
+   - evidence references remain valid;
+   - disposition classifications remain internally consistent;
+   - cross-investigation references resolve correctly.
+
+4. Canonical Ledger Production
+
+   Produce a corrected authoritative Compatibility Ledger.
+
+   Requirements:
+   - preserve existing formatting;
+   - preserve existing proposition text unless a documented correction is
+     required;
+   - document all changes made;
+   - maintain cumulative investigation history.
+
+   The resulting ledger must be the authoritative baseline for:
+   - Investigation 070 — Policy Pending Resolution;
+   - Investigation 071 — Conformance Framework Finalization;
+   - Investigation 072 — CP/M 2.2 Compatibility Standard Release Candidate.
+
+Validation Requirements:
+
+- Complete identifier audit.
+- Duplicate identifier report.
+- Missing identifier report.
+- Processor proposition disposition report.
+- Before/after ledger comparison.
+- SHA-256 manifest of generated artifacts.
+- Confirmation that no unrelated BetterCP/M files were modified.
+
+Expected Outcome:
+
+A clean canonical Compatibility Ledger with all known structural issues
+resolved and all processor-profile propositions assigned an explicit
+compatibility disposition.

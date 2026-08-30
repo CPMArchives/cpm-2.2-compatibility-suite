@@ -1,0 +1,37 @@
+spawn cpmsim -z -d cases/badsp
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>BADSP24
+BADSP24 RET WORD 0000
+
+A>OBS24 AFTER-BADSP
+ENTRY23 FORMAT=01
+REGREC=A9EB4400FF00FFF9EFEB88FCE5494DE879816B49E872006F4000000101
+PZ0000-0007=C303FA0000C306EC
+FCB005C-007F=0041465445522D424120202000000008002020202020202020202020000000000013B5FB
+TAIL0080-00FF=0C2041465445522D424144535000DED8D29AFFF812100229B6C499B17205A6CCF4AF4462AF231C72FA98EEFFFDB626C4A3341A30D586342EF376F72EDDC714FE322DBCE2D475829D0A55D7B60AE15681B765C8D64A5C606B1F3DAA46D2148836A09EF2F2B7185408D069B97DB330897129BDE958D7D2915B703E2504E3FCFD64
+STACK16=5FEB0000242424202020202053554200
+LIVE DRIVE USER=00 00
+DMA OPEN READ DATA=02 00 443032332D44454641554C542D444D41
+
+A>[0;31mE (6245) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 9 ms, waited for 0 ms
+CPU executed 1681659 t-states in 0 ms
+Clock frequency 1794.72 MHz

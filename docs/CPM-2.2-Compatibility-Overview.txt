@@ -1,0 +1,133 @@
+BetterCP/M CP/M 2.2 Compatibility Specification Release Candidate 1 —
+Community Edition
+
+Introduction
+
+BetterCP/M began with a practical question:
+
+What does CP/M 2.2 compatibility actually mean?
+
+At first this sounds simple. CP/M has documented BDOS calls, a
+documented BIOS interface, and a large collection of software. But the
+more closely the system is examined, the more complicated the boundary
+becomes.
+
+Should compatibility be defined by the Digital Research manuals? By the
+original source code? By documented programmer interfaces? Or should it
+include the expectations that developed among CP/M programmers and users
+over decades of practical use?
+
+This specification is the result of that investigation.
+
+It does not claim to be the only possible definition of CP/M
+compatibility. It documents the compatibility model used by BetterCP/M:
+the behaviors BetterCP/M intends to preserve and the boundaries it
+intends to maintain.
+
+How this specification was developed
+
+The compatibility model was developed by examining:
+
+-   Digital Research CP/M documentation;
+-   CP/M source and implementation details where they affect visible
+    behavior;
+-   historical CP/M software behavior;
+-   existing compatibility expectations in the CP/M community;
+-   testing and implementation experience.
+
+The goal was not to reproduce the original Digital Research
+implementation internally. A compatible system may use different designs
+while preserving the behavior visible to CP/M software.
+
+The Compatibility Ledger
+
+The detailed requirements are maintained in the Compatibility Ledger.
+
+Each ledger entry describes one compatibility point and records:
+
+-   the behavior being described;
+-   whether BetterCP/M requires, permits, or excludes that behavior;
+-   the evidence supporting the conclusion;
+-   the related conformance test.
+
+The ledger is intentionally concise. It is a programmer reference, not a
+narrative history.
+
+Example:
+
+5.  Warm-start gateway at 0000h
+
+    Locations 0000h-0002h contain a jump to the BIOS warm-start entry.
+    Transferring control to 0000h invokes programmed warm restart
+    behavior.
+
+    Disposition: REQUIRED
+
+The investigation reports contain the reasoning and evidence behind the
+ledger entries.
+
+Compatibility baseline
+
+The BetterCP/M baseline preserves the software-visible CP/M 2.2
+environment, including:
+
+-   transient program execution;
+-   BDOS behavior;
+-   CCP behavior;
+-   FCB and DMA semantics;
+-   filesystem behavior;
+-   BIOS interfaces;
+-   boot and restart behavior;
+-   established CP/M ecosystem expectations.
+
+Compatibility does not require reproducing Digital Research source code
+or private implementation details.
+
+Profiles and extensions
+
+CP/M systems have always existed in different hardware and software
+environments.
+
+Profiles allow additional compatibility targets to be described for:
+
+-   hardware-specific behavior;
+-   optional features;
+-   machine-specific environments;
+-   historical extensions.
+
+Profiles add requirements. They do not remove baseline compatibility
+requirements.
+
+What this specification is (and is not)
+
+This is not an industry standard issued by a standards organization.
+
+It is a carefully researched compatibility specification developed for
+BetterCP/M and shared with the CP/M community.
+
+Other projects may make different compatibility choices. The purpose of
+this work is to make the BetterCP/M choices explicit, understandable,
+and testable.
+
+Conformance
+
+The conformance documentation describes how compatibility can be
+evaluated.
+
+It defines:
+
+-   what behaviors are tested;
+-   how tests are interpreted;
+-   what evidence should be preserved;
+-   how results can be reproduced.
+
+The purpose is not bureaucracy. The purpose is confidence: another
+developer should be able to understand what was tested and why.
+
+Closing
+
+BetterCP/M is a continuation of the CP/M hobbyist tradition:
+understanding a system deeply, preserving what made it useful, and
+adapting it for new hardware and new projects.
+
+This specification records the results of that effort.

@@ -1,0 +1,114 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 18:17:47 2026	Page 1
+Source file: PROTECT26.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1         ORG 100H
+0100  31 35 02         2      2         LD SP,STACK
+0103  0e 0d            3      3         LD C,13
+0105  cd 05 00         4      4         CALL 5
+0108  21 5b 01         5      5         LD HL,L0
+010b  cd 4d 01         6      6         CALL SHOW
+010e  0e 1c            7      7         LD C,28
+0110  cd 05 00         8      8         CALL 5
+0113  21 67 01         9      9         LD HL,L28
+0116  cd 4d 01        10     10         CALL SHOW
+0119  0e 28           11     11         LD C,40
+011b  11 92 01        12     12         LD DE,FCB
+011e  cd 05 00        13     13         CALL 5
+0121  e5              14     14         PUSH HL
+0122  21 75 01        15     15         LD HL,L40
+0125  cd 35 02        16     16         CALL PUTS
+0128  e1              17     17         POP HL
+0129  cd 5c 02        18     18         CALL HEXW
+012c  cd 4d 02        19     19         CALL SPACE
+012f  0e 1d           20     20         LD C,29
+0131  cd 05 00        21     21         CALL 5
+0134  cd 5c 02        22     22         CALL HEXW
+0137  cd 52 02        23     23         CALL CRLF
+013a  11 01 00        24     24         LD DE,0001H
+013d  0e 25           25     25         LD C,37
+013f  cd 05 00        26     26         CALL 5
+0142  21 84 01        27     27         LD HL,LR
+0145  cd 4d 01        28     28         CALL SHOW
+0148  0e 00           29     29         LD C,0
+014a  c3 05 00        30     30         JP 5
+014d  cd 35 02        31     31 SHOW:   CALL PUTS
+0150  0e 1d           32     32         LD C,29
+0152  cd 05 00        33     33         CALL 5
+0155  cd 5c 02        34     34         CALL HEXW
+0158  c3 52 02        35     35         JP CRLF
+015b  52 4f 20 69     36     36 L0:     DB 'RO initial ',0
+015f  6e 69 74 69     36     37
+0163  61 6c 20 00     36     38
+0167  52 4f 20 61     37     39 L28:    DB 'RO after F28 ',0
+016b  66 74 65 72     37     40
+016f  20 46 32 38     37     41
+0173  20 00           37     42
+0175  46 34 30 20     38     43 L40:    DB 'F40 result/ro ',0
+0179  72 65 73 75     38     44
+017d  6c 74 2f 72     38     45
+0181  6f 20 00        38     46
+0184  52 4f 20 61     39     47 LR:     DB 'RO after F37 ',0
+0188  66 74 65 72     39     48
+018c  20 46 33 37     39     49
+0190  20 00           39     50
+0192  00 4e 4f 46     40     51 FCB:    DB 0,'NOFILE  DAT',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0196  49 4c 45 20     40     52
+019a  20 44 41 54     40     53
+019e  00 00 00 00     40     54
+01a2  00 00 00 00     40     55
+01a6  00 00 00 00     40     56
+01aa  00 00 00 00     40     57
+01ae  00 00 00 00     40     58
+01b2  00 00 00        40     59
+01b5                  41     60         DS 128
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 18:17:47 2026	Page 2
+Source file: PROTECT26.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0235                  42     61 STACK:
+0235  7e              43     62 PUTS:   LD A,(HL)
+0236  23              44     63         INC HL
+0237  b7              45     64         OR A
+0238  c8              46     65         RET Z
+0239  5f              47     66         LD E,A
+023a  cd 3f 02        48     67         CALL PUTC
+023d  18 f6           49     68         JR PUTS
+023f  f5              50     69 PUTC:   PUSH AF
+0240  c5              51     70         PUSH BC
+0241  d5              52     71         PUSH DE
+0242  e5              53     72         PUSH HL
+0243  0e 02           54     73         LD C,2
+0245  cd 05 00        55     74         CALL 5
+0248  e1              56     75         POP HL
+0249  d1              57     76         POP DE
+024a  c1              58     77         POP BC
+024b  f1              59     78         POP AF
+024c  c9              60     79         RET
+024d  1e 20           61     80 SPACE:  LD E,' '
+024f  c3 3f 02        62     81         JP PUTC
+0252  1e 0d           63     82 CRLF:   LD E,13
+0254  cd 3f 02        64     83         CALL PUTC
+0257  1e 0a           65     84         LD E,10
+0259  c3 3f 02        66     85         JP PUTC
+025c  7c              67     86 HEXW:   LD A,H
+025d  cd 61 02        68     87         CALL HEXB
+0260  7d              69     88         LD A,L
+0261  f5              70     89 HEXB:   PUSH AF
+0262  0f              71     90         RRCA
+0263  0f              72     91         RRCA
+0264  0f              73     92         RRCA
+0265  0f              74     93         RRCA
+0266  cd 6a 02        75     94         CALL NIB
+0269  f1              76     95         POP AF
+026a  e6 0f           77     96 NIB:    AND 0FH
+026c  c6 30           78     97         ADD A,'0'
+026e  fe 3a           79     98         CP '9'+1
+0270  38 02           80     99         JR C,NOUT
+0272  c6 07           81    100         ADD A,7
+0274  5f              82    101 NOUT:   LD E,A
+0275  c3 3f 02        83    102         JP PUTC
+                      84    103
+0278                  85    104         END

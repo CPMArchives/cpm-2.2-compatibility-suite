@@ -1,0 +1,8 @@
+usage:	cpmsim -z -8 -s -l -i -u -m val -f freq
+		-x filename -d diskpath
+
+	-z = emulate Zilog Z80
+	-8 = emulate Intel 8080
+	-s = save core and CPU
+	-l = load core and CPU
+	-i = trap on I/O to unused ports

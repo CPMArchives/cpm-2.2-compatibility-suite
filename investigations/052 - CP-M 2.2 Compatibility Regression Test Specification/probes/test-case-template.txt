@@ -1,0 +1,33 @@
+TEST IDENTIFIER:
+COMPATIBILITY AREA:
+LEDGER ENTRIES:
+DISPOSITION / PROFILE:
+EVIDENCE SOURCES:
+
+PURPOSE:
+
+PRECONDITIONS:
+- exact system/profile identity
+- restored disk-image hashes
+- probe/software hashes
+- deterministic console/device input
+
+PROCEDURE:
+1.
+
+EXPECTED OBSERVATION:
+
+PASS CRITERIA:
+
+PERMITTED VARIATION / NON-ASSERTIONS:
+
+FAIL CRITERIA:
+
+EVIDENCE TO PRESERVE:
+- raw console and device transcript
+- register/memory/FCB/DMA capture where applicable
+- before/after image hashes and changed sectors/files
+- exact executable/source/harness hashes
+- profile, memory size, drive geometry, and injected-fault identity
+
+RESULT:

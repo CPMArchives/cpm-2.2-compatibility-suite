@@ -1,0 +1,57 @@
+spawn cpmsim -z -d cases/accepted
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>CALL27
+CALL27 
+0CA7EBA7EB4422B200B2A12200F6E55713AA8EAD48BE5ACF6C07A7EBA7EB44A534003412A500F6E55713AA8EAD48BE5ACF6C18A7EBA7EB4401780078560100F6E55713AA8EAD48BE5ACF6C1AA7EBA7EB4400800002F90000F6E55713AA8EAD48BE5ACF6C29A7EBA7EB44002900BC9A0000F6E55713AA8EAD48BE5ACF6C
+
+A>FUNC27
+FUNC27 fn HL A B
+0C 0022 22 00
+26 0000 00 00
+27 0000 00 00
+29 0000 00 00
+2A 0000 00 00
+7F 0000 00 00
+FF 0000 00 00
+
+A>REG27
+REG27 fn AF BC DE HL IX IY
+0C 224C 0034 1234 0022 5678 9ABC
+19 004C 0034 1234 0000 5678 9ABC
+1A 004C 0034 F902 0000 5678 9ABC
+29 004C 0029 1234 0000 5678 9ABC
+
+A>STACK27
+STACK27 64 repeated calls
+OK pre post guards 0233 0233 A5 3C
+
+A>PARAM27
+PARAM27 set/query user
+00 00
+1F 1F
+20 00
+FE 1E
+malformed/unactivated Open FF
+
+A>[0;31mE (9105) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 11 ms, waited for 0 ms
+CPU executed 4038082 t-states in 2 ms
+Clock frequency 1515.79 MHz

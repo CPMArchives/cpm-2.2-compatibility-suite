@@ -1,0 +1,274 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 11:22:06 2026	Page 1
+Source file: ../ENTRY23.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Investigation 023 transient-entry environment probe.
+                       2      2 ; Build: z80asm -fb ENTRY23.ASM
+                       3      3 ;
+                       4      4 ; Before its first BDOS call the probe records the main/alternate registers,
+                       5      5 ; SP, a 16-byte entry-stack window, and all 256 bytes of page zero.  It then
+                       6      6 ; queries live drive/user state and opens/reads DMACHK.DAT without calling
+                       7      7 ; Function 26.  A successful read into 0080h demonstrates the inherited DMA.
+                       8      8
+                       9      9         ORG     0100H
+                      10     10
+0100                  11     11 START:
+0100  ed 73 de 02     12     12         LD      (INIT_SP),SP
+0104  ed 43 e2 02     13     13         LD      (INIT_BC),BC
+0108  ed 53 e4 02     14     14         LD      (INIT_DE),DE
+010c  22 e6 02        15     15         LD      (INIT_HL),HL
+010f  dd 22 e8 02     16     16         LD      (INIT_IX),IX
+0113  fd 22 ea 02     17     17         LD      (INIT_IY),IY
+0117  f5              18     18         PUSH    AF
+0118  e1              19     19         POP     HL
+0119  22 e0 02        20     20         LD      (INIT_AF),HL
+011c  d9              21     21         EXX
+011d  ed 43 ee 02     22     22         LD      (ALT_BC),BC
+0121  ed 53 f0 02     23     23         LD      (ALT_DE),DE
+0125  22 f2 02        24     24         LD      (ALT_HL),HL
+0128  d9              25     25         EXX
+0129  08              26     26         EX      AF,AF'
+012a  f5              27     27         PUSH    AF
+012b  e1              28     28         POP     HL
+012c  22 ec 02        29     29         LD      (ALT_AF),HL
+012f  08              30     30         EX      AF,AF'
+0130  ed 57           31     31         LD      A,I
+0132  32 f4 02        32     32         LD      (INIT_I),A
+0135  f5              33     33         PUSH    AF
+0136  e1              34     34         POP     HL
+0137  22 f6 02        35     35         LD      (I_FLAGS),HL
+013a  ed 5f           36     36         LD      A,R
+013c  32 f5 02        37     37         LD      (INIT_R),A
+                      38     38
+013f  21 00 00        39     39         LD      HL,0000H
+0142  11 ff 02        40     40         LD      DE,PAGE0
+0145  01 00 01        41     41         LD      BC,0100H
+0148  ed b0           42     42         LDIR
+014a  2a de 02        43     43         LD      HL,(INIT_SP)
+014d  11 ff 03        44     44         LD      DE,STACK16
+0150  01 10 00        45     45         LD      BC,16
+0153  ed b0           46     46         LDIR
+                      47     47         ; The CCP-supplied stack is sufficient for the entry RET contract but
+                      48     48         ; has no promised spare depth. Use private space for probe subroutines.
+0155  31 c3 04        49     49         LD      SP,STACKTOP
+                      50     50
+0158  0e 19           51     51         LD      C,25
+015a  cd 05 00        52     52         CALL    0005H
+015d  32 fb 02        53     53         LD      (LIVE_DRIVE),A
+0160  1e ff           54     54         LD      E,0FFH
+0162  0e 20           55     55         LD      C,32
+0164  cd 05 00        56     56         CALL    0005H
+0167  32 fc 02        57     57         LD      (LIVE_USER),A
+                      58     58
+016a  11 1f 04        59     59         LD      DE,DMAFCB
+016d  0e 0f           60     60         LD      C,15
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 11:22:06 2026	Page 2
+Source file: ../ENTRY23.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+016f  cd 05 00        61     61         CALL    0005H
+0172  32 fd 02        62     62         LD      (OPEN_RC),A
+0175  3c              63     63         INC     A
+0176  28 0d           64     64         JR      Z,NO_READ
+0178  11 1f 04        65     65         LD      DE,DMAFCB
+017b  0e 14           66     66         LD      C,20
+017d  cd 05 00        67     67         CALL    0005H
+0180  32 fe 02        68     68         LD      (READ_RC),A
+0183  18 05           69     69         JR      AFTER_READ
+0185                  70     70 NO_READ:
+0185  3e ff           71     71         LD      A,0FFH
+0187  32 fe 02        72     72         LD      (READ_RC),A
+018a                  73     73 AFTER_READ:
+018a  21 80 00        74     74         LD      HL,0080H
+018d  11 0f 04        75     75         LD      DE,DMA16
+0190  01 10 00        76     76         LD      BC,16
+0193  ed b0           77     77         LDIR
+                      78     78
+0195  11 6a 02        79     79         LD      DE,HDR
+0198  cd 2a 02        80     80         CALL    PSTR
+019b  11 7e 02        81     81         LD      DE,REGMSG
+019e  cd 2a 02        82     82         CALL    PSTR
+01a1  11 de 02        83     83         LD      DE,REGREC
+01a4  01 1d 00        84     84         LD      BC,REGEND-REGREC
+01a7  cd 2f 02        85     85         CALL    DUMP
+01aa  11 86 02        86     86         LD      DE,PZMSG
+01ad  cd 2a 02        87     87         CALL    PSTR
+01b0  11 ff 02        88     88         LD      DE,PAGE0
+01b3  01 08 00        89     89         LD      BC,8
+01b6  cd 2f 02        90     90         CALL    DUMP
+01b9  11 93 02        91     91         LD      DE,FCBMSG
+01bc  cd 2a 02        92     92         CALL    PSTR
+01bf  11 5b 03        93     93         LD      DE,PAGE0+005CH
+01c2  01 24 00        94     94         LD      BC,36
+01c5  cd 2f 02        95     95         CALL    DUMP
+01c8  11 a1 02        96     96         LD      DE,TAILMSG
+01cb  cd 2a 02        97     97         CALL    PSTR
+01ce  11 7f 03        98     98         LD      DE,PAGE0+0080H
+01d1  01 80 00        99     99         LD      BC,128
+01d4  cd 2f 02       100    100         CALL    DUMP
+01d7  11 b0 02       101    101         LD      DE,STKMSG
+01da  cd 2a 02       102    102         CALL    PSTR
+01dd  11 ff 03       103    103         LD      DE,STACK16
+01e0  01 10 00       104    104         LD      BC,16
+01e3  cd 2f 02       105    105         CALL    DUMP
+01e6  11 b9 02       106    106         LD      DE,LIVEMSG
+01e9  cd 2a 02       107    107         CALL    PSTR
+01ec  3a fb 02       108    108         LD      A,(LIVE_DRIVE)
+01ef  cd 40 02       109    109         CALL    HEXBYTE
+01f2  1e 20          110    110         LD      E,' '
+01f4  cd 54 02       111    111         CALL    PUTC
+01f7  3a fc 02       112    112         LD      A,(LIVE_USER)
+01fa  cd 40 02       113    113         CALL    HEXBYTE
+01fd  cd 60 02       114    114         CALL    CRLF
+0200  11 ca 02       115    115         LD      DE,DMAMSG
+0203  cd 2a 02       116    116         CALL    PSTR
+0206  3a fd 02       117    117         LD      A,(OPEN_RC)
+0209  cd 40 02       118    118         CALL    HEXBYTE
+020c  1e 20          119    119         LD      E,' '
+020e  cd 54 02       120    120         CALL    PUTC
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 11:22:06 2026	Page 3
+Source file: ../ENTRY23.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0211  3a fe 02       121    121         LD      A,(READ_RC)
+0214  cd 40 02       122    122         CALL    HEXBYTE
+0217  1e 20          123    123         LD      E,' '
+0219  cd 54 02       124    124         CALL    PUTC
+021c  11 0f 04       125    125         LD      DE,DMA16
+021f  01 10 00       126    126         LD      BC,16
+0222  cd 2f 02       127    127         CALL    DUMP
+0225  ed 7b de 02    128    128         LD      SP,(INIT_SP)
+0229  c9             129    129         RET
+                     130    130
+022a  0e 09          131    131 PSTR:  LD      C,9
+022c  c3 05 00       132    132         JP      0005H
+                     133    133
+                     134    134 ; Dump BC bytes at DE as contiguous uppercase hexadecimal and CR/LF.
+022f  1a             135    135 DUMP:  LD      A,(DE)
+0230  c5             136    136         PUSH    BC
+0231  d5             137    137         PUSH    DE
+0232  cd 40 02       138    138         CALL    HEXBYTE
+0235  d1             139    139         POP     DE
+0236  c1             140    140         POP     BC
+0237  13             141    141         INC     DE
+0238  0b             142    142         DEC     BC
+0239  78             143    143         LD      A,B
+023a  b1             144    144         OR      C
+023b  20 f2          145    145         JR      NZ,DUMP
+023d  c3 60 02       146    146         JP      CRLF
+                     147    147
+0240                 148    148 HEXBYTE:
+0240  f5             149    149         PUSH    AF
+0241  0f             150    150         RRCA
+0242  0f             151    151         RRCA
+0243  0f             152    152         RRCA
+0244  0f             153    153         RRCA
+0245  cd 49 02       154    154         CALL    HEXNIB
+0248  f1             155    155         POP     AF
+0249                 156    156 HEXNIB:
+0249  e6 0f          157    157         AND     0FH
+024b  c6 30          158    158         ADD     A,'0'
+024d  fe 3a          159    159         CP      '9'+1
+024f  38 02          160    160         JR      C,HEXOUT
+0251  c6 07          161    161         ADD     A,7
+0253                 162    162 HEXOUT:
+0253  5f             163    163         LD      E,A
+0254  c5             164    164 PUTC:  PUSH    BC
+0255  d5             165    165         PUSH    DE
+0256  e5             166    166         PUSH    HL
+0257  0e 02          167    167         LD      C,2
+0259  cd 05 00       168    168         CALL    0005H
+025c  e1             169    169         POP     HL
+025d  d1             170    170         POP     DE
+025e  c1             171    171         POP     BC
+025f  c9             172    172         RET
+0260  1e 0d          173    173 CRLF:  LD      E,13
+0262  cd 54 02       174    174         CALL    PUTC
+0265  1e 0a          175    175         LD      E,10
+0267  c3 54 02       176    176         JP      PUTC
+                     177    177
+026a  45 4e 54 52    178    178 HDR:    DB 'ENTRY23 FORMAT=01',13,10,'$'
+026e  59 32 33 20    178    179
+0272  46 4f 52 4d    178    180
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 11:22:06 2026	Page 4
+Source file: ../ENTRY23.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0276  41 54 3d 30    178    181
+027a  31 0d 0a 24    178    182
+027e  52 45 47 52    179    183 REGMSG: DB 'REGREC=$'
+0282  45 43 3d 24    179    184
+0286  50 5a 30 30    180    185 PZMSG:  DB 'PZ0000-0007=$'
+028a  30 30 2d 30    180    186
+028e  30 30 37 3d    180    187
+0292  24             180    188
+0293  46 43 42 30    181    189 FCBMSG: DB 'FCB005C-007F=$'
+0297  30 35 43 2d    181    190
+029b  30 30 37 46    181    191
+029f  3d 24          181    192
+02a1  54 41 49 4c    182    193 TAILMSG:DB 'TAIL0080-00FF=$'
+02a5  30 30 38 30    182    194
+02a9  2d 30 30 46    182    195
+02ad  46 3d 24       182    196
+02b0  53 54 41 43    183    197 STKMSG: DB 'STACK16=$'
+02b4  4b 31 36 3d    183    198
+02b8  24             183    199
+02b9  4c 49 56 45    184    200 LIVEMSG:DB 'LIVE DRIVE USER=$'
+02bd  20 44 52 49    184    201
+02c1  56 45 20 55    184    202
+02c5  53 45 52 3d    184    203
+02c9  24             184    204
+02ca  44 4d 41 20    185    205 DMAMSG: DB 'DMA OPEN READ DATA=$'
+02ce  4f 50 45 4e    185    206
+02d2  20 52 45 41    185    207
+02d6  44 20 44 41    185    208
+02da  54 41 3d 24    185    209
+                     186    210
+                     187    211 ; Little-endian pairs. I_FLAGS is AF immediately after LD A,I; P/V is IFF2.
+02de                 188    212 REGREC:
+02de  00 00          189    213 INIT_SP:        DW 0
+02e0  00 00          190    214 INIT_AF:        DW 0
+02e2  00 00          191    215 INIT_BC:        DW 0
+02e4  00 00          192    216 INIT_DE:        DW 0
+02e6  00 00          193    217 INIT_HL:        DW 0
+02e8  00 00          194    218 INIT_IX:        DW 0
+02ea  00 00          195    219 INIT_IY:        DW 0
+02ec  00 00          196    220 ALT_AF:         DW 0
+02ee  00 00          197    221 ALT_BC:         DW 0
+02f0  00 00          198    222 ALT_DE:         DW 0
+02f2  00 00          199    223 ALT_HL:         DW 0
+02f4  00             200    224 INIT_I:         DB 0
+02f5  00             201    225 INIT_R:         DB 0
+02f6  00 00          202    226 I_FLAGS:        DW 0
+02f8  00 01          203    227 ENTRY_PC:       DW 0100H
+02fa  01             204    228 FORMAT_VERSION: DB 1
+02fb                 205    229 REGEND:
+                     206    230
+02fb  00             207    231 LIVE_DRIVE: DB 0
+02fc  00             208    232 LIVE_USER:  DB 0
+02fd  00             209    233 OPEN_RC:    DB 0
+02fe  00             210    234 READ_RC:    DB 0
+02ff                 211    235 PAGE0:      DS 256
+03ff                 212    236 STACK16:    DS 16
+040f                 213    237 DMA16:      DS 16
+                     214    238
+041f  00 44 4d 41    215    239 DMAFCB: DB 0,'DMACHK  ','DAT',0,0,0,0
+0423  43 48 4b 20    215    240
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 11:22:06 2026	Page 5
+Source file: ../ENTRY23.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0427  20 44 41 54    215    241
+042b  00 00 00 00    215    242
+042f                 216    243         DS 16
+043f  00 00 00 00    217    244         DB 0,0,0,0
+                     218    245
+0443                 219    246         DS 128
+04c3                 220    247 STACKTOP:
+                     221    248
+04c3                 222    249         END

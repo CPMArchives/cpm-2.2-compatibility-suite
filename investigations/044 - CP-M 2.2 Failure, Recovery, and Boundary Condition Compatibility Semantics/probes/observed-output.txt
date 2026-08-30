@@ -1,0 +1,98 @@
+Investigation 044 accepted observations
+=======================================
+
+Environment: z80pack cpmsim 1.39, DRI CP/M 2.2, Z80 CBIOS 1.2. Every command
+and error response was scripted.
+
+FAIL44 - normal, logical failure, invalid request, and boundary state
+--------------------------------------------------------------------
+
+Purpose: Compare normally returning conditions in one process.
+Procedure: Query the version; Open a missing FCB; create/open/read an empty
+file twice; Open ATTR.DAT and Random Read with nonzero R2; call selector 41;
+query console status without supplying input; remove the temporary empty file.
+Observed:
+
+  NORMAL VERSION A/HL=220022
+  MISSING OPEN A=FF
+  REPEATED EOF A=0101
+  RANDOM R2 OVERFLOW A=06
+  SELECTOR 41 A/HL=000000
+  CONSOLE STATUS NO INPUT A=00
+
+Conclusion: These conditions returned normally with function-specific values.
+Repeated EOF was stable in the unchanged logical state. Unsupported selector
+41 returned zero. No-input status reported not-ready; it was not a device-error
+code. The temporary create/delete left physical directory-sector residue, so
+the image hash changed even though EMPTY44.DAT was absent afterward.
+
+WRITE25 - directory exhaustion
+------------------------------
+
+Purpose: Separate directory capacity from data-block capacity.
+Procedure: Run Make/Write on an image with all 64 directory entries occupied
+and 178K data space free.
+Observed: Make=FF; Write was not attempted (EE sentinel). The disk image was
+byte-identical before/after.
+Conclusion: Directory exhaustion is a returning Make failure independent of
+available data blocks.
+
+WRITE25 - allocation exhaustion
+-------------------------------
+
+Purpose: Separate data-block capacity from directory capacity.
+Procedure: Run Make/Write on an image with 0K data space and a free directory
+slot.
+Observed: Make=01; sequential Write=02. The FCB did not acquire a data block or
+advance CR. The image changed because Make successfully created NEW25.DAT.
+Conclusion: Allocation exhaustion occurs later and returns through the Write
+result family; failure does not roll back the preceding successful Make.
+
+OPEN25 C - unavailable drive and recovery
+-----------------------------------------
+
+Purpose: Test a nonreturning unavailable-drive/device path and post-abort use.
+Procedure: Open on unavailable drive C, wait for the DRI diagnostic, supply
+Control-C, then run FAIL44.
+Observed:
+
+  Bdos Err On C: Bad Sector
+  A>FAIL44
+  ...
+  FAIL44 COMPLETE
+
+No normal-return marker from OPEN25 appeared.
+Conclusion: This reference configuration entered operator presentation rather
+than returning a universal device error. Control-C abandoned the caller and
+re-established a usable command/BDOS environment. Exact classification of an
+unavailable drive as Bad Sector is configuration/BIOS-dependent.
+
+PHYS015 - repeated physical failure and recovery
+------------------------------------------------
+
+Purpose: Compare ignore, abort, and healthy recovery in one session.
+Procedure: Inject a pre-transfer read failure and answer x; inject the same
+failure again and answer Control-C; then run an unarmed normal read.
+Observed: The ignored call printed Bad Sector, returned 00, advanced CR, and
+left the DMA sentinel EE. The second call printed Bad Sector and did not return
+to the probe. After the prompt, the healthy read returned 00 and DMA contained
+41. The disk image was byte-identical before/after.
+Conclusion: physical presentation suspends the caller; ignore resumes without
+validating transfer; abort abandons it; recovery guarantees a usable public
+environment, not the interrupted program's state. Repetition did not poison a
+later healthy operation in this reference run.
+
+Controlled matrix
+-----------------
+
+  Normal state:       Function 12 and healthy physical read.
+  Boundary state:     repeated EOF, R2 overflow, selector 41, no console input.
+  Failure state:      missing file, full directory, full allocation, unavailable
+                      drive, injected physical read failure.
+  Recovery state:     returning codes, ignore continuation, Control-C restart.
+  Repeated failure:   EOF twice; physical read failure twice; healthy follow-up.
+
+No invalid pointer was dereferenced: CP/M documents no safe bad-pointer
+contract, and an arbitrary address could corrupt the test rather than expose a
+portable result. I025's malformed/unactivated FCB tests are preserved as prior
+evidence and are not relabelled as new experiments.

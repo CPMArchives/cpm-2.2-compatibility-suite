@@ -1,0 +1,15 @@
+INVESTIGATION 052 SPECIFICATION VALIDATION
+
+Command:
+  probes/validate-inventory.sh
+
+Observed result:
+  ledger_entries=652
+  missing_primary_tests=0
+  inventory_tests=62
+  bad_field_rows=0
+  duplicate_test_ids=0
+  PASS
+
+This validates structural traceability of the proposed specification. It does
+not claim that all 62 proposed regression tests were executed in I052.

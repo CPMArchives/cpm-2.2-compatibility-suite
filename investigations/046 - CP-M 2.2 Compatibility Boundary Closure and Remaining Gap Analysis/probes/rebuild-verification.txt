@@ -1,0 +1,7 @@
+Investigation 046 byte-identical rebuild verification
+=====================================================
+
+  IDENTICAL GAP46.COM
+  IDENTICAL CROSS45.COM
+
+Result: PASS

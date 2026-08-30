@@ -1,0 +1,7 @@
+organization_unit	scope	prerequisites	execution_requirement	evidence	failure_reduction
+Phase 0 - claim and fixtures	ledger hash, baseline/strict/profile applicability, software and disk fixtures	none	validate manifests before execution	hashes and applicability matrix	fixture/claim defect
+Phase 1 - foundation	entry/page zero, public BDOS gateway, BIOS discovery	Phase 0	fresh boot/restored fixture	register/memory snapshots	stop dependent tests if foundation invalid
+Phase 2 - interfaces	console, state, memory/lifecycle and BIOS services	matching Phase 1 boundary	isolated deterministic input/provider instrumentation	raw bytes/registers/calls	boundary-specific defect or permitted variation
+Phase 3 - storage	FCB/DMA/directory/sequential/random/user/extent operations	healthy call/state/BIOS disk tests	fresh image per mutating case	FCB/DMA captures and image diffs	BDOS file versus BIOS/storage provider
+Phase 4 - command and failure	CCP lifecycle plus logical/physical recovery	healthy narrow operations; dedicated restored fault fixture	one controlled failure per case; command inputs scripted	transcript, registers, state and before/after image	CCP, logical error, physical provider or recovery boundary
+Phase 5 - ecosystem/profile	utilities, applications, communications and hardware workflows	all mapped narrow tests pass; named profile/software fixture	deterministic workflow; unsupported profile isolated	software hashes, transcript, generated files/images	first reduce to narrow mapped test; do not infer new rule directly

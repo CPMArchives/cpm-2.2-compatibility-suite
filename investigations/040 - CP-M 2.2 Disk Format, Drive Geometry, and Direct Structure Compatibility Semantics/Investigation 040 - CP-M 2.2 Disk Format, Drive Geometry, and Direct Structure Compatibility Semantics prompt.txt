@@ -1,0 +1,231 @@
+Investigation 040 — CP/M 2.2 Disk Format, Drive Geometry, and Direct
+Structure Compatibility Semantics Prompt
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 039 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation
+039.
+
+Create Investigation 040 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger. Do not modify previous
+investigation reports or artifacts.
+
+This is an evidence investigation only. Do not implement BetterCP/M
+changes.
+
+OBJECTIVE
+
+Determine the CP/M 2.2 disk-format, drive-geometry, and direct structure
+compatibility contract.
+
+Previous investigations established:
+
+-   BDOS file semantics;
+-   directory behavior;
+-   allocation behavior;
+-   BIOS disk interfaces;
+-   disk parameter structures;
+-   runtime device behavior.
+
+Investigation 040 determines the compatibility boundary created by CP/M
+disk structures and physical storage assumptions.
+
+Investigate:
+
+-   disk parameter blocks;
+-   allocation structures;
+-   directory organization;
+-   sector organization;
+-   drive characteristics;
+-   direct disk structure access;
+-   software assumptions about disk layout.
+
+Determine:
+
+-   which disk-format behaviors are compatibility requirements;
+-   which storage behaviors are implementation-specific;
+-   which historical conventions must be preserved for CP/M software
+    compatibility.
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+-   documented CP/M 2.2 behavior;
+-   Digital Research implementation behavior;
+-   common CP/M programming practices;
+-   historically significant disk utility and application behavior.
+
+Do not assume that BDOS file operations define the complete storage
+compatibility boundary.
+
+Do not require undocumented behavior without evidence.
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Investigation 017: CP/M 2.2 BDOS Disk State Allocation Vector and Disk
+Parameter Block Semantics.
+
+Investigation 019: CP/M 2.2 BIOS Disk Interface and Logical-Sector
+Semantics.
+
+Investigation 029: CP/M 2.2 BDOS Directory Search Semantics and FCB-DMA
+Enumeration Contract.
+
+Investigation 030: CP/M 2.2 BDOS File Lifecycle, Extent Management, and
+Metadata State Transition Semantics.
+
+Investigation 036: CP/M 2.2 BIOS Runtime Environment and Hardware
+Abstraction Boundary Semantics.
+
+Investigation 037: CP/M 2.2 BDOS Remaining Functions and Interface
+Consolidation Semantics.
+
+SCOPE
+
+Investigate:
+
+-   CP/M disk organization;
+-   disk parameter structures;
+-   directory layout;
+-   allocation structures;
+-   sector and track assumptions;
+-   direct disk structure access;
+-   disk utility behavior;
+-   application-visible storage conventions.
+
+NON-GOALS
+
+Do not investigate:
+
+-   BetterCP/M storage architecture;
+-   modern filesystem design;
+-   storage backend implementation;
+-   CP/M 3 disk enhancements;
+-   MP/M storage behavior.
+
+INVESTIGATION QUESTIONS
+
+Determine:
+
+-   whether disk organization is a practical software compatibility
+    interface;
+-   which directory structures are visible to software;
+-   whether allocation structures are software-visible;
+-   which DPB fields are compatibility-relevant;
+-   whether software assumes physical geometry;
+-   what direct disk access requires;
+-   what disk utilities historically depend upon.
+
+Create deterministic probes covering:
+
+-   disk parameters;
+-   directory structures;
+-   allocation behavior;
+-   geometry assumptions;
+-   direct disk access.
+
+Include controlled tests covering:
+
+-   empty disks;
+-   normal disks;
+-   nearly full disks;
+-   damaged disks;
+-   different disk definitions;
+-   direct BDOS, BIOS, and utility access.
+
+EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A: documented behavior.
+
+B: Digital Research implementation behavior.
+
+I: experimental observation.
+
+D: unresolved policy.
+
+Ledger evidence must identify:
+
+I040 STORAGE DISK BDOS BIOS subsystem IG AG
+
+COMPATIBILITY CLASSIFICATION
+
+Classify findings:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+Do not require:
+
+-   private implementation details;
+-   undocumented behavior without evidence;
+-   internal algorithms;
+-   behavior invisible to applications.
+
+LEDGER REVIEW
+
+Review affected Compatibility Ledger entries.
+
+Determine:
+
+-   evidence strengthening;
+-   corrections;
+-   duplicate avoidance.
+
+Do not modify the ledger directly.
+
+REPORT STRUCTURE
+
+Create:
+
+Investigation 040 - CP/M 2.2 Disk Format, Drive Geometry, and Direct
+Structure Compatibility Semantics.md
+
+Include:
+
+1.  Objective and scope
+2.  Compatibility standard
+3.  Relationship to previous investigations
+4.  Disk format compatibility boundary
+5.  Documentation findings
+6.  Source findings
+7.  Directory structure assumptions
+8.  Allocation vector compatibility
+9.  Disk parameter block compatibility
+10. Drive geometry assumptions
+11. Direct disk access
+12. Disk utility findings
+13. Disk format variations
+14. Storage error interaction
+15. Software ecosystem findings
+16. Experimental results
+17. Compatibility conclusions
+18. Proposed ledger additions
+19. Existing-entry updates
+20. Open questions
+21. Conformance implications
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M storage architecture.
+
+Do not replace CP/M disk semantics with modern filesystem models.
+
+Determine the CP/M 2.2 disk format, drive geometry, and direct structure
+compatibility contract only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

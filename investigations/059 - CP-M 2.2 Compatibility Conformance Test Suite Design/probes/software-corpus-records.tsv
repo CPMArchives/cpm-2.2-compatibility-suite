@@ -1,0 +1,14 @@
+record_id	software	version	category	environment	outcome	ledger_areas	i052_tests
+V053-01	ASM LOAD PIP STAT ED DDT SUBMIT XSUB DUMP	DRI CP/M 2.2 distributions	standard utilities	z80pack cpmsim CP/M 2.2	PASS normal workflow	CCP BDOS files console memory	UTIL-001 UTIL-004 CCP-008
+V053-02	ASM PIP	DRI CP/M 2.2 distributions	standard utility failures	z80pack cpmsim CP/M 2.2	PASS expected missing-source/file failures	BDOS file errors	ERROR-001 UTIL-001
+V053-03	ASM MAC RMAC LOAD LINK DDT SID SUBMIT	DRI toolchain releases	development toolchain	z80pack cpmsim CP/M 2.2	PASS build link execute debug batch	entry files CCP memory	UTIL-002 UTIL-003 UTIL-004
+V053-04	LINK	1.3	development failure	z80pack cpmsim CP/M 2.2	PASS expected undefined-symbol report	application/tool error boundary	UTIL-003
+V053-05	WordStar	3.00	word processor	Mostek 56K CP/M 2.2 Adds terminal profile	PASS edit save DIR TYPE	console FCB DMA create write close search read	APP-001
+V053-06	Microsoft BASIC-80 and Wumpus	5.2	interpreter/game	Mostek 56K CP/M 2.2	PASS run Ctrl-C SYSTEM return	console transient termination files	APP-002
+V053-07	Adventure	A02	native multi-file application/game	Mostek 56K CP/M 2.2	PASS deterministic startup and quit	large transient multi-file reads console	APP-003
+V053-08	Kermit-80 Generic CP/M	4.11	communications	Mostek CP/M 2.2 logical devices	PASS VERSION SHOW EXIT	logical devices files CCP	COMM-001
+V053-09	Kermit-80 Generic CP/M	4.11	communications failure	Mostek CP/M 2.2 no peer	PASS send-init then scripted abort	logical output application recovery	COMM-003
+V053-10	Kermit-80 Generic CP/M	4.11	capability/file failures	Mostek CP/M 2.2	PASS speed not implemented and missing file handled	profile boundary file error	COMM-001 COMM-003
+V053-11	BASE051	I051 probe	portable control	Mostek CP/M 2.2	PASS version 22 and return	public BDOS gateway/version	BDOS-STATE-001 MEM-001
+V053-12	QTERM IMSAI patch	4.3e	hardware-dependent communications	Mostek unsupported-port trap profile	PASS expected IN 23h trap after CP/M banner	vendor port boundary	COMM-004 BIOS-007
+V053-13	KSCOPE	Cromemco Dazzler	hardware-dependent display	Mostek unsupported-port trap profile	PASS expected OUT 0Eh trap after CP/M sign-on	vendor display boundary	HW-001 BIOS-007

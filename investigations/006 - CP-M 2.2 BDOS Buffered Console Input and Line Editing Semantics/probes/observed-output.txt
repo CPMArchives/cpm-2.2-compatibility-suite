@@ -1,0 +1,52 @@
+Investigation 006 raw observed output
+=====================================
+
+Record format:
+
+  maximum count data[8] CONOUT-count CONOUT[24] LIST-count BIOS-CONIN-count
+
+Only count data bytes and CONOUT-count output bytes are meaningful. Remaining
+capture bytes retain prior values and are not evidence.
+
+A>BUF006
+
+BUF006 max count data[8] conlen con[24] listlen calls
+SIMPLE 08 03 41 42 43 EE EE EE EE EE 04 41 42 43 0D FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 04
+LFTERM 08 02 41 42 EE EE EE EE EE EE 03 41 42 0D 0D FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 03
+EMPTY  08 00 EE EE EE EE EE EE EE EE 01 0D 42 0D 0D FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 01
+FULL   03 03 41 42 43 EE EE EE EE EE 04 41 42 43 0D FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 03
+BS     08 02 41 43 EE EE EE EE EE EE 07 41 42 08 20 08 43 0D FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 05
+DEL    08 02 41 43 EE EE EE EE EE EE 07 41 42 08 20 08 43 0D FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 05
+CTRL-E 08 02 41 42 EE EE EE EE EE EE 05 41 0D 0A 42 0D 43 0D FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 04
+CTRL-U 08 01 43 42 EE EE EE EE EE EE 08 41 42 23 0D 0A 20 43 0D FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 05
+CTRL-X 08 01 43 42 EE EE EE EE EE EE 0A 41 42 08 20 08 08 20 08 43 0D FF FF FF FF FF FF FF FF FF FF FF FF FF FF 00 05
+CTRL-R 08 03 41 42 43 EE EE EE EE EE 0C 41 42 23 0D 0A 20 20 20 41 42 43 0D FF FF FF FF FF FF FF FF FF FF FF FF 00 05
+CTRL-P 08 02 41 42 EE EE EE EE EE EE 03 41 42 0D 0D 0A 20 20 20 41 42 43 0D FF FF FF FF FF FF FF FF FF FF FF FF 02 04
+
+Decoded results
+---------------
+
+SIMPLE: ABC CR -> count 3, data ABC, console ABC CR.
+LFTERM: AB LF -> count 2, data AB, console AB CR; LF was not stored/echoed.
+EMPTY: CR -> count 0, console CR.
+FULL: maximum 3 and ABC -> count 3, data ABC, immediate return with CR output.
+BS: AB BS C CR -> count 2, data AC; correction bytes BS SPACE BS.
+DEL: AB DEL C CR -> same stored data and correction bytes as BS.
+CTRL-E: A ^E B CR -> data AB; ^E emitted CR LF before B.
+CTRL-U: AB ^U C CR -> data C; prior line was abandoned after # CR LF.
+CTRL-X: AB ^X C CR -> data C; prior characters were erased by backspacing.
+CTRL-R: AB ^R C CR -> data ABC; existing line was redisplayed after # CR LF.
+CTRL-P: A ^P B CR -> data AB; ^P was excluded and toggled printer echo.
+        A preceded the toggle; B and the final CR generated two LIST calls.
+
+The number of BIOS CONIN calls equals the number of scripted input bytes used
+in every case. The harness deliberately made CONST report no asynchronously
+pending character, avoiding timing-dependent prefetch during echo.
+
+Rejected development run
+------------------------
+
+An earlier run allocated and printed records one byte too short, omitting the
+final BIOS-CONIN count. Its preceding buffer and output bytes agreed with the
+final run, but it is rejected and not used as evidence. The source and binary
+preserved here correspond to the complete records above.

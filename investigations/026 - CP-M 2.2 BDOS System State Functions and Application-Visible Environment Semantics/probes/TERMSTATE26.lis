@@ -1,0 +1,24 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 18:17:47 2026	Page 1
+Source file: TERMSTATE26.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1         ORG 100H
+0100  1e 01            2      2         LD E,1
+0102  0e 0e            3      3         LD C,14
+0104  cd 05 00         4      4         CALL 5
+0107  1e 07            5      5         LD E,7
+0109  0e 20            6      6         LD C,32
+010b  cd 05 00         7      7         CALL 5
+010e  11 00 03         8      8         LD DE,0300H
+0111  0e 1a            9      9         LD C,26
+0113  cd 05 00        10     10         CALL 5
+0116  3a 82 00        11     11         LD A,(0082H)
+0119  fe 46           12     12         CP 'F'
+011b  28 06           13     13         JR Z,F0
+011d  fe 4a           14     14         CP 'J'
+011f  ca 00 00        15     15         JP Z,0000H
+0122  c9              16     16         RET
+0123  0e 00           17     17 F0:     LD C,0
+0125  c3 05 00        18     18         JP 5
+0128                  19     19         END

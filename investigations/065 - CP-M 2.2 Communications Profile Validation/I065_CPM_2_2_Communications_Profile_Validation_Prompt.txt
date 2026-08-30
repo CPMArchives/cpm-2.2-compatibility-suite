@@ -1,0 +1,323 @@
+Investigation 065 — CP/M 2.2 Communications Profile Validation Prompt
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 064 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation 064.
+
+Create Investigation 065 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports or artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Perform deeper validation of the CP/M 2.2 communications compatibility
+boundary.
+
+Previous investigations established:
+
+- CP/M communications software compatibility requirements;
+- software ecosystem assumptions;
+- BIOS and device interface behavior;
+- conformance validation requirements;
+- remaining closure requirements from the engineering gap assessment.
+
+Investigation 065 determines whether communications compatibility
+requirements are sufficiently understood for specification release.
+
+Determine:
+
+- which communications behaviors are portable CP/M compatibility
+  requirements;
+- which behaviors belong to hardware or device profiles;
+- whether timing, transfer, and failure behavior reveal additional
+  compatibility requirements.
+
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+- documented CP/M 2.2 behavior;
+- Digital Research implementation behavior;
+- common CP/M programming practices;
+- historically significant communications software dependencies.
+
+Distinguish between:
+
+- CP/M-visible communication semantics;
+- BIOS/device interface behavior;
+- hardware-specific communication behavior.
+
+Do not assume modem or serial hardware behavior is part of the CP/M
+compatibility contract without evidence.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Review completed investigations through Investigation 064.
+
+Pay particular attention to:
+
+Investigation 020:
+    CP/M 2.2 BIOS Character Device Semantics.
+
+Investigation 050:
+    CP/M 2.2 Communications Software Compatibility Survey.
+
+Investigation 053:
+    CP/M 2.2 Software Corpus Validation.
+
+Investigation 059:
+    CP/M 2.2 Compatibility Conformance Test Suite Design.
+
+Investigation 062:
+    CP/M 2.2 Compatibility Conformance Pilot Execution.
+
+
+SCOPE
+
+Investigate:
+
+- communications software;
+- serial device behavior;
+- transfer workflows;
+- interoperability assumptions;
+- timing behavior;
+- failure and recovery behavior.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- BetterCP/M networking architecture;
+- modern networking protocols;
+- replacement communication services;
+- unsupported hardware emulation.
+
+
+INVESTIGATION QUESTIONS
+
+
+1. COMMUNICATIONS SOFTWARE CORPUS
+
+Identify representative communications software.
+
+Record:
+
+- software name;
+- version where available;
+- source/archive location;
+- category;
+- platform assumptions;
+- evidence collected.
+
+
+2. COMMUNICATION INTERFACE USAGE
+
+Determine:
+
+- BDOS usage;
+- BIOS character-device usage;
+- direct hardware access;
+- device assumptions;
+- software-visible behavior.
+
+
+3. TRANSFER VALIDATION
+
+Determine:
+
+- file-transfer assumptions;
+- protocol behavior;
+- successful transfer behavior;
+- interoperability requirements.
+
+
+4. FAILURE BEHAVIOR
+
+Determine:
+
+- timeout behavior;
+- interrupted transfers;
+- device failures;
+- recovery behavior;
+- user-visible error handling.
+
+
+5. TIMING AND PERFORMANCE ASSUMPTIONS
+
+Determine:
+
+- polling assumptions;
+- delay-loop behavior;
+- baud-rate dependencies;
+- CPU-speed assumptions;
+- whether behavior affects compatibility.
+
+
+6. HARDWARE PROFILE BOUNDARY
+
+Determine:
+
+- which behaviors belong to CP/M compatibility;
+- which belong to BIOS/device profiles;
+- which are machine-specific.
+
+
+7. EXPERIMENTAL REQUIREMENTS
+
+Create communications validation records.
+
+Each record must include:
+
+- software tested;
+- communication scenario;
+- environment;
+- procedure;
+- observed behavior;
+- compatibility conclusion.
+
+
+8. CONTROLLED TEST MATRIX
+
+Include:
+
+- normal transfers;
+- failed transfers;
+- interrupted transfers;
+- device unavailable cases;
+- boundary timing cases.
+
+
+EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+    documented behavior.
+
+B:
+    Digital Research implementation behavior.
+
+I:
+    experimental observation.
+
+D:
+    unresolved policy.
+
+
+Ledger evidence must identify:
+
+I065
+COMMUNICATIONS
+PROFILE
+VALIDATION
+subsystem
+IG
+AG
+
+
+COMPATIBILITY CLASSIFICATION
+
+Classify findings:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Do not require:
+
+- hardware-specific modem behavior without evidence;
+- undocumented behavior without software dependency;
+- implementation details invisible to software.
+
+
+LEDGER REVIEW
+
+Review affected Compatibility Ledger entries.
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+Do not modify the ledger directly.
+
+
+REPORT STRUCTURE
+
+Create:
+
+Investigation 065 - CP/M 2.2 Communications Profile Validation.md
+
+Include:
+
+1. Objective and scope
+
+2. Relationship to previous investigations
+
+3. Communications software corpus
+
+4. Interface usage analysis
+
+5. Transfer validation results
+
+6. Failure behavior analysis
+
+7. Timing analysis
+
+8. Hardware profile boundary analysis
+
+9. Experimental results
+
+10. Compatibility conclusions
+
+11. Proposed ledger additions
+
+12. Existing-entry updates
+
+13. Open questions
+
+14. Conformance implications
+
+
+FINAL REVIEW
+
+Before completing the investigation, verify:
+
+- communication requirements are separated from hardware assumptions;
+- evidence supports all conclusions;
+- failure behavior is considered;
+- conformance implications are identified.
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M networking architecture.
+
+Do not assume communications behavior is required without evidence.
+
+Determine the CP/M 2.2 communications profile compatibility boundary
+only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

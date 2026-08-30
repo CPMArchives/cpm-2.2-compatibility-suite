@@ -1,0 +1,31 @@
+Reference command:
+
+  A>OUT003
+
+Observed console text (spacing preserved):
+
+OUT003 BEGIN
+F2:A$   X
+
+F9:A    X
+F9TERM:VISIBLE:AFTER
+EMPTY:[]
+MULTI:A
+B
+
+Interpretation of discriminating lines:
+
+  F2:A$   X       function 2 emitted '$'; TAB after column 5 became 3 spaces
+  F9:A    X       function 9 TAB after column 4 became 4 spaces
+  F9TERM...       first '$' and following HIDDEN were not emitted; later call emitted :AFTER
+  EMPTY:[]        function 9 with '$' as its first byte emitted nothing
+  MULTI:A / B     embedded CR/LF were emitted and scanning continued
+
+Printer-echo experiment:
+
+At the CCP prompt, control-P was entered before OUT003 to enable DRI BDOS
+printer echo. The z80pack printer sink captured printer-echo.txt. Its probe
+segment duplicates the fully processed console stream, including expanded
+TAB spaces. z80pack deliberately suppresses CR bytes in its printer-file
+handler (simio.c 1503-1514), so that omission is emulator behavior rather
+than a CP/M/BDOS observation.

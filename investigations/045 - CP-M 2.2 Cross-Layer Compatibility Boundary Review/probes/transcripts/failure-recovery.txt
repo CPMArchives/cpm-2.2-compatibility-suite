@@ -1,0 +1,47 @@
+spawn <local-workspace>/g-p-6a682f002be881918281554d644daf48/stage045/probes/reference-instrumentation/cpmsim -z -d <local-workspace>/g-p-6a682f002be881918281554d644daf48/stage045/probes/cases/failure
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>PHYS015 A
+CASE A
+BEFORE 01 00 00 41 54 54 52 20 20 20 20 44 41 54 00 00 80 01 04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 EE
+ARM READ
+
+Bdos Err On A: Bad SectorRETURNED 00 00 00 41 54 54 52 20 20 20 20 44 41 54 00 00 80 01 04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 EE
+
+A>PHYS015 A
+CASE A
+BEFORE 01 00 00 41 54 54 52 20 20 20 20 44 41 54 00 00 80 01 04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 EE
+ARM READ
+
+Bdos Err On A: Bad Sector
+A>CROSS45
+CROSS45 CROSS-LAYER MATRIX
+WBOOT/BDOS TARGET=FA03/EC06
+VERSION DRIVE USER=00220000
+ALT-DMA SEARCH RC/ENTRY=0100ATTR    DAT
+A:ATTR USER1/USER0 RC, CURRENT DRIVE=FF0101
+DIRECT BIOS CONST=00
+RESET DRIVE/USER=0000
+CROSS45 COMPLETE
+
+A>[0;31mE (12359) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 20 ms, waited for 0 ms
+CPU executed 1674521 t-states in 1 ms
+Clock frequency 1040.72 MHz

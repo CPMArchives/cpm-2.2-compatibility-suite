@@ -1,0 +1,22 @@
+MIN28: one-byte RET returned to A>.
+
+MEM28 before LOAD28: 3000/4000/8000 = 87/7F/83.
+LOAD28: immediate Function 12 = 0022; entry SP observed EBA9; wrote 5A at 4000.
+MEM28 after LOAD28:  3000/4000/8000 = 87/5A/83.
+
+ENTRY28 ONE TWO:
+  SP EBA9; page-zero words/bytes 03C3 00 00 06C3; version 0022.
+  FCB32:
+  004F4E452020202020202020000000040054574F202020202020202000000000
+  Tail count/first bytes:
+  08 20 4F 4E 45 20 54 57 4F 00 ...residue...
+
+ERROR28 control printed ERROR28 EXECUTED.
+Missing B:NOFILE28 printed B:NOFILE28? and reprompted.
+BIGERR28 printed BAD LOAD; ERROR28 EXECUTED marker was absent.
+
+RETURN28 -> CHECK28: current drive 00, user 07, memory 5000=A5.
+
+Exact addresses, SP, residue, diagnostic punctuation, and preserved TPA bytes
+are observations, not compatibility requirements.
+

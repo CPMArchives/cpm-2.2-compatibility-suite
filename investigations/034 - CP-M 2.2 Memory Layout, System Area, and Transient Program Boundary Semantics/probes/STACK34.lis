@@ -1,0 +1,111 @@
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 06:51:15 2026	Page 1
+Source file: STACK34.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1  ORG 0100H
+0100  ed 73 7d 01      2      2  LD (ENTSP),SP
+0104  21 00 00         3      3  LD HL,0
+0107  39               4      4  ADD HL,SP
+0108  11 81 01         5      5  LD DE,STACKBYTES
+010b  01 08 00         6      6  LD BC,8
+010e  ed b0            7      7  LDIR
+0110  2a 7d 01         8      8  LD HL,(ENTSP)
+0113  5e               9      9  LD E,(HL)
+0114  23              10     10  INC HL
+0115  56              11     11  LD D,(HL)
+0116  ed 53 7f 01     12     12  LD (RETWORD),DE
+011a  31 09 02        13     13  LD SP,LOCALSTACK
+011d  21 52 01        14     14  LD HL,MSG
+0120  cd 09 02        15     15  CALL PUTS
+0123  2a 7d 01        16     16  LD HL,(ENTSP)
+0126  cd 47 02        17     17  CALL HEXW
+0129  cd 21 02        18     18  CALL SPACE
+012c  2a 7f 01        19     19  LD HL,(RETWORD)
+012f  cd 47 02        20     20  CALL HEXW
+0132  cd 26 02        21     21  CALL CRLF
+0135  21 70 01        22     22  LD HL,BMSG
+0138  cd 09 02        23     23  CALL PUTS
+013b  21 81 01        24     24  LD HL,STACKBYTES
+013e  06 08           25     25  LD B,8
+0140  7e              26     26 SLP: LD A,(HL)
+0141  23              27     27  INC HL
+0142  cd 30 02        28     28  CALL HEXB
+0145  cd 21 02        29     29  CALL SPACE
+0148  10 f6           30     30  DJNZ SLP
+014a  cd 26 02        31     31  CALL CRLF
+014d  2a 7d 01        32     32  LD HL,(ENTSP)
+0150  f9              33     33  LD SP,HL
+0151  c9              34     34  RET
+0152  53 54 41 43     35     35 MSG: DB 'STACK34 ENTRY_SP RETURN_WORD ',0
+0156  4b 33 34 20     35     36
+015a  45 4e 54 52     35     37
+015e  59 5f 53 50     35     38
+0162  20 52 45 54     35     39
+0166  55 52 4e 5f     35     40
+016a  57 4f 52 44     35     41
+016e  20 00           35     42
+0170  53 54 41 43     36     43 BMSG: DB 'STACK_TOP_8 ',0
+0174  4b 5f 54 4f     36     44
+0178  50 5f 38 20     36     45
+017c  00              36     46
+017d  00 00           37     47 ENTSP: DW 0
+017f  00 00           38     48 RETWORD: DW 0
+0181                  39     49 STACKBYTES: DS 8
+0189                  40     50  DS 128
+0209                  41     51 LOCALSTACK:
+0209  7e              42     52 PUTS: LD A,(HL)
+020a  23              43     53  INC HL
+020b  b7              44     54  OR A
+020c  c8              45     55  RET Z
+020d  5f              46     56  LD E,A
+020e  cd 13 02        47     57  CALL PUTC
+0211  18 f6           48     58  JR PUTS
+0213  f5              49     59 PUTC: PUSH AF
+0214  c5              50     60  PUSH BC
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 06:51:15 2026	Page 2
+Source file: STACK34.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0215  d5              51     61  PUSH DE
+0216  e5              52     62  PUSH HL
+0217  0e 02           53     63  LD C,2
+0219  cd 05 00        54     64  CALL 0005H
+021c  e1              55     65  POP HL
+021d  d1              56     66  POP DE
+021e  c1              57     67  POP BC
+021f  f1              58     68  POP AF
+0220  c9              59     69  RET
+0221  1e 20           60     70 SPACE: LD E,' '
+0223  c3 13 02        61     71  JP PUTC
+0226  1e 0d           62     72 CRLF: LD E,13
+0228  cd 13 02        63     73  CALL PUTC
+022b  1e 0a           64     74  LD E,10
+022d  c3 13 02        65     75  JP PUTC
+0230  f5              66     76 HEXB: PUSH AF
+0231  0f              67     77  RRCA
+0232  0f              68     78  RRCA
+0233  0f              69     79  RRCA
+0234  0f              70     80  RRCA
+0235  cd 39 02        71     81  CALL NIB
+0238  f1              72     82  POP AF
+0239  e6 0f           73     83 NIB: AND 0FH
+023b  c6 30           74     84  ADD A,'0'
+023d  fe 3a           75     85  CP '9'+1
+023f  38 02           76     86  JR C,NOUT
+0241  c6 07           77     87  ADD A,7
+0243  5f              78     88 NOUT: LD E,A
+0244  c3 13 02        79     89  JP PUTC
+0247  7c              80     90 HEXW: LD A,H
+0248  cd 30 02        81     91  CALL HEXB
+024b  7d              82     92  LD A,L
+024c  c3 30 02        83     93  JP HEXB
+024f  11 54 02        84     94 CALLHL: LD DE,CALLBACK
+0252  d5              85     95  PUSH DE
+0253  e9              86     96  JP (HL)
+0254  c9              87     97 CALLBACK: RET
+0255  0e 00           88     98 EXIT0: LD C,0
+0257  c3 05 00        89     99  JP 0005H
+                      90    100
+025a                  91    101  END

@@ -1,0 +1,20 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set emulator [lindex $argv 2]
+set timeout 45
+log_file -noappend $logfile
+spawn -noecho $emulator -z -d $diskdir
+expect "A>"
+foreach mode {A C A} {
+    send -- "FAULT066 $mode\r"
+    expect "Bdos Err On A: Bad Sector"
+    send "x"
+    expect "RETURNED"
+    expect "A>"
+}
+send -- "FAULT066 N\r"
+expect "RETURNED"
+expect "A>"
+send "\034"
+expect eof

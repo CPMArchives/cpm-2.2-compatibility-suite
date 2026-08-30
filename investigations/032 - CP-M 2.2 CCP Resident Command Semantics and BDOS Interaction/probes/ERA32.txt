@@ -1,0 +1,6 @@
+Purpose: exact, partial wildcard, all-files, missing, read-only ERA behavior.
+Procedure: ERA ONE.DEL; NOTHING.DEL; WILD?.DEL; ROFILE.DAT; ERA *.* then N.
+Observed: exact/partial wildcard succeeded silently; missing printed NO FILE;
+only the all-question-mark *.* form prompted ALL (Y/N)?; N cancelled. The
+reference CCP deleted the read-only-attributed entry without a diagnostic.
+Conclusion: confirmation is special to erase-all; user/drive BDOS scope applies.

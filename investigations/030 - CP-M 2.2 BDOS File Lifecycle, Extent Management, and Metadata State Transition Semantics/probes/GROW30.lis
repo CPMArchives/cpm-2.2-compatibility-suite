@@ -1,0 +1,617 @@
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:18:06 2026	Page 1
+Source file: GROW30.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Purpose: empty, small, 128-record and 129-record growth cases.
+                       2      2 ; Investigation 011: CP/M 2.2 sequential write and make probe
+                       3      3 ; Build: z80asm -fb -oWRITE011.COM WRITE011.ASM
+                       4      4
+                       5      5 	ORG	0100H
+                       6      6
+0100                   7      7 START:
+0100  31 67 08         8      8 	LD	SP,STACKTOP
+0103  11 c8 04         9      9 	LD	DE,HEADER
+0106  0e 09           10     10 	LD	C,9
+0108  cd 05 00        11     11 	CALL	0005H
+                      12     12
+                      13     13 	; New file: visibility before write, after write, and after close.
+010b  21 28 04        14     14 	LD	HL,FNEW
+010e  cd 02 03        15     15 	CALL	INITFCB
+0111  0e 16           16     16 	LD	C,22
+0113  cd df 02        17     17 	CALL	BDOSFCB
+0116  11 f8 04        18     18 	LD	DE,LMAKENEW
+0119  cd 99 03        19     19 	CALL	REPORT
+011c  21 28 04        20     20 	LD	HL,FNEW
+011f  11 02 05        21     21 	LD	DE,LSEARCH0
+0122  cd 39 03        22     22 	CALL	SEARCHREPORT
+0125  3e 41           23     23 	LD	A,'A'
+0127  cd 27 03        24     24 	CALL	FILLBUF1
+012a  cd e9 02        25     25 	CALL	WRITECALL
+012d  11 0f 05        26     26 	LD	DE,LWRITE1
+0130  cd 99 03        27     27 	CALL	REPORT
+0133  21 28 04        28     28 	LD	HL,FNEW
+0136  11 1a 05        29     29 	LD	DE,LSEARCH1
+0139  cd 39 03        30     30 	CALL	SEARCHREPORT
+013c  cd ed 02        31     31 	CALL	CLOSECALL
+013f  11 2b 05        32     32 	LD	DE,LCLOSE1
+0142  cd 99 03        33     33 	CALL	REPORT
+0145  21 28 04        34     34 	LD	HL,FNEW
+0148  11 36 05        35     35 	LD	DE,LSEARCH2
+014b  cd 39 03        36     36 	CALL	SEARCHREPORT
+014e  21 28 04        37     37 	LD	HL,FNEW
+0151  cd f5 02        38     38 	CALL	OPENFCB
+0154  cd f1 02        39     39 	CALL	READCALL
+0157  11 45 05        40     40 	LD	DE,LREOPEN1
+015a  cd 99 03        41     41 	CALL	REPORT
+                      42     42
+                      43     43 	; Existing name and wildcard are outside Make's documented precondition.
+015d  21 28 04        44     44 	LD	HL,FNEW
+0160  cd 02 03        45     45 	CALL	INITFCB
+0163  0e 16           46     46 	LD	C,22
+0165  cd df 02        47     47 	CALL	BDOSFCB
+0168  11 52 05        48     48 	LD	DE,LMAKEEX
+016b  cd 99 03        49     49 	CALL	REPORT
+016e  cd ed 02        50     50 	CALL	CLOSECALL
+0171  21 38 04        51     51 	LD	HL,FWILD
+0174  cd 02 03        52     52 	CALL	INITFCB
+0177  0e 16           53     53 	LD	C,22
+0179  cd df 02        54     54 	CALL	BDOSFCB
+017c  11 61 05        55     55 	LD	DE,LMAKEWILD
+017f  cd 99 03        56     56 	CALL	REPORT
+0182  cd ed 02        57     57 	CALL	CLOSECALL
+                      58     58
+                      59     59 	; Three records, close, reopen, and verify first record.
+0185  21 48 04        60     60 	LD	HL,FMULTI
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:18:06 2026	Page 2
+Source file: GROW30.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0188  cd 02 03        61     61 	CALL	INITFCB
+018b  0e 16           62     62 	LD	C,22
+018d  cd df 02        63     63 	CALL	BDOSFCB
+0190  3e 4d           64     64 	LD	A,'M'
+0192  cd 27 03        65     65 	CALL	FILLBUF1
+0195  cd e9 02        66     66 	CALL	WRITECALL
+0198  11 70 05        67     67 	LD	DE,LMULTI1
+019b  cd 99 03        68     68 	CALL	REPORT
+019e  3e 4e           69     69 	LD	A,'N'
+01a0  cd 27 03        70     70 	CALL	FILLBUF1
+01a3  cd e9 02        71     71 	CALL	WRITECALL
+01a6  3e 4f           72     72 	LD	A,'O'
+01a8  cd 27 03        73     73 	CALL	FILLBUF1
+01ab  cd e9 02        74     74 	CALL	WRITECALL
+01ae  11 7b 05        75     75 	LD	DE,LMULTI3
+01b1  cd 99 03        76     76 	CALL	REPORT
+01b4  cd ed 02        77     77 	CALL	CLOSECALL
+01b7  11 88 05        78     78 	LD	DE,LMULTIC
+01ba  cd 99 03        79     79 	CALL	REPORT
+01bd  21 48 04        80     80 	LD	HL,FMULTI
+01c0  cd f5 02        81     81 	CALL	OPENFCB
+01c3  cd f1 02        82     82 	CALL	READCALL
+01c6  11 95 05        83     83 	LD	DE,LMULTIR
+01c9  cd 99 03        84     84 	CALL	REPORT
+                      85     85
+                      86     86 	; 129 records: report the full-extent transition and new extent.
+01cc  21 58 04        87     87 	LD	HL,FBIG
+01cf  cd 02 03        88     88 	CALL	INITFCB
+01d2  0e 16           89     89 	LD	C,22
+01d4  cd df 02        90     90 	CALL	BDOSFCB
+01d7  3e 58           91     91 	LD	A,'X'
+01d9  cd 27 03        92     92 	CALL	FILLBUF1
+01dc  06 7f           93     93 	LD	B,127
+01de                  94     94 BIGLOOP:
+01de  c5              95     95 	PUSH	BC
+01df  cd e9 02        96     96 	CALL	WRITECALL
+01e2  c1              97     97 	POP	BC
+01e3  10 f9           98     98 	DJNZ	BIGLOOP
+01e5  3e 5a           99     99 	LD	A,'Z'
+01e7  cd 27 03       100    100 	CALL	FILLBUF1
+01ea  cd e9 02       101    101 	CALL	WRITECALL
+01ed  11 a3 05       102    102 	LD	DE,LBIG128
+01f0  cd 99 03       103    103 	CALL	REPORT
+01f3  3e 51          104    104 	LD	A,'Q'
+01f5  cd 27 03       105    105 	CALL	FILLBUF1
+01f8  cd e9 02       106    106 	CALL	WRITECALL
+01fb  11 ac 05       107    107 	LD	DE,LBIG129
+01fe  cd 99 03       108    108 	CALL	REPORT
+0201  cd ed 02       109    109 	CALL	CLOSECALL
+0204  11 b5 05       110    110 	LD	DE,LBIGCLOSE
+0207  cd 99 03       111    111 	CALL	REPORT
+                     112    112
+                     113    113 	; Alternate DMA.
+020a  21 68 04       114    114 	LD	HL,FALT
+020d  cd 02 03       115    115 	CALL	INITFCB
+0210  0e 16          116    116 	LD	C,22
+0212  cd df 02       117    117 	CALL	BDOSFCB
+0215  3e 44          118    118 	LD	A,'D'
+0217  cd 2c 03       119    119 	CALL	FILLBUF2
+021a  11 27 07       120    120 	LD	DE,BUF2
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:18:06 2026	Page 3
+Source file: GROW30.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+021d  cd 1d 03       121    121 	CALL	SETDMA
+0220  cd e9 02       122    122 	CALL	WRITECALL
+0223  11 c0 05       123    123 	LD	DE,LALTWRITE
+0226  cd 99 03       124    124 	CALL	REPORT
+0229  cd ed 02       125    125 	CALL	CLOSECALL
+022c  21 68 04       126    126 	LD	HL,FALT
+022f  cd f5 02       127    127 	CALL	OPENFCB
+0232  11 a7 06       128    128 	LD	DE,BUF1
+0235  cd 1d 03       129    129 	CALL	SETDMA
+0238  cd f1 02       130    130 	CALL	READCALL
+023b  11 cb 05       131    131 	LD	DE,LALTREAD
+023e  cd 99 03       132    132 	CALL	REPORT
+                     133    133
+                     134    134 	; Explicit B drive create/write/close; default drive remains A.
+0241  21 78 04       135    135 	LD	HL,FBFILE
+0244  cd 02 03       136    136 	CALL	INITFCB
+0247  0e 16          137    137 	LD	C,22
+0249  cd df 02       138    138 	CALL	BDOSFCB
+024c  11 d7 05       139    139 	LD	DE,LEXPLMAKE
+024f  cd 99 03       140    140 	CALL	REPORT
+0252  3e 42          141    141 	LD	A,'B'
+0254  cd 27 03       142    142 	CALL	FILLBUF1
+0257  cd e9 02       143    143 	CALL	WRITECALL
+025a  11 df 05       144    144 	LD	DE,LEXPLWRITE
+025d  cd 99 03       145    145 	CALL	REPORT
+0260  06 7f          146    146 	LD	B,127
+0262                 147    147 BLOOP:
+0262  c5             148    148 	PUSH	BC
+0263  cd e9 02       149    149 	CALL	WRITECALL
+0266  c1             150    150 	POP	BC
+0267  10 f9          151    151 	DJNZ	BLOOP
+0269  11 e8 05       152    152 	LD	DE,LEXPL128
+026c  cd 99 03       153    153 	CALL	REPORT
+026f  cd e9 02       154    154 	CALL	WRITECALL
+0272  11 f4 05       155    155 	LD	DE,LEXPL129
+0275  cd 99 03       156    156 	CALL	REPORT
+                     157    157
+                     158    158 	; Created and written but deliberately not closed.
+0278  21 88 04       159    159 	LD	HL,FNOCLOSE
+027b  cd 02 03       160    160 	CALL	INITFCB
+027e  0e 16          161    161 	LD	C,22
+0280  cd df 02       162    162 	CALL	BDOSFCB
+0283  3e 55          163    163 	LD	A,'U'
+0285  cd 27 03       164    164 	CALL	FILLBUF1
+0288  cd e9 02       165    165 	CALL	WRITECALL
+028b  11 00 06       166    166 	LD	DE,LNCW
+028e  cd 99 03       167    167 	CALL	REPORT
+0291  21 88 04       168    168 	LD	HL,FNOCLOSE
+0294  11 0f 06       169    169 	LD	DE,LNCS
+0297  cd 39 03       170    170 	CALL	SEARCHREPORT
+                     171    171
+                     172    172 	; Unopened FCB behavior is outside the documented input contract.
+029a  21 98 04       173    173 	LD	HL,FINVALID
+029d  cd 02 03       174    174 	CALL	INITFCB
+02a0  3e 49          175    175 	LD	A,'I'
+02a2  cd 27 03       176    176 	CALL	FILLBUF1
+02a5  cd e9 02       177    177 	CALL	WRITECALL
+02a8  11 1f 06       178    178 	LD	DE,LINVALID
+02ab  cd 99 03       179    179 	CALL	REPORT
+                     180    180
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:18:06 2026	Page 4
+Source file: GROW30.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                     181    181 	; C has a full directory. D has no allocatable data blocks but free slots.
+02ae  21 a8 04       182    182 	LD	HL,FCDIR
+02b1  cd 02 03       183    183 	CALL	INITFCB
+02b4  0e 16          184    184 	LD	C,22
+02b6  cd df 02       185    185 	CALL	BDOSFCB
+02b9  11 2e 06       186    186 	LD	DE,LDIRFULL
+02bc  cd 99 03       187    187 	CALL	REPORT
+02bf  21 b8 04       188    188 	LD	HL,FDFULL
+02c2  cd 02 03       189    189 	CALL	INITFCB
+02c5  0e 16          190    190 	LD	C,22
+02c7  cd df 02       191    191 	CALL	BDOSFCB
+02ca  11 3c 06       192    192 	LD	DE,LDMAKE
+02cd  cd 99 03       193    193 	CALL	REPORT
+02d0  3e 46          194    194 	LD	A,'F'
+02d2  cd 27 03       195    195 	CALL	FILLBUF1
+02d5  cd e9 02       196    196 	CALL	WRITECALL
+02d8  11 4b 06       197    197 	LD	DE,LDWRITE
+02db  cd 99 03       198    198 	CALL	REPORT
+02de  c9             199    199 	RET
+                     200    200
+02df                 201    201 BDOSFCB:
+02df  11 5f 06       202    202 	LD	DE,FCB
+02e2  cd 05 00       203    203 	CALL	0005H
+02e5  32 5b 06       204    204 	LD	(RESULT),A
+02e8  c9             205    205 	RET
+                     206    206
+02e9                 207    207 WRITECALL:
+02e9  0e 15          208    208 	LD	C,21
+02eb  18 f2          209    209 	JR	BDOSFCB
+02ed                 210    210 CLOSECALL:
+02ed  0e 10          211    211 	LD	C,16
+02ef  18 ee          212    212 	JR	BDOSFCB
+02f1                 213    213 READCALL:
+02f1  0e 14          214    214 	LD	C,20
+02f3  18 ea          215    215 	JR	BDOSFCB
+                     216    216
+02f5                 217    217 OPENFCB:
+02f5  cd 02 03       218    218 	CALL	INITFCB
+02f8  0e 0f          219    219 	LD	C,15
+02fa  cd df 02       220    220 	CALL	BDOSFCB
+02fd  af             221    221 	XOR	A
+02fe  32 7f 06       222    222 	LD	(FCB+32),A
+0301  c9             223    223 	RET
+                     224    224
+0302                 225    225 INITFCB:
+0302  e5             226    226 	PUSH	HL
+0303  11 a7 06       227    227 	LD	DE,BUF1
+0306  cd 1d 03       228    228 	CALL	SETDMA
+0309  e1             229    229 	POP	HL
+030a  11 5f 06       230    230 	LD	DE,FCB
+030d  01 10 00       231    231 	LD	BC,16
+0310  ed b0          232    232 	LDIR
+0312  af             233    233 	XOR	A
+0313  21 6f 06       234    234 	LD	HL,FCB+16
+0316  06 14          235    235 	LD	B,20
+0318                 236    236 INIT0:
+0318  77             237    237 	LD	(HL),A
+0319  23             238    238 	INC	HL
+031a  10 fc          239    239 	DJNZ	INIT0
+031c  c9             240    240 	RET
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:18:06 2026	Page 5
+Source file: GROW30.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                     241    241
+031d                 242    242 SETDMA:
+031d  ed 53 5d 06    243    243 	LD	(ACTDMA),DE
+0321  0e 1a          244    244 	LD	C,26
+0323  cd 05 00       245    245 	CALL	0005H
+0326  c9             246    246 	RET
+                     247    247
+0327                 248    248 FILLBUF1:
+0327  21 a7 06       249    249 	LD	HL,BUF1
+032a  18 03          250    250 	JR	FILL128
+032c                 251    251 FILLBUF2:
+032c  21 27 07       252    252 	LD	HL,BUF2
+032f                 253    253 FILL128:
+032f  77             254    254 	LD	(HL),A
+0330  23             255    255 	INC	HL
+0331  06 7f          256    256 	LD	B,127
+0333  af             257    257 	XOR	A
+0334                 258    258 FILLREST:
+0334  77             259    259 	LD	(HL),A
+0335  23             260    260 	INC	HL
+0336  10 fc          261    261 	DJNZ	FILLREST
+0338  c9             262    262 	RET
+                     263    263
+                     264    264 ; HL template, DE label. Search exact and print returned 32-byte entry.
+0339                 265    265 SEARCHREPORT:
+0339  d5             266    266 	PUSH	DE
+033a  e5             267    267 	PUSH	HL
+033b  11 27 07       268    268 	LD	DE,BUF2
+033e  cd 1d 03       269    269 	CALL	SETDMA
+0341  e1             270    270 	POP	HL
+0342  11 83 06       271    271 	LD	DE,SFCB
+0345  01 10 00       272    272 	LD	BC,16
+0348  ed b0          273    273 	LDIR
+034a  af             274    274 	XOR	A
+034b  21 93 06       275    275 	LD	HL,SFCB+16
+034e  06 14          276    276 	LD	B,20
+0350                 277    277 SFILL:
+0350  77             278    278 	LD	(HL),A
+0351  23             279    279 	INC	HL
+0352  10 fc          280    280 	DJNZ	SFILL
+0354  11 83 06       281    281 	LD	DE,SFCB
+0357  0e 11          282    282 	LD	C,17
+0359  cd 05 00       283    283 	CALL	0005H
+035c  32 5b 06       284    284 	LD	(RESULT),A
+035f  47             285    285 	LD	B,A
+0360  e1             286    286 	POP	HL
+0361  cd fd 03       287    287 	CALL	PUTS
+0364  3a 5b 06       288    288 	LD	A,(RESULT)
+0367  cd 11 04       289    289 	CALL	HEXBYTE
+036a  1e 20          290    290 	LD	E,' '
+036c  cd f1 03       291    291 	CALL	PUTC
+036f  78             292    292 	LD	A,B
+0370  fe 04          293    293 	CP	4
+0372  30 1c          294    294 	JR	NC,SNOMATCH
+0374  0f             295    295 	RRCA
+0375  0f             296    296 	RRCA
+0376  0f             297    297 	RRCA
+0377  e6 60          298    298 	AND	60H
+0379  5f             299    299 	LD	E,A
+037a  16 00          300    300 	LD	D,0
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:18:06 2026	Page 6
+Source file: GROW30.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+037c  21 27 07       301    301 	LD	HL,BUF2
+037f  19             302    302 	ADD	HL,DE
+0380  06 20          303    303 	LD	B,32
+0382                 304    304 SDUMP:
+0382  7e             305    305 	LD	A,(HL)
+0383  23             306    306 	INC	HL
+0384  e5             307    307 	PUSH	HL
+0385  cd 11 04       308    308 	CALL	HEXBYTE
+0388  1e 20          309    309 	LD	E,' '
+038a  cd f1 03       310    310 	CALL	PUTC
+038d  e1             311    311 	POP	HL
+038e  10 f2          312    312 	DJNZ	SDUMP
+0390                 313    313 SNOMATCH:
+0390  cd 07 04       314    314 	CALL	CRLF
+0393  11 a7 06       315    315 	LD	DE,BUF1
+0396  c3 1d 03       316    316 	JP	SETDMA
+                     317    317
+                     318    318 ; DE label. Print result/current drive, FCB[33], DMA first 4 and last byte.
+0399                 319    319 REPORT:
+0399  d5             320    320 	PUSH	DE
+039a  0e 19          321    321 	LD	C,25
+039c  cd 05 00       322    322 	CALL	0005H
+039f  32 5c 06       323    323 	LD	(CURDISK),A
+03a2  e1             324    324 	POP	HL
+03a3  cd fd 03       325    325 	CALL	PUTS
+03a6  3a 5b 06       326    326 	LD	A,(RESULT)
+03a9  cd 11 04       327    327 	CALL	HEXBYTE
+03ac  1e 20          328    328 	LD	E,' '
+03ae  cd f1 03       329    329 	CALL	PUTC
+03b1  3a 5c 06       330    330 	LD	A,(CURDISK)
+03b4  cd 11 04       331    331 	CALL	HEXBYTE
+03b7  1e 20          332    332 	LD	E,' '
+03b9  cd f1 03       333    333 	CALL	PUTC
+03bc  21 5f 06       334    334 	LD	HL,FCB
+03bf  06 21          335    335 	LD	B,33
+03c1                 336    336 FDUMP:
+03c1  7e             337    337 	LD	A,(HL)
+03c2  23             338    338 	INC	HL
+03c3  e5             339    339 	PUSH	HL
+03c4  cd 11 04       340    340 	CALL	HEXBYTE
+03c7  1e 20          341    341 	LD	E,' '
+03c9  cd f1 03       342    342 	CALL	PUTC
+03cc  e1             343    343 	POP	HL
+03cd  10 f2          344    344 	DJNZ	FDUMP
+03cf  2a 5d 06       345    345 	LD	HL,(ACTDMA)
+03d2  06 04          346    346 	LD	B,4
+03d4                 347    347 DDUMP:
+03d4  7e             348    348 	LD	A,(HL)
+03d5  23             349    349 	INC	HL
+03d6  e5             350    350 	PUSH	HL
+03d7  cd 11 04       351    351 	CALL	HEXBYTE
+03da  1e 20          352    352 	LD	E,' '
+03dc  cd f1 03       353    353 	CALL	PUTC
+03df  e1             354    354 	POP	HL
+03e0  10 f2          355    355 	DJNZ	DDUMP
+03e2  2a 5d 06       356    356 	LD	HL,(ACTDMA)
+03e5  11 7f 00       357    357 	LD	DE,127
+03e8  19             358    358 	ADD	HL,DE
+03e9  7e             359    359 	LD	A,(HL)
+03ea  cd 11 04       360    360 	CALL	HEXBYTE
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:18:06 2026	Page 7
+Source file: GROW30.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+03ed  cd 07 04       361    361 	CALL	CRLF
+03f0  c9             362    362 	RET
+                     363    363
+03f1                 364    364 PUTC:
+03f1  c5             365    365 	PUSH	BC
+03f2  d5             366    366 	PUSH	DE
+03f3  e5             367    367 	PUSH	HL
+03f4  0e 02          368    368 	LD	C,2
+03f6  cd 05 00       369    369 	CALL	0005H
+03f9  e1             370    370 	POP	HL
+03fa  d1             371    371 	POP	DE
+03fb  c1             372    372 	POP	BC
+03fc  c9             373    373 	RET
+03fd                 374    374 PUTS:
+03fd  7e             375    375 	LD	A,(HL)
+03fe  23             376    376 	INC	HL
+03ff  b7             377    377 	OR	A
+0400  c8             378    378 	RET	Z
+0401  5f             379    379 	LD	E,A
+0402  cd f1 03       380    380 	CALL	PUTC
+0405  18 f6          381    381 	JR	PUTS
+0407                 382    382 CRLF:
+0407  1e 0d          383    383 	LD	E,13
+0409  cd f1 03       384    384 	CALL	PUTC
+040c  1e 0a          385    385 	LD	E,10
+040e  c3 f1 03       386    386 	JP	PUTC
+0411                 387    387 HEXBYTE:
+0411  f5             388    388 	PUSH	AF
+0412  0f             389    389 	RRCA
+0413  0f             390    390 	RRCA
+0414  0f             391    391 	RRCA
+0415  0f             392    392 	RRCA
+0416  cd 1a 04       393    393 	CALL	NIBBLE
+0419  f1             394    394 	POP	AF
+041a                 395    395 NIBBLE:
+041a  e6 0f          396    396 	AND	0FH
+041c  c6 30          397    397 	ADD	A,'0'
+041e  fe 3a          398    398 	CP	'9'+1
+0420  38 02          399    399 	JR	C,NIBOUT
+0422  c6 07          400    400 	ADD	A,7
+0424                 401    401 NIBOUT:
+0424  5f             402    402 	LD	E,A
+0425  c3 f1 03       403    403 	JP	PUTC
+                     404    404
+0428  00 4e 45 57    405    405 FNEW:     DB 0,'NEW     ','DAT',0,0,0,0
+042c  20 20 20 20    405    406
+0430  20 44 41 54    405    407
+0434  00 00 00 00    405    408
+0438  00 57 3f 4c    406    409 FWILD:    DB 0,'W?LD    ','DAT',0,0,0,0
+043c  44 20 20 20    406    410
+0440  20 44 41 54    406    411
+0444  00 00 00 00    406    412
+0448  00 4d 55 4c    407    413 FMULTI:   DB 0,'MULTI   ','DAT',0,0,0,0
+044c  54 49 20 20    407    414
+0450  20 44 41 54    407    415
+0454  00 00 00 00    407    416
+0458  00 42 49 47    408    417 FBIG:     DB 0,'BIG     ','DAT',0,0,0,0
+045c  20 20 20 20    408    418
+0460  20 44 41 54    408    419
+0464  00 00 00 00    408    420
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:18:06 2026	Page 8
+Source file: GROW30.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0468  00 41 4c 54    409    421 FALT:     DB 0,'ALTDMA  ','DAT',0,0,0,0
+046c  44 4d 41 20    409    422
+0470  20 44 41 54    409    423
+0474  00 00 00 00    409    424
+0478  02 42 46 49    410    425 FBFILE:   DB 2,'BFILE   ','DAT',0,0,0,0
+047c  4c 45 20 20    410    426
+0480  20 44 41 54    410    427
+0484  00 00 00 00    410    428
+0488  00 4e 4f 43    411    429 FNOCLOSE: DB 0,'NOCLOSE ','DAT',0,0,0,0
+048c  4c 4f 53 45    411    430
+0490  20 44 41 54    411    431
+0494  00 00 00 00    411    432
+0498  00 49 4e 56    412    433 FINVALID: DB 0,'INVALID ','DAT',0,0,0,0
+049c  41 4c 49 44    412    434
+04a0  20 44 41 54    412    435
+04a4  00 00 00 00    412    436
+04a8  03 4e 4f 53    413    437 FCDIR:    DB 3,'NOSLOT  ','DAT',0,0,0,0
+04ac  4c 4f 54 20    413    438
+04b0  20 44 41 54    413    439
+04b4  00 00 00 00    413    440
+04b8  04 4e 4f 53    414    441 FDFULL:   DB 4,'NOSPACE ','DAT',0,0,0,0
+04bc  50 41 43 45    414    442
+04c0  20 44 41 54    414    443
+04c4  00 00 00 00    414    444
+                     415    445
+04c8  57 52 49 54    416    446 HEADER: DB 'WRITE011 result current fcb[33] dma[0..3,127]',13,10,'$'
+04cc  45 30 31 31    416    447
+04d0  20 72 65 73    416    448
+04d4  75 6c 74 20    416    449
+04d8  63 75 72 72    416    450
+04dc  65 6e 74 20    416    451
+04e0  66 63 62 5b    416    452
+04e4  33 33 5d 20    416    453
+04e8  64 6d 61 5b    416    454
+04ec  30 2e 2e 33    416    455
+04f0  2c 31 32 37    416    456
+04f4  5d 0d 0a 24    416    457
+04f8  4d 41 4b 45    417    458 LMAKENEW: DB 'MAKE-NEW ',0
+04fc  2d 4e 45 57    417    459
+0500  20 00          417    460
+0502  53 45 41 52    418    461 LSEARCH0: DB 'SEARCH-MADE ',0
+0506  43 48 2d 4d    418    462
+050a  41 44 45 20    418    463
+050e  00             418    464
+050f  57 52 49 54    419    465 LWRITE1: DB 'WRITE-ONE ',0
+0513  45 2d 4f 4e    419    466
+0517  45 20 00       419    467
+051a  53 45 41 52    420    468 LSEARCH1: DB 'SEARCH-PRECLOSE ',0
+051e  43 48 2d 50    420    469
+0522  52 45 43 4c    420    470
+0526  4f 53 45 20    420    471
+052a  00             420    472
+052b  43 4c 4f 53    421    473 LCLOSE1: DB 'CLOSE-ONE ',0
+052f  45 2d 4f 4e    421    474
+0533  45 20 00       421    475
+0536  53 45 41 52    422    476 LSEARCH2: DB 'SEARCH-CLOSED ',0
+053a  43 48 2d 43    422    477
+053e  4c 4f 53 45    422    478
+0542  44 20 00       422    479
+0545  52 45 4f 50    423    480 LREOPEN1: DB 'REOPEN-READ ',0
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:18:06 2026	Page 9
+Source file: GROW30.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0549  45 4e 2d 52    423    481
+054d  45 41 44 20    423    482
+0551  00             423    483
+0552  4d 41 4b 45    424    484 LMAKEEX: DB 'MAKE-EXISTING ',0
+0556  2d 45 58 49    424    485
+055a  53 54 49 4e    424    486
+055e  47 20 00       424    487
+0561  4d 41 4b 45    425    488 LMAKEWILD: DB 'MAKE-WILDCARD ',0
+0565  2d 57 49 4c    425    489
+0569  44 43 41 52    425    490
+056d  44 20 00       425    491
+0570  4d 55 4c 54    426    492 LMULTI1: DB 'MULTI-ONE ',0
+0574  49 2d 4f 4e    426    493
+0578  45 20 00       426    494
+057b  4d 55 4c 54    427    495 LMULTI3: DB 'MULTI-THREE ',0
+057f  49 2d 54 48    427    496
+0583  52 45 45 20    427    497
+0587  00             427    498
+0588  4d 55 4c 54    428    499 LMULTIC: DB 'MULTI-CLOSE ',0
+058c  49 2d 43 4c    428    500
+0590  4f 53 45 20    428    501
+0594  00             428    502
+0595  4d 55 4c 54    429    503 LMULTIR: DB 'MULTI-REOPEN ',0
+0599  49 2d 52 45    429    504
+059d  4f 50 45 4e    429    505
+05a1  20 00          429    506
+05a3  42 49 47 2d    430    507 LBIG128: DB 'BIG-128 ',0
+05a7  31 32 38 20    430    508
+05ab  00             430    509
+05ac  42 49 47 2d    431    510 LBIG129: DB 'BIG-129 ',0
+05b0  31 32 39 20    431    511
+05b4  00             431    512
+05b5  42 49 47 2d    432    513 LBIGCLOSE: DB 'BIG-CLOSE ',0
+05b9  43 4c 4f 53    432    514
+05bd  45 20 00       432    515
+05c0  41 4c 54 2d    433    516 LALTWRITE: DB 'ALT-WRITE ',0
+05c4  57 52 49 54    433    517
+05c8  45 20 00       433    518
+05cb  41 4c 54 2d    434    519 LALTREAD: DB 'ALT-REOPEN ',0
+05cf  52 45 4f 50    434    520
+05d3  45 4e 20 00    434    521
+05d7  42 2d 4d 41    435    522 LEXPLMAKE: DB 'B-MAKE ',0
+05db  4b 45 20 00    435    523
+05df  42 2d 57 52    436    524 LEXPLWRITE: DB 'B-WRITE ',0
+05e3  49 54 45 20    436    525
+05e7  00             436    526
+05e8  42 2d 57 52    437    527 LEXPL128: DB 'B-WRITE128 ',0
+05ec  49 54 45 31    437    528
+05f0  32 38 20 00    437    529
+05f4  42 2d 57 52    438    530 LEXPL129: DB 'B-WRITE129 ',0
+05f8  49 54 45 31    438    531
+05fc  32 39 20 00    438    532
+0600  4e 4f 43 4c    439    533 LNCW: DB 'NOCLOSE-WRITE ',0
+0604  4f 53 45 2d    439    534
+0608  57 52 49 54    439    535
+060c  45 20 00       439    536
+060f  4e 4f 43 4c    440    537 LNCS: DB 'NOCLOSE-SEARCH ',0
+0613  4f 53 45 2d    440    538
+0617  53 45 41 52    440    539
+061b  43 48 20 00    440    540
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:18:06 2026	Page 10
+Source file: GROW30.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+061f  49 4e 56 41    441    541 LINVALID: DB 'INVALID-WRITE ',0
+0623  4c 49 44 2d    441    542
+0627  57 52 49 54    441    543
+062b  45 20 00       441    544
+062e  44 49 52 46    442    545 LDIRFULL: DB 'DIRFULL-MAKE ',0
+0632  55 4c 4c 2d    442    546
+0636  4d 41 4b 45    442    547
+063a  20 00          442    548
+063c  44 49 53 4b    443    549 LDMAKE: DB 'DISKFULL-MAKE ',0
+0640  46 55 4c 4c    443    550
+0644  2d 4d 41 4b    443    551
+0648  45 20 00       443    552
+064b  44 49 53 4b    444    553 LDWRITE: DB 'DISKFULL-WRITE ',0
+064f  46 55 4c 4c    444    554
+0653  2d 57 52 49    444    555
+0657  54 45 20 00    444    556
+                     445    557
+065b  00             446    558 RESULT: DB 0
+065c  00             447    559 CURDISK: DB 0
+065d  a7 06          448    560 ACTDMA: DW BUF1
+065f                 449    561 FCB: DS 36,0
+0683                 450    562 SFCB: DS 36,0
+06a7                 451    563 BUF1: DS 128,0
+0727                 452    564 BUF2: DS 128,0
+07a7                 453    565 	DS 192
+0867                 454    566 STACKTOP:
+0867                 455    567 	END	START

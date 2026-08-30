@@ -1,0 +1,12 @@
+#!/usr/bin/expect -f
+# SPDX-License-Identifier: GPL-2.0-or-later
+set timeout 20
+source [file join [file dirname [info script]] cpmsim-path.exp]
+spawn $cpmsim -z -d /tmp/dirtest-dev1-z80
+expect "A>"
+send "B:\r"
+expect "B>"
+send "DIRTEST /SAFE\r"
+expect "B>"
+send "\034"
+expect eof

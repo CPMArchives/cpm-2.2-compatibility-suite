@@ -1,0 +1,31 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set timeout 40
+log_file -noappend $logfile
+spawn cpmsim -z -d $diskdir
+expect "A>"
+send "STAT DEV:\r"
+expect "A>"
+send "STAT CON:=BAD:\r"
+expect "A>"
+send "STAT CON:=CRT:\r"
+expect "A>"
+send "STAT DEV:\r"
+expect "A>"
+foreach p {IOBYTE39 DEVICE39 SWITCH39} {
+  send "$p\r"
+  expect "A>"
+}
+send "STAT DEV:\r"
+expect "A>"
+foreach p {BDOS39 BIOS39 STAT39} {
+  send "$p\r"
+  expect "A>"
+}
+send "STAT CON:=TTY:\r"
+expect "A>"
+send "STAT DEV:\r"
+expect "A>"
+send "\034"
+expect eof

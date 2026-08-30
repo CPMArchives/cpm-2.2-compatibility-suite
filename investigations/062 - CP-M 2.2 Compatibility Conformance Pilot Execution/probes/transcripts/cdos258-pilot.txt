@@ -1,0 +1,136 @@
+spawn /tmp/i061-z80pack/cromemcosim/cromemcosim -M1 -R
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+Cromemco Z-1 Simulation Release 1.19
+Copyright (C) 2014-2025 by Udo Munk & 2021-2022 by David McNaughton
+
+CPU speed is 4 MHz, CPU executes undocumented instructions
+
+Web server builtin, but disabled
+
+RAM 0000H - FFFFH
+ROM C000H - DFFFH rdos0308.hex
+Power-on jump address at C000H
+MMU has 7 additional RAM banks of 64 KB
+
+FDC Banked ROM enabled
+
+DISK MAP: [./disks/disk.map]
+A:DSK:='drivea.dsk'
+[0;33mW (79850) diskmanager: Failed to stat disk image: driveb.dsk, error: 2[0m
+[0;33mW (79855) diskmanager: B:DSK: Image file 'driveb.dsk' is invalid[0m
+[0;33mW (79861) diskmanager: Failed to stat disk image: drivec.dsk, error: 2[0m
+[0;33mW (79863) diskmanager: C:DSK: Image file 'drivec.dsk' is invalid[0m
+[0;33mW (79867) diskmanager: Failed to stat disk image: drived.dsk, error: 2[0m
+[0;33mW (79869) diskmanager: D:DSK: Image file 'drived.dsk' is invalid[0m
+Loader statistics for file ./roms/rdos0308.hex:
+START : C000H
+END   : DFFFH
+PC    : C000H
+LOADED: 2000H (8192)
+
+
+telnet console listening on port 4010
+telnet console listening on port 4011
+
+TU-ART DEVICE MAP:
+TUART0.deviceA = WEBTTY STDIO  
+TUART1.deviceA = SCKTSRV1 WEBTTY2  
+TUART1.deviceB = SCKTSRV2 WEBTTY3  
+
+HARD DISK MAP: [./disks]
+HD0: OFFLINE - NO FILE 'hd0.hdd'
+HD1: OFFLINE - NO FILE 'hd1.hdd'
+HD2: OFFLINE - NO FILE 'hd2.hdd'
+
+
+Preparing to boot, ESC to abort
+
+Standby
+
+CDOS version 02.58
+Cromemco Disk Operating System
+Copyright (C) 1977, 1983 Cromemco, Inc. 
+
+A.VECTOR41
+VECTOR41 PZ00-07: C3 03 E8 00 00 C3 00 C8 
+
+A.ZERO41 ALPHA.TXT BETA.BIN
+ZERO41 before 0000-07 005C-5F 0080-83 
+C3 03 E8 00 00 C3 00 C8 00 41 4C 50 13 20 41 4C 
+ZERO41 after-fn12 
+C3 03 E8 00 00 C3 00 C8 00 41 4C 50 13 20 41 4C 
+ZERO41 fn12-HL 0022
+
+A.BASE61
+BASE61 VER DRIVE USER LOGIN RO ENTRYSP RET 0022 00 00 0022 0000 F8AA D048
+
+A.STATE61
+Illegal system call 29H at 013EH
+
+A.EDGE43
+EDGE43 ENTRYSP RET PRIVATE_PRE/POST TPA_LAST OLD/TEST PATCH VER F8AA D048 02F5 02F5 C7FF F8 A5 5A 0022
+
+A.ZRET43
+ZERORET43 RET TO 0000H
+A.FN043
+FN043 PRIVATE STACK FUNCTION 0
+A.BIOS41
+BIOS41 PZ00-07: C3 03 E8 00 00 C3 00 C8 
+BIOS BASE: E800
+VECTORS index opcode target:
+00 C3 F092
+01 C3 D028
+02 C3 EE69
+03 C3 EE6D
+04 C3 E82D
+05 C3 E831
+06 C3 E835
+07 C3 EE85
+08 C3 E853
+09 C3 E839
+0A C3 E842
+0B C3 E847
+0C C3 E84C
+0D C3 E862
+0E C3 E866
+0F 79 75C3
+10 EE C379
+DIRECT CONST0 CONST1 CONIN READER LISTST0 LISTST1 OUTN: 00 FF 41 52 00 FF 06 
+OUTPUT PAIRS device-byte: 43 09 4C 10 50 1A 
+
+A.PIP COPY62.TXT=SRC61.TXT
+
+A.DIR *.*
+CDOS      COM    14K           CDOSGEN   COM    33K       
+BATCH     COM     3K           DUMP      COM     4K       
+XFER      COM     8K           EDIT      COM     7K       
+INIT282   COM    12K           RDOS      COM     5K       
+STAT      COM     9K           WRTSYS    COM     2K       
+INIT271   COM    11K           BASIC     COM    19K       
+BYE       COM     1K           WM        HLP     3K       
+CLS       COM     1K           WM        COM    11K       
+W         COM     1K           R         COM     1K       
+VECTOR41  COM     1K           ZERO41    COM     1K       
+BASE61    COM     1K           STATE61   COM     1K       
+EDGE43    COM     1K           ZRET43    COM     1K       
+FN043     COM     1K           BIOS41    COM     1K       
+PIP       COM     8K           SRC61     TXT     1K       
+COPY62    TXT     1K           
+*** 29 Files, 32 Entries, 163 K Displayed, 78 K Left ***
+A.NOFILE62
+Program not found
+A.
+
+User Interrupt at 0xef52
+I/O ran for 142 ms, waited for 0 ms
+CPU executed 116737684 t-states in 31159 ms
+Clock frequency 3.74 MHz

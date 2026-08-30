@@ -1,0 +1,8 @@
+gap areas assessed: 24
+incomplete gap records: 0
+duplicate identifier set: 30; conflicting dispositions: 0
+policy-pending proposition lines: 50
+conformance tests reviewed: 62
+recommended evidence campaigns: 7
+release gates: 10
+validation: PASS

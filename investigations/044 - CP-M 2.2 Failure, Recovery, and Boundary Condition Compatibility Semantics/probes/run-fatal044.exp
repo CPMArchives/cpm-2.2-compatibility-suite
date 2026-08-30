@@ -1,0 +1,16 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set timeout 30
+log_file -noappend $logfile
+spawn cpmsim -z -d $diskdir
+expect "A>"
+send -- "OPEN25 C\r"
+expect "Bdos Err On C: Bad Sector"
+send "\003"
+expect "A>"
+send -- "FAIL44\r"
+expect "FAIL44 COMPLETE"
+expect "A>"
+send "\034"
+expect eof

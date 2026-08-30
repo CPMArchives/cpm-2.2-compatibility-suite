@@ -1,0 +1,44 @@
+PUTS:   LD A,(HL)
+        INC HL
+        OR A
+        RET Z
+        LD E,A
+        CALL PUTC
+        JR PUTS
+PUTC:   PUSH AF
+        PUSH BC
+        PUSH DE
+        PUSH HL
+        LD C,2
+        CALL 5
+        POP HL
+        POP DE
+        POP BC
+        POP AF
+        RET
+SPACE:  LD E,' '
+        JP PUTC
+CRLF:   LD E,13
+        CALL PUTC
+        LD E,10
+        JP PUTC
+HEXW:   LD A,H
+        CALL HEXB
+        LD A,L
+HEXB:   PUSH AF
+        RRCA
+        RRCA
+        RRCA
+        RRCA
+        CALL NIB
+        POP AF
+NIB:    AND 0FH
+        ADD A,'0'
+        CP '9'+1
+        JR C,NOUT
+        ADD A,7
+NOUT:   LD E,A
+        JP PUTC
+EXIT:   LD C,0
+        JP 5
+

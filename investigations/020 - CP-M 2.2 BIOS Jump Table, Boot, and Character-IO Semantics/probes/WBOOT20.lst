@@ -1,0 +1,83 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sat Aug 15 19:48:52 2026	Page 1
+Source file: stage020/probes/WBOOT20.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Controlled page-zero WBOOT restoration initiator.
+                       2      2         ORG 0100H
+0100  11 61 01         3      3         LD DE,MSG
+0103  0e 09            4      4         LD C,9
+0105  cd 05 00         5      5         CALL 5
+0108  2a 01 00         6      6         LD HL,(0001H)
+010b  22 26 01         7      7         LD (GO+1),HL
+010e  21 00 00         8      8         LD HL,0
+0111  06 08            9      9         LD B,8
+0113  cd 28 01        10     10         CALL DUMP
+0116  11 7a 01        11     11         LD DE,DMG
+0119  0e 09           12     12         LD C,9
+011b  cd 05 00        13     13         CALL 5
+011e  af              14     14         XOR A
+011f  32 00 00        15     15         LD (0000H),A             ; damage only documented JMP opcodes
+0122  32 05 00        16     16         LD (0005H),A             ; operands/actual targets stay intact
+0125  c3 00 00        17     17 GO:     JP 0000H                 ; patched to saved real WBOOT target
+0128  7e              18     18 DUMP:   LD A,(HL)
+0129  23              19     19         INC HL
+012a  e5              20     20         PUSH HL
+012b  c5              21     21         PUSH BC
+012c  cd 48 01        22     22         CALL HEX
+012f  1e 20           23     23         LD E,' '
+0131  0e 02           24     24         LD C,2
+0133  cd 05 00        25     25         CALL 5
+0136  c1              26     26         POP BC
+0137  e1              27     27         POP HL
+0138  10 ee           28     28         DJNZ DUMP
+013a  1e 0d           29     29         LD E,13
+013c  0e 02           30     30         LD C,2
+013e  cd 05 00        31     31         CALL 5
+0141  1e 0a           32     32         LD E,10
+0143  0e 02           33     33         LD C,2
+0145  c3 05 00        34     34         JP 5
+0148  f5              35     35 HEX:    PUSH AF
+0149  0f              36     36         RRCA
+014a  0f              37     37         RRCA
+014b  0f              38     38         RRCA
+014c  0f              39     39         RRCA
+014d  cd 51 01        40     40         CALL NIB
+0150  f1              41     41         POP AF
+0151  e6 0f           42     42 NIB:    AND 0FH
+0153  c6 30           43     43         ADD A,'0'
+0155  fe 3a           44     44         CP '9'+1
+0157  38 02           45     45         JR C,OUT
+0159  c6 07           46     46         ADD A,7
+015b  5f              47     47 OUT:    LD E,A
+015c  0e 02           48     48         LD C,2
+015e  c3 05 00        49     49         JP 5
+0161  57 42 4f 4f     50     50 MSG:    DB 'WBOOT20 BEFORE PZ00-07: $'
+0165  54 32 30 20     50     51
+0169  42 45 46 4f     50     52
+016d  52 45 20 50     50     53
+0171  5a 30 30 2d     50     54
+0175  30 37 3a 20     50     55
+0179  24              50     56
+017a  57 42 4f 4f     51     57 DMG:    DB 'WBOOT20: setting 0000h and 0005h opcodes to 00, then WBOOT',13,10,'$'
+017e  54 32 30 3a     51     58
+0182  20 73 65 74     51     59
+0186  74 69 6e 67     51     60
+Z80/8080-Macro-Assembler  Release 2.1	Sat Aug 15 19:48:52 2026	Page 2
+Source file: stage020/probes/WBOOT20.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+018a  20 30 30 30     51     61
+018e  30 68 20 61     51     62
+0192  6e 64 20 30     51     63
+0196  30 30 35 68     51     64
+019a  20 6f 70 63     51     65
+019e  6f 64 65 73     51     66
+01a2  20 74 6f 20     51     67
+01a6  30 30 2c 20     51     68
+01aa  74 68 65 6e     51     69
+01ae  20 57 42 4f     51     70
+01b2  4f 54 0d 0a     51     71
+01b6  24              51     72
+01b7                  52     73         END

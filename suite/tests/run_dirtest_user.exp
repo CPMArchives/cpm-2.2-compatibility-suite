@@ -1,0 +1,28 @@
+#!/usr/bin/expect -f
+# SPDX-License-Identifier: GPL-2.0-or-later
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set cpu [lindex $argv 2]
+if {$cpu eq ""} { set cpu "-z" }
+set timeout 30
+log_file -noappend $logfile
+source [file join [file dirname [info script]] cpmsim-path.exp]
+spawn $cpmsim $cpu -d $diskdir
+expect "A>"
+send -- "B:\r"
+expect "B>"
+send -- "DIRTEST /0567\r"
+expect "0567  UNTESTED  REQUIRED      Run: USER 1, then DIRTEST /0567"
+expect "The supplied B: disk has DIRTEST.COM in user 1."
+expect "Summary: 0 pass, 0 fail, 0 error, 0 observations"
+expect "B>"
+send -- "USER 1\r"
+expect "B>"
+send -- "DIRTEST /0567\r"
+expect "0567  PASS"
+expect "B>"
+send -- "USER 0\r"
+expect "B>"
+send "\034"
+expect eof
+exit 0

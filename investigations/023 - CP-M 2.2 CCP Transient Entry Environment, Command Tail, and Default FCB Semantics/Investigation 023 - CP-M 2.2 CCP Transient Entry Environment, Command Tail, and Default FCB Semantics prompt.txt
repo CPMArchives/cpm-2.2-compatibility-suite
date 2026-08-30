@@ -1,0 +1,808 @@
+INVESTIGATION 023 — CP/M 2.2 CCP Transient Entry Environment,
+Command Tail, and Default FCB Semantics
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 022 is complete.
+
+The authoritative Compatibility Ledger is now:
+
+    02 Compatibility Ledger - Investigation 022.txt
+
+It incorporates findings through Investigation 022 and currently ends at
+entry 0505.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify any previous investigation report, architecture document,
+roadmap, source archive, or other pre-existing BetterCP/M file.
+
+Create Investigation 023 as a new evidence report with its own directory
+and associated probe/harness artifacts.
+
+This is an EVIDENCE INVESTIGATION, not BetterCP/M implementation work.
+
+
+OBJECTIVE
+
+Establish the CP/M 2.2 transient-program entry environment contract after
+CCP has successfully located, loaded, and prepared a transient program, but
+before the transient program begins normal execution.
+
+Investigation 022 established:
+
+    transient command candidate
+        |
+        v
+    executable identification
+        |
+        v
+    COM loading
+        |
+        v
+    TPA placement
+        |
+        v
+    DMA restoration
+        |
+        v
+    CALL 0100h
+
+Investigation 001 established several initial transient-entry observations.
+
+Investigation 023 revisits that boundary with a narrower purpose:
+
+    determine exactly what externally visible state CCP provides to the
+    transient program at entry.
+
+The investigation must characterize:
+
+    - command tail construction;
+    - default FCB 1 construction;
+    - default FCB 2 construction;
+    - drive and user visibility;
+    - default DMA state;
+    - page-zero state visible to applications;
+    - entry stack/return environment where relevant;
+    - which bytes and fields are guaranteed;
+    - which observed values are DRI CCP implementation details.
+
+The goal is not to redesign the transient environment.
+
+The goal is to determine the compatibility contract that BetterCP/M must
+preserve.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read the current Compatibility Ledger and relevant previous investigations
+before designing experiments.
+
+In particular use:
+
+    Investigation 001
+        CP/M 2.2 transient program entry environment.
+
+    Investigation 007
+        Current drive, selection, login state, and user handling.
+
+    Investigation 008
+        FCB identification and Open/Close semantics.
+
+    Investigation 009
+        Directory search and DMA transfer semantics.
+
+    Investigation 010
+        Sequential Read semantics.
+
+    Investigation 013
+        Random access and file-size semantics where relevant.
+
+    Investigation 018
+        Character-device and IOBYTE semantics.
+
+    Investigation 019
+        BIOS disk boundary.
+
+    Investigation 020
+        WBOOT and page-zero reconstruction.
+
+    Investigation 021
+        CCP command acquisition, parsing, and dispatch.
+
+    Investigation 022
+        Transient lookup, loading, DMA restoration, and CALL 0100h.
+
+Do not duplicate earlier findings.
+
+Where Investigation 023 confirms existing propositions, strengthen evidence
+rather than creating duplicate ledger entries.
+
+Where Investigation 023 discovers that an earlier proposition was too broad
+or incomplete, propose a correction explicitly.
+
+
+SCOPE BOUNDARY
+
+Investigation 023 includes:
+
+    The state delivered to a transient program immediately before/at 0100h.
+
+It includes:
+
+    command tail bytes at 0080h;
+    default FCB at 005Ch;
+    second default FCB at 006Ch;
+    drive-byte handling;
+    wildcard/default parsing behavior;
+    case conversion;
+    blank padding;
+    unused-field behavior;
+    default DMA state;
+    page-zero fields visible to applications;
+    command-entry drive/user representation;
+    stack return environment where observable.
+
+It does NOT investigate:
+
+    resident CCP commands;
+    transient file lookup;
+    COM loading mechanics already covered by I022;
+    general BDOS FCB semantics;
+    application interpretation of FCBs;
+    application-specific command-line conventions;
+    later CP/M variants.
+
+The investigation should determine the environment supplied to programs,
+not how programs choose to use that environment.
+
+
+IMPORTANT EXISTING FINDINGS
+
+Investigation 001 already established:
+
+    - .COM programs begin at 0100h;
+    - CCP provides default FCBs;
+    - CCP provides a command tail;
+    - default DMA state is visible;
+    - transient programs may terminate by RET, BDOS Function 0, or JMP 0000h.
+
+Do not simply repeat those findings.
+
+Instead determine:
+
+    - exact construction rules;
+    - boundaries of the guarantee;
+    - whether any POLICY PENDING entries can now be resolved;
+    - whether any observed details are not portable requirements.
+
+
+QUESTIONS TO RESOLVE
+
+
+1. ENTRY MEMORY MAP
+
+Create a precise transient entry memory map.
+
+Document:
+
+    005Ch-006Bh:
+        first default FCB
+
+    006Ch-007Bh:
+        second default FCB
+
+    0080h onward:
+        command tail / default DMA area
+
+Determine:
+
+- which bytes CCP initializes;
+- which bytes are inherited;
+- which bytes are undefined;
+- which bytes are guaranteed by documentation;
+- which bytes are only DRI observations.
+
+Do not classify untouched memory contents as guaranteed.
+
+
+2. COMMAND TAIL CONSTRUCTION
+
+Determine the exact command-tail construction rules.
+
+Establish:
+
+- byte 0080h count semantics;
+- location of first character;
+- whether characters begin at 0081h;
+- whether the count includes leading blanks;
+- whether the count includes the terminating CR;
+- whether CR is stored;
+- whether a NUL follows;
+- whether bytes after the tail are initialized;
+- maximum command-tail length;
+- behavior with no arguments;
+- behavior with multiple arguments;
+- behavior with leading separators.
+
+Cross-check Investigation 021.
+
+Do not duplicate CCP parsing.
+
+Investigate the final representation delivered to the transient.
+
+
+3. COMMAND TAIL CASE CONVERSION
+
+Determine exactly which characters CCP converts.
+
+Test:
+
+    lowercase arguments;
+    mixed-case arguments;
+    filenames;
+    nonalphabetic characters.
+
+Establish:
+
+- whether the entire tail is uppercase;
+- whether only command-derived portions are uppercase;
+- whether user-entered argument case survives;
+- whether conversion happens before or after FCB construction.
+
+Be careful:
+
+A reference terminal that automatically uppercases input is not necessarily
+a CCP behavior.
+
+Use controlled input where necessary.
+
+
+4. LEADING BLANK SEMANTICS
+
+Investigation 001 identified a possible leading blank behavior.
+
+Resolve:
+
+- whether CCP always inserts a leading blank before arguments;
+- whether that blank is part of the CP/M command-tail contract;
+- whether it depends on command syntax;
+- whether empty arguments receive the blank;
+- whether applications may rely on it.
+
+Test:
+
+    no argument;
+    one argument;
+    multiple arguments;
+    explicit drive commands.
+
+
+5. COMMAND TAIL MAXIMUM LENGTH
+
+Determine:
+
+- maximum stored tail length;
+- relationship to BDOS Function 10;
+- relationship to CCP input length;
+- truncation behavior;
+- rejection behavior;
+- bell/error behavior if any;
+- final count byte.
+
+Separate:
+
+    CCP input limitation
+
+from:
+
+    transient command-tail representation.
+
+
+6. DEFAULT FCB 1 CONSTRUCTION
+
+Determine the exact initialization of the first default FCB.
+
+Establish:
+
+- address;
+- drive byte;
+- filename bytes;
+- extension bytes;
+- padding;
+- wildcard behavior;
+- current-record byte;
+- extent fields;
+- allocation fields;
+- reserved bytes.
+
+Test commands including:
+
+    NAME
+
+    NAME.EXT
+
+    DRIVE:NAME
+
+    WILDCARD forms where accepted
+
+    SHORT names
+
+    MAXIMUM 8-character names
+
+
+7. DEFAULT FCB 2 CONSTRUCTION
+
+Determine the exact initialization of the second default FCB.
+
+Establish:
+
+- whether it differs from FCB 1;
+- which source text creates it;
+- how parsing rules differ;
+- whether absent fields are blank;
+- whether wildcard fields differ.
+
+Do not assume FCB 2 is simply a copy.
+
+
+8. FCB DRIVE BYTE SEMANTICS
+
+Determine how command drives affect FCB drive bytes.
+
+Test:
+
+    A:NAME
+
+    B:NAME
+
+    current-drive NAME
+
+    different user areas
+
+Establish:
+
+- whether FCB drive byte is zero for current drive;
+- whether explicit drives remain encoded;
+- relationship to page-zero 0004h;
+- relationship to BDOS default drive semantics.
+
+
+9. FCB WILDCARD HANDLING
+
+Determine whether CCP itself expands or merely prepares wildcard FCBs.
+
+Establish:
+
+- wildcard characters preserved;
+- blank padding;
+- default extension behavior;
+- interaction with resident commands versus transient programs.
+
+Do not investigate DIR/ERA/etc. semantics.
+
+Only determine the transient-entry FCB representation.
+
+
+10. UNUSED FCB BYTES
+
+Determine which FCB bytes are:
+
+    guaranteed;
+    documented;
+    DRI-specific;
+    residual memory.
+
+Especially examine:
+
+    current record;
+    random record fields;
+    reserved bytes.
+
+Do not elevate observed zero values to requirements without evidence.
+
+
+11. DEFAULT DMA STATE
+
+Investigation 022 established DMA restoration before CALL 0100h.
+
+Confirm:
+
+- DMA address at entry;
+- whether it always equals 0080h;
+- whether command-tail contents remain intact;
+- whether DMA changes after a transient begins.
+
+Do not duplicate BIOS DMA semantics.
+
+The question is the transient-visible initial state.
+
+
+12. PAGE-ZERO APPLICATION-VISIBLE STATE
+
+Determine the transient-visible page-zero environment.
+
+At minimum inspect:
+
+    0000h
+    0003h
+    0004h
+    0005h
+
+Establish:
+
+- which values CCP/BDOS/BIOS provide;
+- which values are configuration-dependent;
+- which values applications may depend upon.
+
+Do not turn exact vector addresses into requirements where semantics
+are sufficient.
+
+
+13. USER NUMBER VISIBILITY
+
+Determine:
+
+- how the transient learns the current user number;
+- relationship to page-zero state;
+- relationship to BDOS Function 32;
+- behavior after explicit-drive commands;
+- behavior after return.
+
+Cross-check Investigation 007.
+
+
+14. ENTRY STACK AND RETURN WORD
+
+Confirm:
+
+- stack location at entry;
+- CALL-produced return word;
+- RET compatibility;
+- whether exact SP is portable.
+
+Use existing I001/I002 findings as baseline.
+
+Do not require exact numeric stack addresses.
+
+
+15. INITIAL REGISTER STATE
+
+Investigate only if practical.
+
+Determine whether any registers have:
+
+- documented initial values;
+- DRI-guaranteed values;
+- observed but nonportable values.
+
+Be conservative.
+
+Most register contents should likely remain NOT GUARANTEED unless documented.
+
+
+16. INTERRUPT AND FLAG STATE
+
+Determine whether any initial:
+
+- interrupt enable state;
+- processor flags;
+- register flags;
+
+are guaranteed.
+
+Cross-check Investigation 001.
+
+Do not convert observed emulator state into requirements.
+
+
+17. TRANSIENT ENTRY PROBE
+
+Create a deterministic probe that records:
+
+    SP
+
+    return word
+
+    0000h-0005h
+
+    005Ch-007Bh
+
+    0080h-00FFh
+
+    DMA behavior
+
+    user/drive information
+
+Where possible, print results through normal CP/M interfaces without
+altering the observed state.
+
+
+18. CONTROLLED COMMAND MATRIX
+
+Create deterministic invocation cases:
+
+    TEST
+
+    TEST ARG
+
+    TEST ARG1 ARG2
+
+    test lowercase
+
+    TEST filename.ext
+
+    B:TEST
+
+    B:TEST ARG
+
+    TEST with empty argument area
+
+    maximum-length argument
+
+Preserve:
+
+- command entered;
+- resulting memory dump;
+- output transcript.
+
+
+19. SOURCE ANALYSIS
+
+Trace DRI CCP source sufficiently to identify:
+
+- command-tail construction;
+- FCB construction;
+- drive-byte assignment;
+- DMA restoration;
+- CALL setup;
+- page-zero assumptions.
+
+Do not produce a line-by-line CCP commentary.
+
+Analyze only what is necessary to establish externally visible behavior.
+
+
+20. DOCUMENTATION ANALYSIS
+
+Consult:
+
+- CP/M Features and Facilities;
+- CP/M 2.0 Interface Guide;
+- CP/M 2.2 Alteration Guide.
+
+Determine:
+
+- documented transient interface;
+- undocumented DRI extensions;
+- implementation details.
+
+Do not assume a feature is required merely because old programs
+commonly observed it.
+
+
+EVIDENCE DISCIPLINE
+
+Use the established investigation evidence classes:
+
+    A - documented CP/M behavior
+    B - DRI source behavior
+    I - experimental observation
+    D - unresolved policy
+
+These labels are internal investigation classifications only.
+
+They are NOT Compatibility Ledger source references.
+
+Proposed ledger entries must use:
+
+    I023
+    CCP
+    IG
+    AG
+
+and similar actual sources.
+
+Do not place bare A/B/I/D labels into ledger Evidence fields.
+
+
+COMPATIBILITY CLASSIFICATION
+
+For every proposed proposition classify:
+
+    REQUIRED
+    POLICY PENDING
+    NOT REQUIRED
+    NOT GUARANTEED
+
+Be conservative.
+
+Be especially cautious about:
+
+- exact CCP memory addresses;
+- exact FCB internal construction order;
+- unused bytes;
+- residual memory;
+- register contents;
+- flags;
+- interrupt state;
+- exact SP;
+- exact page-zero numeric addresses.
+
+
+EXISTING LEDGER REVIEW
+
+Review entries affected by I023, including:
+
+    0001-0004
+    0010-0030
+    0475-0505
+
+For each affected entry determine:
+
+    no change;
+    stronger evidence;
+    wording correction;
+    disposition change;
+    duplicate avoided.
+
+Do not silently alter previous propositions.
+
+
+BETTERCP/M RELEVANCE
+
+Do not design BetterCP/M implementation here.
+
+Do not decide:
+
+- internal FCB representation;
+- command parser design;
+- memory layout;
+- bank-switching behavior;
+- future command syntax;
+- extended command tails;
+- new executable formats.
+
+First establish the CP/M 2.2 compatibility contract.
+
+
+PROPOSED COMPATIBILITY LEDGER ADDITIONS
+
+The authoritative Ledger 022 currently ends at:
+
+    0505
+
+Therefore any new Investigation 023 entries begin at:
+
+    0506
+
+Do not modify the Compatibility Ledger.
+
+Include:
+
+    Proposed Compatibility Ledger additions
+
+and:
+
+    Proposed corrections/evidence/disposition updates to existing entries
+
+
+Each new entry must use ledger format:
+
+    NNNN. Title
+
+        Description.
+
+        Disposition: REQUIRED / POLICY PENDING /
+                     NOT REQUIRED / NOT GUARANTEED
+
+        Evidence:    I023; CCP; IG; ...
+
+        Conformance: Testable verification statement.
+
+
+REPORT STRUCTURE
+
+Create:
+
+    Investigation 023 - CP/M 2.2 CCP Transient Entry Environment,
+    Command Tail, and Default FCB Semantics.md
+
+
+Include:
+
+1. Objective and scope
+2. Method and evidence classification
+3. Relationship to I001/I021/I022
+4. Documentation findings
+5. CCP source findings
+6. Entry memory map
+7. Command-tail findings
+8. FCB findings
+9. DMA findings
+10. Page-zero findings
+11. Stack/register findings
+12. Experimental design
+13. Experimental results
+14. Compatibility conclusions
+15. Proposed ledger additions
+16. Proposed existing-entry updates
+17. Unresolved questions
+18. Artifact preservation audit
+19. Sources
+
+
+ARTIFACT REQUIREMENTS
+
+Create:
+
+    Investigation 023/
+
+with:
+
+    probes/
+
+Preserve:
+
+- probe source;
+- COM binaries;
+- listings;
+- deterministic harness;
+- command corpus;
+- transcripts;
+- memory dumps;
+- disk images;
+- directory listings;
+- build instructions;
+- SHA-256 hashes.
+
+Verify byte-identical rebuilds where practical.
+
+
+PRESERVATION AUDIT
+
+Before beginning:
+
+- hash Ledger 022;
+- record emulator/version;
+- hash copied disk images.
+
+At completion:
+
+- verify Ledger 022 unchanged;
+- verify no previous investigations changed;
+- verify no architecture/roadmap files changed;
+- hash new artifacts;
+- preserve raw evidence separately.
+
+
+COMPLETION REPORT
+
+When complete, report:
+
+- files created;
+- artifact count;
+- experiments performed;
+- principal transient-entry findings;
+- command-tail findings;
+- FCB findings;
+- DMA/page-zero findings;
+- unresolved issues;
+- proposed ledger range;
+- Ledger 022 SHA-256 before and after;
+- confirmation that no protected files changed;
+- documentation reviewed.
+
+
+FINAL GOAL
+
+Investigation 023 should answer:
+
+    Immediately before a CP/M 2.2 transient program begins execution,
+    exactly what environment has CCP constructed, which parts of that
+    environment constitute the CP/M application contract, and which parts
+    are merely DRI CCP implementation details?
+
+The result should provide the definitive transient-entry compatibility
+boundary needed for BetterCP/M without requiring BetterCP/M to reproduce
+the internal DRI CCP implementation.

@@ -1,0 +1,948 @@
+INVESTIGATION 019 — CP/M 2.2 BIOS Disk Interface and Logical-Sector
+Semantics
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 018 is complete.
+
+The authoritative Compatibility Ledger is now:
+
+    02 Compatibility Ledger - Investigation 018.txt
+
+It incorporates findings through Investigation 018 and currently ends at
+entry 0448.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify any previous investigation report, architecture document,
+roadmap, source archive, or other pre-existing BetterCP/M file.
+
+Create Investigation 019 as a new evidence report with its own directory
+and associated probe/instrumentation artifacts.
+
+This is an EVIDENCE INVESTIGATION, not BetterCP/M implementation work.
+
+
+OBJECTIVE
+
+Determine the externally relevant CP/M 2.2 BIOS disk-interface contract,
+with particular attention to the boundary between BDOS logical disk
+operations and BIOS/device implementation.
+
+Concentrate on these BIOS entry points:
+
+    SELDSK
+    SETTRK
+    SETSEC
+    SETDMA
+    READ
+    WRITE
+    SECTRAN
+
+Also examine the disk structures exchanged across the BDOS/BIOS boundary
+where necessary:
+
+    DPH  - Disk Parameter Header
+    DPB  - Disk Parameter Block
+    CSV  - Check Vector
+    ALV  - Allocation Vector
+    XLT  - Sector Translation Table
+
+The purpose is NOT to document one particular DRI or z80pack BIOS.
+
+The purpose is to determine the smallest externally relevant CP/M 2.2
+contract that BetterCP/M must reproduce at this interface while separating:
+
+    - documented CP/M 2.2 requirements;
+    - DRI BDOS implementation assumptions;
+    - BIOS implementation freedom;
+    - disk-format/configuration-dependent values;
+    - behavior observed only in the reference environment;
+    - unresolved BetterCP/M policy.
+
+This investigation should establish the BIOS disk abstraction on which the
+already-investigated BDOS disk/file semantics depend.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read the current Compatibility Ledger and relevant previous investigations
+before designing experiments.
+
+In particular, use earlier findings concerning:
+
+    Investigation 007
+        Disk reset, selection, current-drive, and login state.
+
+    Investigation 008
+        FCB identification and Open/Close behavior.
+
+    Investigation 009
+        Directory search and DMA transfer semantics.
+
+    Investigation 010
+        Sequential Read.
+
+    Investigation 011
+        Sequential Write and file creation.
+
+    Investigation 012
+        Delete and Rename.
+
+    Investigation 013
+        Random access and file-size semantics.
+
+    Investigation 014
+        Read-only state and protection.
+
+    Investigation 015
+        Physical disk errors and error presentation.
+
+    Investigation 017
+        Login vector, allocation vector, DPB, and Function 37.
+
+    Investigation 018
+        Character-device/IOBYTE behavior and the logical-device/BIOS
+        boundary.
+
+Do not duplicate compatibility propositions already established by those
+investigations.
+
+Where Investigation 019 explains the lower-level BIOS mechanism underlying
+an existing proposition, cite the existing finding rather than proposing a
+duplicate ledger entry unless Investigation 019 establishes a genuinely new,
+independently testable compatibility requirement.
+
+Pay particular attention to Investigation 017 because it already established
+application-visible ALV and DPB behavior. Investigation 019 should clarify
+the BIOS-side origin and use of those structures without contradicting or
+unnecessarily restating those findings.
+
+
+QUESTIONS TO RESOLVE
+
+
+1. BIOS DISK CALLING SEQUENCE
+
+Establish the documented relationship among:
+
+    SELDSK
+    SETTRK
+    SETSEC
+    SETDMA
+    READ / WRITE
+
+Determine:
+
+- which calls establish persistent BIOS disk-I/O state;
+- which state must survive until a subsequent READ or WRITE;
+- whether READ/WRITE receive track, sector, DMA, or drive information
+  directly or operate on state established by earlier calls;
+- which registers carry arguments to each entry;
+- which registers carry meaningful return values;
+- what register preservation, if any, is documented or required;
+- whether BDOS assumes any particular ordering of these calls;
+- whether repeated SETTRK/SETSEC/SETDMA calls simply replace prior state;
+- which aspects are public BIOS interface requirements and which are merely
+  consequences of DRI BDOS's implementation.
+
+Do not create new general ABI requirements where Investigation 002 or the
+BIOS documentation already establishes them.
+
+
+2. SELDSK — DISK SELECTION
+
+Determine the CP/M 2.2 contract for SELDSK.
+
+Establish:
+
+- input drive-number convention;
+- mapping of drive numbers to A:, B:, etc.;
+- behavior for a valid drive;
+- behavior for an invalid or nonexistent drive;
+- returned value/register convention;
+- meaning of the returned DPH address;
+- whether a successful SELDSK necessarily performs physical hardware
+  selection immediately;
+- whether SELDSK may defer physical selection until READ/WRITE;
+- whether repeated selection of the same drive has externally relevant
+  semantics;
+- relationship between SELDSK and BDOS current-drive state;
+- relationship between SELDSK and BDOS login state;
+- relationship between SELDSK and the DPH/DPB/CSV/ALV objects;
+- whether different drives may share any of those structures;
+- whether exact DPH addresses are configuration-specific;
+- whether SELDSK is permitted to initialize or refresh BIOS-private state.
+
+Investigate any documented distinction between an initial disk selection
+and subsequent selections if CP/M 2.2 provides one.
+
+Do not infer a universal CP/M requirement merely from the behavior of the
+z80pack BIOS.
+
+
+3. DISK PARAMETER HEADER
+
+Establish the public BIOS-visible DPH representation and semantics.
+
+Determine:
+
+- documented DPH field layout;
+- field order and width;
+- pointer byte order;
+- meaning of the XLT pointer;
+- meaning of the DPH scratch/workspace fields;
+- meaning of the directory buffer pointer;
+- meaning of the DPB pointer;
+- meaning of the CSV pointer;
+- meaning of the ALV pointer;
+- which fields are supplied by BIOS;
+- which fields are initialized or used by BDOS;
+- which fields applications may legitimately observe;
+- which fields are private BDOS/BIOS workspace;
+- whether multiple drives may share a DPB;
+- whether multiple drives may share a directory buffer;
+- which objects must be drive-specific;
+- whether exact addresses or storage placement are compatibility
+  requirements.
+
+Cross-check these findings against Investigation 017's observations that
+the tested A: and B: drives had distinct ALV storage but shared one DPB.
+
+Classify the observed sharing arrangement correctly: do not promote a
+particular BIOS's sharing decisions into universal requirements.
+
+
+4. SETTRK — LOGICAL TRACK SELECTION
+
+Determine:
+
+- calling convention;
+- track-number representation;
+- whether tracks are zero-based or one-based at the BIOS interface;
+- maximum track value implied by the interface;
+- whether SETTRK performs physical I/O;
+- whether it merely records state for later READ/WRITE;
+- whether track numbering is logical rather than necessarily identical to
+  physical media geometry;
+- how reserved system tracks represented by DPB OFF interact with BIOS track
+  numbering;
+- whether BDOS adds OFF before calling SETTRK or whether BIOS is expected to
+  do so;
+- whether exact physical cylinder/head translation is outside the CP/M
+  contract.
+
+Use source analysis and instrumentation where necessary to determine what
+values DRI BDOS actually passes to BIOS.
+
+
+5. SETSEC — LOGICAL/TRANSLATED SECTOR SELECTION
+
+Determine:
+
+- calling convention;
+- sector-number representation;
+- whether the sector supplied to SETSEC is the original BDOS logical sector
+  or the result of SECTRAN;
+- whether sector numbers are zero-based or one-based at each relevant layer;
+- relationship among:
+
+      BDOS logical record/sector number
+      SECTRAN input
+      SECTRAN output
+      SETSEC input
+      physical sector identifier
+
+- whether SETSEC performs physical I/O;
+- whether it merely records state for subsequent READ/WRITE;
+- which aspects of physical sector numbering are BIOS-specific.
+
+Be extremely careful about terminology. Distinguish CP/M 128-byte logical
+sectors from larger host/emulator/physical sectors where applicable.
+
+
+6. SETDMA — BIOS DMA ADDRESS
+
+Determine:
+
+- calling convention;
+- relationship to BDOS Function 26 Set DMA;
+- whether BIOS SETDMA receives the same address selected by the application
+  through Function 26;
+- circumstances in which BDOS supplies another internal DMA address instead;
+- whether SETDMA merely records an address for later READ/WRITE;
+- whether BIOS may modify the DMA address;
+- whether READ and WRITE operate on exactly 128 bytes at the selected DMA
+  address;
+- whether exact BIOS storage of the DMA pointer is implementation-specific.
+
+Cross-check against the DMA behavior already established in Investigations
+009, 016, and 018.
+
+Do not duplicate existing application-level DMA propositions unless a new
+BIOS-boundary requirement is established.
+
+
+7. READ — BIOS LOGICAL-SECTOR READ
+
+Determine the documented BIOS READ contract.
+
+Establish:
+
+- inputs implicitly established by prior BIOS calls;
+- transfer size;
+- destination buffer semantics;
+- relationship to the current drive, track, sector, and DMA state;
+- success return convention;
+- error return convention;
+- whether zero means success and nonzero means error;
+- whether any particular nonzero error code is required;
+- whether retries belong in BIOS, BDOS, or are implementation-dependent;
+- what BDOS assumes about the DMA buffer after a successful read;
+- what is guaranteed, if anything, about DMA after a failed read;
+- whether READ is required to represent one CP/M 128-byte logical sector even
+  when the underlying host/device uses larger physical sectors.
+
+Cross-check physical-error findings with Investigation 015.
+
+Do not contradict Investigation 015's distinction between logical BDOS
+failure results and physical BIOS failures.
+
+
+8. WRITE — BIOS LOGICAL-SECTOR WRITE
+
+Determine the documented BIOS WRITE contract.
+
+Establish:
+
+- inputs implicitly established by prior BIOS calls;
+- source DMA semantics;
+- transfer size;
+- success/error return convention;
+- meaning of the write-type parameter supplied to BIOS;
+- all documented write-type values;
+- distinction among ordinary data writes, directory writes, and any
+  first-write/unallocated-block optimization;
+- whether BIOS must behave differently for those types;
+- whether the type is a command or an optimization hint;
+- what BDOS assumes after a successful write;
+- what is guaranteed after a failed write;
+- whether physical-sector read/modify/write behavior is BIOS-private.
+
+Pay particular attention to the CP/M 2.2 deblocking algorithm if the
+documentation discusses hosts with physical sectors larger than 128 bytes.
+
+Determine which parts of that algorithm are examples/recommended BIOS
+implementation techniques and which parts are actual externally relevant
+contracts.
+
+
+9. WRITE TYPE CODES
+
+Investigate the WRITE type parameter separately and explicitly.
+
+Determine:
+
+- numeric values used by CP/M 2.2;
+- symbolic/documented meanings;
+- when DRI BDOS supplies each value;
+- whether directory writes receive a distinct type;
+- whether the first write to a previously unallocated block receives a
+  distinct type;
+- why CP/M exposes the distinction to BIOS;
+- whether a BIOS may legally ignore the distinction;
+- whether BetterCP/M must generate the same type values at the BIOS boundary
+  for compatibility with existing BIOS implementations.
+
+If the distinction exists principally to support physical-sector deblocking
+or deferred-write optimization, document that without assuming one specific
+implementation.
+
+
+10. SECTRAN — SECTOR TRANSLATION
+
+Determine the exact CP/M 2.2 SECTRAN contract.
+
+Establish:
+
+- calling convention;
+- input logical-sector value;
+- translation-table pointer input;
+- return value;
+- meaning of a zero/null translation-table pointer if documented;
+- whether identity translation is required when no table is present;
+- relationship between XLT in the DPH and SECTRAN;
+- whether translation tables contain zero-based or one-based sector values;
+- whether SECTRAN itself performs any disk I/O;
+- whether translation is intended for skew/interleave;
+- whether arbitrary physical geometry translation belongs here or elsewhere
+  in BIOS;
+- whether the BIOS may implement translation algorithmically rather than by
+  directly indexing the table, provided externally required behavior is
+  preserved.
+
+Construct an identity-translation case and, if practical, a controlled
+nonidentity translation case.
+
+Do not assume that the stock z80pack disk format's translation arrangement
+is universal.
+
+
+11. 128-BYTE LOGICAL-SECTOR CONTRACT
+
+Determine precisely where CP/M 2.2 requires a 128-byte logical-sector
+abstraction.
+
+Establish:
+
+- BDOS expectations;
+- BIOS READ/WRITE expectations;
+- DMA transfer size;
+- relationship to directory records;
+- relationship to file records;
+- whether physical media sectors may be larger than 128 bytes;
+- whether physical media sectors may be smaller than 128 bytes;
+- where deblocking/blocking belongs;
+- whether BDOS is aware of physical-sector size;
+- whether applications can observe physical-sector size through normal CP/M
+  interfaces.
+
+This question is especially important for BetterCP/M.
+
+Separate rigorously:
+
+    CP/M logical sector
+    CP/M allocation block
+    directory entry
+    file record
+    BIOS logical sector
+    physical/emulated storage sector
+
+Do not use "sector" ambiguously in the report.
+
+
+12. DPB AND BIOS DISK GEOMETRY
+
+Using the documented DPB fields, establish how the BIOS/BDOS interface
+describes a CP/M disk.
+
+Review at least:
+
+    SPT
+    BSH
+    BLM
+    EXM
+    DSM
+    DRM
+    AL0
+    AL1
+    CKS
+    OFF
+
+Determine which values affect:
+
+- logical sectors per track;
+- allocation-block size;
+- extent interpretation;
+- number of allocation blocks;
+- directory size;
+- reserved directory blocks;
+- check-vector size;
+- reserved system tracks.
+
+Distinguish values that are part of the public DPB representation from
+particular values used by the reference disks.
+
+Investigation 017 already established the public 15-byte DPB representation.
+Do not duplicate that proposition. Investigation 019 should establish how
+BDOS and BIOS use those parameters at the disk-I/O boundary.
+
+
+13. LOGICAL VERSUS PHYSICAL GEOMETRY
+
+Determine how much physical disk geometry CP/M 2.2 actually exposes.
+
+Ask:
+
+- Must a CP/M disk really contain physical tracks?
+- Must a CP/M logical track correspond one-to-one with a physical cylinder?
+- Must SETSEC values correspond directly to physical sector IDs?
+- Can BIOS map CP/M track/sector coordinates onto an arbitrary underlying
+  storage representation?
+- Can several CP/M logical sectors reside inside one physical/host sector?
+- Can BIOS synthesize CP/M logical sectors from another backing-store
+  organization?
+- Which assumptions, if any, would ordinary CP/M 2.2 software be able to
+  detect?
+
+Answer these questions from the documented BIOS contract and DRI assumptions,
+not from BetterCP/M architectural preference.
+
+If the documentation leaves freedom, identify that freedom explicitly.
+
+
+14. STATE LIFETIME AND REENTRANCY
+
+Determine what state BIOS must retain between disk setup calls and
+READ/WRITE.
+
+Establish whether CP/M assumes state such as:
+
+    selected drive
+    selected track
+    selected sector
+    DMA address
+
+remains valid until replaced.
+
+Determine whether:
+
+- BIOS calls may be interleaved;
+- BDOS assumes one global disk-I/O context;
+- BIOS disk calls are reentrant;
+- interrupt handlers may safely disturb that state;
+- any reentrancy limitation is part of CP/M's externally relevant contract
+  or merely a consequence of the single-tasking DRI implementation.
+
+Do not overstate conclusions that are not documented.
+
+
+15. CROSS-FUNCTION EXPERIMENTS
+
+Construct deterministic experiments or instrumentation capable of recording
+the BIOS calls generated by controlled BDOS operations.
+
+Where practical, capture sequences for:
+
+    disk selection
+    directory search
+    sequential read
+    sequential write
+    random read
+    random write
+    file creation
+    Close
+    Delete
+
+Record, as appropriate:
+
+    BIOS entry invoked
+    drive
+    track
+    sector
+    DMA address
+    WRITE type
+    READ/WRITE result
+
+The purpose is to establish BDOS/BIOS boundary behavior, not merely to
+produce traces.
+
+Use traces to test specific propositions derived from documentation and
+source analysis.
+
+Do not promote incidental call ordering into REQUIRED behavior unless the
+interface contract or compatibility requirements justify doing so.
+
+
+16. CONTROLLED SECTOR-TRANSLATION TEST
+
+If practical, construct a deterministic fixture using a nonidentity XLT
+table.
+
+Demonstrate:
+
+    logical sector requested
+        ->
+    SECTRAN input
+        ->
+    translated sector returned
+        ->
+    SETSEC value
+        ->
+    actual backing-store location accessed
+
+Preserve all fixture modifications and clearly distinguish them from the
+unmodified reference system.
+
+If this cannot be tested reliably, document the limitation rather than
+forcing an experimental conclusion.
+
+
+17. CONTROLLED WRITE-TYPE TEST
+
+Instrument the BIOS boundary sufficiently to establish when DRI BDOS invokes
+WRITE with each documented write type.
+
+Use controlled operations chosen to provoke, where applicable:
+
+    ordinary allocated data write
+    directory write
+    first write to newly allocated storage
+
+Record raw call sequences.
+
+Compare observed behavior with the documentation and DRI BDOS source.
+
+If exact call sequences vary for reasons irrelevant to the public contract,
+do not turn them into ledger requirements.
+
+
+EVIDENCE DISCIPLINE
+
+Use the established evidence hierarchy and terminology inside the
+investigation report.
+
+Where useful, distinguish:
+
+    A — documented CP/M 2.2 application/BIOS interface
+    B — DRI CP/M 2.2 source behavior
+    I — incidental/reference-environment observation
+    D — unresolved BetterCP/M policy
+
+These are evidence CLASSES inside the investigation report.
+
+They are NOT Compatibility Ledger source abbreviations.
+
+Do not put bare A, B, I, or D evidence-class labels into proposed ledger
+Evidence fields.
+
+For proposed ledger entries, identify actual sources such as:
+
+    I019
+    AG
+    IG
+    BDOS
+
+and other specifically identified primary implementation/documentation
+sources where appropriate.
+
+
+PRIMARY SOURCES
+
+At minimum consult, where relevant:
+
+- Digital Research CP/M 2.2 Alteration Guide;
+- Digital Research CP/M 2.0 Interface Guide;
+- Digital Research CP/M 2.2 BDOS source;
+- relevant DRI distributed BIOS/CBIOS source and comments;
+- existing BetterCP/M investigations;
+- current Compatibility Ledger.
+
+The Alteration Guide should be particularly important for this investigation
+because the BIOS disk interface and disk parameter structures are system
+adaptation concerns.
+
+Do not treat modern emulator documentation as authoritative CP/M 2.2
+specification evidence.
+
+Emulator source or documentation may be used to understand the test fixture,
+but classify it accordingly.
+
+
+SOURCE-CODE ANALYSIS
+
+Trace DRI BDOS sufficiently to establish:
+
+- when each BIOS disk entry is called;
+- values supplied;
+- assumptions BDOS makes about returned values;
+- use of DPH fields;
+- use of DPB fields;
+- generation of track/sector values;
+- use of SECTRAN;
+- generation of WRITE type codes;
+- handling of READ/WRITE errors.
+
+Do not attempt a general line-by-line BDOS commentary.
+
+Analyze only what is necessary to resolve Investigation 019.
+
+
+EXPERIMENTAL REQUIREMENTS
+
+All experiments must be deterministic and reproducible.
+
+Prefer automated harnesses over manually timed interaction.
+
+Where BIOS instrumentation is necessary:
+
+- preserve the original BIOS/system image;
+- make the smallest practical test-fixture modification;
+- document every modification;
+- preserve modified source/binary;
+- preserve hashes;
+- identify instrumentation output unambiguously;
+- ensure instrumentation does not change the semantics being measured.
+
+Where disk contents may change:
+
+- preserve before and after images;
+- record SHA-256 hashes;
+- record directory listings where useful;
+- use controlled scratch files;
+- verify resulting sectors independently where practical.
+
+Record raw evidence separately from report interpretation.
+
+
+REFERENCE-ENVIRONMENT LIMITATIONS
+
+The stock z80pack environment may:
+
+- use a particular disk geometry;
+- use identity or particular sector translation;
+- use a particular deblocking arrangement;
+- expose particular DPH/DPB addresses;
+- share or not share disk structures;
+- implement specific retry behavior.
+
+None of these becomes a universal CP/M 2.2 requirement merely because it is
+observed.
+
+When the reference environment cannot expose an interface distinction needed
+for the investigation, use a controlled fixture if practical.
+
+If a fixture would become disproportionately invasive, document the
+unresolved point instead.
+
+
+COMPATIBILITY CLASSIFICATION
+
+For every proposed compatibility proposition classify it as:
+
+    REQUIRED
+    POLICY PENDING
+    NOT REQUIRED
+    NOT GUARANTEED
+
+Apply these conservatively.
+
+Examples of details likely to require particular care include:
+
+- exact DPH address;
+- exact DPB address;
+- exact ALV/CSV/directory-buffer address;
+- exact physical geometry;
+- exact controller commands;
+- exact host-file offsets;
+- exact retry count;
+- exact internal BIOS variables;
+- exact DRI BDOS call sequence where the public contract does not require it;
+- exact sector-skew table used by the reference disk;
+- residual register values not documented by the interface.
+
+Do not classify an implementation detail as REQUIRED simply because existing
+DRI BDOS happens to rely upon it unless that reliance forms part of the BIOS
+compatibility contract BetterCP/M intends to support.
+
+
+BETTERCP/M RELEVANCE
+
+Investigation 019 is expected to be important to the eventual BetterCP/M
+storage abstraction.
+
+Nevertheless, do NOT design BetterCP/M storage in this investigation.
+
+Do not decide how HyperCP/M, a VRM, host files, network storage, virtual
+disks, or future storage services should implement the CP/M disk abstraction.
+
+First establish what CP/M 2.2 requires.
+
+If the evidence shows that BIOS may translate CP/M logical track/sector
+operations onto an arbitrary backing representation, state that conclusion
+as an interface finding without turning the report into an architecture
+proposal.
+
+
+PROPOSED COMPATIBILITY LEDGER ADDITIONS
+
+The authoritative Ledger 018 currently ends at:
+
+    0448
+
+Therefore Investigation 019 proposals, if any, begin at:
+
+    0449
+
+Do not modify the Compatibility Ledger.
+
+Include a report section:
+
+    Proposed Compatibility Ledger additions
+
+containing only genuinely new compatibility propositions established by
+Investigation 019.
+
+Do not duplicate existing propositions merely because Investigation 019
+provides lower-level explanation or additional evidence.
+
+If Investigation 019 materially strengthens the evidence for an existing
+ledger entry, identify that separately as a proposed evidence update rather
+than creating a duplicate proposition.
+
+If Investigation 019 reveals that an existing entry is wrong or incomplete,
+identify the affected entry number explicitly and propose the correction.
+Do not silently rewrite it.
+
+Each proposed new entry should be suitable for later conversion to the
+established ledger format:
+
+    NNNN. Short title
+
+        Description.
+
+        Disposition: REQUIRED / POLICY PENDING /
+                     NOT REQUIRED / NOT GUARANTEED
+
+        Evidence: I019; AG section ...; BDOS; ...
+
+        Conformance: Independently testable statement.
+
+Use actual source references in Evidence.
+
+Do not use the report's A/B/I/D evidence-class letters as ledger source
+references.
+
+
+REPORT STRUCTURE
+
+Create:
+
+    Investigation 019 - CP-M 2.2 BIOS Disk Interface and Logical-Sector
+    Semantics.md
+
+Use the organization and evidentiary discipline of Investigations 015-018.
+
+The report should include at least:
+
+1. Objective and scope
+2. Method and evidence classification
+3. Documentation findings
+4. DRI source findings
+5. BIOS structure findings
+6. Experimental design
+7. Experimental results
+8. Cross-function analysis
+9. Compatibility conclusions
+10. Proposed Compatibility Ledger additions (not applied)
+11. Proposed corrections/evidence updates to existing ledger entries,
+    if any
+12. Incomplete and unresolved cases
+13. Artifact and preservation audit
+14. Sources
+
+Use additional subsections where needed for SELDSK, DPH, SETTRK, SETSEC,
+SETDMA, READ, WRITE, SECTRAN, logical-sector size, write types, and geometry.
+
+
+ARTIFACT DIRECTORY
+
+Create a new Investigation 019 directory and an appropriate probes/
+subdirectory.
+
+Preserve all newly created material necessary to reproduce the investigation,
+including as applicable:
+
+- probe/instrumentation source;
+- rebuilt binaries;
+- modified test-fixture BIOS source/binary;
+- deterministic run harness;
+- raw transcripts;
+- parsed traces;
+- before/after disk images;
+- directory listings;
+- sector dumps;
+- translation tables;
+- build instructions;
+- run instructions;
+- SHA-256 records;
+- emulator/version/commit identification.
+
+Do not overwrite previous investigation artifacts.
+
+
+PRESERVATION AUDIT
+
+Before beginning:
+
+- hash the authoritative Compatibility Ledger;
+- record the hash;
+- identify the reference emulator/version/commit;
+- hash any pre-existing system/disk images that will be used or copied.
+
+At completion:
+
+- hash the authoritative Compatibility Ledger again;
+- verify that it is byte-for-byte unchanged;
+- verify that no previous investigation was modified;
+- record hashes of new source and binary artifacts;
+- rebuild probes/instrumentation where practical and verify reproducibility;
+- preserve raw evidence separately from derived interpretation.
+
+If the ledger hash changes, stop and investigate rather than accepting the
+change.
+
+
+COMPLETION REPORT
+
+When Investigation 019 is complete, report succinctly:
+
+- files created;
+- number and kinds of preserved artifacts;
+- experiments performed;
+- principal documented findings;
+- principal DRI-source findings;
+- principal experimental findings;
+- important distinctions between logical and physical disk behavior;
+- any POLICY PENDING questions;
+- any proposed corrections/evidence updates to existing ledger entries;
+- proposed new ledger-entry range;
+- authoritative ledger SHA-256 before and after;
+- confirmation that the Compatibility Ledger and all other pre-existing
+  BetterCP/M files remained unchanged;
+- primary documentation reviewed.
+
+
+IMPORTANT CONSTRAINTS
+
+Do not modify the Compatibility Ledger.
+
+Do not modify BetterCP/M implementation code.
+
+Do not modify earlier investigations.
+
+Do not modify architecture or roadmap documents.
+
+Do not create or update a project ZIP unless explicitly requested.
+
+Do not turn z80pack-specific geometry into CP/M semantics.
+
+Do not turn DRI-private storage addresses into compatibility requirements.
+
+Do not confuse CP/M 128-byte logical sectors with physical/emulator sectors.
+
+Do not assume SETTRK/SETSEC coordinates must map directly to real physical
+cylinders/sectors unless the CP/M interface requires it.
+
+Do not infer requirements from a single observed call sequence when the
+documented interface permits alternatives.
+
+Do not use A/B/I/D evidence-class letters as Compatibility Ledger source
+abbreviations.
+
+Do not add duplicate ledger propositions simply because this investigation
+provides deeper explanation of behavior already established.
+
+
+FINAL GOAL
+
+Investigation 019 should answer this question precisely:
+
+    What disk abstraction does CP/M 2.2 require the BIOS to present to BDOS,
+    and how much freedom does the BIOS retain in mapping that abstraction
+    onto the underlying storage device?
+
+The result should define the CP/M 2.2 BIOS disk boundary rigorously enough
+that a future BetterCP/M implementation can reproduce the required contract
+without unnecessarily reproducing DRI's particular BIOS, disk geometry, or
+physical storage implementation.

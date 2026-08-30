@@ -1,0 +1,12 @@
+Compatibility Ledger preservation audit
+
+Path:
+<project-root>/compatibility/02 Compatibility Ledger - Investigation 013.txt
+
+Before Investigation 016:
+316b2c6eda23a62581f073e95013d27009dab1c9561ec4762c77351131bd42f9
+
+After Investigation 016:
+316b2c6eda23a62581f073e95013d27009dab1c9561ec4762c77351131bd42f9
+
+Result: unchanged.

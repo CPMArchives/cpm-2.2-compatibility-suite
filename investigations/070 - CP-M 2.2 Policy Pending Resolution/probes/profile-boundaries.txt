@@ -1,0 +1,43 @@
+Investigation 070 profile boundaries
+====================================
+
+Generic CP/M baseline
+  Universal documented and consequential ecosystem behavior. It incorporates
+  the six I070 REQUIRED decisions and treats eleven exact/residual behaviors as
+  NOT GUARANTEED. No profile may waive a baseline requirement.
+
+Strict DRI CCP/ecosystem profile
+  Second default FCB, DRI command acquisition capacity, tail-capacity rules,
+  and exact post-termination CCP state. It supplements, but does not replace,
+  generic command-tail, parsing, load, entry, and lifecycle requirements.
+
+DRI formatted-console and line-editor profile
+  Logical-column rules, cross-call retained-input behavior where explicitly
+  selected, Ctrl-P treatment, seven-bit masking, exact correction display, and
+  noninitial Ctrl-C handling. Timing/residue entries resolved NOT GUARANTEED do
+  not become profile promises unless a future evidenced proposition says so.
+
+Interactive CP/M disk-error profile
+  Operator presentation, ignore/abort, nonreturning protection paths, and
+  recovery for unavailable drives and physical file/directory/random I/O.
+  Logical BDOS result codes and the physical-error namespace remain distinct.
+
+DRI diagnostic and resident-presentation profile
+  Exact Bad Sector/read-only/command-error text, CR/LF placement, DIR layout,
+  and resident-command presentation. Generic baseline retains semantic errors,
+  recovery, drive/readiness prompt content, and directory function.
+
+BIOS and device profiles
+  Active IOBYTE routing and LISTST encoding are required only for a declared
+  configured device profile. Removable-media change detection is required only
+  for a profile whose hardware/BIOS claim supplies that facility.
+
+Optional compatibility features
+  Function 37 and its conditional vector effects are one optional compatibility
+  profile. A structured/headless physical-error interface is an opt-in BetterCP/M
+  extension isolated from strict CP/M paths.
+
+Outside the compatibility claim
+  Undocumented wildcard Rename semantics are not promised by generic CP/M or by
+  any profile selected here. Unambiguous Rename remains part of the baseline.
+

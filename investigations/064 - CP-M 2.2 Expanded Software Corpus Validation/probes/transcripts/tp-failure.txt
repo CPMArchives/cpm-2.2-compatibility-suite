@@ -1,0 +1,60 @@
+spawn cpmsim -z -d .
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>B:
+B>TURBO
+[0m[1m[f[2J---------------------------------------
+TURBO Pascal system[0m       Version 3.01A
+                           CP/M-80, Z80
+
+Copyright (C) 1983,84,85   [1mBORLAND Inc.
+---------------------------------------
+
+Terminal: ANSI
+
+
+
+Include error messages (Y/N)? Y
+
+Loading B:TURBO.MSG[f[2JL[0mogged drive:[1m B
+
+W[0mork file:[1m 
+M[0main file:[1m 
+
+E[0mdit     [1mC[0mompile  [1mR[0mun   [1mS[0mave
+
+e[1mX[0mecute  [1mD[0mir      [1mQ[0muit  compiler [1mO[0mptions
+
+Text:     0 bytes (8118-8118)
+Free: 26349 bytes (8119-E806)
+[1m
+>
+
+Work file name: BAD
+
+Loading B:BAD.PAS
+>
+
+Compiling 
+  0  4 lines
+
+Error 1: 'd. 
+User Interrupt at 0xfbc5
+I/O ran for 1 ms, waited for 0 ms
+CPU executed 2300784 t-states in 1 ms
+Clock frequency 2023.55 MHz

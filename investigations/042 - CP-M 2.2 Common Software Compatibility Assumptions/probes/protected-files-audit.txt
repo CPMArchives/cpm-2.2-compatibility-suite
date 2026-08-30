@@ -1,0 +1,28 @@
+Investigation 042 protected-file audit
+======================================
+
+The pre-investigation manifest contains 2,542 existing BetterCP/M files.
+Verification found every prior report/artifact, substantive project file, and
+the authoritative ledger byte-identical except for one source prompt that
+disappeared externally during the investigation. One Finder metadata file also
+changed independently.
+
+Missing after baseline (Investigation 042 did not remove it):
+<project-root>/investigations/I041_CPM_2_2_Direct_System_Access_Compatibility_Prompt.txt
+  before: b12ed33995153840b6160ac888546769107ac146c0907b79d604f51d7494519d
+
+Finder-managed metadata changed (Investigation 042 did not write it):
+<project-root>/investigations/.DS_Store
+  before: 12676c19faad85d28ec7be8a438ea547f6d6c91215f85a0525d32354b57fd631
+  after:  4c0afa302c81c61d0706925051ec37a3fbea3945bd414bafbd51dca8a2a4ca47
+
+The missing I041 prompt remains preserved inside the completed Investigation
+041 directory as Investigation-041-prompt.txt. It was not restored to the old
+top-level path because this investigation was forbidden to modify existing
+BetterCP/M files outside its own directory.
+
+Authoritative ledger after investigation:
+19ff14ae829058dd318f4fa73d2cac5b58eaae30345e76da9b00feafd86a76e7
+
+This exception is disclosed rather than claiming a false all-file hash match.
+

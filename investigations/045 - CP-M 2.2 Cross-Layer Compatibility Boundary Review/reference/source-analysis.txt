@@ -1,0 +1,39 @@
+Investigation 045 source interaction review
+===========================================
+
+OS2CCP.ASM
+----------
+
+The CCP acquires and parses commands, uses documented BDOS file/DMA functions
+to find and load COM records, establishes page-zero/default objects, calls the
+transient at 0100h, and resumes after ordinary RET. Function 0/JMP 0000h and
+error paths instead converge through system restart. The loader's private FCB,
+stack, addresses, and comparison sequence are implementation details.
+
+OS3BDOS.ASM
+-----------
+
+BDOS translates function-level FCB/DMA/drive/user requests into directory and
+data operations, selects configured DPH/DPB resources, calls BIOS physical I/O,
+and maps logical conditions to function-specific results. Final BIOS errors
+divert to operator presentation. Automatic FCB drive reselection saves and
+restores persistent drive context. Private caches, work DMA, tables, and stack
+layout are not interfaces.
+
+CBIOS.ASM
+---------
+
+BIOS exposes the configured jump table and converts logical CP/M drive,
+track/sector, DMA, console, and restart requests into machine operations.
+WBOOT reconstructs the resident runtime; disk READ/WRITE provide zero/nonzero
+status to BDOS. Geometry, controller IDs, retry loop, and hardware code are
+profile-specific.
+
+Combined conclusion
+-------------------
+
+The source shows intentional layering but also explicit state handoffs: CCP
+uses BDOS rather than private storage access; BDOS uses BIOS and configured
+disk structures; page zero and restart reconnect transients to all three.
+Experiments, documentation, and standard software establish the observable
+results independently of these private implementations.

@@ -1,0 +1,29 @@
+#!/usr/bin/expect -f
+set path [lindex $argv 0]
+set diskdir [lindex $argv 1]
+set logfile [lindex $argv 2]
+set emulator [lindex $argv 3]
+set timeout 45
+log_file -noappend $logfile
+spawn -noecho $emulator -z -d $diskdir
+expect "A>"
+if {$path eq "ignore"} {set mode A} else {set mode G}
+send -- "FAULT066 $mode\r"
+expect "Bdos Err On A: Bad Sector"
+if {$path eq "ignore"} {
+    send "x"
+    expect "RETURNED"
+    expect "A>"
+} else {
+    send "\003"
+    expect "A>"
+}
+send -- "CROSS70A\r"
+expect "CROSS70A COMPLETE"
+expect "A>"
+send -- "DIR ATTR.DAT\r"
+expect "ATTR"
+expect "A>"
+send "\034"
+expect eof
+

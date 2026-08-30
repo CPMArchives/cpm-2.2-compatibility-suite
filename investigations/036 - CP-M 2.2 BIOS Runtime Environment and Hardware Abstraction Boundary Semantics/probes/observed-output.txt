@@ -1,0 +1,28 @@
+INVESTIGATION 036 OBSERVED OUTPUT (CONDENSED)
+
+BIOS base and vector
+  Page zero: C3 03 FA 00 00 C3 06 EC
+  Derived BIOS base: FA00
+  Entries 00-10: 17 consecutive C3 JMP slots with distinct configured targets.
+
+Direct character transport
+  CONST empty/ready: 00 FF
+  CONIN: 41; READER: 52; LISTST scripted: 00 FF
+  Captured output pairs: CONOUT/C=09, LIST/C=10, PUNCH/C=1A.
+
+Disk boundary
+  Traces show SELDSK, SETTRK, SECTRAN, SETSEC, SETDMA, then READ/WRITE.
+  Directory accesses selected BIOS-private directory DMA FC30h and restored the
+  caller DMA. WRITE auxiliary types 00, 01, and 02 were all observed. The
+  XLT-DIRECT case directly exercised identity and nonidentity translation/read.
+
+Error boundary
+  One-shot physical read failure printed "Bdos Err On A: Bad Sector" only after
+  BDOS received BIOS failure. Carriage-return ignore resumed ERROR36; the DMA
+  sentinel EE remained, while the working FCB had advanced.
+
+Images
+  Error-case A/B images equal their before-images. Core B is unchanged. Core A
+  differs as expected because DISK36 creates, writes, closes, reopens, and
+  deletes its controlled BIOS019.DAT fixture while recording disk calls.
+

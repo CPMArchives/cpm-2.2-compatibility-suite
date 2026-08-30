@@ -1,0 +1,35 @@
+spawn cpmsim -z -d <local-workspace>/g-p-6a682f002be881918281554d644daf48/stage054/work/042/probes/case
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>SDIR
+
+Directory For Drive A:  User  0
+
+    Name     Bytes   Recs   Attributes      Name     Bytes   Recs   Attributes 
+------------ ------ ------ ------------ ------------ ------ ------ ------------
+         HEX     0k      0 Dir RW                PRN     0k      0 Dir RW      
+ASM      COM     8k     64 Dir RW       BYE      COM     1k      1 Dir RW      
+CLS      COM     1k      1 Dir RW       CREF80   COM     4k     32 Dir RW      
+DDT      COM     5k     38 Dir RW       DUMP     COM     1k      3 Dir RW      
+ED       COM     7k     52 Dir RW       HIST     COM     3k     21 Dir RW      
+HIST     UTL     2k     10 Dir RW       IN42     COM     1k      2 Dir RW      
+L80      COM    11k     84 Dir RW       LIB      C
+User Interrupt at 0xfbbe
+I/O ran for 20 ms, waited for 0 ms
+CPU executed 3966658 t-states in 3 ms
+Clock frequency 1285.37 MHz

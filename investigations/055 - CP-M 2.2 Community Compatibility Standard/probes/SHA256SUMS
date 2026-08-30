@@ -1,0 +1,14 @@
+494b0e28b32105fea361ea3adf3b1aadc315bd4d9265ae2c646ba62bdcfc9ef9  ./Investigation 055 - CP-M 2.2 Community Compatibility Standard.md
+e599adc67191444e20427359563ccb634a2caa667da0ab25561414e40cc16d07  ./probes/README.txt
+2e55bb937f6f44dafad6c1fbf1c6a360f5857d43249ee5299788e4ba64a43cd2  ./probes/community-standard-review.tsv
+552406edd610f3036c2f7b9b2c91449137a34349d7a6135bb834d7188603f193  ./probes/conformance-categories.txt
+fcbd5d42da89ca550905882763238c70781f0f66fb750151f614b12ab8d285d4  ./probes/ecosystem-coverage.txt
+babac6d7c3c2a71b8091f60318415961b16de83a9e822561a504c7f249dee70b  ./probes/ledger-disposition-summary.txt
+a1812b123b0f76fddc5a5f455f17717097f2009009702636ee9cb70bd66f1092  ./probes/ledger-sha256-after.txt
+a1812b123b0f76fddc5a5f455f17717097f2009009702636ee9cb70bd66f1092  ./probes/ledger-sha256-before.txt
+518cd166ec46e3946c247dd9ebaf29f5de4e060eaba07fcc366992c0552e5b22  ./probes/ledger-test-traceability.tsv
+73d15bcd7ee66183a6d2f1f86300cbb4d2818b23766bd5b2df2bfe76d8f9594c  ./probes/protected-files-audit.txt
+f7aecd5bb6681f4dfb0202e8adea0aab703595397f4c2567049bb446d73771c7  ./probes/regression-test-inventory.tsv
+f3e04dc970816a48be1ee9e480c98b0cbbd54e7a47245d0dbc567a9f9a19031d  ./probes/undocumented-behavior-inventory.tsv
+8a28ee9b1e6138d31affc888044f3ef45f154dcec0235bfec00b9c6e21626627  ./probes/validate055.sh
+109d5306da1c94c15f447a51e08f361daa3fd7a4fd0ef9a34978ab0701374100  ./probes/validation-audit.txt

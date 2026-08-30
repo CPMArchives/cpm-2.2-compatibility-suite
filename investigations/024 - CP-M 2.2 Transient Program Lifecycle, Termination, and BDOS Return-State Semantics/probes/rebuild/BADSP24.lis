@@ -1,0 +1,20 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:10:35 2026	Page 1
+Source file: BADSP24.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; A corrupted RET stack is not validated: this safe case routes RET to 0000h.
+                       2      2         ORG 100H
+0100  11 0e 01         3      3         LD DE,MSG
+0103  0e 09            4      4         LD C,9
+0105  cd 05 00         5      5         CALL 5
+0108  31 0c 01         6      6         LD SP,WORD0
+010b  c9               7      7         RET
+010c  00 00            8      8 WORD0:  DW 0
+010e  42 41 44 53      9      9 MSG:    DB 'BADSP24 RET WORD 0000',13,10,'$'
+0112  50 32 34 20      9     10
+0116  52 45 54 20      9     11
+011a  57 4f 52 44      9     12
+011e  20 30 30 30      9     13
+0122  30 0d 0a 24      9     14
+0126                  10     15         END

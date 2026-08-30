@@ -1,0 +1,4 @@
+drive0 = CPM/system.dsk
+drive1 = CPM/wordstar.dsk
+drive2 = CPM/games.dsk
+bootrom = MostekROM.bin

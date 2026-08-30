@@ -1,0 +1,33 @@
+Recommended controlled-ledger treatment
+=======================================
+
+The I070 release-applicability classes need not replace the canonical ledger's
+four historical dispositions. During the separately authorized update:
+
+  REQUIRED          -> change Disposition to REQUIRED.
+  PROFILE REQUIRED  -> rewrite as a conditional, independently testable
+                       proposition ("A claim selecting profile X shall...") and
+                       set Disposition to REQUIRED.
+  OPTIONAL          -> set baseline Disposition to NOT REQUIRED and state the
+                       optional profile/extension applicability explicitly.
+  NOT GUARANTEED    -> change Disposition to NOT GUARANTEED.
+  OUTSIDE SCOPE     -> change Disposition to NOT REQUIRED and state that no
+                       BetterCP/M CP/M compatibility claim promises it.
+
+This preserves machine-readable REQUIRED/NOT GUARANTEED/NOT REQUIRED meanings
+while eliminating all POLICY PENDING entries. Profile manifests determine which
+conditional REQUIRED propositions apply to a conformance claim.
+
+Counts:
+  6  direct REQUIRED changes
+  28 conditional profile-scoped REQUIRED rewrites
+  3  OPTIONAL -> baseline NOT REQUIRED with explicit opt-in metadata
+  11 NOT GUARANTEED changes
+  1  OUTSIDE SCOPE -> NOT REQUIRED with explicit exclusion
+
+Overlaps:
+  0012 and 0506 share one strict-CCP policy and may share a test, but retain
+  distinct propositions (entry environment versus operand assignment).
+  0435 owns Function 37 adoption; 0523 is its conditional state-effect detail.
+  Both receive the same optional-profile applicability and are not merged.
+

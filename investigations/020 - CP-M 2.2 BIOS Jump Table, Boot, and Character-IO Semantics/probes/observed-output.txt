@@ -1,0 +1,46 @@
+Accepted deterministic run, 15 August 2026
+===========================================
+
+Reference environment:
+  z80pack cpmsim Release 1.39
+  z80pack commit 91fd28eb04e675c2127df88ed3f40675e15282e2
+  64K CP/M 2.2, Z80 CBIOS V1.2
+
+BIOS020 PZ00-07: C3 03 FA 00 00 C3 06 EC
+BIOS BASE: FA00
+VECTORS index opcode target:
+00 C3 FB3E
+01 C3 FB51
+02 C3 FBBC
+03 C3 FBBF
+04 C3 FBC2
+05 C3 FBC6
+06 C3 FBCD
+07 C3 FBD1
+08 C3 FBD4
+09 C3 FBD9
+0A C3 FC05
+0B C3 FC09
+0C C3 FC1E
+0D C3 FC25
+0E C3 FC29
+0F C3 FBCA
+10 C3 FC0D
+DIRECT CONST0 CONST1 CONIN READER LISTST0 LISTST1 OUTN:
+00 FF 41 52 00 FF 06
+OUTPUT PAIRS device-byte:
+43 09 4C 10 50 1A
+
+WBOOT20 BEFORE PZ00-07: C3 03 FA 00 00 C3 06 EC
+WBOOT20: setting 0000h and 0005h opcodes to 00, then WBOOT
+PZERO20 AFTER WBOOT PZ00-07: C3 03 FA 00 00 C3 06 EC
+
+Interpretation boundaries:
+- All 17 observed public entries were C3 JMP instructions at three-byte
+  spacing; FA00 and the individual targets are reference-configuration facts.
+- The direct-call fixture observed the programmed values and exact raw C
+  bytes. This validates the vector/calling boundary, not the stock hardware.
+- WBOOT restored both deliberately damaged jump opcodes before CCP ran the
+  follow-up probe.
+- The startup signon and CCP prompt are a cold-start observation. BOOT entry
+  internals were not instrumented.

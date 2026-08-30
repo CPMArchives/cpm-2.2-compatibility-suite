@@ -1,0 +1,5 @@
+z80pack cpmsim Release 1.39
+DRI CP/M 2.2
+Z80 CBIOS V1.2 for Z80SIM
+Executable: cpmsim
+

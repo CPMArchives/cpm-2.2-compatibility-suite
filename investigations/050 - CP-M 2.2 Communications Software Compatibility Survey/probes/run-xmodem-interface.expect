@@ -1,0 +1,23 @@
+#!/usr/bin/expect -f
+set timeout 15
+set send_slow {1 0.04}
+set root [file normalize [file join [file dirname [info script]] ..]]
+set emu "<project-root>/investigations/049 - CP-M 2.2 Application Compatibility Survey/probes/mosteksim"
+set work [file join $root work]
+log_file -noappend [file join $root probes transcripts xmodem-interface-raw.txt]
+spawn -noecho $emu -z -d [file join $work disks] -r [file join $work roms] -c [file join $work config-kermit.txt]
+expect "A>"
+send -s "b:\r"
+expect "B>"
+send -s "xmodem absent50.bin /s /x1\r"
+expect "File not found"
+expect "B>"
+send -s "xmodem test50.txt /s /x1\r"
+expect "XMODEM 2.7"
+after 1000
+send "\003"
+after 1000
+send "\034"
+expect ">>>"
+send "q\n"
+expect eof

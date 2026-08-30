@@ -1,0 +1,33 @@
+#!/usr/bin/expect -f
+set timeout 30
+if {$argc != 4} {
+    puts stderr "usage: run-machine067.exp PROFILE_DIR KIND COMMAND TRANSCRIPT"
+    exit 2
+}
+set profile [file normalize [lindex $argv 0]]
+set kind [lindex $argv 1]
+set command [lindex $argv 2]
+set transcript [file normalize [lindex $argv 3]]
+log_file -noappend $transcript
+cd $profile
+if {$kind eq "cromemco"} {
+    spawn ./cromemcosim -M1 -R
+} elseif {$kind eq "imsai"} {
+    set env(CPU_SPEED) 4
+    spawn ./imsaisim -R
+} else {
+    puts stderr "unknown profile $kind"
+    exit 2
+}
+if {$kind eq "imsai"} {
+    # The distribution's PROFILE.SUB prints a notice and runs STAT.  Wait for
+    # the prompt after that startup command, not either embedded A> prefix.
+    expect -re {A>stat}
+    expect -re {A>}
+} else {
+    expect -re {A>}
+}
+send -- "$command\r"
+expect -re {A>}
+send -- "\034"
+expect eof

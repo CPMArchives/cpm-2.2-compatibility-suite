@@ -1,0 +1,56 @@
+Investigation 040 condensed observations
+=========================================
+
+Controlled raw images
+---------------------
+
+IBM 3740 definition: 77 tracks, 26 logical 128-byte sectors/track,
+2 reserved tracks, 1,024-byte blocks, 243 allocation blocks, 64 directory
+entries, skew factor 6.
+
+empty-ibm3740: 0 active entries; 2 reserved directory blocks; 241 free data
+blocks. Independent check: clean.
+
+normal-ibm3740: 35 active extent entries; 231 data blocks referenced; 10 free
+data blocks. Independent check: structurally connected.
+
+nearly-full-ibm3740: FILLER.BIN occupies 15 extent entries and 234 data
+blocks; 7 free data blocks. Independent check: clean.
+
+damaged-ibm3740: deterministic edit duplicates allocation block 2 in slots 0
+and 1. Both analyze040 and fsck.cpm report the duplicate. No CP/M recovery
+behavior is inferred from the host checker.
+
+z80pack-hd definition: 255 tracks, 128 logical 128-byte sectors/track,
+2,048-byte blocks, 2,040 allocation blocks, 1,024 directory entries,
+16 reserved directory blocks, no reserved tracks, identity translation.
+The empty image has no active entries and 2,024 non-directory blocks free.
+
+Native CP/M observations
+------------------------
+
+DPB040 Function 31 returned bytes:
+  1A 00 03 07 00 F2 00 3F 00 C0 00 10 00 02 00
+Decoded: SPT=26, BSH=3, BLM=7, EXM=0, DSM=242, DRM=63,
+AL0=C0, AL1=00, CKS=16, OFF=2.
+
+Function 27 returned the live allocation-vector address. Its leading reserved
+bits and file allocations changed coherently across create/write/close/delete.
+
+DRI STAT DSK: decoded the same profile as 1,944 records, 243 KB, 64 directory
+entries, 64 checked entries, 128 records/extent, 8 records/block,
+26 sectors/track, and 2 reserved tracks.
+
+BIOS040 recorded SELDSK/SETTRK/SECTRAN/SETSEC/SETDMA/READ/WRITE sequences.
+Directory transfers used the directory buffer, file transfers used application
+DMA, translated sector identifiers followed the configured skew table, and
+WRITE type values 0, 1, and 2 were observed. The direct case selected logical
+sector 2 through two different translation results and read distinct bytes.
+
+Image preservation
+------------------
+
+The five read-only matrix images equal their images-after copies byte for
+byte. Native images differ only where expected: inserting probes and the
+BIOS040 create/write/delete lifecycle alter controlled A: directory sectors;
+the controlled B: images remained byte-identical.

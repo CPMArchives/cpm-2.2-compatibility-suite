@@ -1,0 +1,217 @@
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 12:37:08 2026	Page 1
+Source file: FAIL44.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Investigation 044 returning-failure and boundary probe.
+                       2      2         ORG 100H
+0100  11 1d 02         3      3         LD DE,TITLE
+0103  cd 18 02         4      4         CALL PRINT
+                       5      5
+0106  0e 0c            6      6         LD C,12
+0108  cd 05 00         7      7         CALL 5
+010b  22 c4 02         8      8         LD (VERHL),HL
+010e  32 c3 02         9      9         LD (VERA),A
+0111  11 37 02        10     10         LD DE,LVER
+0114  cd 18 02        11     11         CALL PRINT
+0117  3a c3 02        12     12         LD A,(VERA)
+011a  cd fc 01        13     13         CALL HEX
+011d  2a c4 02        14     14         LD HL,(VERHL)
+0120  7c              15     15         LD A,H
+0121  e5              16     16         PUSH HL
+0122  cd fc 01        17     17         CALL HEX
+0125  e1              18     18         POP HL
+0126  7d              19     19         LD A,L
+0127  cd ef 01        20     20         CALL HEXCR
+                      21     21
+012a  11 c9 02        22     22         LD DE,MISSING
+012d  0e 0f           23     23         LD C,15
+012f  cd 05 00        24     24         CALL 5
+0132  11 4c 02        25     25         LD DE,LOPEN
+0135  cd e7 01        26     26         CALL SHOWA
+                      27     27
+0138  11 ed 02        28     28         LD DE,EMPTY
+013b  0e 13           29     29         LD C,19
+013d  cd 05 00        30     30         CALL 5
+0140  11 ed 02        31     31         LD DE,EMPTY
+0143  0e 16           32     32         LD C,22
+0145  cd 05 00        33     33         CALL 5
+0148  11 ed 02        34     34         LD DE,EMPTY
+014b  0e 10           35     35         LD C,16
+014d  cd 05 00        36     36         CALL 5
+0150  11 ed 02        37     37         LD DE,EMPTY
+0153  0e 0f           38     38         LD C,15
+0155  cd 05 00        39     39         CALL 5
+0158  11 ed 02        40     40         LD DE,EMPTY
+015b  0e 14           41     41         LD C,20
+015d  cd 05 00        42     42         CALL 5
+0160  32 c1 02        43     43         LD (EOF1),A
+0163  11 ed 02        44     44         LD DE,EMPTY
+0166  0e 14           45     45         LD C,20
+0168  cd 05 00        46     46         CALL 5
+016b  32 c2 02        47     47         LD (EOF2),A
+016e  11 5c 02        48     48         LD DE,LEOF
+0171  cd 18 02        49     49         CALL PRINT
+0174  3a c1 02        50     50         LD A,(EOF1)
+0177  cd fc 01        51     51         CALL HEX
+017a  3a c2 02        52     52         LD A,(EOF2)
+017d  cd ef 01        53     53         CALL HEXCR
+                      54     54
+0180  11 11 03        55     55         LD DE,ATTR
+0183  0e 0f           56     56         LD C,15
+0185  cd 05 00        57     57         CALL 5
+0188  3e 04           58     58         LD A,4
+018a  32 34 03        59     59         LD (ATTR+35),A
+018d  11 11 03        60     60         LD DE,ATTR
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 12:37:08 2026	Page 2
+Source file: FAIL44.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0190  0e 21           61     61         LD C,33
+0192  cd 05 00        62     62         CALL 5
+0195  11 6c 02        63     63         LD DE,LR2
+0198  cd e7 01        64     64         CALL SHOWA
+                      65     65
+019b  0e 29           66     66         LD C,41
+019d  cd 05 00        67     67         CALL 5
+01a0  22 c7 02        68     68         LD (SELHL),HL
+01a3  32 c6 02        69     69         LD (SELA),A
+01a6  11 82 02        70     70         LD DE,LSEL
+01a9  cd 18 02        71     71         CALL PRINT
+01ac  3a c6 02        72     72         LD A,(SELA)
+01af  cd fc 01        73     73         CALL HEX
+01b2  2a c7 02        74     74         LD HL,(SELHL)
+01b5  7c              75     75         LD A,H
+01b6  e5              76     76         PUSH HL
+01b7  cd fc 01        77     77         CALL HEX
+01ba  e1              78     78         POP HL
+01bb  7d              79     79         LD A,L
+01bc  cd ef 01        80     80         CALL HEXCR
+                      81     81
+01bf  0e 0b           82     82         LD C,11
+01c1  cd 05 00        83     83         CALL 5
+01c4  11 94 02        84     84         LD DE,LCON
+01c7  cd e7 01        85     85         CALL SHOWA
+                      86     86
+01ca  11 ed 02        87     87         LD DE,EMPTY
+01cd  0e 13           88     88         LD C,19
+01cf  cd 05 00        89     89         CALL 5
+01d2  11 af 02        90     90         LD DE,DONE
+01d5  c3 18 02        91     91         JP PRINT
+                      92     92
+01d8  e5              93     93 SHOWHL: PUSH HL
+01d9  cd 18 02        94     94         CALL PRINT
+01dc  e1              95     95         POP HL
+01dd  7c              96     96         LD A,H
+01de  e5              97     97         PUSH HL
+01df  cd fc 01        98     98         CALL HEX
+01e2  e1              99     99         POP HL
+01e3  7d             100    100         LD A,L
+01e4  c3 ef 01       101    101         JP HEXCR
+01e7  f5             102    102 SHOWA:  PUSH AF
+01e8  cd 18 02       103    103         CALL PRINT
+01eb  f1             104    104         POP AF
+01ec  c3 ef 01       105    105         JP HEXCR
+01ef  cd fc 01       106    106 HEXCR:  CALL HEX
+01f2  1e 0d          107    107         LD E,13
+01f4  cd 10 02       108    108         CALL OUT
+01f7  1e 0a          109    109         LD E,10
+01f9  c3 10 02       110    110         JP OUT
+01fc  f5             111    111 HEX:    PUSH AF
+01fd  0f             112    112         RRCA
+01fe  0f             113    113         RRCA
+01ff  0f             114    114         RRCA
+0200  0f             115    115         RRCA
+0201  cd 05 02       116    116         CALL NIB
+0204  f1             117    117         POP AF
+0205  e6 0f          118    118 NIB:    AND 0FH
+0207  c6 30          119    119         ADD A,'0'
+0209  fe 3a          120    120         CP '9'+1
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 12:37:08 2026	Page 3
+Source file: FAIL44.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+020b  38 02          121    121         JR C,HOUT
+020d  c6 07          122    122         ADD A,7
+020f  5f             123    123 HOUT:   LD E,A
+0210  c5             124    124 OUT:    PUSH BC
+0211  0e 02          125    125         LD C,2
+0213  cd 05 00       126    126         CALL 5
+0216  c1             127    127         POP BC
+0217  c9             128    128         RET
+0218  0e 09          129    129 PRINT:  LD C,9
+021a  c3 05 00       130    130         JP 5
+                     131    131
+021d  46 41 49 4c    132    132 TITLE:  DB 'FAIL44 RETURNING MATRIX',13,10,'$'
+0221  34 34 20 52    132    133
+0225  45 54 55 52    132    134
+0229  4e 49 4e 47    132    135
+022d  20 4d 41 54    132    136
+0231  52 49 58 0d    132    137
+0235  0a 24          132    138
+0237  4e 4f 52 4d    133    139 LVER:   DB 'NORMAL VERSION A/HL=','$'
+023b  41 4c 20 56    133    140
+023f  45 52 53 49    133    141
+0243  4f 4e 20 41    133    142
+0247  2f 48 4c 3d    133    143
+024b  24             133    144
+024c  4d 49 53 53    134    145 LOPEN:  DB 'MISSING OPEN A=','$'
+0250  49 4e 47 20    134    146
+0254  4f 50 45 4e    134    147
+0258  20 41 3d 24    134    148
+025c  52 45 50 45    135    149 LEOF:   DB 'REPEATED EOF A=','$'
+0260  41 54 45 44    135    150
+0264  20 45 4f 46    135    151
+0268  20 41 3d 24    135    152
+026c  52 41 4e 44    136    153 LR2:    DB 'RANDOM R2 OVERFLOW A=','$'
+0270  4f 4d 20 52    136    154
+0274  32 20 4f 56    136    155
+0278  45 52 46 4c    136    156
+027c  4f 57 20 41    136    157
+0280  3d 24          136    158
+0282  53 45 4c 45    137    159 LSEL:   DB 'SELECTOR 41 A/HL=','$'
+0286  43 54 4f 52    137    160
+028a  20 34 31 20    137    161
+028e  41 2f 48 4c    137    162
+0292  3d 24          137    163
+0294  43 4f 4e 53    138    164 LCON:   DB 'CONSOLE STATUS NO INPUT A=','$'
+0298  4f 4c 45 20    138    165
+029c  53 54 41 54    138    166
+02a0  55 53 20 4e    138    167
+02a4  4f 20 49 4e    138    168
+02a8  50 55 54 20    138    169
+02ac  41 3d 24       138    170
+02af  46 41 49 4c    139    171 DONE:   DB 'FAIL44 COMPLETE',13,10,'$'
+02b3  34 34 20 43    139    172
+02b7  4f 4d 50 4c    139    173
+02bb  45 54 45 0d    139    174
+02bf  0a 24          139    175
+02c1  00             140    176 EOF1:   DB 0
+02c2  00             141    177 EOF2:   DB 0
+02c3  00             142    178 VERA:   DB 0
+02c4  00 00          143    179 VERHL:  DW 0
+02c6  00             144    180 SELA:   DB 0
+Z80/8080-Macro-Assembler  Release 2.1	Tue Aug 18 12:37:08 2026	Page 4
+Source file: FAIL44.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+02c7  00 00          145    181 SELHL:  DW 0
+02c9  00 4d 49 53    146    182 MISSING: DB 0,'MISS44  ','DAT',0,0,0,0
+02cd  53 34 34 20    146    183
+02d1  20 44 41 54    146    184
+02d5  00 00 00 00    146    185
+02d9                 147    186         DS 20
+02ed  00 45 4d 50    148    187 EMPTY:  DB 0,'EMPTY44 ','DAT',0,0,0,0
+02f1  54 59 34 34    148    188
+02f5  20 44 41 54    148    189
+02f9  00 00 00 00    148    190
+02fd                 149    191         DS 20
+0311  00 41 54 54    150    192 ATTR:   DB 0,'ATTR    ','DAT',0,0,0,0
+0315  52 20 20 20    150    193
+0319  20 44 41 54    150    194
+031d  00 00 00 00    150    195
+0321                 151    196         DS 20
+0335                 152    197         END

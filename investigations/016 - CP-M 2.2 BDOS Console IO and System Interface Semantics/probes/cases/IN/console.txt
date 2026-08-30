@@ -1,0 +1,36 @@
+spawn cpmsim -z -d /private/tmp/inv016-runs/IN
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>IN005
+
+IN005 ret conlen con[8] listlen conincalls
+A    41 01 41 FF FF FF FF FF FF FF 00 01 
+TAB  09 08 20 20 20 20 20 20 20 20 00 01 
+CR   0D 01 0D 20 20 20 20 20 20 20 00 01 
+LF   0A 01 0A 20 20 20 20 20 20 20 00 01 
+BS   08 01 08 20 20 20 20 20 20 20 00 01 
+C-A  01 00 08 20 20 20 20 20 20 20 00 01 
+C-PQ 10 01 51 20 20 20 20 20 20 20 00 01 
+PEND status 01 5A 01 5A 20 20 20 20 20 20 20 00 01 
+
+A>[0;31mE (8182) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 11 ms, waited for 0 ms
+CPU executed 569655 t-states in 0 ms
+Clock frequency 693.85 MHz

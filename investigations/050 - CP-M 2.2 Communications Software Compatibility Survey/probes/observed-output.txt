@@ -1,0 +1,48 @@
+INVESTIGATION 050 OBSERVED OUTPUT SUMMARY
+
+All application input was scripted. Raw terminal transcripts are in
+probes/transcripts/. Disk images were restored before each run.
+
+T01 Generic Kermit startup and identity
+  Kermit-80 v4.11 identified itself as "Generic CP/M-80" and entered its
+  command prompt. VERSION and SHOW completed. The disk image was unchanged.
+
+T02 Generic Kermit standard-device connection
+  SET ESCAPE accepted Control-]. CONNECT entered the configured logical
+  communications path. "AT" was sent, Control-] C closed the connection,
+  and EXIT returned to CP/M. On this Mostek BIOS, RDR/PUN alias the console;
+  this proves path execution, not an independent modem endpoint. Disk unchanged.
+
+T03 Generic Kermit no-peer send and abort
+  SEND TEST50.TXT emitted a Kermit send-init packet. With no peer, scripted
+  Control-C returned to Kermit's command prompt and EXIT returned to CP/M.
+  Disk unchanged.
+
+T04 Generic Kermit capability and missing-file failures
+  SET SPEED 9600 reported "(Not implemented)". SEND ABSENT50.BIN reported
+  "?Unable to find file". The command interpreter remained usable. Disk unchanged.
+
+T05 Generic Kermit local file workflow
+  COPY TEST50.TXT COPY50.TXT succeeded and DIRECTORY found both names. The
+  extracted destination occupied one 128-byte CP/M record; its first 39 bytes
+  matched the source and the remainder was record padding. Disk changed only as
+  expected for file creation.
+
+T06 IMSAI-patched QTERM on a nonmatching machine profile
+  QTERM 4.3e started, identified "IMSAI 8080 - VT 100", displayed its help and
+  settings, and accepted modem-channel selection. Its direct IMSAI-port input
+  on the Mostek machine produced a continuous stream of FFh bytes. Escape-Q
+  still returned to CP/M. This is observed hardware-profile mismatch behavior,
+  not a generic CP/M requirement. Disk unchanged.
+
+T07 XMODEM BIOS-device mode, missing file and no peer
+  XMODEM 2.7 with /X1 reported "File not found" for ABSENT50.BIN and returned
+  to CP/M. For TEST50.TXT it reported "File open" and "Sending via RDR/PUN".
+  With the tested BIOS aliasing RDR/PUN to console and no independent peer, the
+  transfer did not complete during the bounded run and the emulator was halted.
+  Disk unchanged. No successful XMODEM peer transfer is claimed.
+
+Unperformed cases
+  No paired serial endpoint transfer, dial-out network connection, BBS server,
+  or interrupt-driven serial driver was available and executed. No evidence is
+  claimed for those cases.

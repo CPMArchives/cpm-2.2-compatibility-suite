@@ -1,0 +1,19 @@
+Investigation 064 category coverage
+
+Category                         Earlier state          I064 result
+Standard utilities               Covered I047/I053      Retained; not duplicated
+Word processor                   Covered I049/I053      Retained; not duplicated
+Interpreter/language runtime     BASIC covered          Retained
+Compiled high-level language     Material gap           Turbo Pascal and FORTRAN executed
+Relocatable library/link flow    Partial I048           FORTRAN -> REL -> LINK -> COM executed
+Spreadsheet                     Gap                    Candidate identified; not executed
+Database                        Gap                    Candidate identified; not executed
+Packaged business/accounting    Gap                    Candidate identified; not executed
+BBS/server                      Gap                    Candidate identified; not executed
+Dedicated printer workflow      Gap                    Candidate identified; not executed
+Paired communications           Gap                    Still open from I050/I053
+Matching historical hardware    Profile gap            Still open from I051/I053
+
+I064 materially improves language/toolchain breadth but does not close the
+application-category gaps. Those absences are evidence-coverage limitations,
+not proof of missing CP/M requirements.

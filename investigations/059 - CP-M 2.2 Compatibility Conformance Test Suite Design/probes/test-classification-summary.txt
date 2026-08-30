@@ -1,0 +1,4 @@
+tests containing REQUIRED mappings: 56
+tests containing POLICY PENDING mappings: 39
+tests containing NOT GUARANTEED mappings: 45
+tests containing NOT REQUIRED mappings: 37

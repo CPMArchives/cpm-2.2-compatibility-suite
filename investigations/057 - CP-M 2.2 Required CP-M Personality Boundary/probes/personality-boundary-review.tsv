@@ -1,0 +1,18 @@
+id	compatibility_requirement	evidence_source	personality_responsibility	validation_method	classification
+P057-01	COM image load, 0100h entry and configured loader ceiling	A IG/AG; I001,I022,I028,I043	Present CP/M-visible program image, entry and accept/reject boundary	CCP-006,MEM-001/002	REQUIRED
+P057-02	Page-zero WBOOT/BDOS vectors, current drive, IOBYTE where selected, FCBs, tail and DMA	A IG/AG; B DRI software; I001,I023,I041,I053	Present and maintain CP/M-visible low-memory objects	CCP-003,MEM-001,BIOS-001/003	REQUIRED plus profile-gated IOBYTE
+P057-03	CCP command cycle, parsing, resident commands and transient dispatch	A/B DRI CCP; I021-I024,I028,I032,I047	Present CP/M-native command environment and handoff	CCP-001 through 007	REQUIRED
+P057-04	Standard SUBMIT/XSUB interoperation	B DRI components; I042,I047,I048,I054	Present strict-community command stream and gateway interposition behavior	CCP-008	REQUIRED strict community
+P057-05	CALL 0005h and BDOS register/return contract	A/B; I002,I027,I041	Present stable public gateway without promising private target	BDOS-CALL-001,MEM-006	REQUIRED / private target NOT GUARANTEED
+P057-06	BDOS console Functions 1,2,6,9,10,11	A/B; I003-I006,I016	Present CP/M formatted/direct/buffered semantics above raw device provider	BDOS-CON-001 through 005	REQUIRED plus POLICY PENDING edges
+P057-07	Drive, user, DMA, login and read-only state	A/B; I007,I014,I017,I026,I031	Maintain CP/M-visible cross-call system state	BDOS-STATE-001 through 003	REQUIRED
+P057-08	FCB directory/search/sequential/random/lifecycle semantics	A/B; I008-I013,I029-I031,I037	Translate delegated media/storage into CP/M FCB/DMA/record/extent observations	BDOS-FILE-001 through 012	REQUIRED
+P057-09	BIOS jump table, boot, character paths and logical-sector disk ABI	A AG; B CBIOS; I018-I020,I035-I040	Expose CP/M BIOS ABI; delegate physical mechanism only behind it	BIOS-001 through 006	REQUIRED configured platform
+P057-10	Logical/physical error result and promised recovery	A/B; I015,I025,I033,I044	Present CP/M-visible error/recovery outcome while coordinating providers	ERROR-001 through 005	REQUIRED / POLICY PENDING cases
+P057-11	Writable/executable application-owned TPA	A/B/I043,I048,I054	Present strict CP/M flat-memory observation including self-modification	MEM-003	REQUIRED strict community
+P057-12	Terminal, IOBYTE, logical-device and communications behavior	A/B/I018,I038-I039,I049-I050; D	Activate only declared CP/M-visible profile obligations	BIOS-003,APP-001,COMM-001 through 003	POLICY PENDING where not fixed
+P057-13	Direct ports, MMIO, controller and peripheral behavior	B vendor software; I040,I050-I053; D	Keep outside baseline; expose only through named hardware profile	BIOS-007,COMM-004,HW-001 through 003	POLICY PENDING / NOT GUARANTEED baseline
+P057-14	Unspecified registers, residue, order, invalid-call aftermath and physical choices	A silence; B/I001-I054	Avoid expanding CP/M personality promise; contain provider leakage	I052 negative/variant tests	NOT GUARANTEED
+P057-15	DRI private stacks, tables, addresses, algorithms and host mechanisms	B source; I041,I045,I054	Exclude from personality acceptance criteria	Substitution/anti-requirement review	NOT REQUIRED
+P057-16	Exact vendor UI, diagnostics and emulator presentation	B/I047-I054	Exclude except where named presentation profile selects behavior	Semantic transcript comparison	NOT REQUIRED / POLICY PENDING named profile
+P057-17	Claim/profile applicability and evidence traceability	I052-I056; D for selections	Declare what personality surface is promised; validation remains outside runtime	652-row mapping and 62-test applicability audit	REQUIRED conformance implication

@@ -1,0 +1,104 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sat Aug 15 20:27:34 2026	Page 1
+Source file: stage021/probes/PARSE21.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Investigation 021 transient-entry observation probe.
+                       2      2 ; Prints the CCP-produced page-zero drive byte, two default FCB identity
+                       3      3 ; regions, and command tail. Build with z80asm -fb.
+                       4      4         ORG 0100H
+0100  31 2f 02         5      5         LD SP,STACKTOP
+0103  11 91 01         6      6         LD DE,HDR
+0106  0e 09            7      7         LD C,9
+0108  cd 05 00         8      8         CALL 5
+010b  3a 04 00         9      9         LD A,(0004H)
+010e  cd 67 01        10     10         CALL HEX
+0111  11 a0 01        11     11         LD DE,F1
+0114  0e 09           12     12         LD C,9
+0116  cd 05 00        13     13         CALL 5
+0119  21 5c 00        14     14         LD HL,005CH
+011c  06 10           15     15         LD B,16
+011e  cd 4f 01        16     16         CALL DUMP
+0121  11 af 01        17     17         LD DE,F2
+0124  0e 09           18     18         LD C,9
+0126  cd 05 00        19     19         CALL 5
+0129  21 6c 00        20     20         LD HL,006CH
+012c  06 10           21     21         LD B,16
+012e  cd 4f 01        22     22         CALL DUMP
+0131  11 bc 01        23     23         LD DE,TL
+0134  0e 09           24     24         LD C,9
+0136  cd 05 00        25     25         CALL 5
+0139  3a 80 00        26     26         LD A,(0080H)
+013c  cd 67 01        27     27         CALL HEX
+013f  1e 20           28     28         LD E,' '
+0141  cd 7b 01        29     29         CALL PUTC
+0144  3a 80 00        30     30         LD A,(0080H)
+0147  47              31     31         LD B,A
+0148  21 81 00        32     32         LD HL,0081H
+014b  cd 4f 01        33     33         CALL DUMP
+014e  c9              34     34         RET
+014f  78              35     35 DUMP:  LD A,B
+0150  b7              36     36         OR A
+0151  ca 87 01        37     37         JP Z,CRLF
+0154  7e              38     38 DLOOP: LD A,(HL)
+0155  23              39     39         INC HL
+0156  e5              40     40         PUSH HL
+0157  c5              41     41         PUSH BC
+0158  cd 67 01        42     42         CALL HEX
+015b  1e 20           43     43         LD E,' '
+015d  cd 7b 01        44     44         CALL PUTC
+0160  c1              45     45         POP BC
+0161  e1              46     46         POP HL
+0162  10 f0           47     47         DJNZ DLOOP
+0164  c3 87 01        48     48         JP CRLF
+0167  f5              49     49 HEX:   PUSH AF
+0168  0f              50     50         RRCA
+0169  0f              51     51         RRCA
+016a  0f              52     52         RRCA
+016b  0f              53     53         RRCA
+016c  cd 70 01        54     54         CALL NIB
+016f  f1              55     55         POP AF
+0170  e6 0f           56     56 NIB:   AND 0FH
+0172  c6 30           57     57         ADD A,'0'
+0174  fe 3a           58     58         CP '9'+1
+0176  38 02           59     59         JR C,OUT
+0178  c6 07           60     60         ADD A,7
+Z80/8080-Macro-Assembler  Release 2.1	Sat Aug 15 20:27:34 2026	Page 2
+Source file: stage021/probes/PARSE21.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+017a  5f              61     61 OUT:   LD E,A
+017b  c5              62     62 PUTC:  PUSH BC
+017c  d5              63     63         PUSH DE
+017d  e5              64     64         PUSH HL
+017e  0e 02           65     65         LD C,2
+0180  cd 05 00        66     66         CALL 5
+0183  e1              67     67         POP HL
+0184  d1              68     68         POP DE
+0185  c1              69     69         POP BC
+0186  c9              70     70         RET
+0187  1e 0d           71     71 CRLF:  LD E,13
+0189  cd 7b 01        72     72         CALL PUTC
+018c  1e 0a           73     73         LD E,10
+018e  c3 7b 01        74     74         JP PUTC
+0191  50 41 52 53     75     75 HDR:   DB 'PARSE21 DRIVE=$'
+0195  45 32 31 20     75     76
+0199  44 52 49 56     75     77
+019d  45 3d 24        75     78
+01a0  0d 0a 46 43     76     79 F1:    DB 13,10,'FCB1 00-0F: $'
+01a4  42 31 20 30     76     80
+01a8  30 2d 30 46     76     81
+01ac  3a 20 24        76     82
+01af  46 43 42 32     77     83 F2:    DB 'FCB2 00-0F: $'
+01b3  20 30 30 2d     77     84
+01b7  30 46 3a 20     77     85
+01bb  24              77     86
+01bc  54 41 49 4c     78     87 TL:    DB 'TAIL COUNT/BYTES: $'
+01c0  20 43 4f 55     78     88
+01c4  4e 54 2f 42     78     89
+01c8  59 54 45 53     78     90
+01cc  3a 20 24        78     91
+01cf                  79     92         DS 96
+022f                  80     93 STACKTOP:
+022f                  81     94         END

@@ -1,0 +1,32 @@
+spawn cpmsim -z -d /tmp/inv018-run
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>CHAR018
+
+CHAR018 stat rdr pend rdrcnt io0 get0 loc1 get1 locrest punchio dma80 dmaalt plen llen conlen
+01 C1 5A 01 00 00 A5 A5 00 A5 A5 5A 06 05 08 
+PUNCH len/bytes 06 41 09 10 80 09 51 
+LIST len/bytes 05 41 09 10 80 09 
+CON len/bytes 08 41 20 20 20 20 20 20 20 
+
+A>[0;31mE (4553) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 4 ms, waited for 0 ms
+CPU executed 660431 t-states in 0 ms
+Clock frequency 1405.17 MHz

@@ -1,0 +1,5 @@
+ledger	numbered_lines	unique_ids	REQUIRED	POLICY_PENDING	NOT_REQUIRED	NOT_GUARANTEED
+Investigation 068 input	652	622	445	50	48	109
+Investigation 069 canonical	627	627	424	49	49	105
+normalized I068 unique propositions	622	622	422	49	47	104
+I069 net semantic additions	5	5	2	0	2	1

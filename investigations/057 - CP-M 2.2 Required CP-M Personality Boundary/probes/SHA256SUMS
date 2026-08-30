@@ -1,0 +1,18 @@
+de5242345da279e47c5b820221fdcb533b516520888120aeed32ee3bd239de12  ./Investigation 057 - CP-M 2.2 Required CP-M Personality Boundary.md
+272bade02125c745a66075fbd2ddb702ce1caa38fbaa0e189253ea2373be1a4b  ./probes/README.txt
+2e55bb937f6f44dafad6c1fbf1c6a360f5857d43249ee5299788e4ba64a43cd2  ./probes/community-standard-review.tsv
+a74314906ffab7d3bfa1f54876bbd2d21659bc608b2d7b9206bff51dce504132  ./probes/delegation-boundaries.tsv
+672f4576c3d2f5fd984967d29c9012c82558207d137271d704fa8e1554971b12  ./probes/generate-personality-map.awk
+cbeefa352924eb9b8af549bfd556a3eb53c6a8be2b28d67e3f68bce216f179ba  ./probes/ledger-sha256-after.txt
+cbeefa352924eb9b8af549bfd556a3eb53c6a8be2b28d67e3f68bce216f179ba  ./probes/ledger-sha256-before.txt
+f4501e0564ba8753e28f1e675947683ffa3fa0673dedb638c355c39e79195dc1  ./probes/personality-boundary-review.tsv
+8de4dce688122ba50df3e8ce845b0a7f99706f3300bad955287baa8bcc6593d4  ./probes/personality-requirement-map.tsv
+d0aa9b59644308107069a820c7863fd6194a4ff76ba0e334d868de105f06a272  ./probes/personality-responsibility-summary.txt
+070db8cfcacac5f2084b9157adf7a5e30505f06a212cd4b3d93cf483f31bd113  ./probes/protected-files-audit.txt
+f7aecd5bb6681f4dfb0202e8adea0aab703595397f4c2567049bb446d73771c7  ./probes/regression-test-inventory.tsv
+767f32077e064d371064113392d73f94862f5824df91ad7a5d638e0fed367e51  ./probes/requirement-responsibility-map.tsv
+8b5e29be1bd0c0aa177d3381e81af3eef565cb006bbb0be5f4e520b6009131bd  ./probes/responsibility-boundaries.tsv
+e0ce51026f471f1e0b3f8db9e65cda502ac9cf10e73ca060aa1cb24dd8353d99  ./probes/software-boundary-analysis.tsv
+cd7c68e240e9b2c94415714a9018ac96a92cd3d55fcf7331eaf50c0239070a11  ./probes/validate057.sh
+1fc9251a9e9eddd64a2b595befb2301bd79719acee0c803f2b79cc098b6b2fa5  ./probes/validation-audit.txt
+d7676768ae75d4a6246100699e5856e9811b9c9dc765fbbdbb71a587a135aa1f  ./probes/validation-ownership.tsv

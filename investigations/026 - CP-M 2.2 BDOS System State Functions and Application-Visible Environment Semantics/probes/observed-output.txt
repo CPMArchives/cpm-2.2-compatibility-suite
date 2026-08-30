@@ -1,0 +1,33 @@
+Accepted observations (see transcripts for raw output):
+
+STATE26
+  initial current/user/login/ro: 00 00 0001 0000
+  after select B, user 7:        01 07 0003 0000
+  Function 12 version:           0022
+  Search after alternate DMA and intervening state calls returned slot 01;
+  alternate DMA byte 0 changed A5->01 while 0080h byte 0 remained 00.
+
+DPB26
+  A ALV FCB0, B ALV FCCF; both DPB FA8D in this BIOS.
+  DPB bytes: 1A00030700F2003F00C00010000200
+  Function 39: 0000; Function 41: 0000.
+
+RESET26
+  before:  cur 00 login 0003 ro 0002
+  reset B: cur 00 login 0001 ro 0000
+  reset A: cur 00 login 0000 ro 0000
+  observed ALV/DPB pointers remained FCB0/FA8D.
+
+PROTECT26
+  Function 28 changed ro 0000->0001.
+  Function 40 returned 0006 on unsuitable random-write FCB; ro remained 0001.
+  Function 37 cleared ro to 0000.
+
+TERMINATION
+  RET observer:      current 00 user 07 login 0003 ro 0000
+  Function 0:        current 00 user 00 login 0003 ro 0000
+  JMP 0000h:         current 00 user 00 login 0003 ro 0000
+
+Numeric pointers, directory slots, and exact unsupported-selector results are
+observations, not compatibility requirements.
+

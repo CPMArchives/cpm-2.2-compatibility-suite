@@ -1,0 +1,5 @@
+Purpose: valid SAVE, bad count, existing/full-media handling.
+Procedure: SAVE 1 SAVED.COM; SAVE X BAD.COM; SAVE 1 D:FULL.COM.
+Observed: valid output was 256 bytes; bad count printed X?; full media printed
+NO SPACE. Source confirms existing target is deleted before Make.
+Conclusion: SAVE writes twice the page count in 128-byte records from 0100h.

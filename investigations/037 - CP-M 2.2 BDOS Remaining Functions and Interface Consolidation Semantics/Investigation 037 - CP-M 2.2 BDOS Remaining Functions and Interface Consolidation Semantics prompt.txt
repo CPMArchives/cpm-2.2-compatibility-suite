@@ -1,0 +1,651 @@
+Investigation 037 — CP/M 2.2 BDOS Remaining Functions and Interface Consolidation Semantics Prompt
+
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 036 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation 036.
+
+Create Investigation 037 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports or artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Determine whether the CP/M 2.2 BDOS compatibility surface has been
+completely characterized.
+
+Previous investigations established:
+
+- BDOS calling convention;
+- console functions;
+- disk state functions;
+- file operations;
+- directory operations;
+- random access;
+- protection behavior;
+- error behavior;
+- system state behavior.
+
+
+Investigation 037 performs a remaining-function audit and interface
+consolidation review.
+
+Determine:
+
+- which BDOS functions remain insufficiently characterized;
+- whether existing investigations fully define application-visible
+  behavior;
+- whether undocumented but historically significant behavior exists;
+- whether additional compatibility requirements should be recorded.
+
+
+The objective is not to redesign BDOS.
+
+The objective is to establish the CP/M 2.2 BDOS compatibility contract.
+
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+- documented CP/M 2.2 behavior;
+- Digital Research implementation behavior;
+- common CP/M programming practices;
+- historically significant software dependencies.
+
+
+Do not assume that only documented behavior matters.
+
+Do not assume undocumented behavior is required without evidence.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+
+Investigation 002:
+
+    CP/M 2.2 BDOS Call and Return Convention.
+
+
+Investigation 007:
+
+    BDOS Disk Reset Selection and Drive-State Query Semantics.
+
+
+Investigation 008:
+
+    FCB File Identification and Open-Close Semantics.
+
+
+Investigation 009:
+
+    Directory Search and DMA Transfer Semantics.
+
+
+Investigation 010:
+
+    Sequential Read Semantics.
+
+
+Investigation 011:
+
+    Sequential Write and File Creation Semantics.
+
+
+Investigation 012:
+
+    File Deletion and Rename Semantics.
+
+
+Investigation 013:
+
+    Random Access and File Size Semantics.
+
+
+Investigation 014:
+
+    Read-Only State and Protection Semantics.
+
+
+Investigation 015:
+
+    Physical Disk Error and Error Presentation Semantics.
+
+
+Investigation 017:
+
+    Disk State Allocation Vector and Disk Parameter Block Semantics.
+
+
+Investigation 025:
+
+    File Operation Error Semantics and Application-Visible Failure
+    Behavior.
+
+
+Investigation 026:
+
+    BDOS System State Functions and Application-Visible Environment
+    Semantics.
+
+
+Investigation 027:
+
+    BDOS Call Interface Convention and Register-State Semantics.
+
+
+Investigation 033:
+
+    BDOS/BIOS Error Propagation and Recovery Semantics.
+
+
+Do not duplicate previous investigations.
+
+Identify remaining gaps and unresolved compatibility boundaries.
+
+SCOPE
+
+Investigate:
+
+- all BDOS functions not fully covered by previous investigations;
+- edge cases of previously investigated functions;
+- application-visible BDOS state;
+- register behavior;
+- DMA behavior;
+- FCB mutation;
+- return values;
+- undocumented but observable conventions.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- BetterCP/M internal BDOS architecture;
+- implementation design;
+- CP/M 3 BDOS extensions;
+- MP/M behavior;
+- private internal algorithms that are not application-visible.
+
+
+Do not repeat:
+
+- already established file operation semantics;
+- already established directory semantics;
+- already established calling conventions.
+
+
+INVESTIGATION QUESTIONS
+
+
+1. BDOS FUNCTION COVERAGE AUDIT
+
+Determine:
+
+- complete CP/M 2.2 BDOS function list;
+- investigation coverage for each function;
+- remaining unknown behavior.
+
+
+Classify each function:
+
+- fully characterized;
+- partially characterized;
+- requiring additional investigation.
+
+
+Identify:
+
+- missing evidence;
+- unresolved behavior;
+- duplicate investigations.
+
+
+2. APPLICATION-VISIBLE BDOS BEHAVIOR
+
+Determine whether existing investigations fully define:
+
+- return values;
+- register effects;
+- DMA effects;
+- FCB changes;
+- system state changes.
+
+
+Investigate:
+
+- behavior after success;
+- behavior after failure;
+- behavior after boundary conditions.
+
+
+3. BDOS SYSTEM FUNCTIONS
+
+Review remaining system-oriented BDOS functions.
+
+Determine:
+
+- application-visible state;
+- return conventions;
+- compatibility requirements.
+
+
+Investigate:
+
+- drive state;
+- user state;
+- allocation state;
+- system reset behavior;
+- version reporting;
+- memory-related functions where applicable.
+
+
+4. REGISTER AND MEMORY SIDE EFFECTS
+
+Determine whether BDOS calls have observable side effects beyond documented returns.
+
+Investigate:
+
+- preserved registers;
+- modified registers;
+- DMA contents;
+- FCB mutation;
+- zero-page interaction.
+
+
+Determine:
+
+- whether software historically depends on these effects.
+
+
+5. UNDOCUMENTED BDOS CONVENTIONS
+
+Investigate whether CP/M software commonly depends on:
+
+- undocumented return values;
+- undocumented error behavior;
+- undocumented FCB changes;
+- undocumented DMA behavior.
+
+
+Classify findings:
+
+- required compatibility;
+- implementation behavior;
+- incidental behavior.
+
+
+6. BDOS AND SOFTWARE ECOSYSTEM USAGE
+
+Survey common CP/M software categories:
+
+- utilities;
+- assemblers;
+- compilers;
+- editors;
+- communications programs;
+- applications.
+
+
+Determine:
+
+- which BDOS behaviors are relied upon;
+- whether unusual BDOS usage exists.
+
+
+7. BDOS ERROR CONSISTENCY
+
+Review whether error behavior is consistent across BDOS functions.
+
+Investigate:
+
+- invalid parameters;
+- missing files;
+- disk errors;
+- full directories;
+- full disks.
+
+
+Determine:
+
+- common error patterns;
+- compatibility requirements.
+
+
+8. BDOS SOURCE ANALYSIS
+
+Review available CP/M 2.2 source material.
+
+Investigate:
+
+- BDOS dispatch;
+- function implementations;
+- shared routines;
+- return paths;
+- error handling.
+
+
+Extract:
+
+- documented behavior;
+- DRI implementation behavior;
+- application-visible conventions.
+
+
+Do not produce:
+
+- source walkthroughs;
+- internal implementation documentation.
+
+
+9. EXPERIMENTAL PROGRAMS
+
+Create deterministic probes covering:
+
+
+BDOS37:
+
+    Verify remaining BDOS function behavior.
+
+
+STATE37:
+
+    Observe BDOS state changes.
+
+
+REGISTER37:
+
+    Observe register effects.
+
+
+DMA37:
+
+    Observe DMA behavior.
+
+
+ERROR37:
+
+    Observe failure behavior.
+
+
+Each probe must include:
+
+- purpose;
+- procedure;
+- observed behavior;
+- compatibility conclusion.
+
+
+10. CONTROLLED TEST MATRIX
+
+Include:
+
+FUNCTION COVERAGE
+
+- every BDOS function;
+- normal operation;
+- boundary operation;
+- failure operation where applicable.
+
+
+STATE
+
+- before call;
+- after success;
+- after failure.
+
+
+MEMORY
+
+- DMA contents;
+- FCB contents;
+- observable system locations.
+
+
+SOFTWARE USAGE
+
+- standard utilities;
+- direct BDOS callers;
+- unusual callers.
+
+
+ERRORS
+
+- invalid parameters;
+- missing resources;
+- media failures.
+
+11. COMPATIBILITY GAP ANALYSIS
+
+Determine whether the current BDOS investigation series has identified
+all application-visible compatibility boundaries.
+
+Review:
+
+- completed investigations;
+- Compatibility Ledger entries;
+- unresolved POLICY PENDING items;
+- known CP/M programming practices.
+
+
+Identify:
+
+- missing investigations;
+- incomplete evidence;
+- conflicting conclusions;
+- areas requiring additional focused work.
+
+
+12. COMPATIBILITY REQUIREMENT CLASSIFICATION
+
+For each finding, determine:
+
+- whether software can observe the behavior;
+- whether historical software depends upon the behavior;
+- whether evidence supports requiring compatibility.
+
+
+Classify findings:
+
+REQUIRED
+
+    Behavior BetterCP/M must reproduce.
+
+
+POLICY PENDING
+
+    Evidence exists, but a compatibility decision remains open.
+
+
+NOT REQUIRED
+
+    Behavior need not be reproduced.
+
+
+NOT GUARANTEED
+
+    Software should not depend upon the behavior.
+
+
+13. EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+
+    documented behavior.
+
+B:
+
+    DRI implementation behavior.
+
+I:
+
+    experimental observation.
+
+D:
+
+    unresolved policy.
+
+
+These labels are internal investigation classifications only.
+
+
+Ledger evidence must identify:
+
+    I037
+    BDOS
+    subsystem
+    IG
+    AG
+
+
+14. EXISTING LEDGER REVIEW
+
+Review affected Compatibility Ledger entries:
+
+- BDOS calling convention;
+- BDOS function behavior;
+- file operations;
+- directory operations;
+- system functions;
+- error handling;
+- application-visible state.
+
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+
+Do not modify the Compatibility Ledger directly.
+
+
+The current Compatibility Ledger ends after Investigation 036.
+
+Determine the next available ledger entry number.
+
+Do not create duplicate propositions merely because a lower-level
+mechanism has been explained more fully.
+
+
+15. PROPOSED LEDGER ADDITIONS
+
+Include:
+
+Proposed Compatibility Ledger additions
+
+and:
+
+Proposed existing-entry updates.
+
+
+Each entry must contain:
+
+
+NNNN. Title
+
+    Description.
+
+    Disposition:
+
+    Evidence:
+
+    Conformance:
+
+
+16. REPORT STRUCTURE
+
+Create:
+
+Investigation 037 - CP/M 2.2 BDOS Remaining Functions and Interface
+Consolidation Semantics.md
+
+
+Include:
+
+
+1. Objective and scope
+
+2. Compatibility standard
+
+3. Relationship to previous investigations
+
+4. BDOS function coverage audit
+
+5. Documentation findings
+
+6. Source findings
+
+7. Application-visible behavior review
+
+8. Register and memory side effects
+
+9. Undocumented convention analysis
+
+10. Software ecosystem findings
+
+11. Error consistency review
+
+12. Experimental results
+
+13. Compatibility gap analysis
+
+14. Compatibility conclusions
+
+15. Proposed ledger additions
+
+16. Existing-entry updates
+
+17. Open questions
+
+18. Conformance implications
+
+
+17. FINAL REVIEW
+
+Before completing the investigation, verify:
+
+- all CP/M 2.2 BDOS functions have been accounted for;
+- previous investigations are not duplicated;
+- remaining compatibility gaps are identified;
+- application-visible behavior is separated from internal implementation;
+- undocumented behavior is supported by evidence before being treated
+  as a compatibility requirement.
+
+
+Ensure conclusions distinguish:
+
+- documented CP/M behavior;
+- Digital Research implementation behavior;
+- historical software dependencies;
+- experimental observations;
+- unresolved policy.
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M BDOS architecture.
+
+Do not replace CP/M BDOS semantics with modern operating-system
+interfaces.
+
+Determine the CP/M 2.2 BDOS remaining-function and interface
+consolidation compatibility contract only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

@@ -1,0 +1,62 @@
+spawn cpmsim -z -d /tmp/inv022-bound
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>LOAD22
+LOAD22 bytes at 0100/0180/0200: 11 B2 C3
+
+A>MINRET22
+
+A>PART22
+PART22 byte at 017F=00
+
+A>MAXOK
+
+BOUND22 EXECUTED O
+
+A>BOUND
+BAD LOAD
+A>WHO22
+
+MARK22 variant 0
+
+A>USER 1
+A>WHO22
+
+MARK22 variant 1
+
+A>ONLY0
+ONLY0?
+
+A>B:WHO22
+
+MARK22 variant 3
+
+A>USER 0
+A>B:WHO22
+
+MARK22 variant 2
+
+A>NOFILE22
+NOFILE22?
+
+A>[0;31mE (7982) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 6 ms, waited for 0 ms
+CPU executed 4928801 t-states in 2 ms
+Clock frequency 2163.65 MHz

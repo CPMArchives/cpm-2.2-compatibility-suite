@@ -1,0 +1,40 @@
+DISPOSITION NOT GUARANTEED 109
+DISPOSITION NOT REQUIRED 48
+DISPOSITION POLICY PENDING 50
+DISPOSITION REQUIRED 445
+SECTION 001 - CP/M 2.2 Transient Program Entry Environment 33
+SECTION 002 - CP/M 2.2 BDOS Call and Return Convention 17
+SECTION 003 - CP/M 2.2 BDOS Console Output and String Output Semantics 23
+SECTION 004 - CP/M 2.2 BDOS Direct Console IO and Console Status Semantics 16
+SECTION 005 - CP/M 2.2 BDOS Console Input and Echo Semantics 15
+SECTION 006 - CP/M 2.2 BDOS Buffered Console Input and Line Editing Semantics 26
+SECTION 007 - CP/M 2.2 BDOS Disk Reset Selection and Drive-State Query Semantics 24
+SECTION 008 - CP/M 2.2 FCB File Identification and Open-Close Semantics 32
+SECTION 009 - CP/M 2.2 BDOS Directory Search and DMA Transfer Semantics 31
+SECTION 010 - CP/M 2.2 BDOS Sequential Read Semantics 29
+SECTION 011 - CP/M 2.2 BDOS Sequential Write and File Creation Semantics 67
+SECTION 012 - CP/M 2.2 BDOS File Deletion and Rename Semantics 105
+SECTION 015 - CP/M 2.2 BDOS Physical Disk Error and Error Presentation Semantics 24
+SECTION 016 - CP/M 2.2 BDOS Console I/O and System Interface Semantics 10
+SECTION 017 - CP/M 2.2 BDOS Disk State, Allocation Vector, and Disk Parameter 12
+SECTION 018 - CP/M 2.2 BDOS Character Devices and IOBYTE Semantics 13
+SECTION 019 - CP/M 2.2 BIOS Disk Interface and Logical-Sector Semantics 12
+SECTION 020 - CP/M 2.2 BIOS Jump Table, Boot, and Character-I/O Semantics 14
+SECTION 021 - CP/M 2.2 CCP Command Acquisition, Parsing, and Dispatch Semantics 17
+SECTION 022 - CP/M 2.2 CCP Transient Program Lookup, Loading, and Execution 3
+SECTION 023 - CP/M 2.2 CCP Transient Program Lookup, Loading, and Execution 14
+SECTION 024 - CP/M 2.2 Transient Program Lifecycle, Termination, and BDOS Return- 4
+SECTION 025 - CP/M 2.2 BDOS File Operation Error Semantics and Application- 5
+SECTION 026 - CP/M 2.2 BDOS System State Functions and Application-Visible 8
+SECTION 027 - CP/M 2.2 BDOS Call Interface Convention and Register-State 8
+SECTION 028 - CP/M 2.2 CCP Transient Execution Handoff and Loader State Contract 8
+SECTION 029 - CP/M 2.2 BDOS Directory Search Semantics and FCB/DMA Enumeration 9
+SECTION 030 - CP/M 2.2 BDOS File Lifecycle, Extent Management, and Metadata State 8
+SECTION 031 - CP/M 2.2 BDOS User Area, File Visibility, and Directory Namespace 10
+SECTION 032 - CP/M 2.2 CCP Resident Command Semantics and BDOS Interaction 12
+SECTION 033 - CP/M 2.2 BDOS-BIOS Error Propagation and Recovery Semantics 8
+SECTION 034 - CP/M 2.2 Memory Layout, System Area, and Transient Program Boundary 30
+SECTION 041 - CP/M 2.2 Direct System Access and Undocumented Application Interface 1
+SECTION 042 - CP/M 2.2 Common Software Compatibility Assumptions 2
+SECTION 043 - CP/M 2.2 Memory and Execution Edge Case Compatibility Semantics 1
+SECTION 051 - CP/M 2.2 Hardware-Dependent Software Compatibility Survey 1

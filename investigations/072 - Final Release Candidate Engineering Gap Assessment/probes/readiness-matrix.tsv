@@ -1,0 +1,12 @@
+area	status	evidence	finding
+Compatibility boundary	READY	I045-I058; Ledger 071 purpose/profile applicability; I070 sections 6-8	Observable CP/M behavior, exclusions, optional behavior, non-guarantees, and profile-qualified commitments are explicit in the canonical evidence set.
+Ledger integrity	READY	I069; Ledger 071; I071 ledger-update-audit.txt	627 unique contiguous propositions; 458 REQUIRED, 116 NOT GUARANTEED, 53 NOT REQUIRED, and no POLICY PENDING entries.
+Policy decisions	READY IN CANONICAL EVIDENCE	I070 policy-resolution-matrix.tsv; Ledger 071	All 49 formerly pending decisions have one final treatment and explicit applicability.
+Published policy document	NOT READY	compatibility/01 Compatibility Policy.txt	Draft 0.1 still describes DEFERRED, UNRESOLVED, and a perpetually evolving ledger; it does not publish the final profile and NOT GUARANTEED model.
+Normative conformance framework	READY IN I071 ARTIFACTS	I071 report and probes	62 frozen tests, 627 cases/oracles, evidence schemas, phases, result rules, and certification levels validate.
+Published conformance specification	NOT READY	compatibility/03 Conformance Strategy.txt; I071	The public strategy is Draft 0.1 and contains only “Under development”; I071 has not been promoted into a release-facing specification.
+Profile definitions	PARTIAL	I070 profile-boundaries.txt; Ledger 071 applicability; I071 certification-levels.tsv	Profile semantics exist, but stable public profile IDs, versions, inclusion status, and manifest syntax are not assembled into a profile registry.
+Certification rules and evidence model	READY IN I071 ARTIFACTS	I071 certification-levels.tsv, campaign-manifest-schema.tsv, result-record-schema.tsv	The normative rules are sufficiently defined for publication and later implementation.
+Executable certification implementation	NOT IMPLEMENTED	I071 sections 11 and 14	Runners, fixtures, campaign tooling, and a candidate campaign remain engineering work; this does not invalidate the specification but prevents certification of an implementation.
+Release manifest and authority chain	NOT READY	Compatibility directory inventory; I071 manifest schema	No RC manifest binds authoritative policy, ledger, framework, profiles, versions, hashes, and supersession rules.
+Publication index	NOT READY	compatibility/gophermap	The index calls the structure incomplete and links “02 Compatibility Ledger.txt”, which is absent; it does not expose the I071 authority set.

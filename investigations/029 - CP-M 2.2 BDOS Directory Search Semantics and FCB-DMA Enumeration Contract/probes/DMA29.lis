@@ -1,0 +1,128 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:27:49 2026	Page 1
+Source file: DMA29.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1  ORG 100H
+0100  31 74 01         2      2  LD SP,STACK
+0103  af               3      3  XOR A
+0104  cd b7 01         4      4  CALL SEL
+0107  cd bd 01         5      5  CALL SETDMA
+010a  11 50 01         6      6  LD DE,FCB
+010d  0e 11            7      7  LD C,17
+010f  cd 05 00         8      8  CALL 5
+0112  32 0e 02         9      9  LD (RC),A
+0115  21 36 01        10     10  LD HL,BAN
+0118  cd 74 01        11     11  CALL PUTS
+011b  3a 0e 02        12     12  LD A,(RC)
+011e  cd 9b 01        13     13  CALL HEXB
+0121  cd 91 01        14     14  CALL CRLF
+0124  21 1f 02        15     15  LD HL,DMA
+0127  06 80           16     16  LD B,128
+0129  7e              17     17 DLOOP: LD A,(HL)
+012a  23              18     18  INC HL
+012b  cd 9b 01        19     19  CALL HEXB
+012e  10 f9           20     20  DJNZ DLOOP
+0130  cd 91 01        21     21  CALL CRLF
+0133  c3 b2 01        22     22  JP EXIT
+0136  44 4d 41 32     23     23 BAN: DB 'DMA29 result and dma128',13,10,0
+013a  39 20 72 65     23     24
+013e  73 75 6c 74     23     25
+0142  20 61 6e 64     23     26
+0146  20 64 6d 61     23     27
+014a  31 32 38 0d     23     28
+014e  0a 00           23     29
+0150  00 3f 3f 3f     24     30 FCB: DB 0,'???????????','?',0,0,0
+0154  3f 3f 3f 3f     24     31
+0158  3f 3f 3f 3f     24     32
+015c  3f 00 00 00     24     33
+0160                  25     34  DS 20
+0174                  26     35 STACK:
+0174  7e              27     36 PUTS: LD A,(HL)
+0175  23              28     37  INC HL
+0176  b7              29     38  OR A
+0177  c8              30     39  RET Z
+0178  5f              31     40  LD E,A
+0179  cd 7e 01        32     41  CALL PUTC
+017c  18 f6           33     42  JR PUTS
+017e  f5              34     43 PUTC: PUSH AF
+017f  c5              35     44  PUSH BC
+0180  d5              36     45  PUSH DE
+0181  e5              37     46  PUSH HL
+0182  0e 02           38     47  LD C,2
+0184  cd 05 00        39     48  CALL 5
+0187  e1              40     49  POP HL
+0188  d1              41     50  POP DE
+0189  c1              42     51  POP BC
+018a  f1              43     52  POP AF
+018b  c9              44     53  RET
+018c  1e 20           45     54 SPACE: LD E,' '
+018e  c3 7e 01        46     55  JP PUTC
+0191  1e 0d           47     56 CRLF: LD E,13
+0193  cd 7e 01        48     57  CALL PUTC
+0196  1e 0a           49     58  LD E,10
+0198  c3 7e 01        50     59  JP PUTC
+019b  f5              51     60 HEXB: PUSH AF
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:27:49 2026	Page 2
+Source file: DMA29.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+019c  0f              52     61  RRCA
+019d  0f              53     62  RRCA
+019e  0f              54     63  RRCA
+019f  0f              55     64  RRCA
+01a0  cd a4 01        56     65  CALL NIB
+01a3  f1              57     66  POP AF
+01a4  e6 0f           58     67 NIB: AND 0FH
+01a6  c6 30           59     68  ADD A,'0'
+01a8  fe 3a           60     69  CP '9'+1
+01aa  38 02           61     70  JR C,NOUT
+01ac  c6 07           62     71  ADD A,7
+01ae  5f              63     72 NOUT: LD E,A
+01af  c3 7e 01        64     73  JP PUTC
+01b2  0e 00           65     74 EXIT: LD C,0
+01b4  c3 05 00        66     75  JP 5
+01b7  5f              67     76 SEL: LD E,A
+01b8  0e 0e           68     77  LD C,14
+01ba  c3 05 00        69     78  JP 5
+01bd  11 1f 02        70     79 SETDMA: LD DE,DMA
+01c0  0e 1a           71     80  LD C,26
+01c2  c3 05 00        72     81  JP 5
+01c5  32 0e 02        73     82 REPORT: LD (RC),A
+01c8  fe ff           74     83  CP 0FFH
+01ca  28 14           75     84  JR Z,RPRINT
+01cc  6f              76     85  LD L,A
+01cd  26 00           77     86  LD H,0
+01cf  29              78     87  ADD HL,HL
+01d0  29              79     88  ADD HL,HL
+01d1  29              80     89  ADD HL,HL
+01d2  29              81     90  ADD HL,HL
+01d3  29              82     91  ADD HL,HL
+01d4  11 1f 02        83     92  LD DE,DMA
+01d7  19              84     93  ADD HL,DE
+01d8  11 0f 02        85     94  LD DE,SNAP
+01db  01 10 00        86     95  LD BC,16
+01de  ed b0           87     96  LDIR
+01e0                  88     97 RPRINT:
+01e0  21 02 02        89     98  LD HL,LABEL
+01e3  cd 74 01        90     99  CALL PUTS
+01e6  3a 0e 02        91    100  LD A,(RC)
+01e9  cd 9b 01        92    101  CALL HEXB
+01ec  fe ff           93    102  CP 0FFH
+01ee  28 0f           94    103  JR Z,RDONE
+01f0  cd 8c 01        95    104  CALL SPACE
+01f3  21 0f 02        96    105  LD HL,SNAP
+01f6  06 10           97    106  LD B,16
+01f8  7e              98    107 RBYTE: LD A,(HL)
+01f9  23              99    108  INC HL
+01fa  cd 9b 01       100    109  CALL HEXB
+01fd  10 f9          101    110  DJNZ RBYTE
+01ff  c3 91 01       102    111 RDONE: JP CRLF
+0202  72 63 2f 65    103    112 LABEL: DB 'rc/entry16 ',0
+0206  6e 74 72 79    103    113
+020a  31 36 20 00    103    114
+020e  00             104    115 RC: DB 0
+020f                 105    116 SNAP: DS 16,0
+021f                 106    117 DMA: DS 128,0A5H
+029f                 107    118  END

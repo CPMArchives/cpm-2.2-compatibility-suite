@@ -1,0 +1,54 @@
+#!/usr/bin/expect -f
+set timeout 12
+if {$argc != 4} {
+  puts stderr "usage: run064.exp DISKDIR CASE TRANSCRIPT CPU"
+  exit 2
+}
+set diskdir [lindex $argv 0]
+set case [lindex $argv 1]
+set transcript [lindex $argv 2]
+set cpu [lindex $argv 3]
+log_file -noappend $transcript
+cd $diskdir
+spawn cpmsim $cpu -d .
+expect -re {A>}
+send -- "B:\r"
+expect -re {B>}
+if {$case eq "tp-normal"} {
+  send -- "TURBO\r"; expect -re {Include error messages}; send -- "Y"; expect -re {>}
+  send -- "W"; expect -re {Work file name:}; send -- "HELLO\r"; expect -re {>}
+  send -- "C"; expect -re {Compiling}; expect -re {>}
+  send -- "R"; expect -re {TP64 PASS}; expect -re {>}
+  send -- "Q"; expect -re {B>}
+} elseif {$case eq "tp-failure"} {
+  send -- "TURBO\r"; expect -re {Include error messages}; send -- "Y"; expect -re {>}
+  send -- "W"; expect -re {Work file name:}; send -- "BAD\r"; expect -re {>}
+  send -- "C"
+  expect {
+    -re {Error} {send -- "\034"; expect eof; exit 0}
+    -re {error} {send -- "\034"; expect eof; exit 0}
+  }
+} elseif {$case eq "tp-8080"} {
+  send -- "TURBO\r"
+  expect {
+    -re {B>} {}
+    -re {HALT Op-Code} {expect eof; exit 0}
+    -re {trap} {expect eof; exit 0}
+    timeout {send -- "\034"; expect eof; exit 0}
+    eof {exit 0}
+  }
+} elseif {$case eq "f80-normal"} {
+  send -- "F80 =HELLO\r"; expect -re {B>}
+  send -- "L80 HELLO,FORLIB/S,HELLO/N/E\r"; expect -re {B>}
+  send -- "HELLO\r"; expect -re {F80-64 PASS}; expect -re {B>}
+} elseif {$case eq "f80-failure"} {
+  send -- "F80 =MISSING\r"
+  expect {
+    -re {File not found} {send -- "\034"; expect eof; exit 0}
+    -re {NO FILE} {send -- "\034"; expect eof; exit 0}
+    -re {ERROR} {send -- "\034"; expect eof; exit 0}
+    -re {Error} {send -- "\034"; expect eof; exit 0}
+  }
+}
+send -- "\034"
+expect eof

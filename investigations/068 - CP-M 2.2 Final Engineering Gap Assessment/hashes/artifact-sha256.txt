@@ -1,0 +1,21 @@
+386bcf75355a383d2cb2dbb27b119b1941bd0ac63e127d76592a0a94ffab6fc3  ./Investigation 068 - CP-M 2.2 Final Engineering Gap Assessment prompt.txt
+17a19f5e6ef04b9b4c8142e6ddc3e317487c077d5b01e41ba9e0cf7c6d93a1fe  ./Investigation 068 - CP-M 2.2 Final Engineering Gap Assessment.md
+d31da4f988eb7d01ec954631027781bb818a6ced52eb20bb6df061afa8db4d5c  ./hashes/closure-reports.sha256
+f6ff0291bb9b8f9099a70b84489561058d8ce5cba4c50420f0068efb08d68e8e  ./hashes/conformance-inputs.sha256
+96e6c5627bd4b6b67e535abcd473846e53e3205015edc72417e0c6046b1b5add  ./hashes/ledger-sha256-after.txt
+96e6c5627bd4b6b67e535abcd473846e53e3205015edc72417e0c6046b1b5add  ./hashes/ledger-sha256-before.txt
+d6af6f9e073b6a9b217e497b8f0216d00b2bd8eab7181efa5f26f8dae8b77c51  ./hashes/protected-after.sha256
+d6af6f9e073b6a9b217e497b8f0216d00b2bd8eab7181efa5f26f8dae8b77c51  ./hashes/protected-before.sha256
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./hashes/protected.diff
+b0b083c64a541e1ea24792d65bb9338bc1a08139358dd84377fca980f2ef846a  ./probes/README.txt
+0a9e97d33305388e182eee9159166aa87ccc994cc683248aefd0a7ba017a7065  ./probes/duplicate-ledger-audit.tsv
+29146248b9684bd50e30914fffa4df12cd3ee89ddf0e6c4ee8e79ca5c4399348  ./probes/final-readiness-matrix.tsv
+99dfdc6063ac41e1da8ec39f8952431663063fabd0bd7333cf4761befc7ee409  ./probes/i060-gap-closure.tsv
+e290874c852aabda9df173ea45a78e0f6a17c71f04dce591c34c5c6dd99bd974  ./probes/ledger-audit-summary.txt
+da29e4de39e5716ad5341106d8ffd79d020ceed34d11edcda53fd5a669d4b792  ./probes/ledger-entries.tsv
+80d2b2e74b01184a4fe138588b86259c2ee813185514406381d5aeddabf7ee2b  ./probes/policy-pending-inventory.tsv
+1b805533ec703d343c2015534c4a06c7699ca1a2b6707db1f91f780632ea680e  ./probes/release-conditions.tsv
+f18611a8bbef4ab40c52780962eb4fbe414288907de8bf1139d3816b64264b94  ./probes/validate068.sh
+ec206f19c0d994966801d247659b30656aaef34a6460ddd5db25f76a7aa55af4  ./probes/validation-output.txt
+c43094a5513598825ed27e2d64d193c03e9168779704bf135df4841f60a57251  ./reference/02 Compatibility Ledger - Investigation 067.txt
+3038c9bf1dbfbeb5930d2e1b980831f0d781b5f580b9df05b87660a7fad31e41  ./reference/03 Conformance Strategy.txt

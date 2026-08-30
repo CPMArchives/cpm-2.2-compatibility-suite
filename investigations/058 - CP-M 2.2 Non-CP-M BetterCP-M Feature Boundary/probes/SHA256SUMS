@@ -1,0 +1,17 @@
+159bf495008d176090229d84ec26a6242f8ef3084f595be1f666b1e48531d3a3  ./Investigation 058 - CP-M 2.2 Non-CP-M BetterCP-M Feature Boundary.md
+c02932bb98946b2c6f39d6382553efd2d58ea2b83aa6396f3dd24d450f846db4  ./probes/README.txt
+a74314906ffab7d3bfa1f54876bbd2d21659bc608b2d7b9206bff51dce504132  ./probes/delegation-boundaries.tsv
+0ebd30e00b37521ac746b903bfd2a25ceddcc2570579542a268833f10e1b5754  ./probes/extension-boundary-classifications.tsv
+af055aa6360087ef01a4664a7ce80966d1af731ccdbd642a93e435456c6021bd  ./probes/extension-constraint-map.tsv
+6cd7cd741ba9215488af7b2e35e7fe23373203605e39aee9b3ccbc00293ae078  ./probes/extension-constraint-summary.txt
+14351db8e91e0787fd3a5504d55a969b61d467fd058c62ac58eb7856b31cbe0e  ./probes/generate-extension-constraint-map.awk
+44291edbc1c0d3373562c7e6b07b3c78906f6079d0c300f8e92834dc327aae04  ./probes/ledger-sha256-after.txt
+44291edbc1c0d3373562c7e6b07b3c78906f6079d0c300f8e92834dc327aae04  ./probes/ledger-sha256-before.txt
+8de4dce688122ba50df3e8ce845b0a7f99706f3300bad955287baa8bcc6593d4  ./probes/personality-requirement-map.tsv
+f0884ff1a82f6dea31df5a5c72419a826d2a58e1d414c1d59e6c28e29ba7b334  ./probes/protected-files-audit.txt
+f7aecd5bb6681f4dfb0202e8adea0aab703595397f4c2567049bb446d73771c7  ./probes/regression-test-inventory.tsv
+ff5e2982d631812c978690398563e56541664f96e4231e115b278c7bbc82529a  ./probes/risk-preservation-matrix.tsv
+b1b50787a7df3ade105f83f0b40cbfdb4bb16e068a03bee17400ebf497a48d5a  ./probes/validate058.sh
+f7c1072a62f98f278ce5a4f8fd132a744b0ea928447191d9bed73ce5e88053f1  ./probes/validation-audit.txt
+d7676768ae75d4a6246100699e5856e9811b9c9dc765fbbdbb71a587a135aa1f  ./probes/validation-ownership.tsv
+0aa64f216acd8bb5fbff1adf88efbe8ab9d341ff189850f2005103a5e57ec62f  ./probes/validation-policy.txt

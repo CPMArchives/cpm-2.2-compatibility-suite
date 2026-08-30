@@ -1,0 +1,169 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:58:35 2026	Page 1
+Source file: FILEERR25.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; General logical failure matrix: missing Open/Close/Delete/Rename and duplicate Make.
+                       2      2         ORG 100H
+0100  11 bb 02         3      3         LD DE,DMA
+0103  0e 1a            4      4         LD C,26
+0105  cd 05 00         5      5         CALL 5
+0108  cd 87 01         6      6         CALL FILLDMA
+010b  11 4f 02         7      7         LD DE,MISS
+010e  0e 0f            8      8         LD C,15
+0110  cd 05 00         9      9         CALL 5
+0113  11 cb 01        10     10         LD DE,L_OPEN
+0116  cd 52 01        11     11         CALL SHOW
+0119  11 4f 02        12     12         LD DE,MISS
+011c  0e 10           13     13         LD C,16
+011e  cd 05 00        14     14         CALL 5
+0121  11 e4 01        15     15         LD DE,L_CLOSE
+0124  cd 52 01        16     16         CALL SHOW
+0127  11 4f 02        17     17         LD DE,MISS
+012a  0e 13           18     18         LD C,19
+012c  cd 05 00        19     19         CALL 5
+012f  11 fe 01        20     20         LD DE,L_DELETE
+0132  cd 52 01        21     21         CALL SHOW
+0135  11 73 02        22     22         LD DE,RENFCB
+0138  0e 17           23     23         LD C,23
+013a  cd 05 00        24     24         CALL 5
+013d  11 19 02        25     25         LD DE,L_RENAME
+0140  cd 5f 01        26     26         CALL SHOWREN
+0143  11 97 02        27     27         LD DE,DUPFCB
+0146  0e 16           28     28         LD C,22
+0148  cd 05 00        29     29         CALL 5
+014b  11 34 02        30     30         LD DE,L_DUP
+014e  cd 6c 01        31     31         CALL SHOWDUP
+0151  c9              32     32         RET
+0152  f5              33     33 SHOW:   PUSH AF
+0153  cd 92 01        34     34         CALL PSTR
+0156  f1              35     35         POP AF
+0157  cd af 01        36     36         CALL HEX
+015a  11 4f 02        37     37         LD DE,MISS
+015d  18 18           38     38         JR SDUMP
+015f  f5              39     39 SHOWREN:PUSH AF
+0160  cd 92 01        40     40         CALL PSTR
+0163  f1              41     41         POP AF
+0164  cd af 01        42     42         CALL HEX
+0167  11 73 02        43     43         LD DE,RENFCB
+016a  18 0b           44     44         JR SDUMP
+016c  f5              45     45 SHOWDUP:PUSH AF
+016d  cd 92 01        46     46         CALL PSTR
+0170  f1              47     47         POP AF
+0171  cd af 01        48     48         CALL HEX
+0174  11 97 02        49     49         LD DE,DUPFCB
+0177  01 24 00        50     50 SDUMP:  LD BC,36
+017a  cd 97 01        51     51         CALL DUMP
+017d  11 bb 02        52     52         LD DE,DMA
+0180  01 10 00        53     53         LD BC,16
+0183  cd 97 01        54     54         CALL DUMP
+0186  c9              55     55         RET
+0187  21 bb 02        56     56 FILLDMA:LD HL,DMA
+018a  06 80           57     57         LD B,128
+018c  36 aa           58     58 FD0:    LD (HL),0AAH
+018e  23              59     59         INC HL
+018f  10 fb           60     60         DJNZ FD0
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:58:35 2026	Page 2
+Source file: FILEERR25.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0191  c9              61     61         RET
+0192  0e 09           62     62 PSTR:   LD C,9
+0194  c3 05 00        63     63         JP 5
+0197  1a              64     64 DUMP:   LD A,(DE)
+0198  c5              65     65         PUSH BC
+0199  d5              66     66         PUSH DE
+019a  cd af 01        67     67         CALL HEX
+019d  d1              68     68         POP DE
+019e  c1              69     69         POP BC
+019f  13              70     70         INC DE
+01a0  0b              71     71         DEC BC
+01a1  78              72     72         LD A,B
+01a2  b1              73     73         OR C
+01a3  20 f2           74     74         JR NZ,DUMP
+01a5  1e 0d           75     75         LD E,13
+01a7  cd c3 01        76     76         CALL OUT
+01aa  1e 0a           77     77         LD E,10
+01ac  c3 c3 01        78     78         JP OUT
+01af  f5              79     79 HEX:    PUSH AF
+01b0  0f              80     80         RRCA
+01b1  0f              81     81         RRCA
+01b2  0f              82     82         RRCA
+01b3  0f              83     83         RRCA
+01b4  cd b8 01        84     84         CALL NIB
+01b7  f1              85     85         POP AF
+01b8  e6 0f           86     86 NIB:    AND 0FH
+01ba  c6 30           87     87         ADD A,'0'
+01bc  fe 3a           88     88         CP '9'+1
+01be  38 02           89     89         JR C,HOUT
+01c0  c6 07           90     90         ADD A,7
+01c2  5f              91     91 HOUT:   LD E,A
+01c3  c5              92     92 OUT:    PUSH BC
+01c4  0e 02           93     93         LD C,2
+01c6  cd 05 00        94     94         CALL 5
+01c9  c1              95     95         POP BC
+01ca  c9              96     96         RET
+01cb  4f 50 45 4e     97     97 L_OPEN: DB 'OPEN-MISSING RC/FCB/DMA=','$'
+01cf  2d 4d 49 53     97     98
+01d3  53 49 4e 47     97     99
+01d7  20 52 43 2f     97    100
+01db  46 43 42 2f     97    101
+01df  44 4d 41 3d     97    102
+01e3  24              97    103
+01e4  43 4c 4f 53     98    104 L_CLOSE:DB 'CLOSE-MISSING RC/FCB/DMA=','$'
+01e8  45 2d 4d 49     98    105
+01ec  53 53 49 4e     98    106
+01f0  47 20 52 43     98    107
+01f4  2f 46 43 42     98    108
+01f8  2f 44 4d 41     98    109
+01fc  3d 24           98    110
+01fe  44 45 4c 45     99    111 L_DELETE:DB 'DELETE-MISSING RC/FCB/DMA=','$'
+0202  54 45 2d 4d     99    112
+0206  49 53 53 49     99    113
+020a  4e 47 20 52     99    114
+020e  43 2f 46 43     99    115
+0212  42 2f 44 4d     99    116
+0216  41 3d 24        99    117
+0219  52 45 4e 41    100    118 L_RENAME:DB 'RENAME-MISSING RC/FCB/DMA=','$'
+021d  4d 45 2d 4d    100    119
+0221  49 53 53 49    100    120
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:58:35 2026	Page 3
+Source file: FILEERR25.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0225  4e 47 20 52    100    121
+0229  43 2f 46 43    100    122
+022d  42 2f 44 4d    100    123
+0231  41 3d 24       100    124
+0234  4d 41 4b 45    101    125 L_DUP:  DB 'MAKE-DUPLICATE RC/FCB/DMA=','$'
+0238  2d 44 55 50    101    126
+023c  4c 49 43 41    101    127
+0240  54 45 20 52    101    128
+0244  43 2f 46 43    101    129
+0248  42 2f 44 4d    101    130
+024c  41 3d 24       101    131
+024f  00 4d 49 53    102    132 MISS:   DB 0,'MISSING ','DAT',055H,066H,077H,088H
+0253  53 49 4e 47    102    133
+0257  20 44 41 54    102    134
+025b  55 66 77 88    102    135
+025f                 103    136         DS 16,099H
+026f  aa bb cc dd    104    137         DB 0AAH,0BBH,0CCH,0DDH
+0273  00 4d 49 53    105    138 RENFCB: DB 0,'MISSING ','DAT',0,0,0,0
+0277  53 49 4e 47    105    139
+027b  20 44 41 54    105    140
+027f  00 00 00 00    105    141
+0283  00 4e 45 57    106    142         DB 0,'NEWNAME ','DAT',0,0,0,0
+0287  4e 41 4d 45    106    143
+028b  20 44 41 54    106    144
+028f  00 00 00 00    106    145
+0293  00 00 00 00    107    146         DB 0,0,0,0
+0297  00 4f 4e 45    108    147 DUPFCB: DB 0,'ONE25   ','DAT',0,0,0,0
+029b  32 35 20 20    108    148
+029f  20 44 41 54    108    149
+02a3  00 00 00 00    108    150
+02a7                 109    151         DS 16
+02b7  00 00 00 00    110    152         DB 0,0,0,0
+02bb                 111    153 DMA:    DS 128
+033b                 112    154         END

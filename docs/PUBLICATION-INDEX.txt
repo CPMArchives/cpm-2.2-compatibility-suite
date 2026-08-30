@@ -1,0 +1,62 @@
+BETTERCP/M CP/M 2.2 COMPATIBILITY STANDARD 1.0-rc1
+PUBLICATION INDEX
+
+Publication base: /bettercpm/compatibility/releases/BetterCPM-CPM22-Compatibility-Standard-1.0-rc1/
+
+Start here
+  Path: README.txt
+  Role: informative
+
+Compatibility Standard
+  Path: standard/BetterCPM CP-M 2.2 Compatibility Standard 1.0-rc1.txt
+  Role: normative
+
+Compatibility Ledger
+  Path: ledger/02 Compatibility Ledger - Investigation 072.txt
+  Role: normative proposition authority
+
+Compatibility Policy
+  Path: policy/BetterCPM Compatibility Policy 1.0-rc1.txt
+  Role: normative
+
+Conformance Specification
+  Path: conformance/BetterCPM CP-M 2.2 Conformance Specification 1.0-rc1.txt
+  Role: normative
+
+Frozen conformance tables
+  Path: conformance/tables/
+  Role: normative directory
+
+Compatibility Profile Registry
+  Path: profiles/Compatibility Profile Registry 1.0-rc1.txt
+  Role: normative
+
+Profile registry table
+  Path: profiles/Compatibility Profile Registry 1.0-rc1.tsv
+  Role: normative
+
+Profile-case map
+  Path: profiles/profile-case-map.tsv
+  Role: normative
+
+Release manifest
+  Path: RELEASE-MANIFEST.tsv
+  Role: authoritative package inventory
+
+Release notes
+  Path: RELEASE-NOTES.txt
+  Role: informative
+
+Source map
+  Path: SOURCE-MAP.tsv
+  Role: reproduction metadata
+
+Validation report
+  Path: VALIDATION-REPORT.txt
+  Role: release engineering evidence
+
+Hash manifest
+  Path: PACKAGE-SHA256SUMS
+  Role: integrity metadata
+
+Historical Draft 0.1 documents and Ledgers 001-071 are not current RC1 authority and are not included as normative package content.

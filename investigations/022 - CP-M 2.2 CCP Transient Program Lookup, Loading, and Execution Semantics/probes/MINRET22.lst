@@ -1,0 +1,8 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sat Aug 15 20:55:25 2026	Page 1
+Source file: MINRET22.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1         ORG 0100H
+0100  c9               2      2         RET
+0101                   3      3         END

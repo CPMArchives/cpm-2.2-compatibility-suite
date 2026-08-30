@@ -1,0 +1,40 @@
+INVESTIGATION 037 COMPLETION AUDIT
+
+Project state
+  Authoritative ledger: 02 Compatibility Ledger - Investigation 036.txt
+  Baseline/current SHA-256:
+    92c35e831ed07d165cbffbf2fef1804c56e78e1fb529d56840bdd679c74f04eb
+  Last entry: 0601
+  Ledger writes: none
+
+Protected tree
+  2,261 pre-existing files recorded and verified.
+  Differences: none.
+
+Build verification
+  BDOS37.COM: byte-identical
+  STATE37.COM: byte-identical
+  REGISTER37.COM: byte-identical
+  DMA37.COM: byte-identical
+  ERROR37.COM: byte-identical
+
+Experiment verification
+  Deterministic harness: PASS
+  Functions 0-40 accounted for in function-coverage.txt: PASS
+  Function 40 normal/boundary/zero-fill/overflow/full cases: PASS
+  State, register, DMA, malformed-FCB and logical failure checks: PASS
+  Before/after A and B images preserved with expected changes: PASS
+  The full-B terminal endpoint occurred only after return code 02 was captured.
+
+Artifacts
+  Report sections 1-18: present
+  Five required named source and binary probes: present
+  Coverage map, README, observed output, transcript, disk images, directory
+  listings, references, scripts and hashes: present
+  ZIP archives created: none
+
+Incomplete/future cases
+  Function 40 under explicit file/disk write protection remains an isolated
+  cross-product test recommended by Investigation 014. It is not claimed here.
+  Function 37 and selector-extension choices remain policy questions.
+

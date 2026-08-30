@@ -1,0 +1,6 @@
+result	meaning	aggregation
+PASS	Exact applicable oracle satisfied with complete evidence.	Contributes to parent PASS.
+FAIL	Candidate observation contradicts an applicable oracle.	Fails parent and every certification claim gated by the case.
+BLOCKED	A prerequisite, fixture, authority, profile provider, or required artifact is unavailable.	Prevents parent PASS and certification; never converted to PASS.
+NOT_APPLICABLE	Profile or optional case is outside the declared claim.	Excluded only when manifest proves non-applicability.
+ERROR	Runner/framework execution failed before a valid product observation.	Prevents parent PASS; classify and rerun after repair.

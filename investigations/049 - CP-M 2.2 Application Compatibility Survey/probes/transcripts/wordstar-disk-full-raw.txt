@@ -1,0 +1,76 @@
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+Mostek AID-80F and SYS-80FT Emulator Release 1.1
+by Mike Douglas
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Drive 0: CPM/system.dsk
+Drive 1: CPM/wordstar.dsk
+Drive 2: CPM/games.dsk
+
+Boot ROM: MostekROM.bin
+
+Loader statistics for file <local-workspace>/g-p-6a682f002be881918281554d644daf48/stage049/work/roms/MostekROM.bin:
+START : E000H
+END   : EFFFH
+PC    : E000H
+LOADED: 1000H (4096)
+
+Type CTRL-\ to halt emulation
+
+
+
+56K CP/M 2.2 Ver 1.1
+ for Mostek AID-80F
+
+A>b:
+B>ws
+6Y7 Y7 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Y"   MicroPro WordStar  release 3.00  serial # WT9720FZ      
+  COPYRIGHT (C) 1981  MicroPro International Corporation  
+
+             Adds Regent 20/25                
+             Teletype-like printer            
+             No communications protocol       
+             CP/M List Output driver (LST:)   
+Y!                  < < <  N O - F I L E   M E N U  > > >                     Y"    ---Preliminary  Commands---   | --File  Commands-- | -System  Commands- Y#  L  Changed logged disk drive    |                    |  R  Run a program  Y$  F  File directory    on (OFF)   |  P  Print a file   |  X  EXIT to system Y%  H  Set help level               |                    |                    Y&   ---Commands to open a file---  |  E  RENAME a file  | -WordStar Options- Y'     D  Open a  document  file    |  O  COPY   a file  |  M  Run MailMerge  Y(     N  Open a non-document file  |  Y  DELETE a file  |  S  Run SpellStar   Y) Y(lY  dY! Y!1KY"     NAME OF FILE TO EDIT? KY# Y#!KY$ Y":Y# Y":FY +editing no fileY$!KY%!KY&"KY'$KY($KY";ULL49.TXTY# Y$ Y# Y$ NEW FILEY% Y& Y   Y! Y!o.Y! Y"$                                                                           .Y#o.Y$                                                                                .Y" DISK CAPACITY FAILURE TESTY  ^KxY )   WAIT  Y 3KY! Y #Y! Y!oKY"     SAVING KY# Y#oKY$ Y"+FILE B:FULL49.TXTY# Y$ Y"<Y$ DISK CAPACITY FAILURE TESTY% DISK CAPACITY FAILURE TEST                                                     .Y&o.Y'o.Y(o.Y)o.Y*o.Y+o.Y,o.Y-o.Y.o.Y/o.Y0o.Y1o.Y2o.Y3o.Y4o.Y5o.Y6o.Y )B:FULL49.TXT  PAGE 1 LINE 1 COL 27Y$ L----!----!----!----!----!----!----!----!----!----!----!--------R               Y"<Y )   WAIT  KY! Y"<Y$ KY% *** ERROR E12: DISK FULL^G^G^G ***S
+User Interrupt at 0xdb06
+I/O ran for 3052 ms, waited for 0 ms
+CPU executed 126548668 t-states in 108 ms
+clock frequency = 1170.69 MHz
+
+PC   A  SZHPNC I  R  IFF BC   DE   HL   A'F' B'C' D'E' H'L' IX   IY   SP
+db06 53 101000 00 19 11  0053 26d2 da0c 5c03 0000 0002 e9db 3012 dc12 340b
+>>> q

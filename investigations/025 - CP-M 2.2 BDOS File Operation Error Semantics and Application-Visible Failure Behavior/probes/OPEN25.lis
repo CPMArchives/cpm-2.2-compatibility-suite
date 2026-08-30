@@ -1,0 +1,118 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:32:04 2026	Page 1
+Source file: OPEN25.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Missing, wrong-user, wildcard, and unavailable/invalid drive Open behavior.
+                       2      2 ; Argument N performs returning cases; C uses drive code 3; I uses drive 17.
+                       3      3         ORG 100H
+0100  3a 82 00         4      4         LD A,(0082H)
+0103  fe 43            5      5         CP 'C'
+0105  28 2f            6      6         JR Z,DRIVEC
+0107  fe 49            7      7         CP 'I'
+0109  28 3a            8      8         JR Z,DRIVEI
+010b  11 d4 01         9      9         LD DE,MISS
+010e  0e 0f           10     10         LD C,15
+0110  cd 05 00        11     11         CALL 5
+0113  11 81 01        12     12         LD DE,L_MISS
+0116  cd 54 01        13     13         CALL SHOW
+0119  11 f8 01        14     14         LD DE,USER1
+011c  0e 0f           15     15         LD C,15
+011e  cd 05 00        16     16         CALL 5
+0121  11 8f 01        17     17         LD DE,L_USER
+0124  cd 54 01        18     18         CALL SHOW
+0127  11 1c 02        19     19         LD DE,WILD
+012a  0e 0f           20     20         LD C,15
+012c  cd 05 00        21     21         CALL 5
+012f  11 ab 01        22     22         LD DE,L_WILD
+0132  cd 54 01        23     23         CALL SHOW
+0135  c9              24     24         RET
+0136  11 40 02        25     25 DRIVEC: LD DE,CFILE
+0139  0e 0f           26     26         LD C,15
+013b  cd 05 00        27     27         CALL 5
+013e  11 ba 01        28     28         LD DE,L_RET
+0141  cd 54 01        29     29         CALL SHOW
+0144  c9              30     30         RET
+0145  11 64 02        31     31 DRIVEI: LD DE,IFILE
+0148  0e 0f           32     32         LD C,15
+014a  cd 05 00        33     33         CALL 5
+014d  11 ba 01        34     34         LD DE,L_RET
+0150  cd 54 01        35     35         CALL SHOW
+0153  c9              36     36         RET
+0154  f5              37     37 SHOW:   PUSH AF
+0155  0e 09           38     38         LD C,9
+0157  cd 05 00        39     39         CALL 5
+015a  f1              40     40         POP AF
+015b  cd 68 01        41     41         CALL HEX
+015e  1e 0d           42     42         LD E,13
+0160  cd 7c 01        43     43         CALL OUT
+0163  1e 0a           44     44         LD E,10
+0165  c3 7c 01        45     45         JP OUT
+0168  f5              46     46 HEX:    PUSH AF
+0169  0f              47     47         RRCA
+016a  0f              48     48         RRCA
+016b  0f              49     49         RRCA
+016c  0f              50     50         RRCA
+016d  cd 71 01        51     51         CALL NIB
+0170  f1              52     52         POP AF
+0171  e6 0f           53     53 NIB:    AND 0FH
+0173  c6 30           54     54         ADD A,'0'
+0175  fe 3a           55     55         CP '9'+1
+0177  38 02           56     56         JR C,HOUT
+0179  c6 07           57     57         ADD A,7
+017b  5f              58     58 HOUT:   LD E,A
+017c  0e 02           59     59 OUT:    LD C,2
+017e  c3 05 00        60     60         JP 5
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:32:04 2026	Page 2
+Source file: OPEN25.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0181  4f 50 45 4e     61     61 L_MISS: DB 'OPEN MISSING=','$'
+0185  20 4d 49 53     61     62
+0189  53 49 4e 47     61     63
+018d  3d 24           61     64
+018f  4f 50 45 4e     62     65 L_USER: DB 'OPEN USER1-FILE FROM USER0=','$'
+0193  20 55 53 45     62     66
+0197  52 31 2d 46     62     67
+019b  49 4c 45 20     62     68
+019f  46 52 4f 4d     62     69
+01a3  20 55 53 45     62     70
+01a7  52 30 3d 24     62     71
+01ab  4f 50 45 4e     63     72 L_WILD: DB 'OPEN WILDCARD=','$'
+01af  20 57 49 4c     63     73
+01b3  44 43 41 52     63     74
+01b7  44 3d 24        63     75
+01ba  55 4e 45 58     64     76 L_RET:  DB 'UNEXPECTED NORMAL RETURN=','$'
+01be  50 45 43 54     64     77
+01c2  45 44 20 4e     64     78
+01c6  4f 52 4d 41     64     79
+01ca  4c 20 52 45     64     80
+01ce  54 55 52 4e     64     81
+01d2  3d 24           64     82
+01d4  00 4d 49 53     65     83 MISS:   DB 0,'MISSING ','DAT',0,0,0,0
+01d8  53 49 4e 47     65     84
+01dc  20 44 41 54     65     85
+01e0  00 00 00 00     65     86
+01e4                  66     87         DS 20
+01f8  00 55 53 45     67     88 USER1:  DB 0,'USER1   ','DAT',0,0,0,0
+01fc  52 31 20 20     67     89
+0200  20 44 41 54     67     90
+0204  00 00 00 00     67     91
+0208                  68     92         DS 20
+021c  00 4f 4e 45     69     93 WILD:   DB 0,'ONE?5   ','DAT',0,0,0,0
+0220  3f 35 20 20     69     94
+0224  20 44 41 54     69     95
+0228  00 00 00 00     69     96
+022c                  70     97         DS 20
+0240  03 4f 4e 45     71     98 CFILE:  DB 3,'ONE25   ','DAT',0,0,0,0
+0244  32 35 20 20     71     99
+0248  20 44 41 54     71    100
+024c  00 00 00 00     71    101
+0250                  72    102         DS 20
+0264  11 4f 4e 45     73    103 IFILE:  DB 17,'ONE25   ','DAT',0,0,0,0
+0268  32 35 20 20     73    104
+026c  20 44 41 54     73    105
+0270  00 00 00 00     73    106
+0274                  74    107         DS 20
+0288                  75    108         END

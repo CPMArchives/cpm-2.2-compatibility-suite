@@ -1,0 +1,8 @@
+318 Expose required CP/M BDOS call/state/service semantics
+109 Personality non-guarantee: do not publish one stable result
+50 Profile-gated CP/M-visible obligation if selected
+48 Excluded from CP/M personality contract
+43 Expose required CP/M CPU/memory/entry/lifecycle view
+38 Expose required CP/M command-environment behavior
+27 Expose required CP/M BIOS ABI and configured structures
+19 Expose required CP/M result/recovery boundary

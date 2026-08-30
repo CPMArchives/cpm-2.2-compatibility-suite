@@ -1,0 +1,89 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set timeout 90
+log_file -noappend $logfile
+spawn cpmsim -z -d $diskdir
+expect "A>"
+
+# Absolute assembler -> Intel HEX -> loader -> one-record COM.
+send "ASM B:ABS48\r"
+expect "A>"
+send "LOAD B:ABS48\r"
+expect "A>"
+send "B:ABS48\r"
+expect "ABS48 OK"
+expect "A>"
+
+# Macro expansion -> HEX -> COM.
+send "MAC B:MACRO48\r"
+expect "A>"
+send "LOAD B:MACRO48\r"
+expect "A>"
+send "B:MACRO48\r"
+expect "MACRO48 OK"
+expect "A>"
+
+# Two relocatable modules, external resolution, link map, COM execution.
+send "RMAC B:MAIN48\r"
+expect "A>"
+send "RMAC B:MSG48\r"
+expect "A>"
+send "LINK B:DEV48=B:MAIN48,B:MSG48\r"
+expect "A>"
+send "B:DEV48\r"
+expect "TOOL48 OK"
+expect "A>"
+
+# Multi-record generated executable boundary.
+send "RMAC B:BIG48\r"
+expect "A>"
+send "LINK B:BIG48=B:BIG48\r"
+expect "A>"
+send "STAT B:BIG48.COM\r"
+expect "A>"
+send "B:BIG48\r"
+expect "BIG48 OK"
+expect "A>"
+
+# Unresolved external: diagnostic and clean return to the CCP.
+send "RMAC B:BAD48\r"
+expect "A>"
+send "LINK B:BADOUT=B:BAD48\r"
+expect "UNDEFINED SYMBOLS"
+expect "A>"
+
+# DDT loads the linked COM, displays it, executes it, then uses G0 restart.
+send "DDT B:DEV48.COM\r"
+expect -- "-"
+send "D100,116\r"
+expect -- "-"
+send "G100,0103\r"
+expect "TOOL48 OK"
+expect -- "-"
+send "G0\r"
+expect "A>"
+
+# SID repeats debugger execution and programmed restart.
+send "SID B:DEV48.COM\r"
+expect -- "#"
+send "D100,116\r"
+expect -- "#"
+send "G100,0103\r"
+expect "TOOL48 OK"
+expect -- "#"
+send "G0\r"
+expect "A>"
+
+# Standard batch command acquisition drives a complete relocatable rebuild.
+send "SUBMIT BUILD48\r"
+expect "TOOL48 OK"
+expect "A>"
+
+# A locally supplied Hi-Tech-C-generated program is runtime-only evidence.
+send "B:SPEED\r"
+expect "CPU speed is unlimited"
+expect "A>"
+
+send "\034"
+expect eof

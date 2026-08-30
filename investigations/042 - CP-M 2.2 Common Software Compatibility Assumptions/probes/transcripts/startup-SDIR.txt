@@ -1,0 +1,53 @@
+spawn cpmsim -z -d <local-workspace>/g-p-6a682f002be881918281554d644daf48/stage042/probes/case
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>SDIR
+
+Directory For Drive A:  User  0
+
+    Name     Bytes   Recs   Attributes      Name     Bytes   Recs   Attributes 
+------------ ------ ------ ------------ ------------ ------ ------ ------------
+         HEX     0k      0 Dir RW                PRN     0k      0 Dir RW      
+ASM      COM     8k     64 Dir RW       BYE      COM     1k      1 Dir RW      
+CLS      COM     1k      1 Dir RW       CREF80   COM     4k     32 Dir RW      
+DDT      COM     5k     38 Dir RW       DUMP     COM     1k      3 Dir RW      
+ED       COM     7k     52 Dir RW       HIST     COM     3k     21 Dir RW      
+HIST     UTL     2k     10 Dir RW       IN42     COM     1k      2 Dir RW      
+L80      COM    11k     84 Dir RW       LIB      COM     7k     56 Dir RW      
+LIB80    COM     5k     37 Dir RW       LINK     COM    16k    122 Dir RW      
+LOAD     COM     2k     14 Dir RW       M80      COM    20k    157 Dir RW      
+MAC      COM    12k     92 Dir RW       MOVCPM   COM    10k     76 Dir RW      
+PIP      COM     8k     58 Dir RW       RESET    COM     1k      1 Dir RW      
+RMAC     COM    14k    106 Dir RW       RUN42    SUB     1k      1 Dir RW      
+SDIR     COM    15k    119 Dir RW       SID      COM     8k     61 Dir RW      
+SLRNK    COM     9k     68 Dir RW       STAT     COM     5k     40 Dir RW      
+SUBMIT   COM     2k     10 Dir RW       SYSGEN   COM     1k      8 Dir RW      
+TEST     COM     1k      1 Dir RW       TRACE    UTL     2k      9 Dir RW      
+WM       COM    11k     82 Dir RW       WM       HLP     3k     23 Dir RW      
+XSUB     COM     1k      6 Dir RW       Z80ASM   COM    25k    193 Dir RW      
+ZSID     COM    10k     80 Dir RW      
+
+Total Bytes     =    233k  Total Records =    1728  Files Found =   37
+Total 1k Blocks =    233   Used/Max Dir Entries For Drive A:   39/  64
+
+A>[0;31mE (21981) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 1045 ms, waited for 0 ms
+CPU executed 7236094 t-states in 5 ms
+Clock frequency 1341.50 MHz

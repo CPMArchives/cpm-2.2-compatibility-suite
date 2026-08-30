@@ -1,0 +1,24 @@
+#!/usr/bin/expect -f
+set timeout 30
+if {$argc != 4} {
+    puts stderr "usage: run061-single.exp RUN_DIRECTORY IMPLEMENTATION COMMAND TRANSCRIPT"
+    exit 2
+}
+set rundir [lindex $argv 0]
+set impl [lindex $argv 1]
+set command [lindex $argv 2]
+set transcript [lindex $argv 3]
+log_file -noappend $transcript
+cd $rundir
+spawn /tmp/i061-z80pack/cromemcosim/cromemcosim -M1 -R
+if {$impl eq "dri"} {
+    expect -re {\r\nA>}
+    set prompt {\r\nA>}
+} else {
+    expect -re {\r\nA\.}
+    set prompt {\r\nA\.}
+}
+send -- "$command\r"
+expect -re $prompt
+send -- "\034"
+expect eof

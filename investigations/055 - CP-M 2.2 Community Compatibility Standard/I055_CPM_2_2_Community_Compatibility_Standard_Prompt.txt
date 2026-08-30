@@ -1,0 +1,285 @@
+Investigation 055 — CP/M 2.2 Community Compatibility Standard Prompt
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 054 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation 054.
+
+Create Investigation 055 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports or artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Determine the practical CP/M 2.2 compatibility standard required for
+compatibility with the historical CP/M community software ecosystem.
+
+Previous investigations established:
+
+- documented CP/M behavior;
+- Digital Research implementation behavior;
+- utility compatibility;
+- development tool compatibility;
+- application compatibility;
+- communications compatibility;
+- hardware compatibility boundaries;
+- regression testing requirements;
+- software corpus validation;
+- undocumented behavior classification.
+
+Investigation 055 consolidates those findings into a practical
+compatibility standard.
+
+Determine:
+
+- which behaviors define practical CP/M 2.2 compatibility;
+- which behaviors are optional or policy-dependent;
+- which behaviors should not be required;
+- what conformance categories should exist.
+
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+- documented CP/M 2.2 behavior;
+- Digital Research implementation behavior;
+- common CP/M programming practices;
+- historically significant software dependencies.
+
+The objective is compatibility with the practical CP/M software
+ecosystem.
+
+Do not define BetterCP/M architecture.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Review completed investigations through Investigation 054.
+
+Pay particular attention to:
+
+Investigation 046:
+    Compatibility Boundary Closure and Remaining Gap Analysis.
+
+Investigation 052:
+    Compatibility Regression Test Specification.
+
+Investigation 053:
+    Software Corpus Validation.
+
+Investigation 054:
+    Undocumented Behavior Validation.
+
+
+SCOPE
+
+Investigate:
+
+- compatibility requirement consolidation;
+- conformance categories;
+- required behaviors;
+- optional behaviors;
+- excluded behaviors;
+- evidence traceability.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- BetterCP/M architecture;
+- implementation decisions;
+- future features;
+- unsupported CP/M versions.
+
+
+INVESTIGATION QUESTIONS
+
+
+1. COMPATIBILITY REQUIREMENT CONSOLIDATION
+
+Determine:
+
+- which Compatibility Ledger entries define the CP/M 2.2 contract;
+- which requirements are fundamental;
+- which requirements are ecosystem-driven.
+
+
+2. CONFORMANCE CATEGORIES
+
+Define possible classifications:
+
+- required compatibility;
+- optional compatibility;
+- hardware-profile compatibility;
+- unsupported behavior.
+
+Determine the evidence supporting each category.
+
+
+3. SOFTWARE ECOSYSTEM COMPATIBILITY
+
+Determine:
+
+- whether the current compatibility model explains observed software
+  behavior;
+- whether important software categories remain uncovered.
+
+
+4. DOCUMENTED VERSUS PRACTICAL STANDARD
+
+Determine:
+
+- where documented behavior is sufficient;
+- where Digital Research behavior matters;
+- where community practice establishes expectations.
+
+
+5. UNDOCUMENTED BEHAVIOR POLICY
+
+Determine:
+
+- which undocumented behaviors should be preserved;
+- which should remain unspecified;
+- which should be excluded.
+
+
+6. VALIDATION REQUIREMENTS
+
+Determine:
+
+- how compatibility claims map to regression tests;
+- what evidence is required for conformance claims.
+
+
+7. EXPERIMENTAL REQUIREMENTS
+
+Create a compatibility standard review.
+
+Each conclusion must include:
+
+- requirement;
+- evidence source;
+- compatibility classification;
+- validation method.
+
+
+EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+    documented behavior.
+
+B:
+    Digital Research implementation behavior.
+
+I:
+    experimental observation.
+
+D:
+    unresolved policy.
+
+
+Ledger evidence must identify:
+
+I055
+STANDARD
+CONFORMANCE
+COMPATIBILITY
+subsystem
+IG
+AG
+
+
+COMPATIBILITY CLASSIFICATION
+
+Classify findings:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Do not require:
+
+- private implementation details;
+- undocumented behavior without evidence;
+- internal algorithms;
+- behavior invisible to applications.
+
+
+LEDGER REVIEW
+
+Review affected Compatibility Ledger entries.
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+Do not modify the ledger directly.
+
+
+REPORT STRUCTURE
+
+Create:
+
+Investigation 055 - CP/M 2.2 Community Compatibility Standard.md
+
+Include:
+
+1. Objective and scope
+2. Compatibility standard
+3. Relationship to previous investigations
+4. Compatibility requirement consolidation
+5. Conformance categories
+6. Software ecosystem analysis
+7. Documented versus practical standard analysis
+8. Undocumented behavior policy
+9. Validation requirements
+10. Compatibility conclusions
+11. Proposed ledger additions
+12. Existing-entry updates
+13. Open questions
+14. Conformance implications
+
+
+FINAL REVIEW
+
+Before completing the investigation, verify:
+
+- compatibility requirements are evidence-based;
+- practical ecosystem requirements are separated from implementation
+  details;
+- unsupported assumptions are removed;
+- conformance categories are clearly defined.
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M architecture.
+
+Do not replace CP/M semantics with modern abstractions.
+
+Determine the CP/M 2.2 community compatibility standard only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

@@ -1,0 +1,32 @@
+Investigation 023 deterministic command corpus
+==============================================
+
+Main matrix:
+
+  ENTRY23
+  ENTRY23 ARG
+  ENTRY23 ARG1 ARG2
+  entry23 lower Mixed.txt 9-z_?
+  ENTRY23 filename.ext
+  ENTRY23 ABCDEFGHIJK.XYZ
+  ENTRY23   ARG
+  ENTRY23 SHORT.T X:ABCDEFGH.XYZ
+  ENTRY23 A*.T?T B:???.*
+  BIG23 ARG
+  B:ENTRY23
+  B:ENTRY23 ARG
+  USER 1
+  B:STATE22 BEFORE-USER1-ENTRY
+  ENTRY23 USERONE B:SECOND.DAT
+  USER 0
+  B:
+  ENTRY23 ONE TWO
+  ENTRY23 A:ONE B:TWO
+  A:
+
+Maximum/capacity matrix:
+
+  T <125 As>   (127 total input bytes; 126-byte tail)
+  T <126 Bs>   (128th input-byte attempt)
+
+Both harnesses wait for prompts and send all input deterministically.

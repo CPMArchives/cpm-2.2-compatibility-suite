@@ -1,0 +1,10 @@
+#!/usr/bin/expect -f
+set timeout 30
+log_user 1
+log_file -noappend observed-raw.txt
+spawn cpmsim -z -d /private/tmp/inv013-disk
+expect "A>"
+send "RAND013\r"
+expect "A>"
+send "\034"
+expect eof

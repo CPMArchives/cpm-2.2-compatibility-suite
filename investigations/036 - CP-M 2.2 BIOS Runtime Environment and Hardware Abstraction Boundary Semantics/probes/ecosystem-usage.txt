@@ -1,0 +1,25 @@
+LOCAL CORPUS: DIRECT BIOS / SYSTEM-BOUNDARY USAGE
+
+DRI SYSGEN.ASM
+  Defines SELDSK through WRITE as offsets relative to the page-zero WBOOT
+  target. At runtime it reads that target, adds the required offset, and jumps
+  directly to BIOS disk entries. This is primary source evidence that direct
+  BIOS disk access is required for at least DRI system-generation software.
+
+DRI XSUB1.ASM
+  Reads and temporarily replaces the WBOOT vector operand, restores it later,
+  and manages DMA through BDOS. This demonstrates historical system utility
+  dependence on documented page-zero/system conventions, while also showing
+  that vector mutation is specialized and must be restored.
+
+CP/M 2.2 Alteration Guide
+  States that PIP may use LIST, PUNCH, and READER even though BDOS does not need
+  them, and that LISTST was used by DESPOOL. This is documentary evidence of
+  direct optional-device consumers.
+
+Evidence limit
+  No quantitative third-party program survey was available locally. Debugger,
+  disk-tool, communications, and diagnostic categories are compatibility-risk
+  categories, not quantified prevalence claims. Vendor-private access requires
+  a named machine profile or additional preserved-software evidence.
+

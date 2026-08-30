@@ -1,0 +1,23 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set timeout 45
+log_file -noappend $logfile
+spawn cpmsim -z -d $diskdir
+proc cmd {s} { expect ">"; send -- "$s\r" }
+cmd "LOAD22"
+cmd "MINRET22"
+cmd "PART22"
+cmd "MAXOK"
+cmd "BOUND"
+cmd "WHO22"
+cmd "USER 1"
+cmd "WHO22"
+cmd "ONLY0"
+cmd "B:WHO22"
+cmd "USER 0"
+cmd "B:WHO22"
+cmd "NOFILE22"
+expect ">"
+send "\034"
+expect eof

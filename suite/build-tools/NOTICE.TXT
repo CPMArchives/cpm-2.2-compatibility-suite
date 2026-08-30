@@ -1,0 +1,20 @@
+THIRD-PARTY TOOL NOTICES
+
+ZSM4.COM
+Copyright (C) 2017-2023 Hector Peraza.
+Licensed under GNU GPL version 2 or, at your option, any later version.
+Corresponding source and the complete license are in the host distribution
+under suite/build-tools/zsm4-source.
+
+CRUNCH.COM and UNCR.COM
+Copyright (c) Steven Greenberg, 15 September 1987.
+The programs state: "May be reproduced for non-profit use only."
+This is not permission for unrestricted commercial redistribution.
+
+LINK.COM
+LINK 1.3, Copyright (C) 1980 Digital Research.
+The host distribution records its provenance and the nonexclusive CP/M
+redistribution grant clarified on 9 July 2022.
+
+See THIRD-PARTY-NOTICES.md in the host distribution for exact hashes,
+upstream locations, complete attribution, and redistribution details.

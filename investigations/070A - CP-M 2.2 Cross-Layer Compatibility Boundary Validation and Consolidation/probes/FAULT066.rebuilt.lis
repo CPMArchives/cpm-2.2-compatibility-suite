@@ -1,0 +1,447 @@
+Z80/8080-Macro-Assembler  Release 2.1	Wed Aug 19 15:40:13 2026	Page 1
+Source file: FAULT066.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Investigation 015 controlled physical disk-error probe
+                       2      2 ; Custom emulator port 18: OUT 1 fails next physical read, OUT 2 next write.
+                       3      3 	ORG 0100H
+0100                   4      4 START:
+0100  31 c6 05         5      5 	LD SP,STACKTOP
+0103  3a 80 00         6      6 	LD A,(0080H)
+0106  b7               7      7 	OR A
+0107  28 41            8      8 	JR Z,MODE_N
+0109  3a 82 00         9      9 	LD A,(0082H)
+010c  e6 5f           10     10 	AND 05FH
+010e  fe 41           11     11 	CP 'A'
+0110  ca 66 01        12     12 	JP Z,MODE_A
+0113  fe 42           13     13 	CP 'B'
+0115  ca 8f 01        14     14 	JP Z,MODE_B
+0118  fe 43           15     15 	CP 'C'
+011a  ca be 01        16     16 	JP Z,MODE_C
+011d  fe 44           17     17 	CP 'D'
+011f  ca 28 02        18     18 	JP Z,MODE_D
+0122  fe 45           19     19 	CP 'E'
+0124  ca 57 02        20     20 	JP Z,MODE_E
+0127  fe 46           21     21 	CP 'F'
+0129  ca 77 02        22     22 	JP Z,MODE_F
+012c  fe 47           23     23 	CP 'G'
+012e  ca 6a 01        24     24 	JP Z,MODE_G
+0131  fe 48           25     25 	CP 'H'
+0133  ca c2 01        26     26 	JP Z,MODE_H
+0136  fe 49           27     27 	CP 'I'
+0138  ca a4 02        28     28 	JP Z,MODE_I
+013b  fe 4a           29     29 	CP 'J'
+013d  ca c5 02        30     30 	JP Z,MODE_J
+0140  fe 50           31     31 	CP 'P'
+0142  ca e7 01        32     32 	JP Z,MODE_P
+0145  fe 55           33     33 	CP 'U'
+0147  ca 0c 02        34     34 	JP Z,MODE_U
+                      35     35
+                      36     36 ; Normal sequential-read control, no injected fault.
+014a                  37     37 MODE_N:
+014a  3e 4e           38     38 	LD A,'N'
+014c  cd 8a 03        39     39 	CALL CASEHEAD
+014f  21 d9 03        40     40 	LD HL,FREAD
+0152  cd 0e 03        41     41 	CALL OPENFCB
+0155  3e ee           42     42 	LD A,0EEH
+0157  cd 38 03        43     43 	CALL FILLBUF
+015a  0e 14           44     44 	LD C,20
+015c  cd 1b 03        45     45 	CALL CALLFCB
+015f  11 27 04        46     46 	LD DE,LRETURNED
+0162  cd 4a 03        47     47 	CALL REPORT
+0165  c9              48     48 	RET
+                      49     49
+                      50     50 ; A/G: sequential physical read failure. G receives ^C at handler.
+0166                  51     51 MODE_A:
+0166  3e 41           52     52 	LD A,'A'
+0168  18 02           53     53 	JR SEQREADFAIL
+016a                  54     54 MODE_G:
+016a  3e 47           55     55 	LD A,'G'
+016c                  56     56 SEQREADFAIL:
+016c  cd 8a 03        57     57 	CALL CASEHEAD
+016f  21 d9 03        58     58 	LD HL,FREAD
+0172  cd 0e 03        59     59 	CALL OPENFCB
+0175  3e ee           60     60 	LD A,0EEH
+Z80/8080-Macro-Assembler  Release 2.1	Wed Aug 19 15:40:13 2026	Page 2
+Source file: FAULT066.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0177  cd 38 03        61     61 	CALL FILLBUF
+017a  11 1f 04        62     62 	LD DE,LBEFORE
+017d  cd 4a 03        63     63 	CALL REPORT
+0180  cd ed 02        64     64 	CALL ARMREAD
+0183  0e 14           65     65 	LD C,20
+0185  cd 1b 03        66     66 	CALL CALLFCB
+0188  11 27 04        67     67 	LD DE,LRETURNED
+018b  cd 4a 03        68     68 	CALL REPORT
+018e  c9              69     69 	RET
+                      70     70
+                      71     71 ; B: random physical read failure at record zero.
+018f                  72     72 MODE_B:
+018f  3e 42           73     73 	LD A,'B'
+0191  cd 8a 03        74     74 	CALL CASEHEAD
+0194  21 d9 03        75     75 	LD HL,FREAD
+0197  cd 0e 03        76     76 	CALL OPENFCB
+019a  af              77     77 	XOR A
+019b  32 83 04        78     78 	LD (FCB+33),A
+019e  32 84 04        79     79 	LD (FCB+34),A
+01a1  32 85 04        80     80 	LD (FCB+35),A
+01a4  3e ee           81     81 	LD A,0EEH
+01a6  cd 38 03        82     82 	CALL FILLBUF
+01a9  11 1f 04        83     83 	LD DE,LBEFORE
+01ac  cd 4a 03        84     84 	CALL REPORT
+01af  cd ed 02        85     85 	CALL ARMREAD
+01b2  0e 21           86     86 	LD C,33
+01b4  cd 1b 03        87     87 	CALL CALLFCB
+01b7  11 27 04        88     88 	LD DE,LRETURNED
+01ba  cd 4a 03        89     89 	CALL REPORT
+01bd  c9              90     90 	RET
+                      91     91
+                      92     92 ; C/H: sequential physical write failure. H receives ^C at handler.
+01be                  93     93 MODE_C:
+01be  3e 43           94     94 	LD A,'C'
+01c0  18 02           95     95 	JR SEQWRITEFAIL
+01c2                  96     96 MODE_H:
+01c2  3e 48           97     97 	LD A,'H'
+01c4                  98     98 SEQWRITEFAIL:
+01c4  cd 8a 03        99     99 	CALL CASEHEAD
+01c7  21 e9 03       100    100 	LD HL,FWRITE
+01ca  cd 0e 03       101    101 	CALL OPENFCB
+01cd  3e 53          102    102 	LD A,'S'
+01cf  cd 38 03       103    103 	CALL FILLBUF
+01d2  11 1f 04       104    104 	LD DE,LBEFORE
+01d5  cd 4a 03       105    105 	CALL REPORT
+01d8  cd f8 02       106    106 	CALL ARMWRITE
+01db  0e 15          107    107 	LD C,21
+01dd  cd 1b 03       108    108 	CALL CALLFCB
+01e0  11 27 04       109    109 	LD DE,LRETURNED
+01e3  cd 4a 03       110    110 	CALL REPORT
+01e6  c9             111    111 	RET
+                     112    112
+                     113    113 ; P: the isolated I066 emulator writes the selected physical sector and then
+                     114    114 ; reports a physical error. This models an acknowledged partial-completion
+                     115    115 ; boundary without claiming a particular controller algorithm.
+01e7                 116    116 MODE_P:
+01e7  3e 50          117    117 	LD A,'P'
+01e9  cd 8a 03       118    118 	CALL CASEHEAD
+01ec  21 e9 03       119    119 	LD HL,FWRITE
+01ef  cd 0e 03       120    120 	CALL OPENFCB
+Z80/8080-Macro-Assembler  Release 2.1	Wed Aug 19 15:40:13 2026	Page 3
+Source file: FAULT066.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+01f2  3e 50          121    121 	LD A,'P'
+01f4  cd 38 03       122    122 	CALL FILLBUF
+01f7  11 1f 04       123    123 	LD DE,LBEFORE
+01fa  cd 4a 03       124    124 	CALL REPORT
+01fd  cd 03 03       125    125 	CALL ARMPOSTWRITE
+0200  0e 15          126    126 	LD C,21
+0202  cd 1b 03       127    127 	CALL CALLFCB
+0205  11 27 04       128    128 	LD DE,LRETURNED
+0208  cd 4a 03       129    129 	CALL REPORT
+020b  c9             130    130 	RET
+                     131    131
+                     132    132 ; U: attempt to open on explicit drive B with no drive-B image attached.
+020c                 133    133 MODE_U:
+020c  3e 55          134    134 	LD A,'U'
+020e  cd 8a 03       135    135 	CALL CASEHEAD
+0211  21 d9 03       136    136 	LD HL,FREAD
+0214  cd 25 03       137    137 	CALL LOADFCB
+0217  3e 02          138    138 	LD A,2
+0219  32 62 04       139    139 	LD (FCB),A
+021c  0e 0f          140    140 	LD C,15
+021e  cd 1b 03       141    141 	CALL CALLFCB
+0221  11 27 04       142    142 	LD DE,LRETURNED
+0224  cd 4a 03       143    143 	CALL REPORT
+0227  c9             144    144 	RET
+                     145    145
+                     146    146 ; D: random physical write failure at allocated record zero.
+0228                 147    147 MODE_D:
+0228  3e 44          148    148 	LD A,'D'
+022a  cd 8a 03       149    149 	CALL CASEHEAD
+022d  21 e9 03       150    150 	LD HL,FWRITE
+0230  cd 0e 03       151    151 	CALL OPENFCB
+0233  af             152    152 	XOR A
+0234  32 83 04       153    153 	LD (FCB+33),A
+0237  32 84 04       154    154 	LD (FCB+34),A
+023a  32 85 04       155    155 	LD (FCB+35),A
+023d  3e 52          156    156 	LD A,'R'
+023f  cd 38 03       157    157 	CALL FILLBUF
+0242  11 1f 04       158    158 	LD DE,LBEFORE
+0245  cd 4a 03       159    159 	CALL REPORT
+0248  cd f8 02       160    160 	CALL ARMWRITE
+024b  0e 22          161    161 	LD C,34
+024d  cd 1b 03       162    162 	CALL CALLFCB
+0250  11 27 04       163    163 	LD DE,LRETURNED
+0253  cd 4a 03       164    164 	CALL REPORT
+0256  c9             165    165 	RET
+                     166    166
+                     167    167 ; E: physical directory-write failure during Make.
+0257                 168    168 MODE_E:
+0257  3e 45          169    169 	LD A,'E'
+0259  cd 8a 03       170    170 	CALL CASEHEAD
+025c  21 09 04       171    171 	LD HL,FNEW
+025f  cd 25 03       172    172 	CALL LOADFCB
+0262  11 1f 04       173    173 	LD DE,LBEFORE
+0265  cd 4a 03       174    174 	CALL REPORT
+0268  cd f8 02       175    175 	CALL ARMWRITE
+026b  0e 16          176    176 	LD C,22
+026d  cd 1b 03       177    177 	CALL CALLFCB
+0270  11 27 04       178    178 	LD DE,LRETURNED
+0273  cd 4a 03       179    179 	CALL REPORT
+0276  c9             180    180 	RET
+Z80/8080-Macro-Assembler  Release 2.1	Wed Aug 19 15:40:13 2026	Page 4
+Source file: FAULT066.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                     181    181
+                     182    182 ; F: physical directory-write failure during Close. Open an existing file,
+                     183    183 ; make its activated FCB dirty without a preceding disk write, and request a
+                     184    184 ; changed RC so an uninjected Close would rewrite the directory entry.
+0277                 185    185 MODE_F:
+0277  3e 46          186    186 	LD A,'F'
+0279  cd 8a 03       187    187 	CALL CASEHEAD
+027c  21 f9 03       188    188 	LD HL,FCLOSE
+027f  cd 0e 03       189    189 	CALL OPENFCB
+0282  3a 70 04       190    190 	LD A,(FCB+14)
+0285  e6 7f          191    191 	AND 07FH
+0287  32 70 04       192    192 	LD (FCB+14),A
+028a  3e 02          193    193 	LD A,2
+028c  32 71 04       194    194 	LD (FCB+15),A
+028f  11 1f 04       195    195 	LD DE,LBEFORE
+0292  cd 4a 03       196    196 	CALL REPORT
+0295  cd f8 02       197    197 	CALL ARMWRITE
+0298  0e 10          198    198 	LD C,16
+029a  cd 1b 03       199    199 	CALL CALLFCB
+029d  11 27 04       200    200 	LD DE,LRETURNED
+02a0  cd 4a 03       201    201 	CALL REPORT
+02a3  c9             202    202 	RET
+                     203    203
+                     204    204 ; I/J: documented logical missing-data controls. These do not arm a physical
+                     205    205 ; fault and distinguish ordinary BDOS return codes from Bad Sector.
+02a4                 206    206 MODE_I:
+02a4  3e 49          207    207 	LD A,'I'
+02a6  cd 8a 03       208    208 	CALL CASEHEAD
+02a9  21 d9 03       209    209 	LD HL,FREAD
+02ac  cd 0e 03       210    210 	CALL OPENFCB
+02af  3e 01          211    211 	LD A,1
+02b1  32 82 04       212    212 	LD (FCB+32),A
+02b4  3e ee          213    213 	LD A,0EEH
+02b6  cd 38 03       214    214 	CALL FILLBUF
+02b9  0e 14          215    215 	LD C,20
+02bb  cd 1b 03       216    216 	CALL CALLFCB
+02be  11 27 04       217    217 	LD DE,LRETURNED
+02c1  cd 4a 03       218    218 	CALL REPORT
+02c4  c9             219    219 	RET
+02c5                 220    220 MODE_J:
+02c5  3e 4a          221    221 	LD A,'J'
+02c7  cd 8a 03       222    222 	CALL CASEHEAD
+02ca  21 d9 03       223    223 	LD HL,FREAD
+02cd  cd 0e 03       224    224 	CALL OPENFCB
+02d0  3e 01          225    225 	LD A,1
+02d2  32 83 04       226    226 	LD (FCB+33),A
+02d5  af             227    227 	XOR A
+02d6  32 84 04       228    228 	LD (FCB+34),A
+02d9  32 85 04       229    229 	LD (FCB+35),A
+02dc  3e ee          230    230 	LD A,0EEH
+02de  cd 38 03       231    231 	CALL FILLBUF
+02e1  0e 21          232    232 	LD C,33
+02e3  cd 1b 03       233    233 	CALL CALLFCB
+02e6  11 27 04       234    234 	LD DE,LRETURNED
+02e9  cd 4a 03       235    235 	CALL REPORT
+02ec  c9             236    236 	RET
+                     237    237
+02ed                 238    238 ARMREAD:
+02ed  11 31 04       239    239 	LD DE,LARMREAD
+02f0  cd 9d 03       240    240 	CALL PUTS9
+Z80/8080-Macro-Assembler  Release 2.1	Wed Aug 19 15:40:13 2026	Page 5
+Source file: FAULT066.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+02f3  3e 01          241    241 	LD A,1
+02f5  d3 12          242    242 	OUT (18),A
+02f7  c9             243    243 	RET
+02f8                 244    244 ARMWRITE:
+02f8  11 3c 04       245    245 	LD DE,LARMWRITE
+02fb  cd 9d 03       246    246 	CALL PUTS9
+02fe  3e 02          247    247 	LD A,2
+0300  d3 12          248    248 	OUT (18),A
+0302  c9             249    249 	RET
+0303                 250    250 ARMPOSTWRITE:
+0303  11 48 04       251    251 	LD DE,LARMPOST
+0306  cd 9d 03       252    252 	CALL PUTS9
+0309  3e 03          253    253 	LD A,3
+030b  d3 12          254    254 	OUT (18),A
+030d  c9             255    255 	RET
+                     256    256
+030e                 257    257 OPENFCB:
+030e  cd 25 03       258    258 	CALL LOADFCB
+0311  0e 0f          259    259 	LD C,15
+0313  cd 1b 03       260    260 	CALL CALLFCB
+0316  af             261    261 	XOR A
+0317  32 82 04       262    262 	LD (FCB+32),A
+031a  c9             263    263 	RET
+031b                 264    264 CALLFCB:
+031b  11 62 04       265    265 	LD DE,FCB
+031e  cd 05 00       266    266 	CALL 0005H
+0321  32 5f 04       267    267 	LD (RESULT),A
+0324  c9             268    268 	RET
+0325                 269    269 LOADFCB:
+0325  11 62 04       270    270 	LD DE,FCB
+0328  01 10 00       271    271 	LD BC,16
+032b  ed b0          272    272 	LDIR
+032d  af             273    273 	XOR A
+032e  21 72 04       274    274 	LD HL,FCB+16
+0331  06 14          275    275 	LD B,20
+0333  77             276    276 LF0:	LD (HL),A
+0334  23             277    277 	INC HL
+0335  10 fc          278    278 	DJNZ LF0
+0337  c9             279    279 	RET
+0338                 280    280 FILLBUF:
+0338  21 86 04       281    281 	LD HL,BUF
+033b  06 80          282    282 	LD B,128
+033d  77             283    283 FB0:	LD (HL),A
+033e  23             284    284 	INC HL
+033f  10 fc          285    285 	DJNZ FB0
+0341  11 86 04       286    286 	LD DE,BUF
+0344  0e 1a          287    287 	LD C,26
+0346  cd 05 00       288    288 	CALL 0005H
+0349  c9             289    289 	RET
+                     290    290
+034a                 291    291 REPORT:
+034a  d5             292    292 	PUSH DE
+034b  0e 19          293    293 	LD C,25
+034d  cd 05 00       294    294 	CALL 0005H
+0350  32 60 04       295    295 	LD (CURDISK),A
+0353  e1             296    296 	POP HL
+0354  cd a3 03       297    297 	CALL PUTS
+0357  3a 5f 04       298    298 	LD A,(RESULT)
+035a  cd c3 03       299    299 	CALL HEXBYTE
+035d  3e 20          300    300 	LD A,' '
+Z80/8080-Macro-Assembler  Release 2.1	Wed Aug 19 15:40:13 2026	Page 6
+Source file: FAULT066.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+035f  cd ac 03       301    301 	CALL PUTC
+0362  3a 60 04       302    302 	LD A,(CURDISK)
+0365  cd c3 03       303    303 	CALL HEXBYTE
+0368  3e 20          304    304 	LD A,' '
+036a  cd ac 03       305    305 	CALL PUTC
+036d  21 62 04       306    306 	LD HL,FCB
+0370  06 24          307    307 	LD B,36
+0372  7e             308    308 RD0:	LD A,(HL)
+0373  23             309    309 	INC HL
+0374  e5             310    310 	PUSH HL
+0375  cd c3 03       311    311 	CALL HEXBYTE
+0378  3e 20          312    312 	LD A,' '
+037a  cd ac 03       313    313 	CALL PUTC
+037d  e1             314    314 	POP HL
+037e  10 f2          315    315 	DJNZ RD0
+0380  3a 86 04       316    316 	LD A,(BUF)
+0383  cd c3 03       317    317 	CALL HEXBYTE
+0386  cd b9 03       318    318 	CALL CRLF
+0389  c9             319    319 	RET
+038a                 320    320 CASEHEAD:
+038a  32 61 04       321    321 	LD (CASECHAR),A
+038d  11 19 04       322    322 	LD DE,LCASE
+0390  cd 9d 03       323    323 	CALL PUTS9
+0393  3a 61 04       324    324 	LD A,(CASECHAR)
+0396  cd ac 03       325    325 	CALL PUTC
+0399  cd b9 03       326    326 	CALL CRLF
+039c  c9             327    327 	RET
+039d                 328    328 PUTS9:
+039d  0e 09          329    329 	LD C,9
+039f  cd 05 00       330    330 	CALL 0005H
+03a2  c9             331    331 	RET
+03a3  7e             332    332 PUTS:	LD A,(HL)
+03a4  23             333    333 	INC HL
+03a5  b7             334    334 	OR A
+03a6  c8             335    335 	RET Z
+03a7  cd ac 03       336    336 	CALL PUTC
+03aa  18 f7          337    337 	JR PUTS
+03ac                 338    338 PUTC:
+03ac  c5             339    339 	PUSH BC
+03ad  d5             340    340 	PUSH DE
+03ae  e5             341    341 	PUSH HL
+03af  5f             342    342 	LD E,A
+03b0  0e 02          343    343 	LD C,2
+03b2  cd 05 00       344    344 	CALL 0005H
+03b5  e1             345    345 	POP HL
+03b6  d1             346    346 	POP DE
+03b7  c1             347    347 	POP BC
+03b8  c9             348    348 	RET
+03b9                 349    349 CRLF:
+03b9  3e 0d          350    350 	LD A,13
+03bb  cd ac 03       351    351 	CALL PUTC
+03be  3e 0a          352    352 	LD A,10
+03c0  c3 ac 03       353    353 	JP PUTC
+03c3                 354    354 HEXBYTE:
+03c3  f5             355    355 	PUSH AF
+03c4  0f             356    356 	RRCA
+03c5  0f             357    357 	RRCA
+03c6  0f             358    358 	RRCA
+03c7  0f             359    359 	RRCA
+03c8  cd cc 03       360    360 	CALL NIBBLE
+Z80/8080-Macro-Assembler  Release 2.1	Wed Aug 19 15:40:13 2026	Page 7
+Source file: FAULT066.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+03cb  f1             361    361 	POP AF
+03cc                 362    362 NIBBLE:
+03cc  e6 0f          363    363 	AND 0FH
+03ce  c6 30          364    364 	ADD A,'0'
+03d0  fe 3a          365    365 	CP '9'+1
+03d2  38 02          366    366 	JR C,NOUT
+03d4  c6 07          367    367 	ADD A,7
+03d6  c3 ac 03       368    368 NOUT:	JP PUTC
+                     369    369
+03d9  00 41 54 54    370    370 FREAD: DB 0,'ATTR    ','DAT',0,0,0,0
+03dd  52 20 20 20    370    371
+03e1  20 44 41 54    370    372
+03e5  00 00 00 00    370    373
+03e9  00 43 4c 4f    371    374 FWRITE: DB 0,'CLOSEME ','DAT',0,0,0,0
+03ed  53 45 4d 45    371    375
+03f1  20 44 41 54    371    376
+03f5  00 00 00 00    371    377
+03f9  00 44 53 4b    372    378 FCLOSE: DB 0,'DSKFILE ','DAT',0,0,0,0
+03fd  46 49 4c 45    372    379
+0401  20 44 41 54    372    380
+0405  00 00 00 00    372    381
+0409  00 4e 45 57    373    382 FNEW: DB 0,'NEW015  ','DAT',0,0,0,0
+040d  30 31 35 20    373    383
+0411  20 44 41 54    373    384
+0415  00 00 00 00    373    385
+0419  43 41 53 45    374    386 LCASE: DB 'CASE $'
+041d  20 24          374    387
+041f  42 45 46 4f    375    388 LBEFORE: DB 'BEFORE ',0
+0423  52 45 20 00    375    389
+0427  52 45 54 55    376    390 LRETURNED: DB 'RETURNED ',0
+042b  52 4e 45 44    376    391
+042f  20 00          376    392
+0431  41 52 4d 20    377    393 LARMREAD: DB 'ARM READ',13,10,'$'
+0435  52 45 41 44    377    394
+0439  0d 0a 24       377    395
+043c  41 52 4d 20    378    396 LARMWRITE: DB 'ARM WRITE',13,10,'$'
+0440  57 52 49 54    378    397
+0444  45 0d 0a 24    378    398
+0448  41 52 4d 20    379    399 LARMPOST: DB 'ARM WRITE-THEN-ERROR',13,10,'$'
+044c  57 52 49 54    379    400
+0450  45 2d 54 48    379    401
+0454  45 4e 2d 45    379    402
+0458  52 52 4f 52    379    403
+045c  0d 0a 24       379    404
+045f  00             380    405 RESULT: DB 0
+0460  00             381    406 CURDISK: DB 0
+0461  00             382    407 CASECHAR: DB 0
+0462                 383    408 FCB: DS 36,0
+0486                 384    409 BUF: DS 128,0
+0506                 385    410 	DS 192
+05c6                 386    411 STACKTOP:
+05c6                 387    412 	END START

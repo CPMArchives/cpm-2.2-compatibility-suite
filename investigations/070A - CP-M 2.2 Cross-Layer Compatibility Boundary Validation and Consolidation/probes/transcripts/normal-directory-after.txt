@@ -1,0 +1,11 @@
+     Name    Bytes   Recs  Attr     update             create
+------------ ------ ------ ---- -----------------  -----------------
+ATTR    .DAT     1K      1    
+BIG     .DAT    17K    130    
+CLOSEME .DAT     1K      1    
+CROSS45 .COM     1K      6    
+CROSS70A.COM     1K      6    
+DSKFILE .DAT     1K      1    
+PHYS015 .COM     2K      9    
+ROFILE  .DAT     1K      1 R  
+    8 Files occupying     25K,     216K Free.

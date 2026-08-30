@@ -1,0 +1,33 @@
+spawn cpmsim -z -d /tmp/inv022-f0
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>B:
+B>USER 1
+B>F0TERM22
+
+F0TERM22 terminating by BDOS Function 0
+
+B>STATE22 AFTER-F0TERM22
+STATE22 PZ4=11 USER=01 SP/RET=EBA9 EB5F TAILCOUNT=0F
+
+B>[0;31mE (5639) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 4 ms, waited for 0 ms
+CPU executed 1213625 t-states in 0 ms
+Clock frequency 1368.23 MHz

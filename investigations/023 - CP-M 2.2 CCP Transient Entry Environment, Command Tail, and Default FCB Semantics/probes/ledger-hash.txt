@@ -1,0 +1,8 @@
+Protected ledger
+================
+
+Path: <project-root>/compatibility/02 Compatibility Ledger - Investigation 022.txt
+Before SHA-256: 748ecaed773e2b612b3138914b1877b62c4a25174725183cce46708f291eb789
+After SHA-256:  748ecaed773e2b612b3138914b1877b62c4a25174725183cce46708f291eb789
+Result: unchanged
+

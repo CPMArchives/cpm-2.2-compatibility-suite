@@ -1,0 +1,22 @@
+COMMUNITY ECOSYSTEM COVERAGE REVIEW
+
+Validated coverage
+- DRI standard utilities and resident commands.
+- Assembly, macro assembly, linking, loading, debugging and submitted builds.
+- WordStar 3.00, BASIC-80/Wumpus and Adventure A02 application workflows.
+- Generic Kermit startup and controlled failure paths.
+- Portable public-interface controls and unsupported QTERM/KSCOPE hardware traps.
+- Documented, de facto and selected undocumented behaviors through I054.
+
+The model explains every observed successful workflow and expected failure in the
+I053 corpus without adding a baseline requirement. I054 found no contradiction.
+
+Material uncovered or incomplete categories
+- Spreadsheet, database, packaged business, BBS and printer workflows.
+- Additional compiled languages beyond assembly and BASIC.
+- Successful paired communications transfer, receive errors and carrier loss.
+- Matching IMSAI, Dazzler and other hardware/peripheral profiles.
+- Some timing-sensitive console/serial and late physical-fault cases.
+
+These remain corpus/profile gaps. They do not invalidate the baseline standard,
+but a claim covering one of them requires named software, fixtures and evidence.

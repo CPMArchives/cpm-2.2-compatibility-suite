@@ -1,0 +1,8 @@
+      53 SRC61.TXT
+     128 extracted/dri-COPY61.TXT
+      53 extracted/cdos258-COPY61.TXT
+     234 total
+37b9ac371512cdc77c90ec9939ef0ea49fdf9212b31edc6a646609b7cf18a991  SRC61.TXT
+ccbdd6ae5db71db3583581861cf5fa9ecaa1523088d26e84c51e6225f0435f5f  extracted/dri-COPY61.TXT
+37b9ac371512cdc77c90ec9939ef0ea49fdf9212b31edc6a646609b7cf18a991  extracted/cdos258-COPY61.TXT
+First 53 bytes match on both; CDOS exact file matches source.

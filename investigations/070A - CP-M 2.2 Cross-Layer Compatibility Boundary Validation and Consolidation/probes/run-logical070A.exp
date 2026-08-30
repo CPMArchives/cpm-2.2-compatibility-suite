@@ -1,0 +1,19 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set timeout 40
+log_file -noappend $logfile
+spawn -noecho cpmsim -z -d $diskdir
+expect "A>"
+send -- "FAULT066 I\r"
+expect "RETURNED"
+expect "A>"
+send -- "FAULT066 J\r"
+expect "RETURNED"
+expect "A>"
+send -- "CROSS70A\r"
+expect "CROSS70A COMPLETE"
+expect "A>"
+send "\034"
+expect eof
+

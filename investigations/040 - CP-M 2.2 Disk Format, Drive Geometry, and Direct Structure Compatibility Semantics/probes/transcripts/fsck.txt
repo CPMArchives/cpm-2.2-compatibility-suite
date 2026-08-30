@@ -1,0 +1,19 @@
+== damaged-ibm3740.dsk ==
+Phase 1: check extent fields
+Phase 2: check extent connectivity
+Error: Multiple allocated block (extent=0,1, name="DUMP    .COM","SDIR    .COM" block=2)
+Error: Multiple allocated block (extent=1,0, name="SDIR    .COM","DUMP    .COM" block=2)
+== empty-ibm3740.dsk ==
+Phase 1: check extent fields
+Phase 2: check extent connectivity
+<local-workspace>/g-p-6a682f002be881918281554d644daf48/stage040/probes/images-before/empty-ibm3740.dsk: 0/64 files (0.0% non-contigous), 2/243 blocks
+== nearly-full-ibm3740.dsk ==
+Phase 1: check extent fields
+Phase 2: check extent connectivity
+<local-workspace>/g-p-6a682f002be881918281554d644daf48/stage040/probes/images-before/nearly-full-ibm3740.dsk: 15/64 files (0.0% non-contigous), 236/243 blocks
+== normal-ibm3740.dsk ==
+Phase 1: check extent fields
+Phase 2: check extent connectivity
+<local-workspace>/g-p-6a682f002be881918281554d644daf48/stage040/probes/images-before/normal-ibm3740.dsk: 35/64 files (4.9% non-contigous), 233/243 blocks
+== empty-z80pack-hd.dsk ==
+fsck.cpm: cannot open <local-workspace>/g-p-6a682f002be881918281554d644daf48/stage040/probes/images-before/empty-z80pack-hd.dsk: No such file or directory

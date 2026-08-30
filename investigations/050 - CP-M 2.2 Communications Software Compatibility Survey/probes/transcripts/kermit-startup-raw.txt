@@ -1,0 +1,96 @@
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+Mostek AID-80F and SYS-80FT Emulator Release 1.1
+by Mike Douglas
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Drive 0: CPM/system.dsk
+Drive 1: CPM/comms.dsk
+
+Boot ROM: MostekROM.bin
+
+Loader statistics for file <local-workspace>/g-p-6a682f002be881918281554d644daf48/stage050/work/roms/MostekROM.bin:
+START : E000H
+END   : EFFFH
+PC    : E000H
+LOADED: 1000H (4096)
+
+Type CTRL-\ to halt emulation
+
+
+
+56K CP/M 2.2 Ver 1.1
+ for Mostek AID-80F
+
+A>b:
+B>kermit
+Kermit-80 v4.11 configured for Generic CP/M-80 with Generic (Dumb) CRT Terminal type selected 
+
+For help, type ? at any point in a command
+Kermit-80   0B:>version
+Kermit-80 v4.11  has been built from the following modules:
+CPSMIT.ASM (30) 29-Mar-1991
+CPSCOM.ASM (13) 25-Mar-1991
+CPSPK1.ASM (23) 16-Jan-1991
+CPSPK2.ASM (11)  21-Mar-1991
+CPSREM.ASM (13)  21-Mar-1991
+CPSSER.ASM (1)  8-SEP-87
+CPSTT.ASM  (12) 31-Jan-1991
+CPSCPM.ASM (14)  1-Apr-1991
+CPSWLD.ASM (4)  20-Jun-86
+CPSCMD.ASM (13)  17-Jan-1991
+CPSUTL.ASM (31) 21-Mar-1991
+CPSDAT.ASM (19)  29-Mar-1991
+CPXSWT.ASM (10)  7-Jan-1991 
+CPXSYS.ASM (40)  28-Aug-89 
+Kermit-80   0B:>show
+
+Autoreceive is off
+Block check type: 1-character
+Multi-sector buffering at 64 of a maximum of 64
+File COLLISION:  RENAME
+Debugging off
+Current default disk: B
+Display file size on DIRECTORY command on
+Escape char: Control-\
+File Mode default
+Flow control off
+IBM flag off
+Disposition for incomplete files is discard
+
+ * * * Press any key to continue * * * 
+
+
+Local echo off
+Logging to B:KERMIT.LOG is off
+Parity: none
+Printer copy off
+RECEIVE packet length  80
+RECEIVE start-of-pkt char  ^A
+SEND packet length  80
+SEND start-of-pkt char  ^A
+Current TACTrap Status/Intercept Character:   off
+Timer off
+Current user number:  0
+Terminal display is REGULAR
+Terminal emulation is OFF
+File warning on
+Kermit-80   0B:>exit
+B>
+User Interrupt at 0xdaf2
+I/O ran for 961 ms, waited for 0 ms
+CPU executed 47809022 t-states in 43 ms
+clock frequency = 1100.57 MHz
+
+PC   A  SZHPNC I  R  IFF BC   DE   HL   A'F' B'C' D'E' H'L' IX   IY   SP
+daf2 80 011100 00 0b 00  007f c406 cf06 d319 0000 0002 e9db f310 dc12 cf2f
+>>> q

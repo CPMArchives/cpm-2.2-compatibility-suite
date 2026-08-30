@@ -1,0 +1,14 @@
+#!/usr/bin/expect -f
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set timeout 60
+log_file -noappend $logfile
+spawn cpmsim -z -d $diskdir
+expect "A>"
+foreach p {REG37 DMA37 STATE37 ERROR37} {
+  send "$p\r"
+  expect "A>"
+}
+send "BDOS37\r"
+expect "WRITE-DISKFULL"
+expect eof

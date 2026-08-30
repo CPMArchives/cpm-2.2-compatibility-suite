@@ -1,0 +1,25 @@
+INVESTIGATION 053 CORPUS COVERAGE
+
+Covered categories
+- Standard software: DRI ASM, LOAD, PIP, STAT, ED, DDT, SUBMIT, XSUB, DUMP.
+- Development software: ASM, MAC, RMAC, LOAD, LINK, DDT, SID, SUBMIT.
+- Applications: WordStar 3.00, Microsoft BASIC-80 5.2/Wumpus, Adventure A02.
+- Communications: Kermit-80 Generic CP/M 4.11.
+- Hardware-dependent: IMSAI-patched QTERM 4.3e and Cromemco KSCOPE, with BASE051 control.
+
+Operation classes
+- Normal: utility/toolchain workflows, WordStar save, BASIC and Adventure runs,
+  Kermit startup, BASE051.
+- Boundary: multi-record/multi-module builds, large application, alternate terminal
+  and logical-device profiles, direct-port traps.
+- Failure: missing source/input, undefined link symbol, unsupported Kermit speed,
+  missing send file, absent peer abort, unsupported hardware ports.
+
+Material gaps
+- Spreadsheet, database, packaged business, and BBS applications.
+- Successful paired communications transfer and receive-side/carrier failures.
+- Matching IMSAI/Dazzler and other named hardware profiles.
+- Printer workflows and high-level compiled languages beyond BASIC/assembly tools.
+
+These are corpus/profile gaps. They are not evidence that the current baseline
+contract is deficient.

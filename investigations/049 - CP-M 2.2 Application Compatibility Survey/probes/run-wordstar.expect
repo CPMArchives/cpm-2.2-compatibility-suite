@@ -1,0 +1,31 @@
+#!/usr/bin/expect -f
+set timeout 20
+set send_slow {1 0.04}
+set root [file normalize [file join [file dirname [info script]] ..]]
+set emu [file join $root build z80pack mosteksim mosteksim]
+set work [file join $root work]
+log_file -noappend [file join $root probes transcripts wordstar-raw.txt]
+spawn -noecho $emu -z -d [file join $work disks] -r [file join $work roms] -c [file join $work config-wordstar.txt]
+expect "A>"
+send -s "b:\r"
+expect "B>"
+send -s "ws\r"
+expect "N O - F I L E"
+send -s "d"
+expect "NAME OF FILE TO EDIT?"
+send -s "APP49.TXT\r"
+after 1200
+send -s "BETTERCPM APPLICATION SURVEY\rSECOND LINE"
+after 800
+send "\013"
+after 200
+send "x"
+expect "B>"
+send -s "dir APP49.TXT\r"
+expect "B>"
+send -s "type APP49.TXT\r"
+expect "B>"
+send "\034"
+expect ">>>"
+send "q\n"
+expect eof

@@ -1,0 +1,261 @@
+INVESTIGATION 018 — CP/M 2.2 BDOS Character Devices and IOBYTE Semantics
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation.
+
+Investigation 017 is complete. The authoritative Compatibility Ledger is
+"02 Compatibility Ledger - Investigation 016.txt" and currently ends at
+entry 0422. Entry 0423 was deliberately deleted. Investigation 017 proposes
+entries 0424-0435, but those proposals have NOT yet been incorporated into
+the authoritative ledger.
+
+Do not modify the Compatibility Ledger, any previous investigation, the
+architecture documents, roadmap, or other pre-existing BetterCP/M files.
+
+Create Investigation 018 as a new evidence report and associated probe
+artifacts only.
+
+OBJECTIVE
+
+Determine the externally observable CP/M 2.2 compatibility contract for
+the remaining BDOS character-device and IOBYTE services:
+
+    Function 3  — Reader Input
+    Function 4  — Punch Output
+    Function 5  — List Output
+    Function 7  — Get I/O Byte
+    Function 8  — Set I/O Byte
+
+The investigation should establish what a CP/M 2.2 transient program may
+legitimately depend upon, distinguishing documented interface requirements
+from DRI implementation behavior and configuration-specific BIOS behavior.
+
+Do not broaden this investigation into a general BIOS investigation.
+Examine BIOS character-device entry points only insofar as necessary to
+understand the externally visible behavior of these BDOS calls.
+
+QUESTIONS TO RESOLVE
+
+1. Function 3 — Reader Input
+
+Determine:
+
+- selector and calling convention;
+- whether the call blocks until a character is available;
+- where the returned character is delivered;
+- whether input is echoed;
+- whether control characters receive any special BDOS interpretation;
+- whether input is transformed or masked;
+- interaction, if any, with console pending-character state established
+  in Investigations 003-006 and 016;
+- whether DMA or other unrelated BDOS state is affected;
+- what aspects depend upon BIOS/IOBYTE configuration rather than BDOS;
+- whether any observed residual register values are merely consequences
+  of the general BDOS ABI already established by Investigation 002.
+
+2. Function 4 — Punch Output
+
+Determine:
+
+- selector and calling convention;
+- source of the output character;
+- whether the byte is transformed;
+- whether TAB, Ctrl-S, Ctrl-P, printer echo, or formatted-console state
+  applies;
+- whether Punch output affects console formatting state;
+- whether DMA or unrelated BDOS state changes;
+- what externally visible behavior is BDOS-defined versus BIOS/device
+  dependent;
+- whether a function-specific return value exists.
+
+3. Function 5 — List Output
+
+Determine:
+
+- selector and calling convention;
+- source of the output character;
+- whether the byte is transformed;
+- relationship to the logical LIST device;
+- whether direct Function-5 LIST output differs from the LIST output
+  produced by Ctrl-P printer echo investigated previously;
+- whether Function 5 participates in console formatting, TAB expansion,
+  scrolling control, or printer-echo state;
+- whether Function 5 itself changes printer-echo state;
+- whether DMA or unrelated BDOS state changes;
+- whether a function-specific return value exists.
+
+Where useful, compare Function 5 directly with the LIST-side effects already
+established for formatted console output. Do not duplicate existing ledger
+propositions unless Investigation 018 adds a genuinely new independently
+testable requirement.
+
+4. Functions 7 and 8 — IOBYTE
+
+Determine:
+
+- exact calling conventions;
+- relationship between these calls and page-zero location 0003h;
+- whether Function 7 returns the current IOBYTE value and where;
+- what Function 8 accepts as its new value;
+- whether Function 8 changes location 0003h directly;
+- whether Get after Set must reproduce the supplied value;
+- whether either call performs device initialization or merely changes
+  logical-device selection state;
+- how the IOBYTE selects physical devices for CON, RDR, PUN, and LST;
+- which parts of the IOBYTE encoding are Intel/CP/M documented interface
+  and which parts remain BIOS-specific;
+- behavior when the target BIOS does not implement meaningful IOBYTE
+  switching;
+- whether the optional nature of IOBYTE noted in earlier investigation
+  material changes the BetterCP/M compatibility requirement.
+
+Pay particular attention to existing ledger entry 0006:
+
+    Location 0003h is the Intel-standard IOBYTE when implemented by the
+    target CBIOS. The IOBYTE itself is optional as permitted by the
+    CP/M 2.2 BIOS environment.
+
+Investigation 018 must clarify or extend that proposition only if the
+evidence warrants it. Do not silently contradict or duplicate it.
+
+5. Cross-function logical-device routing
+
+Establish, to the extent documented and experimentally testable:
+
+- whether Functions 3, 4, and 5 invoke logical RDR, PUN, and LST services;
+- whether IOBYTE changes can redirect those logical devices on a BIOS that
+  implements IOBYTE selection;
+- whether the BDOS itself interprets IOBYTE routing or delegates that
+  interpretation to BIOS;
+- whether exact physical-device behavior is therefore configuration
+  dependent.
+
+Do not mistake behavior of the z80pack BIOS for a universal CP/M 2.2
+requirement.
+
+EVIDENCE
+
+Use the same evidentiary discipline as the preceding investigations.
+
+At minimum examine:
+
+- Digital Research CP/M 2.0 Interface Guide;
+- Digital Research CP/M 2.2 Alteration Guide;
+- original DRI CP/M 2.2 BDOS source;
+- relevant DRI BIOS/sample BIOS material;
+- existing BetterCP/M investigations and current ledger entries where
+  necessary to avoid duplication or contradiction.
+
+Use experiments against the established z80pack CP/M 2.2 reference
+environment where they can distinguish competing externally observable
+behaviors.
+
+If the stock BIOS does not provide distinct usable RDR/PUN/LST devices or
+does not meaningfully implement IOBYTE switching, do not manufacture
+conclusions from that limitation. Use deterministic instrumentation or a
+minimal controlled BIOS/harness modification if necessary, preserving the
+original environment and documenting exactly what was changed.
+
+Prefer deterministic probes over manually timed input.
+
+EXPERIMENTAL DISCIPLINE
+
+- Preserve original disk images before experiments.
+- Make probe behavior reproducible.
+- Record raw output separately from interpretation.
+- Preserve source and rebuilt COM binaries.
+- Record relevant hashes.
+- If emulator/BIOS instrumentation is required, keep it minimal and identify
+  it explicitly as test-fixture machinery rather than CP/M behavior.
+- Rebuild probe binaries and verify reproducibility where practical.
+- Do not infer universal behavior from numeric addresses, exact BIOS device
+  assignments, or z80pack-specific implementation details.
+
+LEDGER RELATIONSHIP
+
+Read the authoritative ledger and Investigation 017 before proposing new
+entries.
+
+Investigation 017 already proposes 0424-0435. Therefore Investigation 018
+proposals, if warranted, should begin at:
+
+    0436
+
+Do not actually edit the ledger.
+
+Do not renumber, rewrite, or silently correct existing ledger entries.
+
+If Investigation 018 reveals that an existing ledger proposition is wrong,
+incomplete, or requires stronger/weaker disposition, identify that explicitly
+as a proposed correction to the existing entry rather than creating a
+contradictory new entry.
+
+Each proposed ledger entry must contain one independently testable
+compatibility proposition with:
+
+- number;
+- concise title;
+- proposition;
+- disposition;
+- evidence;
+- conformance test.
+
+Use the established dispositions:
+
+    REQUIRED
+    POLICY PENDING
+    NOT REQUIRED
+    NOT GUARANTEED
+
+Do not promote an observed DRI implementation detail to REQUIRED without
+documentary or other adequate compatibility evidence.
+
+REPORT
+
+Create:
+
+Investigation 018 - CP-M 2.2 BDOS Character Devices and IOBYTE Semantics.md
+
+Use the organization and evidentiary discipline of the recent investigation
+reports. Include at least:
+
+1. Objective and method
+2. Documentation findings
+3. DRI source findings
+4. Experimental design and results
+5. Compatibility conclusions
+6. Proposed Compatibility Ledger additions (not applied)
+7. Incomplete and unresolved cases
+8. Artifact and preservation audit
+9. Sources
+
+Create an Investigation 018 directory with a probes/ subdirectory and retain
+all source, deterministic harness/instrumentation, raw observations, relevant
+before/after artifacts, build/run instructions, and hashes needed to reproduce
+the findings.
+
+IMPORTANT
+
+This is an evidence investigation, not implementation work.
+
+Do not modify BetterCP/M itself.
+
+Do not modify the authoritative Compatibility Ledger.
+
+Do not assume that undocumented DRI behavior is required.
+
+Do not turn z80pack BIOS behavior into a CP/M-wide rule.
+
+Do not duplicate propositions already established by Investigations 001-017.
+
+Where documentation, DRI source, and experiment disagree, preserve the
+disagreement and classify it rather than forcing a conclusion.
+
+At completion, report:
+
+- files created;
+- experiments performed;
+- principal findings;
+- unresolved POLICY PENDING questions;
+- proposed ledger-entry range;
+- confirmation that the authoritative ledger and all pre-existing
+  BetterCP/M files remained unchanged.

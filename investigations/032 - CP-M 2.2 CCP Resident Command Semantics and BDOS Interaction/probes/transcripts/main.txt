@@ -1,0 +1,87 @@
+spawn cpmsim -z -d cases/main
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>DIR
+A: DIR      COM : SAVE     COM : TYPE     COM : USER     COM
+A: ERA      COM : REN      COM : TEXT     TXT : EMPTY    DAT
+A: BINARY   DAT : SAME     TXT : ONE      DEL : WILD1    DEL
+A: WILD2    DEL : OLDFILE  DAT : SOURCE   DAT : EXISTS   DAT
+A: ROFILE   DAT
+A>DIR *.TXT
+A: TEXT     TXT : SAME     TXT
+A>DIR NOMATCH.ZZZ
+NO FILE
+A>DIR.COM
+A: DIR      COM : SAVE     COM : TYPE     COM : USER     COM
+A: ERA      COM : REN      COM : TEXT     TXT : EMPTY    DAT
+A: BINARY   DAT : SAME     TXT : ONE      DEL : WILD1    DEL
+A: WILD2    DEL : OLDFILE  DAT : SOURCE   DAT : EXISTS   DAT
+A: ROFILE   DAT
+A>BOGUS
+BOGUS?
+
+A>TYPE TEXT.TXT
+FIRST LINE
+SECOND LINE
+
+A>TYPE EMPTY.DAT
+
+A>TYPE BINARY.DAT
+BINARY  TAB
+BELL
+
+A>TYPE MISSING.TXT
+MISSING.TXT?
+
+A>REN NEWFILE.DAT=OLDFILE.DAT
+A>REN EXISTS.DAT=SOURCE.DAT
+FILE EXISTS
+A>REN NEW.DAT=NOSOURCE.DAT
+NO FILE
+A>ERA ONE.DEL
+A>ERA NOTHING.DEL
+NO FILE
+A>SAVE 1 SAVED.COM
+A>SAVE X BAD.COM
+X?
+
+A>USER 1
+A>DIR SAME.TXT
+A: SAME     TXT
+A>TYPE SAME.TXT
+VISIBLE USER ONE
+
+A>USER 0
+A>TYPE SAME.TXT
+VISIBLE USER ZERO
+
+A>USER 16
+16?
+
+A>ERA WILD?.DEL
+A>ERA ROFILE.DAT
+A>SAVE 1 D:FULL.COM
+NO SPACE
+A>ERA *.*
+ALL (Y/N)?N
+A>[0;31mE (16094) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 43 ms, waited for 0 ms
+CPU executed 3586992 t-states in 3 ms
+Clock frequency 985.97 MHz

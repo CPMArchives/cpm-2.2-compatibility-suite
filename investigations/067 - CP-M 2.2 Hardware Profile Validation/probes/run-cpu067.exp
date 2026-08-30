@@ -1,0 +1,22 @@
+#!/usr/bin/expect -f
+set timeout 20
+if {$argc != 4} {
+    puts stderr "usage: run-cpu067.exp DISKDIR CPU COMMAND TRANSCRIPT"
+    exit 2
+}
+set diskdir [file normalize [lindex $argv 0]]
+set cpu [lindex $argv 1]
+set command [lindex $argv 2]
+set transcript [file normalize [lindex $argv 3]]
+log_file -noappend $transcript
+spawn cpmsim $cpu -d $diskdir
+expect -re {A>}
+send -- "$command\r"
+expect {
+    -re {A>} {}
+    -re {User Interrupt|HALT instruction|system halted|illegal|undocumented} {}
+    timeout {}
+    eof {exit 0}
+}
+send -- "\034"
+expect eof

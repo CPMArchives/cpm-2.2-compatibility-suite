@@ -1,0 +1,21 @@
+f96a12a0dd983a8a2dd8766c3f0d1e943147d350bdb97c0fd8abb749c74caa84  ./Investigation 059 - CP-M 2.2 Compatibility Conformance Test Suite Design.md
+00917cf01c227f442a43aba889b1aa92020dc6af32747e1012d4f044dd2e20bd  ./probes/README.txt
+de415f468087ed0f8a03d5d2b808d067ca6c9144eff0593721f7faeef6ccb314  ./probes/conformance-levels.tsv
+7db318f7925436a8a3527b1942a0d0facb24e6b24f5f722b10d3b6a85c8becea  ./probes/evidence-preservation.txt
+97cff12ece7bfabac6845e1e9bc975af394451c6fc1f29be29aef962c5537daa  ./probes/generate-conformance-inventory.awk
+8b710845e2fdc773bad1e0b525d76a184bd257d14933169690e0745c83ff0d56  ./probes/ledger-sha256-after.txt
+8b710845e2fdc773bad1e0b525d76a184bd257d14933169690e0745c83ff0d56  ./probes/ledger-sha256-before.txt
+518cd166ec46e3946c247dd9ebaf29f5de4e060eaba07fcc366992c0552e5b22  ./probes/ledger-test-traceability.tsv
+78a4ec36167b1511c5aa985438a0702b9b8951a009205b19ea387f120816ff21  ./probes/pass-fail-rules.tsv
+a29b96d1b502454b65d516e854277f924c4bc7b7bc8fc59a92af47af1b237bd5  ./probes/proposed-conformance-test-inventory.tsv
+3dcf113d7d08642bc2ae96bb5896c0cfdf3744dee7f4a6e98c31a4550273c6ae  ./probes/protected-files-audit.txt
+f7aecd5bb6681f4dfb0202e8adea0aab703595397f4c2567049bb446d73771c7  ./probes/regression-test-inventory.tsv
+767f32077e064d371064113392d73f94862f5824df91ad7a5d638e0fed367e51  ./probes/requirement-responsibility-map.tsv
+863e3b51d16c30799092bbfaf50c9fb0e4720f42d4765f6071f1520f4b338905  ./probes/result-record-schema.tsv
+6cee4aeea3b10792a69590fdbf84ddf62491a0cf4faeea0b5f77d7bf22f88e81  ./probes/software-corpus-policy.txt
+aa413d0dca3e227aa7d7ae3f16fbcea4e639f1697c07310e5a978ca97b46fc37  ./probes/software-corpus-records.tsv
+332cebcb2b7bc6fadefcc195d3a63f7a592eb8f01f400b98f8685c07ae52e2b1  ./probes/test-classification-summary.txt
+b9d526085dc8129405473871772433d447032f988730d07a6eecbb8ded485467  ./probes/test-organization.tsv
+1a8049ed566422a5e6ee163a4747435d46e7b1fdd238e1750b6e2b50e7e71aa5  ./probes/test-phase-summary.txt
+d0f59a61c3d1a702a40daa64085a18f849b5e21a10ceffd651bb986ee93df542  ./probes/validate059.sh
+debcafdf4dd4f2852a386f7cd202470cc8348ee5321f9818a0ceda29ad3cd022  ./probes/validation-audit.txt

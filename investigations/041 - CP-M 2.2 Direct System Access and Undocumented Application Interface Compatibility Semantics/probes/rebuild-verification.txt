@@ -1,0 +1,15 @@
+Investigation 041 byte-identical rebuild verification
+=====================================================
+
+The six preserved COM files were copied aside, build.sh was run with the
+documented assembler, and each rebuilt file was compared byte-for-byte:
+
+BDOS41.COM   byte-identical
+BIOS41.COM   byte-identical
+DIRECT41.COM byte-identical
+MOD41.COM    byte-identical
+VECTOR41.COM byte-identical
+ZERO41.COM   byte-identical
+
+Result: PASS (6 of 6).
+

@@ -1,0 +1,49 @@
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+Mostek AID-80F and SYS-80FT Emulator Release 1.1
+by Mike Douglas
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Drive 0: CPM/system.dsk
+Drive 1: CPM/comms.dsk
+
+Boot ROM: MostekROM.bin
+
+Loader statistics for file <local-workspace>/g-p-6a682f002be881918281554d644daf48/stage053/work/051/work/roms/MostekROM.bin:
+START : E000H
+END   : EFFFH
+PC    : E000H
+LOADED: 1000H (4096)
+
+Type CTRL-\ to halt emulation
+
+
+
+56K CP/M 2.2 Ver 1.1
+ for Mostek AID-80F
+
+A>b:
+B>qterm
+QTERM  V4.3e
+(C) Copyright  DPG  1991 - All rights reserved
+Version for IMSAI 8080 - VT 100
+Escape character is ^^
+
+
+[0;31mE (15233) core: I/O input Trap at 0x0112, port 0x23[0m
+I/O ran for 9 ms, waited for 0 ms
+CPU executed 4427112 t-states in 3 ms
+clock frequency = 1146.02 MHz
+
+PC   A  SZHPNC I  R  IFF BC   DE   HL   A'F' B'C' D'E' H'L' IX   IY   SP
+0112 ff 010001 00 1a 00  00ff 0000 0000 df85 0000 0002 e9db 4471 dc12 cbf6
+>>> q

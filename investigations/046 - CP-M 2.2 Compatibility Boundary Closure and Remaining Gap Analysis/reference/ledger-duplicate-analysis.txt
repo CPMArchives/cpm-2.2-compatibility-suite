@@ -1,0 +1,32 @@
+Investigation 046 ledger duplicate analysis
+===========================================
+
+Authoritative input:
+  02 Compatibility Ledger - Investigation 045.txt
+  SHA-256 119aa2ee89d33973c2bc55267a99c55240887371fe210af455b01614426c5975
+
+Findings
+--------
+
+1. Entries 0248 through 0277 occur twice under two consecutive Investigation
+   011 headings. Their proposition text, dispositions, evidence, and
+   conformance text are duplicated. The second block should be removed in a
+   future ledger-maintenance operation without renumbering later entries.
+
+2. Entries 0435 and 0523 independently describe the same Function 37 policy
+   question. Their wording/evidence differs slightly but dispositions agree.
+   They should be consolidated or one should cross-reference the other.
+
+3. Entries 0012 and 0506 overlap on the second default FCB. They are not exact
+   duplicates: 0506 combines first- and second-operand assignment, while 0012
+   isolates the second FCB. Consolidation would improve maintenance but must
+   preserve independently testable propositions.
+
+4. Entries 0019-0021 and 0508 concern different command-tail dimensions:
+   representation versus capacity. They should not be collapsed.
+
+5. No number from 0001 through 0622 is absent. No duplicated proposition has a
+   conflicting disposition. The defects are duplication/overlap, not a runtime
+   compatibility contradiction.
+
+No ledger file was edited.

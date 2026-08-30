@@ -1,0 +1,53 @@
+Z80/8080-Macro-Assembler  Release 2.1	Wed Aug 19 13:26:58 2026	Page 1
+Source file: CPU8080.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Investigation 063: Intel 8080-compatible instruction and flag probe.
+                       2      2         org     0100h
+0005  =                3      3 bdos    equ     0005h
+                       4      4
+0100  31 85 01         5      5 start:  lxi     sp,stack
+0103  3e 09            6      6         mvi     a,09h
+0105  c6 09            7      7         adi     09h
+0107  27               8      8         daa
+0108  fe 18            9      9         cpi     18h
+010a  c2 40 01        10     10         jnz     fail
+010d  3e ff           11     11         mvi     a,0ffh
+010f  c6 01           12     12         adi     01h
+0111  d2 40 01        13     13         jnc     fail
+0114  c2 40 01        14     14         jnz     fail
+0117  3e 03           15     15         mvi     a,03h
+0119  e6 03           16     16         ani     03h
+011b  e2 40 01        17     17         jpo     fail
+011e  21 34 12        18     18         lxi     h,1234h
+0121  e5              19     19         push    h
+0122  d1              20     20         pop     d
+0123  7a              21     21         mov     a,d
+0124  fe 12           22     22         cpi     12h
+0126  c2 40 01        23     23         jnz     fail
+0129  7b              24     24         mov     a,e
+012a  fe 34           25     25         cpi     34h
+012c  c2 40 01        26     26         jnz     fail
+012f  cd 3b 01        27     27         call    subtest
+0132  c2 40 01        28     28         jnz     fail
+0135  11 4b 01        29     29         lxi     d,passmsg
+0138  c3 43 01        30     30         jmp     print
+013b  3e 55           31     31 subtest:mvi     a,55h
+013d  ee 55           32     32         xri     55h
+013f  c9              33     33         ret
+0140  11 58 01        34     34 fail:   lxi     d,failmsg
+0143  0e 09           35     35 print:  mvi     c,9
+0145  cd 05 00        36     36         call    bdos
+0148  c3 00 00        37     37         jmp     0000h
+014b  43 50 55 38     38     38 passmsg:db      'CPU8080 PASS$'
+014f  30 38 30 20     38     39
+0153  50 41 53 53     38     40
+0157  24              38     41
+0158  43 50 55 38     39     42 failmsg:db      'CPU8080 FAIL$'
+015c  30 38 30 20     39     43
+0160  46 41 49 4c     39     44
+0164  24              39     45
+0165                  40     46         ds      32
+0185                  41     47 stack:
+0185                  42     48         end

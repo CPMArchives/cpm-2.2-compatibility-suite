@@ -1,0 +1,30 @@
+spawn cpmsim -z -d /private/tmp/i035-runs/fzero
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>FZERO35
+MUTATE35 B/U7/DMA0800/IO40/PZ/TD000
+
+B>A:STATE35
+STATE35 DRIVE USER LOGIN RO IOBYTE PZ4 PZ0 PZ5 M50 TD000 CCP ALV DPB CST SRC DMA80 DMA800 SP 01 07 0003 0000 40 71 03C3 06C3 5A A5 C3 FCCF FA8D 00 FF 01 A5 EBA9
+
+B>[0;31mE (4418) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 3 ms, waited for 0 ms
+CPU executed 1572428 t-states in 0 ms
+Clock frequency 1883.14 MHz

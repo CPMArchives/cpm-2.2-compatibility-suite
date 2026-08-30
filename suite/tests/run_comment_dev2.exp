@@ -1,0 +1,45 @@
+#!/usr/bin/expect -f
+# SPDX-License-Identifier: GPL-2.0-or-later
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set cpu [lindex $argv 2]
+if {$cpu eq ""} { set cpu "-z" }
+set timeout 45
+log_file -noappend $logfile
+source [file join [file dirname [info script]] cpmsim-path.exp]
+spawn $cpmsim $cpu -d $diskdir
+expect "A>"
+send -- "B:\r"
+expect "B>"
+
+send -- "ECOTEST /H\r"
+expect "ECOTEST 0.1.0-dev2"
+expect "B>"
+send -- "ECOTEST /LIST\r"
+expect "TOTAL: 8 ITEMS"
+expect "B>"
+send -- "ECOTEST /ALL\r"
+expect "0513  P  R"
+expect "Summary: 1 pass, 0 fail, 0 error, 3 observed, 4 not-run"
+expect "B>"
+send -- "ECOTEST /0513\r"
+expect "SUCCESS: OPEN=FFH and sequential READ returns 00H then 01H."
+expect "B>"
+
+send -- "CPUTEST /H\r"
+expect "CPUTEST 0.1.0-dev2"
+expect "B>"
+send -- "CPUTEST /LIST\r"
+expect "TOTAL: 5 ITEMS"
+expect "B>"
+send -- "CPUTEST /ALL\r"
+expect "0623  P  R"
+expect "0624  P  R"
+expect "Summary: 2 pass, 0 fail, 0 error, 1 observed, 2 not-run"
+expect "B>"
+send -- "CPUTEST /0624\r"
+expect "SUCCESS: FFH+carry wraps to 00H with carry; INR preserves carry;"
+expect "B>"
+
+send "\034"
+expect eof

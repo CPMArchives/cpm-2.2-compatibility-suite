@@ -1,0 +1,34 @@
+Investigation 067 observed results
+====================================
+
+Fresh I067 tests
+
+T01 Cromemco Z-1 / CP/M 2.2:
+  BASE051 printed its banner, Function 12 matched 22h, printed
+  VERSION=22 PASS, and returned to A>.  The test image was unchanged.
+
+T02 IMSAI 8080 / CP/M 2.2 B03:
+  BASE051 loaded and printed through Function 9, but its Function 12 result
+  did not match 22h in L; it printed VERSION MISMATCH and returned to A>.
+  PROFILE.SUB startup created and deleted a temporary submit stream, leaving
+  254 changed bytes in deallocated media while the directory and PROFILE.SUB
+  contents remained unchanged.  This is not attributed to BASE051.
+
+T03/T04:
+  CPU8080 PASS in both Intel 8080 and Z80 processor modes.
+
+T05:
+  CPUZ80 PASS in Z80 mode.
+
+T06:
+  CPUZ80 under the Intel 8080 profile produced no PASS and no CCP return in
+  20 seconds; the harness interrupted execution at 0088h.
+
+Inherited, independently preserved controls
+
+T07 (I065): matched IMSAI QTERM exchanged exact bytes with its endpoint.
+T08 (I051): IMSAI QTERM on Mostek trapped at first unsupported IN 23h.
+T09 (I051): KSCOPE on Mostek trapped at first unsupported OUT 0Eh.
+
+These observations validate a layered claim: generic CP/M, processor profile,
+BIOS/device profile, and application fixture are separate conformance scopes.

@@ -1,0 +1,302 @@
+; Investigation 005: BDOS function 1 Console Input and echo probe.
+; Assemble: z80asm -fb -oIN005.COM IN005.ASM
+;
+; A deterministic harness temporarily replaces BIOS CONST, CONIN, CONOUT,
+; and LIST vectors.  CONIN supplies one scripted byte, while CONOUT and LIST
+; capture exact device bytes.  Original vectors are restored before reporting.
+
+	ORG	0100H
+
+START:
+	CALL	PATCHBIOS
+
+	LD	A,'A'
+	LD	HL,RECA
+	CALL	RUN1
+
+	CALL	ZEROCOL		; function-2 LF, then discard its capture
+	LD	A,09H
+	LD	HL,RECTAB
+	CALL	RUN1
+
+	LD	A,0DH
+	LD	HL,RECCR
+	CALL	RUN1
+
+	LD	A,0AH
+	LD	HL,RECLF
+	CALL	RUN1
+
+	LD	A,08H
+	LD	HL,RECBS
+	CALL	RUN1
+
+	LD	A,01H
+	LD	HL,RECCTL1
+	CALL	RUN1
+
+; Ctrl-P is documented as checked by function 1.  Record its own echo, then
+; output Q through function 2 without clearing capture: a toggle would cause
+; Q to appear in LIST as well as CONOUT.
+	CALL	CLEARCAP
+	LD	A,10H
+	CALL	SETCHAR
+	LD	C,1
+	CALL	0005H
+	LD	(RECCP),A
+	LD	E,'Q'
+	LD	C,2
+	CALL	0005H
+	LD	HL,RECCP
+	CALL	SAVECAP
+
+; Function 11 consumes scripted Z into DRI pending state.  Function 1 should
+; then consume that retained byte without a second BIOS CONIN call and echo Z.
+	CALL	CLEARCAP
+	LD	A,'Z'
+	CALL	SETCHAR
+	LD	C,11
+	CALL	0005H
+	LD	(RECPENDSTAT),A
+	LD	C,1
+	CALL	0005H
+	LD	(RECPEND),A
+	LD	HL,RECPEND
+	CALL	SAVECAP
+
+	CALL	RESTBIOS
+	LD	DE,HEADER
+	CALL	PRINT9
+	LD	DE,LABA
+	LD	HL,RECA
+	CALL	PRINTREC
+	LD	DE,LABTAB
+	LD	HL,RECTAB
+	CALL	PRINTREC
+	LD	DE,LABCR
+	LD	HL,RECCR
+	CALL	PRINTREC
+	LD	DE,LABLF
+	LD	HL,RECLF
+	CALL	PRINTREC
+	LD	DE,LABBS
+	LD	HL,RECBS
+	CALL	PRINTREC
+	LD	DE,LABC1
+	LD	HL,RECCTL1
+	CALL	PRINTREC
+	LD	DE,LABCP
+	LD	HL,RECCP
+	CALL	PRINTREC
+	LD	DE,LABPEND
+	CALL	PRINT9
+	LD	A,(RECPENDSTAT)
+	CALL	HEXBYTE
+	LD	E,' '
+	CALL	PUT2
+	LD	HL,RECPEND
+	CALL	PRBODY
+	RET
+
+; Input A=scripted byte, HL=record.
+RUN1:
+	PUSH	HL
+	CALL	SETCHAR
+	CALL	CLEARCAP
+	LD	C,1
+	CALL	0005H
+	POP	HL
+	LD	(HL),A
+	CALL	SAVECAP
+	RET
+
+SETCHAR:
+	LD	(HCHAR),A
+	LD	A,1
+	LD	(HREADY),A
+	RET
+
+ZEROCOL:
+	LD	E,0AH
+	LD	C,2
+	CALL	0005H
+	JP	CLEARCAP
+
+CLEARCAP:
+	XOR	A
+	LD	(CONLEN),A
+	LD	(LISTLEN),A
+	LD	(CONINCNT),A
+	RET
+
+; Record: return, CONOUT length, first 8 CONOUT bytes, LIST length, CONIN calls.
+SAVECAP:
+	INC	HL
+	LD	A,(CONLEN)
+	LD	(HL),A
+	INC	HL
+	PUSH	HL
+	LD	DE,CONBUF
+	EX	DE,HL
+	LD	BC,8
+	LDIR
+	EX	DE,HL
+	POP	HL
+	LD	DE,8
+	ADD	HL,DE
+	LD	A,(LISTLEN)
+	LD	(HL),A
+	INC	HL
+	LD	A,(CONINCNT)
+	LD	(HL),A
+	RET
+
+; Patch BIOS vectors derived from the WBOOT jump target at 0001h.
+PATCHBIOS:
+	LD	HL,(0001H)
+	DEC	HL
+	DEC	HL
+	DEC	HL		; BIOS base
+	LD	DE,6
+	ADD	HL,DE
+	LD	(VECBASE),HL	; CONST vector
+	LD	DE,SAVEVEC
+	LD	BC,12
+	LDIR
+	LD	HL,(VECBASE)
+	LD	DE,HCONST
+	CALL	PUTJP
+	LD	DE,HCONIN
+	CALL	PUTJP
+	LD	DE,HCONOUT
+	CALL	PUTJP
+	LD	DE,HLIST
+	JP	PUTJP
+
+PUTJP:
+	LD	(HL),0C3H
+	INC	HL
+	LD	A,E
+	LD	(HL),A
+	INC	HL
+	LD	A,D
+	LD	(HL),A
+	INC	HL
+	RET
+
+RESTBIOS:
+	LD	HL,SAVEVEC
+	LD	DE,(VECBASE)
+	LD	BC,12
+	LDIR
+	RET
+
+HCONST:
+	LD	A,(HREADY)
+	OR	A
+	RET	Z
+	LD	A,0FFH
+	RET
+
+HCONIN:
+	LD	HL,CONINCNT
+	INC	(HL)
+	XOR	A
+	LD	(HREADY),A
+	LD	A,(HCHAR)
+	RET
+
+HCONOUT:
+	LD	A,(CONLEN)
+	CP	8
+	JR	NC,HCOCOUNT
+	LD	E,A
+	LD	D,0
+	LD	HL,CONBUF
+	ADD	HL,DE
+	LD	(HL),C
+HCOCOUNT:
+	LD	HL,CONLEN
+	INC	(HL)
+	RET
+
+HLIST:
+	LD	HL,LISTLEN
+	INC	(HL)
+	RET
+
+PRINTREC:
+	PUSH	HL
+	CALL	PRINT9
+	POP	HL
+PRBODY:
+	LD	B,12
+PRLOOP:
+	LD	A,(HL)
+	INC	HL
+	PUSH	BC
+	PUSH	HL
+	CALL	HEXBYTE
+	LD	E,' '
+	CALL	PUT2
+	POP	HL
+	POP	BC
+	DJNZ	PRLOOP
+	LD	DE,CRLF
+	JP	PRINT9
+
+HEXBYTE:
+	PUSH	AF
+	RRCA
+	RRCA
+	RRCA
+	RRCA
+	CALL	HEXNIB
+	POP	AF
+HEXNIB:
+	AND	0FH
+	ADD	A,'0'
+	CP	'9'+1
+	JR	C,HEXOUT
+	ADD	A,7
+HEXOUT:
+	LD	E,A
+PUT2:
+	LD	C,2
+	JP	0005H
+
+PRINT9:
+	LD	C,9
+	JP	0005H
+
+VECBASE: DW 0
+SAVEVEC: DS 12
+HREADY: DB 0
+HCHAR: DB 0
+CONINCNT: DB 0
+CONLEN: DB 0
+LISTLEN: DB 0
+CONBUF: DS 8
+
+RECA: DS 12
+RECTAB: DS 12
+RECCR: DS 12
+RECLF: DS 12
+RECBS: DS 12
+RECCTL1: DS 12
+RECCP: DS 12
+RECPENDSTAT: DB 0
+RECPEND: DS 12
+
+HEADER: DB 13,10,'IN005 ret conlen con[8] listlen conincalls',13,10,'$'
+LABA: DB 'A    $'
+LABTAB: DB 'TAB  $'
+LABCR: DB 'CR   $'
+LABLF: DB 'LF   $'
+LABBS: DB 'BS   $'
+LABC1: DB 'C-A  $'
+LABCP: DB 'C-PQ $'
+LABPEND: DB 'PEND status $'
+CRLF: DB 13,10,'$'
+
+	END

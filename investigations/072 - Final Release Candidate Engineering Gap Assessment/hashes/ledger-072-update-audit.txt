@@ -1,0 +1,25 @@
+LEDGER 072 CONTROLLED UPDATE AUDIT
+
+Source Ledger 071: <project-root>/compatibility/02 Compatibility Ledger - Investigation 071.txt
+Source Ledger 071 SHA-256: e8e1acd1ddeb74daf9e2a3642abf3ab8917eff48058ff217f42152abf48e15d5
+Investigation 072 report SHA-256: e001ed7a13ea9b79b21fdd18ddd59b3b5de1e113538a5cb3796113df1757b641
+Investigation 072 gap register SHA-256: 7fc9ab74d12b92bb8ae451fdf6a026ddd37edceeaaad44873ec3a1fc58a8b5d1
+Ledger 072 SHA-256: eb16466fdbff8fb2bc07bd02a07198b8426fb6452be3dd1f256cbff4af0547d3
+
+Identifiers: 627 unique and contiguous, 0001-0627
+Numbered proposition blocks byte-identical to Ledger 071: 627/627
+Disposition counts:
+  REQUIRED: 458
+  NOT GUARANTEED: 116
+  NOT REQUIRED: 53
+  POLICY PENDING: 0
+
+Changes:
+  - added I072 to the source catalogue;
+  - appended the I072 cumulative-history section.
+
+Compatibility proposition changes: none
+Disposition changes: none
+Applicability changes: none
+Conformance-oracle changes: none
+RESULT: PASS

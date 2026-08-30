@@ -1,0 +1,39 @@
+INVESTIGATION 038 COMPLETION AUDIT
+
+Project state
+  Authoritative ledger: 02 Compatibility Ledger - Investigation 037.txt
+  Baseline/current SHA-256:
+    aaca2220e65751e3ac2604b5b718092c40c5ccd4ddc470d0303420690e7349de
+  Last entry: 0605
+  Ledger writes: none
+
+Protected tree
+  2,311 pre-existing files recorded and verified.
+  Differences: none.
+
+Build verification
+  CHAR38.COM: byte-identical
+  STATUS38.COM: byte-identical
+  IOBYTE38.COM: byte-identical
+  BLOCK38.COM: byte-identical
+  ERROR38.COM: byte-identical
+
+Experiment verification
+  Deterministic console/reader/punch/list matrix: PASS
+  BIOS direct-call/status matrix: PASS
+  Live IOBYTE assignment matrix: PASS
+  Empty/ready/pending/raw-output matrix: PASS
+  Optional-device boundary/failure-model matrix: PASS
+  A and B after-images byte-identical to before-images: PASS
+
+Artifacts
+  Report sections 1-21: present
+  Five required named ASM/COM probes: present
+  README, observed output, ecosystem evidence, transcript, images, references,
+  scripts and hashes: present
+  ZIP archives created: none
+
+Unresolved policy
+  Exact LISTST encoding, Function 6 E=FEh, and named unavailable-device profiles
+  remain explicitly open. No unperformed physical-device behavior is claimed.
+

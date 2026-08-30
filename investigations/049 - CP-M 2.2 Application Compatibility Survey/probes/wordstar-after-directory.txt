@@ -1,0 +1,9 @@
+0:
+-rw-rw-rw-     128 Jan 01 1970  app49.txt
+-rwxrwxrwx    6016 Jan 01 1970  opi.com
+-rw-rw-rw-    2304 Jan 01 1970  rdd.sup
+-rwxrwxrwx   12800 Jan 01 1970  system.com
+-rwxrwxrwx   15872 Jan 01 1970  ws.com
+-rw-rw-rw-   27904 Jan 01 1970  wsmsgs.ovr
+-rw-rw-rw-   34048 Jan 01 1970  wsovly1.ovr
+-rwxrwxrwx    5504 Jan 01 1970  xfer.com

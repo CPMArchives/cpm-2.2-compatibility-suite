@@ -1,0 +1,103 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 18:39:29 2026	Page 1
+Source file: FUNC27.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1         ORG 100H
+0100  31 ec 01         2      2         LD SP,STACK
+0103  21 4e 01         3      3         LD HL,BAN
+0106  cd ec 01         4      4         CALL PUTS
+0109  21 61 01         5      5         LD HL,FUNCS
+010c  06 07            6      6         LD B,7
+010e  4e               7      7 LOOP:   LD C,(HL)
+010f  23               8      8         INC HL
+0110  e5               9      9         PUSH HL
+0111  c5              10     10         PUSH BC
+0112  1e a5           11     11         LD E,0A5H
+0114  cd 05 00        12     12         CALL 5
+0117  22 68 01        13     13         LD (RESHL),HL
+011a  32 6a 01        14     14         LD (RESA),A
+011d  78              15     15         LD A,B
+011e  32 6b 01        16     16         LD (RESB),A
+0121  c1              17     17         POP BC
+0122  e1              18     18         POP HL
+0123  e5              19     19         PUSH HL
+0124  c5              20     20         PUSH BC
+0125  79              21     21         LD A,C
+0126  cd 18 02        22     22         CALL HEXB
+0129  cd 04 02        23     23         CALL SPACE
+012c  2a 68 01        24     24         LD HL,(RESHL)
+012f  cd 13 02        25     25         CALL HEXW
+0132  cd 04 02        26     26         CALL SPACE
+0135  3a 6a 01        27     27         LD A,(RESA)
+0138  cd 18 02        28     28         CALL HEXB
+013b  cd 04 02        29     29         CALL SPACE
+013e  3a 6b 01        30     30         LD A,(RESB)
+0141  cd 18 02        31     31         CALL HEXB
+0144  cd 09 02        32     32         CALL CRLF
+0147  c1              33     33         POP BC
+0148  e1              34     34         POP HL
+0149  10 c3           35     35         DJNZ LOOP
+014b  c3 2f 02        36     36         JP EXIT
+014e  46 55 4e 43     37     37 BAN:    DB 'FUNC27 fn HL A B',13,10,0
+0152  32 37 20 66     37     38
+0156  6e 20 48 4c     37     39
+015a  20 41 20 42     37     40
+015e  0d 0a 00        37     41
+0161  0c 26 27 29     38     42 FUNCS:  DB 12,38,39,41,42,127,255
+0165  2a 7f ff        38     43
+0168  00 00           39     44 RESHL:  DW 0
+016a  00              40     45 RESA:   DB 0
+016b  00              41     46 RESB:   DB 0
+016c                  42     47         DS 128
+01ec                  43     48 STACK:
+01ec  7e              44     49 PUTS:   LD A,(HL)
+01ed  23              45     50         INC HL
+01ee  b7              46     51         OR A
+01ef  c8              47     52         RET Z
+01f0  5f              48     53         LD E,A
+01f1  cd f6 01        49     54         CALL PUTC
+01f4  18 f6           50     55         JR PUTS
+01f6  f5              51     56 PUTC:   PUSH AF
+01f7  c5              52     57         PUSH BC
+01f8  d5              53     58         PUSH DE
+01f9  e5              54     59         PUSH HL
+01fa  0e 02           55     60         LD C,2
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 18:39:29 2026	Page 2
+Source file: FUNC27.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+01fc  cd 05 00        56     61         CALL 5
+01ff  e1              57     62         POP HL
+0200  d1              58     63         POP DE
+0201  c1              59     64         POP BC
+0202  f1              60     65         POP AF
+0203  c9              61     66         RET
+0204  1e 20           62     67 SPACE:  LD E,' '
+0206  c3 f6 01        63     68         JP PUTC
+0209  1e 0d           64     69 CRLF:   LD E,13
+020b  cd f6 01        65     70         CALL PUTC
+020e  1e 0a           66     71         LD E,10
+0210  c3 f6 01        67     72         JP PUTC
+0213  7c              68     73 HEXW:   LD A,H
+0214  cd 18 02        69     74         CALL HEXB
+0217  7d              70     75         LD A,L
+0218  f5              71     76 HEXB:   PUSH AF
+0219  0f              72     77         RRCA
+021a  0f              73     78         RRCA
+021b  0f              74     79         RRCA
+021c  0f              75     80         RRCA
+021d  cd 21 02        76     81         CALL NIB
+0220  f1              77     82         POP AF
+0221  e6 0f           78     83 NIB:    AND 0FH
+0223  c6 30           79     84         ADD A,'0'
+0225  fe 3a           80     85         CP '9'+1
+0227  38 02           81     86         JR C,NOUT
+0229  c6 07           82     87         ADD A,7
+022b  5f              83     88 NOUT:   LD E,A
+022c  c3 f6 01        84     89         JP PUTC
+022f  0e 00           85     90 EXIT:   LD C,0
+0231  c3 05 00        86     91         JP 5
+                      87     92
+0234                  88     93         END

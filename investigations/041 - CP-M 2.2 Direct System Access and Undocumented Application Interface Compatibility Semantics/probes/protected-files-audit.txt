@@ -1,0 +1,25 @@
+Investigation 041 protected-file audit
+======================================
+
+The pre-investigation manifest contains 2,482 existing BetterCP/M files.
+Verification after the investigation found every substantive project file,
+prior report/artifact, and ledger byte-identical.
+
+Two macOS Finder metadata files changed outside the Investigation 041 staging
+directory during the work:
+
+<project-root>/investigations/.DS_Store
+  before: 2e6b87b592ba3083fa151648e3ad540c8159e27c9b9ad254fc4189c6ae0653b4
+  after:  7d6ef520a6013331cef905624572aae9fd6d407600291d5413a1c055c668c9c4
+
+<project-root>/investigations/040 - CP-M 2.2 Disk Format, Drive Geometry, and Direct Structure Compatibility Semantics/.DS_Store
+  before: d65165279105ca6773180500688df4bdc69a2c7b771752f0a46ef120b7fd8ec3
+  after:  dbf2bfbaa68341875e8255f6a9556055ac94d97b1c9c5235e25b5c3a26ff3316
+
+Investigation 041 did not write these Finder-managed files and did not attempt
+to overwrite or reconstruct them. This exception is disclosed rather than
+claiming a false all-file hash match.
+
+Authoritative ledger after investigation:
+28dbd0779a5b5ce4cdc431d07de1895135abc970ba21e4eea42d8148ed8241e2
+

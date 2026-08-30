@@ -1,0 +1,91 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sat Aug 15 20:55:25 2026	Page 1
+Source file: STATE22.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Entry/return-state probe used after all three termination paths.
+                       2      2         ORG 0100H
+0100  ed 73 aa 01      3      3         LD (SPSAVE),SP
+0104  11 81 01         4      4         LD DE,MSG
+0107  0e 09            5      5         LD C,9
+0109  cd 05 00         6      6         CALL 5
+010c  3a 04 00         7      7         LD A,(0004H)
+010f  cd 57 01         8      8         CALL HEX
+0112  11 8e 01         9      9         LD DE,ULAB
+0115  0e 09           10     10         LD C,9
+0117  cd 05 00        11     11         CALL 5
+011a  1e ff           12     12         LD E,0FFH
+011c  0e 20           13     13         LD C,32
+011e  cd 05 00        14     14         CALL 5
+0121  cd 57 01        15     15         CALL HEX
+0124  11 95 01        16     16         LD DE,SPLAB
+0127  0e 09           17     17         LD C,9
+0129  cd 05 00        18     18         CALL 5
+012c  2a aa 01        19     19         LD HL,(SPSAVE)
+012f  cd 50 01        20     20         CALL HEXW
+0132  1e 20           21     21         LD E,' '
+0134  cd 6b 01        22     22         CALL PUTC
+0137  5e              23     23         LD E,(HL)
+0138  23              24     24         INC HL
+0139  56              25     25         LD D,(HL)
+013a  eb              26     26         EX DE,HL
+013b  cd 50 01        27     27         CALL HEXW
+013e  11 9e 01        28     28         LD DE,TAIL
+0141  0e 09           29     29         LD C,9
+0143  cd 05 00        30     30         CALL 5
+0146  3a 80 00        31     31         LD A,(0080H)
+0149  cd 57 01        32     32         CALL HEX
+014c  cd 77 01        33     33         CALL CRLF
+014f  c9              34     34         RET
+0150  e5              35     35 HEXW:  PUSH HL
+0151  7c              36     36         LD A,H
+0152  cd 57 01        37     37         CALL HEX
+0155  e1              38     38         POP HL
+0156  7d              39     39         LD A,L
+0157  f5              40     40 HEX:   PUSH AF
+0158  0f              41     41         RRCA
+0159  0f              42     42         RRCA
+015a  0f              43     43         RRCA
+015b  0f              44     44         RRCA
+015c  cd 60 01        45     45         CALL NIB
+015f  f1              46     46         POP AF
+0160  e6 0f           47     47 NIB:   AND 0FH
+0162  c6 30           48     48         ADD A,'0'
+0164  fe 3a           49     49         CP '9'+1
+0166  38 02           50     50         JR C,OUT
+0168  c6 07           51     51         ADD A,7
+016a  5f              52     52 OUT:   LD E,A
+016b  c5              53     53 PUTC:  PUSH BC
+016c  d5              54     54         PUSH DE
+016d  e5              55     55         PUSH HL
+016e  0e 02           56     56         LD C,2
+0170  cd 05 00        57     57         CALL 5
+0173  e1              58     58         POP HL
+0174  d1              59     59         POP DE
+0175  c1              60     60         POP BC
+Z80/8080-Macro-Assembler  Release 2.1	Sat Aug 15 20:55:25 2026	Page 2
+Source file: STATE22.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0176  c9              61     61         RET
+0177  1e 0d           62     62 CRLF:  LD E,13
+0179  cd 6b 01        63     63         CALL PUTC
+017c  1e 0a           64     64         LD E,10
+017e  c3 6b 01        65     65         JP PUTC
+0181  53 54 41 54     66     66 MSG:   DB 'STATE22 PZ4=$'
+0185  45 32 32 20     66     67
+0189  50 5a 34 3d     66     68
+018d  24              66     69
+018e  20 55 53 45     67     70 ULAB:  DB ' USER=$'
+0192  52 3d 24        67     71
+0195  20 53 50 2f     68     72 SPLAB: DB ' SP/RET=$'
+0199  52 45 54 3d     68     73
+019d  24              68     74
+019e  20 54 41 49     69     75 TAIL:  DB ' TAILCOUNT=$'
+01a2  4c 43 4f 55     69     76
+01a6  4e 54 3d 24     69     77
+01aa  00 00           70     78 SPSAVE:DW 0
+01ac                  71     79         DS 96
+020c                  72     80 STACKTOP:
+020c                  73     81         END

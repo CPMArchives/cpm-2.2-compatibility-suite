@@ -1,0 +1,64 @@
+Investigation 070A observed results
+==================================
+
+Reference environment
+---------------------
+z80pack cpmsim 1.39 (2025 banner), unlimited Z80 with undocumented
+instructions enabled; DRI 64K CP/M 2.2; Z80 CBIOS 1.2; IBM-3740 images.
+All console input was scripted.
+
+Normal complete workflow
+------------------------
+- Boot reached A>.
+- CCP found and loaded CROSS70A.COM.
+- Public WBOOT/BDOS targets observed: FA03/EC06 (configuration-specific).
+- Function 12 returned 0022; initial drive/user returned 00/00.
+- Alternate-DMA Search First returned 01 and exposed user 00 ATTR.DAT.
+- In user 1, explicit A: search returned FF; in user 0 it returned 01.
+- Explicit A: searching did not change persistent current drive B (01).
+- Configured BIOS CONST returned 00.
+- Function 13 restored drive 00; user query returned 00; DMA was restored.
+- RET returned to A>; a second DIR succeeded.
+- CCP SAVE created/wrote/closed COPY70.DAT; DIR found it; ERA deleted it;
+  final DIR reported NO FILE. The final directory had the original free-space
+  count, showing that the allocation was released at the public level.
+
+Logical failure workflow
+------------------------
+- Sequential and random missing-data controls each returned 01.
+- DMA sentinel EE remained non-result data.
+- Neither logical failure entered the physical-error presentation path.
+- CROSS70A then completed and returned to a usable A> prompt.
+
+Physical failure, ignore
+------------------------
+- The isolated emulator failed the next BIOS physical read before transfer.
+- BDOS presented "Bdos Err On A: Bad Sector".
+- An arbitrary non-Control-C response selected ignore; the BDOS read returned
+  00 while the EE DMA sentinel remained invalid new data.
+- CROSS70A and DIR then completed normally.
+- Both disk images were byte-identical to ready images.
+
+Physical failure, Control-C abort
+---------------------------------
+- The isolated emulator failed the next BIOS physical read before transfer.
+- BDOS presented "Bdos Err On A: Bad Sector".
+- Control-C abandoned the interrupted transient and returned through warm
+  recovery to A>.
+- CROSS70A and DIR then completed normally.
+- Both disk images were byte-identical to ready images.
+
+Ledger review
+-------------
+- 627 entries, contiguous 0001-0627; no duplicate IDs or gaps.
+- 424 REQUIRED, 105 NOT GUARANTEED, 49 NOT REQUIRED, 49 POLICY PENDING.
+- No byte-normalized exact duplicate propositions.
+- Entry 0435 is the canonical Function-37 status proposition; 0523 is the
+  explicitly conditional detailed profile, so the pair is not contradictory.
+- No conflicting cross-layer disposition was found.
+
+Host shutdown note
+------------------
+The terminal diagnostic after the harness sends the emulator interrupt is a
+host-side cpmsim shutdown artifact after the final A> prompt, not CP/M evidence.
+

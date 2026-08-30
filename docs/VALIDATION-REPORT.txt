@@ -1,0 +1,30 @@
+F073-02 RELEASE PACKAGE VALIDATION REPORT
+
+Release ID: bettercpm-cpm22-standard-1.0-rc1
+Package directory: BetterCPM-CPM22-Compatibility-Standard-1.0-rc1
+Publication base: /bettercpm/compatibility/releases/BetterCPM-CPM22-Compatibility-Standard-1.0-rc1/
+
+Normative copied artifacts byte-identical to sources: 16/16
+Ledger 072 SHA-256: eb16466fdbff8fb2bc07bd02a07198b8426fb6452be3dd1f256cbff4af0547d3
+Ledger IDs: 627 unique and contiguous 0001-0627
+Dispositions: REQUIRED 458; NOT GUARANTEED 116; NOT REQUIRED 53; POLICY PENDING 0
+Frozen top-level tests: 62 unique
+Proposition cases: 627 unique
+Oracles: 627 unique
+Registry profiles: 18 including CPM22-BASE
+Mapped conditional cases: 31 unique (28 PROFILE REQUIRED; 3 OPTIONAL)
+Publication file references resolve: yes
+Publication directory references resolve: yes
+Draft artifacts presented as normative: no
+Historical supersession stated: yes
+Implementation/certification claim made: no
+Ledger modified: no
+Semantic assembly changes: none
+
+Synchronization checks inherited from I074: 10/10 PASS
+Final package hash verification: performed after manifest generation; see
+PACKAGE-SHA256SUMS and task completion audit.
+
+RESULT: PASS
+Conclusion: the package is complete and internally consistent as a
+specification release-candidate artifact. It is not a product certificate.

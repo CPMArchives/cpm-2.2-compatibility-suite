@@ -1,0 +1,100 @@
+.DS_Store
+*.bak
+*.log
+__pycache__/
+*.pyc
+suite/build-tools/M80.COM
+suite/build-tools/L80.COM
+
+# Historical proprietary fixtures retained locally for research, but omitted
+# from the public repository. See docs/REDISTRIBUTION-OMISSIONS.md.
+/investigations/048 - CP-M 2.2 Development Toolchain Compatibility Survey/reference/software/CREF80.COM
+/investigations/048 - CP-M 2.2 Development Toolchain Compatibility Survey/reference/software/LIB80.COM
+/investigations/048 - CP-M 2.2 Development Toolchain Compatibility Survey/probes/case/drivea.dsk
+/investigations/048 - CP-M 2.2 Development Toolchain Compatibility Survey/probes/images-before/drivea.dsk
+/investigations/048 - CP-M 2.2 Development Toolchain Compatibility Survey/probes/images-after/drivea.dsk
+/investigations/048 - CP-M 2.2 Development Toolchain Compatibility Survey/probes/transcripts/drivea-after-run2.dsk
+
+/investigations/049 - CP-M 2.2 Application Compatibility Survey/probes/MBASIC.COM
+/investigations/049 - CP-M 2.2 Application Compatibility Survey/probes/WS.COM
+/investigations/049 - CP-M 2.2 Application Compatibility Survey/probes/games-fixture-before.dsk
+/investigations/049 - CP-M 2.2 Application Compatibility Survey/probes/games-after.dsk
+/investigations/049 - CP-M 2.2 Application Compatibility Survey/probes/system-fixture-before.dsk
+/investigations/049 - CP-M 2.2 Application Compatibility Survey/probes/wordstar-fixture-before.dsk
+/investigations/049 - CP-M 2.2 Application Compatibility Survey/probes/wordstar-after.dsk
+/investigations/049 - CP-M 2.2 Application Compatibility Survey/probes/wordstar-after-repeat.dsk
+/investigations/049 - CP-M 2.2 Application Compatibility Survey/probes/wordstar-disk-full-after.dsk
+
+/investigations/050 - CP-M 2.2 Communications Software Compatibility Survey/probes/QTERM.COM
+/investigations/050 - CP-M 2.2 Communications Software Compatibility Survey/probes/imsai-apps-fixture-before.dsk
+/investigations/050 - CP-M 2.2 Communications Software Compatibility Survey/probes/qterm-profile-after.dsk
+/investigations/050 - CP-M 2.2 Communications Software Compatibility Survey/probes/xmodem-interface-after.dsk
+/investigations/050 - CP-M 2.2 Communications Software Compatibility Survey/reference/imsai-comms/qt-imsai.asm
+/investigations/050 - CP-M 2.2 Communications Software Compatibility Survey/reference/imsai-comms/qt-imsai.com
+/investigations/050 - CP-M 2.2 Communications Software Compatibility Survey/reference/imsai-comms/qtchat.doc
+/investigations/050 - CP-M 2.2 Communications Software Compatibility Survey/reference/imsai-comms/qterm.doc
+/investigations/050 - CP-M 2.2 Communications Software Compatibility Survey/reference/imsai-comms/qterm.pat
+
+/investigations/064 - CP-M 2.2 Expanded Software Corpus Validation/downloads/F80.COM
+/investigations/064 - CP-M 2.2 Expanded Software Corpus Validation/downloads/FORLIB.REL
+/investigations/064 - CP-M 2.2 Expanded Software Corpus Validation/downloads/TURBO.COM
+/investigations/064 - CP-M 2.2 Expanded Software Corpus Validation/downloads/TURBO.MSG
+/investigations/064 - CP-M 2.2 Expanded Software Corpus Validation/downloads/TURBO.OVR
+/investigations/064 - CP-M 2.2 Expanded Software Corpus Validation/probes/cases/
+/investigations/064 - CP-M 2.2 Expanded Software Corpus Validation/probes/images-before/
+/investigations/064 - CP-M 2.2 Expanded Software Corpus Validation/probes/images-after/
+/investigations/064 - CP-M 2.2 Expanded Software Corpus Validation/probes/extracted/F80HELLO.COM
+
+# Earlier and later investigations reused the same locally preserved fixture
+# disks, so these copies also contain one or more omitted products.
+/investigations/040 - CP-M 2.2 Disk Format, Drive Geometry, and Direct Structure Compatibility Semantics/probes/images-after/damaged-ibm3740.dsk
+/investigations/040 - CP-M 2.2 Disk Format, Drive Geometry, and Direct Structure Compatibility Semantics/probes/images-after/normal-ibm3740.dsk
+/investigations/040 - CP-M 2.2 Disk Format, Drive Geometry, and Direct Structure Compatibility Semantics/probes/images-before/damaged-ibm3740.dsk
+/investigations/040 - CP-M 2.2 Disk Format, Drive Geometry, and Direct Structure Compatibility Semantics/probes/images-before/normal-ibm3740.dsk
+/investigations/040 - CP-M 2.2 Disk Format, Drive Geometry, and Direct Structure Compatibility Semantics/probes/native-bdos/drivea.dsk
+/investigations/040 - CP-M 2.2 Disk Format, Drive Geometry, and Direct Structure Compatibility Semantics/probes/native-bios/drivea.dsk
+/investigations/040 - CP-M 2.2 Disk Format, Drive Geometry, and Direct Structure Compatibility Semantics/probes/work/damage-source.dsk
+/investigations/041 - CP-M 2.2 Direct System Access and Undocumented Application Interface Compatibility Semantics/probes/case/drivea.dsk
+/investigations/041 - CP-M 2.2 Direct System Access and Undocumented Application Interface Compatibility Semantics/probes/images-after/drivea.dsk
+/investigations/041 - CP-M 2.2 Direct System Access and Undocumented Application Interface Compatibility Semantics/probes/images-before/drivea.dsk
+/investigations/042 - CP-M 2.2 Common Software Compatibility Assumptions/probes/case/drivea.dsk
+/investigations/042 - CP-M 2.2 Common Software Compatibility Assumptions/probes/images-after/drivea.dsk
+/investigations/042 - CP-M 2.2 Common Software Compatibility Assumptions/probes/images-before/drivea.dsk
+/investigations/047 - CP-M 2.2 Standard Utility Compatibility Survey/probes/case/drivea.dsk
+/investigations/047 - CP-M 2.2 Standard Utility Compatibility Survey/probes/images-after/drivea.dsk
+/investigations/047 - CP-M 2.2 Standard Utility Compatibility Survey/probes/images-before/drivea.dsk
+/investigations/051 - CP-M 2.2 Hardware-Dependent Software Compatibility Survey/probes/base-control-after.dsk
+/investigations/051 - CP-M 2.2 Hardware-Dependent Software Compatibility Survey/probes/hardware-fixture-before.dsk
+/investigations/051 - CP-M 2.2 Hardware-Dependent Software Compatibility Survey/probes/kscope-unsupported-port-after.dsk
+/investigations/051 - CP-M 2.2 Hardware-Dependent Software Compatibility Survey/probes/prommer-startup-after.dsk
+/investigations/051 - CP-M 2.2 Hardware-Dependent Software Compatibility Survey/probes/qterm-unsupported-port-after.dsk
+/investigations/051 - CP-M 2.2 Hardware-Dependent Software Compatibility Survey/probes/viopen-profile-mismatch-after.dsk
+/investigations/051 - CP-M 2.2 Hardware-Dependent Software Compatibility Survey/reference/qt-imsai.asm
+/investigations/051 - CP-M 2.2 Hardware-Dependent Software Compatibility Survey/reference/qterm.com
+/investigations/053 - CP-M 2.2 Software Corpus Validation/probes/images/hardware-after.dsk
+/investigations/053 - CP-M 2.2 Software Corpus Validation/probes/images/hardware-before.dsk
+/investigations/053 - CP-M 2.2 Software Corpus Validation/probes/images/toolchain-drivea-after.dsk
+/investigations/053 - CP-M 2.2 Software Corpus Validation/probes/images/toolchain-drivea-before.dsk
+/investigations/053 - CP-M 2.2 Software Corpus Validation/probes/images/utility-drivea-after.dsk
+/investigations/053 - CP-M 2.2 Software Corpus Validation/probes/images/utility-drivea-before.dsk
+/investigations/053 - CP-M 2.2 Software Corpus Validation/probes/images/wordstar-after.dsk
+/investigations/053 - CP-M 2.2 Software Corpus Validation/probes/images/wordstar-before.dsk
+/investigations/053 - CP-M 2.2 Software Corpus Validation/probes/images/wumpus-after.dsk
+/investigations/053 - CP-M 2.2 Software Corpus Validation/probes/images/wumpus-before.dsk
+/investigations/053 - CP-M 2.2 Software Corpus Validation/probes/transcripts/toolchain/drivea-after-run2.dsk
+/investigations/054 - CP-M 2.2 Undocumented Behavior Validation/probes/images/i041/images-after/drivea.dsk
+/investigations/054 - CP-M 2.2 Undocumented Behavior Validation/probes/images/i041/images-before/drivea.dsk
+/investigations/054 - CP-M 2.2 Undocumented Behavior Validation/probes/images/i042/images-after/drivea.dsk
+/investigations/054 - CP-M 2.2 Undocumented Behavior Validation/probes/images/i042/images-before/drivea.dsk
+/investigations/063 - CP-M 2.2 Processor and Instruction Profile/probes/images-after/run-8080-drivea.dsk
+/investigations/063 - CP-M 2.2 Processor and Instruction Profile/probes/images-after/run-z80-drivea.dsk
+/investigations/063 - CP-M 2.2 Processor and Instruction Profile/probes/images-before/run-8080-drivea.dsk
+/investigations/063 - CP-M 2.2 Processor and Instruction Profile/probes/images-before/run-z80-drivea.dsk
+/investigations/063 - CP-M 2.2 Processor and Instruction Profile/probes/run-8080/drivea.dsk
+/investigations/063 - CP-M 2.2 Processor and Instruction Profile/probes/run-z80/drivea.dsk
+/investigations/065 - CP-M 2.2 Communications Profile Validation/probes/source/qt-imsai.asm
+/investigations/065 - CP-M 2.2 Communications Profile Validation/probes/source/qterm.doc
+/investigations/067 - CP-M 2.2 Hardware Profile Validation/probes/profiles/cpu-i8080/drivea.dsk
+/investigations/067 - CP-M 2.2 Hardware Profile Validation/probes/profiles/cpu-z80/drivea.dsk
+/investigations/067 - CP-M 2.2 Hardware Profile Validation/probes/profiles/imsai/disks/library/comms.dsk
+/investigations/067 - CP-M 2.2 Hardware Profile Validation/probes/profiles/imsai/disks/library/imdos205r0-1.dsk

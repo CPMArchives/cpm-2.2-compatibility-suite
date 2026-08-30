@@ -1,0 +1,33 @@
+Z80/8080-Macro-Assembler  Release 2.1	Wed Aug 19 13:26:58 2026	Page 1
+Source file: UNDOC63.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Investigation 063: isolated undocumented-Z80 SLL opcode probe.
+                       2      2         org     0100h
+0005  =                3      3 bdos    equ     0005h
+0100  31 5f 01         4      4 start:  ld      sp,stack
+0103  06 03            5      5         ld      b,03h
+0105  cb 30            6      6         db      0cbh,030h       ; undocumented SLL B: expected 07h on tested Z80
+0107  78               7      7         ld      a,b
+0108  fe 07            8      8         cp      07h
+010a  20 05            9      9         jr      nz,fail
+010c  11 1c 01        10     10         ld      de,passmsg
+010f  18 03           11     11         jr      print
+0111  11 2d 01        12     12 fail:   ld      de,failmsg
+0114  0e 09           13     13 print:  ld      c,9
+0116  cd 05 00        14     14         call    bdos
+0119  c3 00 00        15     15         jp      0000h
+011c  55 4e 44 4f     16     16 passmsg:db      'UNDOC63 OBSERVED$'
+0120  43 36 33 20     16     17
+0124  4f 42 53 45     16     18
+0128  52 56 45 44     16     19
+012c  24              16     20
+012d  55 4e 44 4f     17     21 failmsg:db      'UNDOC63 DIFFERENT$'
+0131  43 36 33 20     17     22
+0135  44 49 46 46     17     23
+0139  45 52 45 4e     17     24
+013d  54 24           17     25
+013f                  18     26         ds      32
+015f                  19     27 stack:
+015f                  20     28         end

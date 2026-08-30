@@ -1,0 +1,68 @@
+Investigation 014 accepted observations
+Date: 14 August 2026
+
+Environment
+-----------
+z80pack cpmsim 1.39; DRI CP/M 2.2; Z80 CBIOS 1.2; IBM-3740 image.
+Every mode used a new copy of images-before/drivea.dsk.
+Base image SHA-256:
+84103fcdc4e2f202194c966120589a824671d03b07305b11bc05dc632cce3acc
+
+Normal attribute/vector mode N
+------------------------------
+Function 29 initially returned HL=0000.
+Function 28 changed it to HL=0001 (A: is bit 0).
+Function 13 changed it back to HL=0000.
+Function 30 on ATTR.DAT returned 00 while setting t1'/t2', then 00 while
+clearing them. Function 30 on 130-record BIG.DAT returned 00; post-run
+directory inspection showed the logical multi-extent file read-only.
+Function 30 on absent NOATTR.DAT returned FF.
+Function 22 on MADEATTR.DAT returned directory code 03; post-run inspection
+showed an empty file with R and S attributes.
+The image changed to:
+f55cb1dd452581ad5550ef3f8dabebae5dbc099ea7b2dbbaf2349d96c96fccb1
+
+Isolated fatal/close cases
+--------------------------
+Case  Operation/condition                         Result
+A     Function 21 on read-only ROFILE.DAT         File R/O fatal path
+B     Function 34 on read-only ROFILE.DAT         File R/O fatal path
+C     Function 19 on read-only ROFILE.DAT         File R/O fatal path
+D     Function 23 on read-only ROFILE.DAT         File R/O fatal path
+E     Function 16 after dirty FCB, attribute set  normal return 00
+F     Function 22 after Function 28               disk R/O fatal path
+G     Function 21 after Function 28               disk R/O fatal path
+H     Function 34 after Function 28               disk R/O fatal path
+I     Function 19 after Function 28               disk R/O fatal path
+J     Function 23 after Function 28               disk R/O fatal path
+K     Function 28/29, Function 13/29              0001 then 0000
+
+Every File R/O case printed "Bdos Err On A: File R/O". Every disk R/O case
+printed "Bdos Err On A: R/O". None printed the probe's RETURNED marker. Each
+handler waited for the harness's deterministic 'x', then warm-booted to A>.
+
+Cases A-D and F-J were byte-identical to their before images. Case K was also
+identical. Thus the rejected writes, deletes, renames, and Make caused no disk,
+directory, or allocation change in these fixtures.
+
+Case E did not exercise a rejected write: it deliberately performed one legal
+write, saved the dirty activated FCB, set the same directory file read-only via
+Function 30, restored the dirty FCB, and closed it. Close returned 00; the image
+changed to e2043a728930d49a13680f0237f750d3acd579c81b8d31f2de07c92055627380.
+CLOSEME.DAT retained its read-only bit and the written 128-byte length. This
+isolates the DRI close-time race behavior: Close does not re-run the file
+read-only rejection check against the directory entry.
+
+Raw evidence
+------------
+Full console streams, before/after hashes, and decoded directory listings are
+under cases/N and cases/A through cases/K. Corresponding post-run images are
+under images-after. Escape/color diagnostics after the final A> are cpmsim's
+response to the harness terminating the emulator, not CP/M probe output.
+
+Reproducibility hashes
+----------------------
+PROT014.ASM SHA-256:
+fe1f310e92796a1dbf44bd58113a3ea5265e1da1896ac7eca30959484b0b675a
+PROT014.COM SHA-256:
+1307f96971db70f8123b52f297eb465d2a764391dfbc1cf13bd3f90926aeb9e8

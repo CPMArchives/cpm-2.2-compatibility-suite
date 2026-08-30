@@ -1,0 +1,9 @@
+profile	processor	BIOS characteristics	storage	peripherals	software dependency	evidence
+Generic CP/M binary baseline	Intel 8080-compatible	standard CP/M BDOS/page-zero and 17-entry BIOS contract	implementation-defined through BIOS	standard logical character devices only	portable transient programs	A; I036/I051/I063; T03
+Cromemco Z-1 CP/M	Z80 at configured 4 MHz	Cromemco RDOS boot and CP/M BIOS; TU-ART; banked ROM	Cromemco FDC mapped to IBM-3740 test image	TU-ART, optional socket terminals, MMU	portable CP/M control; Dazzler software only with matching device	I; T01; I051 corpus
+IMSAI CP/M 2.2 B03	8080 simulation at configured 2 MHz	IMSAI MPU/FIF/SIO/VIO-oriented BIOS	IMSAI mapped floppy image	SIO 1/2 channels, VIO keyboard, modem/profile endpoints	QTERM IMSAI patch; VI/Open; IMSAI BIOS extensions	I; T02/T07; I051/I065
+Intel 8080 processor	8080	not a machine BIOS claim	profile-independent	profile-independent	8080 binaries	I; T03/T06; I063
+Zilog Z80 processor	Z80 with 8080 subset	not a machine BIOS claim	profile-independent	profile-independent	8080 plus documented Z80 binaries	I; T04/T05; I063
+Mostek CP/M fixture	Z80/Mostek emulator profile	standard CP/M services; unrelated machine devices	fixture disk	no IMSAI SIO or Dazzler profile	mismatch controls QTERM/KSCOPE/VI-Open	I051 inherited; T08/T09
+Altair 8800 family	8080/Z80 depending configuration	MITS or Tarbell controller-specific BIOS	MITS/Tarbell floppy formats	front panel, optional VDM/Dazzler/controller ports	FDCT1, KILLBITS, VDM software	Source/archive inventory only; not executed in I067
+Intel MDS-800	8080	DRI reference integration / Intel IOBYTE conventions	Intel MDS disk format	Intel console/paper-tape devices	DRI development environment	A/archive inventory only; not executed in I067

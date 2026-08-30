@@ -1,0 +1,15 @@
+Investigation 043 byte-identical rebuild verification
+=====================================================
+
+The preserved binaries were copied aside, probes/build.sh was run, and each
+rebuilt artifact was compared byte-for-byte with its preserved copy.
+
+  IDENTICAL EDGE43.COM
+  IDENTICAL ZRET43.COM
+  IDENTICAL FN043.COM
+  IDENTICAL OVER43.COM
+  IDENTICAL LARGE43.COM
+  IDENTICAL MAXOK43.COM
+  IDENTICAL MAXBAD43.COM
+
+Result: PASS

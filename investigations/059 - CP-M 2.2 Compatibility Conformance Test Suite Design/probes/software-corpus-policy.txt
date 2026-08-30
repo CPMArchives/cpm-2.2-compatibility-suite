@@ -1,0 +1,17 @@
+SOFTWARE CORPUS INTEGRATION POLICY
+
+- Corpus workflows run after mapped narrow tests pass. They validate composition,
+  not byte/register semantics already owned by narrow probes.
+- Every record pins software/version/hash, source/archive provenance, environment,
+  profile, deterministic procedure, expected OS-level observations and disk relation.
+- Vendor UI text, banners and protocol diagnostics are ignored unless a named profile
+  independently classifies them.
+- A failure is first classified as fixture/harness defect, implementation defect,
+  permitted variation, unresolved policy, unsupported/mismatched profile or blocker.
+- Only an implementation defect against an existing proposition is a conformance
+  failure. A previously unexplained repeatable dependency starts a new investigation;
+  it does not automatically become a requirement.
+- Startup is smoke evidence only. A corpus endorsement states the exact workflows
+  completed and all known feature/category gaps.
+- I053's 13 records are the initial preserved corpus set; paired communications,
+  matching hardware and several application categories remain incomplete.

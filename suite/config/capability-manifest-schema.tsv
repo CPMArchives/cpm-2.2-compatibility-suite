@@ -1,0 +1,11 @@
+field	requirement	definition
+RUN_PURPOSE	required	DEVELOPMENT or CONFORMANCE.
+WORKFLOW	required	Registered workflow ID; FILESYSTEM_BRINGUP for the first FILETEST slice.
+PROCESSOR_REQUIRED	required	Minimum processor supplied by the execution environment.
+BDOS_FUNCTIONS	required	Comma-separated decimal functions the implementor authorizes the suite to call.
+BIOS_ROUTINES	required	Comma-separated BIOS routine IDs or NONE.
+PRIMARY_DRIVE	required	Primary fixture drive letter.
+SECONDARY_DRIVE	required	Secondary explicit-drive fixture letter or NONE.
+REPORT_SINKS	required	Authorized report sinks, initially CONSOLE and optionally FILE.
+SCRATCH_DRIVE	required	Explicit destructive scratch drive or NONE.
+

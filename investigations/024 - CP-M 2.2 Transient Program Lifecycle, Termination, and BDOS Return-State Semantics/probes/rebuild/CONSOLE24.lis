@@ -1,0 +1,33 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 17:10:35 2026	Page 1
+Source file: CONSOLE24.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Exercise console output and change only the LIST routing IOBYTE field.
+                       2      2         ORG 100H
+0100  1e 43            3      3         LD E,'C'
+0102  0e 02            4      4         LD C,2
+0104  cd 05 00         5      5         CALL 5
+0107  1e 32            6      6         LD E,'2'
+0109  0e 02            7      7         LD C,2
+010b  cd 05 00         8      8         CALL 5
+010e  1e 34            9      9         LD E,'4'
+0110  0e 02           10     10         LD C,2
+0112  cd 05 00        11     11         CALL 5
+0115  1e 0d           12     12         LD E,13
+0117  0e 02           13     13         LD C,2
+0119  cd 05 00        14     14         CALL 5
+011c  1e 0a           15     15         LD E,10
+011e  0e 02           16     16         LD C,2
+0120  cd 05 00        17     17         CALL 5
+0123  3e 40           18     18         LD A,40H
+0125  32 03 00        19     19         LD (0003H),A
+0128  3a 82 00        20     20         LD A,(0082H)
+012b  fe 46           21     21         CP 'F'
+012d  28 06           22     22         JR Z,DOF0
+012f  fe 4a           23     23         CP 'J'
+0131  ca 00 00        24     24         JP Z,0
+0134  c9              25     25         RET
+0135  0e 00           26     26 DOF0:   LD C,0
+0137  c3 05 00        27     27         JP 5
+013a                  28     28         END

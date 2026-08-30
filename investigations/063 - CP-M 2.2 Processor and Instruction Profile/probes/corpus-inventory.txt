@@ -1,0 +1,44 @@
+Investigation 063 processor evidence corpus
+
+1. DRI CP/M 2.2 documentation
+   Sources: CPM_2_0_Interface_Guide.pdf and CPM_2.2_Alteration_Guide_1979.pdf.
+   Assumption: 8080-family register names, opcodes, page-zero JMP/CALL objects,
+   Intel IOBYTE, restart locations, and an Intel MDS-800 reference system.
+   Evidence: documentation-extracts.txt (A).
+
+2. DRI reconstructed CP/M 2.2 source corpus
+   Location: <reference-archive>/cpm2-plm/
+   Components screened: CCP, BDOS, BIOS, ASM, DDT, DUMP, ED patch, XSUB,
+   SYSGEN and support modules. Source is written in 8080 mnemonic vocabulary.
+   A bounded scan found no IX, IY, EXX, DJNZ, JR, or Z80 block-operation
+   mnemonic in the ASM files. This is source evidence, not an assertion that
+   every historical CP/M binary was 8080-only (B).
+
+3. DRI CP/M 2.2 reference disk and STAT.COM
+   Location: <cpmsim-root>/disks/drivea.dsk.
+   Assumption tested: boot and ordinary DRI utility execution on 8080 and Z80.
+   Evidence: T01 and the STAT portions of the two documented transcripts (I).
+
+4. CPU8080.COM
+   Locally authored deterministic control using only Intel 8080 instructions.
+   Tests representative data movement, arithmetic/DAA, carry/zero/parity,
+   stack, call/return, and CP/M BDOS output. Evidence: T02-T03 (I).
+
+5. CPUZ80.COM
+   Locally authored documented-extension boundary probe using IX, IY, EXX,
+   JR, DJNZ, BIT and LDIR. Evidence: T04-T05 (I).
+
+6. UNDOC63.COM
+   Locally authored isolated undocumented SLL test. Evidence: T06-T07 (I).
+
+7. TIMING63.COM
+   Locally authored counted-loop control at two configured clock rates.
+   Evidence: T08 (I).
+
+8. Earlier ecosystem evidence
+   I048 preserves and starts Microsoft M80/L80 and SLR Z80ASM/SLRNK but does
+   not claim full workflows. I051 shows QTERM and PROMMER CPU-speed assumptions
+   and classifies clock loops with machine profiles. I061-I062 demonstrate
+   implementation-independent CP/M semantics on DRI CP/M and CDOS, both in
+   Z80-hosted test configurations. These broaden context but do not prove that
+   Z80-only instructions are part of generic CP/M 2.2.

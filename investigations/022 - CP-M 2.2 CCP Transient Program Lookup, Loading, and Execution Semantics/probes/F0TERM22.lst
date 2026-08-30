@@ -1,0 +1,23 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sat Aug 15 20:55:25 2026	Page 1
+Source file: F0TERM22.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1         ORG 0100H
+0100  11 0d 01         2      2         LD DE,MSG
+0103  0e 09            3      3         LD C,9
+0105  cd 05 00         4      4         CALL 5
+0108  0e 00            5      5         LD C,0
+010a  c3 05 00         6      6         JP 5
+010d  0d 0a 46 30      7      7 MSG:   DB 13,10,'F0TERM22 terminating by BDOS Function 0',13,10,'$'
+0111  54 45 52 4d      7      8
+0115  32 32 20 74      7      9
+0119  65 72 6d 69      7     10
+011d  6e 61 74 69      7     11
+0121  6e 67 20 62      7     12
+0125  79 20 42 44      7     13
+0129  4f 53 20 46      7     14
+012d  75 6e 63 74      7     15
+0131  69 6f 6e 20      7     16
+0135  30 0d 0a 24      7     17
+0139                   8     18         END

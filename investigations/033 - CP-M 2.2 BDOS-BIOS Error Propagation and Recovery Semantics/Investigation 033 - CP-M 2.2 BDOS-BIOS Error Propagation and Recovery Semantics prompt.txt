@@ -1,0 +1,700 @@
+Investigation 033 — CP/M 2.2 BDOS/BIOS Error Propagation and Recovery Semantics Prompt
+
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 032 is complete.
+
+The authoritative Compatibility Ledger currently incorporates findings
+through Investigation 032.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports, architecture documents,
+roadmaps, specifications, or other existing BetterCP/M files.
+
+Create Investigation 033 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Define the CP/M 2.2 BDOS/BIOS error propagation and recovery
+compatibility contract.
+
+Previous investigations established:
+
+- BIOS disk interface behavior;
+- BDOS file operation behavior;
+- BDOS error presentation;
+- CCP command behavior;
+- application-visible failure behavior.
+
+Investigation 033 determines how errors propagate between:
+
+- BIOS;
+- BDOS;
+- CCP;
+- transient programs.
+
+
+Determine:
+
+- how BIOS failures become BDOS results;
+- how BDOS handles failures;
+- what recovery actions occur;
+- what applications observe;
+- what state remains after failure.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read and incorporate:
+
+
+Investigation 015:
+
+    CP/M 2.2 BDOS Physical Disk Error and Error Presentation
+    Semantics.
+
+
+Investigation 019:
+
+    CP/M 2.2 BIOS Disk Interface and Logical-Sector Semantics.
+
+
+Investigation 020:
+
+    CP/M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics.
+
+
+Investigation 025:
+
+    CP/M 2.2 BDOS File Operation Error Semantics and
+    Application-Visible Failure Behavior.
+
+
+Investigation 027:
+
+    BDOS Call Interface Convention and Register-State Semantics.
+
+
+Investigation 030:
+
+    BDOS File Lifecycle, Extent Management, and Metadata State
+    Transition Semantics.
+
+
+Investigation 032:
+
+    CCP Resident Command Semantics and BDOS Interaction.
+
+
+Do not duplicate previous investigations.
+
+Focus on error propagation and recovery boundaries.
+
+
+SCOPE
+
+Investigate:
+
+- BIOS error reporting;
+- BDOS error handling;
+- BDOS retry behavior;
+- BDOS return values;
+- CCP error presentation;
+- transient program error handling;
+- file state after failure;
+- disk state after failure.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- hardware-specific controller behavior;
+- host filesystem errors;
+- BetterCP/M error architecture;
+- CP/M 3 error extensions;
+- MP/M behavior.
+
+
+Do not require:
+
+- exact BIOS implementation;
+- exact retry algorithms;
+- undocumented internal recovery routines.
+
+
+KEY QUESTIONS
+
+
+1. BIOS ERROR REPORTING
+
+Determine how BIOS reports failures.
+
+Investigate:
+
+- disk read errors;
+- disk write errors;
+- sector selection failures;
+- controller failures;
+- media failures.
+
+
+Determine:
+
+- BIOS return conventions;
+- information passed to BDOS;
+- application-visible consequences.
+
+
+2. BDOS ERROR PROPAGATION
+
+Determine how BDOS processes BIOS failures.
+
+Investigate:
+
+- sequential reads;
+- sequential writes;
+- random access;
+- directory operations;
+- allocation operations.
+
+
+Determine:
+
+- returned BDOS status;
+- console messages;
+- CCP involvement;
+- transient program behavior.
+
+
+3. RETRY BEHAVIOR
+
+Determine whether BDOS or BIOS retries failed operations.
+
+Investigate:
+
+- read retry;
+- write retry;
+- repeated failure;
+- final failure result.
+
+
+Determine:
+
+- what applications observe;
+- what behavior is implementation-specific.
+
+
+4. FILE OPERATION FAILURE STATE
+
+Determine file state after failed operations.
+
+Investigate:
+
+- failed read;
+- failed write;
+- failed extension;
+- failed Close;
+- failed allocation.
+
+
+Determine:
+
+- directory state;
+- extent state;
+- allocation state;
+- FCB state.
+
+
+Cross-reference:
+
+Investigation 030.
+
+
+5. DIRECTORY OPERATION FAILURE
+
+Determine behavior when directory operations fail.
+
+Investigate:
+
+- Search First;
+- Search Next;
+- Make File;
+- Delete File;
+- Rename File.
+
+
+Determine:
+
+- returned status;
+- DMA state;
+- directory state;
+- application-visible result.
+
+
+Cross-reference:
+
+Investigation 029.
+
+6. WRITE FAILURE SEMANTICS
+
+Determine behavior when write operations fail.
+
+Investigate:
+
+- sequential write failure;
+- random write failure;
+- extent allocation failure;
+- directory update failure;
+- Close failure after writes.
+
+
+Determine:
+
+- returned BDOS status;
+- FCB state;
+- file lifecycle state;
+- allocation state;
+- whether partial data remains visible.
+
+
+Cross-reference:
+
+Investigation 011.
+
+Investigation 013.
+
+Investigation 030.
+
+
+7. READ FAILURE SEMANTICS
+
+Determine behavior when read operations fail.
+
+Investigate:
+
+- sequential read;
+- random read;
+- directory read;
+- invalid media state.
+
+
+Determine:
+
+- returned status;
+- DMA contents;
+- FCB state;
+- application-visible behavior.
+
+
+Cross-reference:
+
+Investigation 010.
+
+Investigation 013.
+
+
+8. BDOS STATE AFTER FAILURE
+
+Determine what state remains after failed BDOS operations.
+
+Investigate:
+
+- FCB contents;
+- DMA address;
+- current drive;
+- directory search state;
+- allocation state;
+- internal BDOS state visible to applications.
+
+
+Determine:
+
+- whether applications can continue after failure;
+- whether recovery requires warm boot;
+- whether state is defined.
+
+
+9. CCP ERROR HANDLING
+
+Determine how CCP responds to BDOS failures.
+
+Investigate:
+
+- resident commands;
+- transient execution;
+- command output;
+- return to CCP after failure.
+
+
+Determine:
+
+- when CCP displays errors;
+- when CCP terminates operations;
+- what state remains.
+
+
+Cross-reference:
+
+Investigation 032.
+
+
+10. TRANSIENT PROGRAM ERROR HANDLING
+
+Determine what transient programs observe after BDOS/BIOS failures.
+
+Investigate:
+
+- BDOS return values;
+- console messages;
+- program continuation;
+- program termination behavior.
+
+
+Determine:
+
+- application responsibilities;
+- BDOS guarantees.
+
+
+11. WARM BOOT AND RECOVERY
+
+Determine when failures cause system recovery actions.
+
+Investigate:
+
+- warm boot;
+- CCP restart;
+- disk reset;
+- state reinitialization.
+
+
+Determine:
+
+- what triggers recovery;
+- what state survives;
+- what applications observe.
+
+
+Cross-reference:
+
+Future boot/restart investigation if applicable.
+
+
+12. APPLICATION ASSUMPTIONS
+
+Determine which assumptions are valid:
+
+- BDOS errors always return to the caller;
+- failed writes leave predictable state;
+- failed reads preserve DMA contents;
+- disk errors require restart;
+- file operations can continue after failure.
+
+
+Classify each assumption.
+
+
+13. DRI SOURCE ANALYSIS
+
+Review available source material for:
+
+- BIOS error handling;
+- BDOS disk error paths;
+- retry logic;
+- error reporting;
+- recovery paths;
+- CCP error handling.
+
+
+Extract:
+
+- compatibility-relevant behavior;
+- implementation behavior affecting compatibility.
+
+
+Do not produce:
+
+- source walkthroughs;
+- hardware-specific explanations.
+
+
+14. EXPERIMENTAL PROGRAMS
+
+Create deterministic probes:
+
+
+READERR33:
+
+    Read failure behavior.
+
+
+WRITEERR33:
+
+    Write failure behavior.
+
+
+DIRERR33:
+
+    Directory operation failure behavior.
+
+
+RECOVER33:
+
+    State after failure and recovery.
+
+
+CCPERR33:
+
+    CCP-visible error behavior.
+
+
+Each probe must include:
+
+- purpose;
+- procedure;
+- observed behavior;
+- compatibility conclusion.
+
+
+15. CONTROLLED TEST MATRIX
+
+Include:
+
+
+READ OPERATIONS
+
+- successful read;
+- failed read;
+- repeated failed read.
+
+
+WRITE OPERATIONS
+
+- successful write;
+- failed write;
+- failed extension;
+- failed Close.
+
+
+DIRECTORY OPERATIONS
+
+- search failure;
+- creation failure;
+- deletion failure.
+
+
+RECOVERY
+
+- continue after error;
+- warm boot after error;
+- restart after error.
+
+
+APPLICATION CONTEXT
+
+- CCP command;
+- transient program;
+- direct BDOS caller.
+
+16. EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+
+    documented behavior.
+
+B:
+
+    DRI implementation behavior.
+
+I:
+
+    experimental observation.
+
+D:
+
+    unresolved policy.
+
+
+These labels are internal investigation classifications only.
+
+
+Ledger evidence must use:
+
+    I033
+    BDOS
+    BIOS
+    CCP
+    IG
+    AG
+
+
+17. COMPATIBILITY CLASSIFICATION
+
+Classify each conclusion:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Do not require:
+
+- exact hardware recovery behavior;
+- undocumented BIOS conventions;
+- private BDOS error paths;
+- internal retry algorithms.
+
+
+18. EXISTING LEDGER REVIEW
+
+Review affected Compatibility Ledger entries:
+
+- BIOS disk interface;
+- BIOS error behavior;
+- BDOS error handling;
+- file operation failures;
+- directory failures;
+- CCP error presentation;
+- transient program error handling.
+
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+
+The current Compatibility Ledger ends after Investigation 032.
+
+Determine the next available ledger entry number.
+
+Do not modify the Compatibility Ledger.
+
+
+19. PROPOSED LEDGER ADDITIONS
+
+Include:
+
+Proposed Compatibility Ledger additions
+
+and:
+
+Proposed existing-entry updates.
+
+
+Each entry must contain:
+
+
+NNNN. Title
+
+    Description.
+
+    Disposition:
+
+    Evidence:
+
+    Conformance:
+
+
+20. REPORT STRUCTURE
+
+Create:
+
+Investigation 033 - CP/M 2.2 BDOS/BIOS Error Propagation and
+Recovery Semantics.md
+
+
+Include:
+
+
+1. Objective and scope
+
+2. Relationship to previous investigations
+
+3. Documentation findings
+
+4. BIOS source findings
+
+5. BDOS source findings
+
+6. BIOS error reporting
+
+7. BDOS error propagation
+
+8. Retry behavior
+
+9. File operation failure behavior
+
+10. Directory operation failure behavior
+
+11. BDOS state after failure
+
+12. CCP error handling
+
+13. Transient program error handling
+
+14. Recovery behavior
+
+15. Experimental results
+
+16. Compatibility conclusions
+
+17. Proposed ledger additions
+
+18. Existing-entry updates
+
+19. Open questions
+
+20. Conformance implications
+
+
+21. FINAL REVIEW
+
+Verify that the investigation determines:
+
+- how BIOS failures reach BDOS;
+- how BDOS reports failures;
+- how CCP and transient programs observe errors;
+- what state remains after failure;
+- what recovery behavior is guaranteed;
+- what behavior is implementation-specific.
+
+
+Ensure conclusions distinguish:
+
+- documented behavior;
+- BIOS implementation behavior;
+- BDOS implementation behavior;
+- experimental observations;
+- unresolved policy.
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M error handling.
+
+Do not replace CP/M error semantics with modern operating-system models.
+
+Determine the CP/M 2.2 BDOS/BIOS error propagation and recovery
+compatibility contract only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

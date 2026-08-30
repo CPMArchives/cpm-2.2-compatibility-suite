@@ -1,0 +1,9 @@
+From this directory:
+
+    chmod +x build.sh make-bigerr28.sh run-main028.exp run-return028.exp
+    ./build.sh
+    ./make-bigerr28.sh
+
+Assembler: z80asm Release 2.1.
+BIGERR28.COM is ERROR28.COM extended with zeros to 58,112 bytes (454 records).
+

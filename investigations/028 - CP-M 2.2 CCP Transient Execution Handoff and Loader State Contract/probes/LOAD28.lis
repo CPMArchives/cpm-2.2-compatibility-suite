@@ -1,0 +1,87 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:01:49 2026	Page 1
+Source file: LOAD28.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1  ORG 100H
+0100  ed 73 56 01      2      2  LD (OLDSP),SP
+0104  31 d8 01         3      3  LD SP,STACK
+0107  0e 0c            4      4  LD C,12
+0109  cd 05 00         5      5  CALL 5
+010c  22 54 01         6      6  LD (VER),HL
+010f  3e 5a            7      7  LD A,05AH
+0111  32 00 40         8      8  LD (04000H),A
+0114  21 31 01         9      9  LD HL,MSG
+0117  cd d8 01        10     10  CALL PUTS
+011a  2a 54 01        11     11  LD HL,(VER)
+011d  cd 16 02        12     12  CALL HEXW
+0120  cd f0 01        13     13  CALL SPACE
+0123  2a 56 01        14     14  LD HL,(OLDSP)
+0126  cd 16 02        15     15  CALL HEXW
+0129  cd f5 01        16     16  CALL CRLF
+012c  ed 7b 56 01     17     17  LD SP,(OLDSP)
+0130  c9              18     18  RET
+0131  4c 4f 41 44     19     19 MSG: DB 'LOAD28 immediate-version entry-SP ',0
+0135  32 38 20 69     19     20
+0139  6d 6d 65 64     19     21
+013d  69 61 74 65     19     22
+0141  2d 76 65 72     19     23
+0145  73 69 6f 6e     19     24
+0149  20 65 6e 74     19     25
+014d  72 79 2d 53     19     26
+0151  50 20 00        19     27
+0154  00 00           20     28 VER: DW 0
+0156  00 00           21     29 OLDSP: DW 0
+0158                  22     30  DS 128
+01d8                  23     31 STACK:
+01d8  7e              24     32 PUTS: LD A,(HL)
+01d9  23              25     33  INC HL
+01da  b7              26     34  OR A
+01db  c8              27     35  RET Z
+01dc  5f              28     36  LD E,A
+01dd  cd e2 01        29     37  CALL PUTC
+01e0  18 f6           30     38  JR PUTS
+01e2  f5              31     39 PUTC: PUSH AF
+01e3  c5              32     40  PUSH BC
+01e4  d5              33     41  PUSH DE
+01e5  e5              34     42  PUSH HL
+01e6  0e 02           35     43  LD C,2
+01e8  cd 05 00        36     44  CALL 5
+01eb  e1              37     45  POP HL
+01ec  d1              38     46  POP DE
+01ed  c1              39     47  POP BC
+01ee  f1              40     48  POP AF
+01ef  c9              41     49  RET
+01f0  1e 20           42     50 SPACE: LD E,' '
+01f2  c3 e2 01        43     51  JP PUTC
+01f5  1e 0d           44     52 CRLF: LD E,13
+01f7  cd e2 01        45     53  CALL PUTC
+01fa  1e 0a           46     54  LD E,10
+01fc  c3 e2 01        47     55  JP PUTC
+01ff  f5              48     56 HEXB: PUSH AF
+0200  0f              49     57  RRCA
+0201  0f              50     58  RRCA
+0202  0f              51     59  RRCA
+0203  0f              52     60  RRCA
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:01:49 2026	Page 2
+Source file: LOAD28.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0204  cd 08 02        53     61  CALL NIB
+0207  f1              54     62  POP AF
+0208  e6 0f           55     63 NIB: AND 0FH
+020a  c6 30           56     64  ADD A,'0'
+020c  fe 3a           57     65  CP '9'+1
+020e  38 02           58     66  JR C,NOUT
+0210  c6 07           59     67  ADD A,7
+0212  5f              60     68 NOUT: LD E,A
+0213  c3 e2 01        61     69  JP PUTC
+0216  7c              62     70 HEXW: LD A,H
+0217  cd ff 01        63     71  CALL HEXB
+021a  7d              64     72  LD A,L
+021b  c3 ff 01        65     73  JP HEXB
+021e  0e 00           66     74 EXIT: LD C,0
+0220  c3 05 00        67     75  JP 5
+                      68     76
+0223                  69     77  END

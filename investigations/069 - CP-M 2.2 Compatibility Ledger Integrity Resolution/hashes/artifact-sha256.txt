@@ -1,0 +1,27 @@
+40d5e514a698bbabdfe8c7d926cea39b9962e17d83b25f2a2915ea4882014097  ./02 Compatibility Ledger - Investigation 069.txt
+149fe3f628af8283b5c787118eaa467b02695e4f6dca7d0bdc6bf232d7c5aede  ./Investigation 069 - CP-M 2.2 Compatibility Ledger Integrity Resolution Prompt.txt
+e2505912a67285d55508a314abc147f4c37d8cc1acd13f8d02589be27b880cef  ./Investigation 069 - CP-M 2.2 Compatibility Ledger Integrity Resolution.md
+62097b4beaead023f1976d480d3171ea915ef85473988ac0b0d15798f5c112f0  ./canonicalize069.awk
+080c93261f981454989791c98a65ecac5737269cbb3cfad4fadb8c592c202467  ./hashes/ledger-after.sha256
+914f8a231c9c1fc18ec347c493f825b4bcde4885501f20eca83d7cd1f8bc2956  ./hashes/ledger-before.sha256
+2f593cb674dd73c4086546a2ccca9aef19a9ab551f6822dc66bdb0ba6a34a2e2  ./hashes/protected-after.sha256
+2f593cb674dd73c4086546a2ccca9aef19a9ab551f6822dc66bdb0ba6a34a2e2  ./hashes/protected-before.sha256
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./hashes/protected.diff
+6213c64cdfc5227ac45d6c6b3490b32c39e8c98075768402d3a6348ae0250ef4  ./hashes/source-reports.sha256
+54d62575a998eae45d4e5494193cd9cbdd06b7fbaaaed6259df9eb4143eec752  ./probes/README.txt
+db0e0757facea166aa3ea0aca778cd3747c2d7c0c107fb7bf8e9e308e85b45ee  ./probes/after-unique-entries.tsv
+d0d9b90c0556c75d3a52ba50068d1cf6a5da464270f1b419ff912ce3d4b879d8  ./probes/before-unique-entries.tsv
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./probes/canonical-rebuild.diff
+584aef405df31572f6a829862b050542a1c4c1811beb28bca02810c3da1560b5  ./probes/change-log.tsv
+e4f9a44de2e4a6162ecc69f17b42fe3aa9abf1c23958d0e7ca5c539e8e5bb882  ./probes/cross-reference-audit.txt
+34cc16e3ff67598226fd5ebb334902435295282bfd45aab98ff14636d2e2cd93  ./probes/disposition-audit.tsv
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./probes/duplicate-identifier-report.txt
+97fbf02804ae4d987651e8c40c3fab36858e70c82b9ade9800f0b49cd7422bf2  ./probes/identifier-audit.txt
+e6fb45f479ce05fb2a482b238e27a14d2d6724060dbdbaaaaf984dec71e9e5d1  ./probes/ledger-before-after.diff
+e471a1637bc3517c80a6008b0e56186b10dd98b72804d5aeb181088e133a6a8f  ./probes/ledger-cross-references.txt
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  ./probes/missing-identifier-report.txt
+3ff796fb2bf5e7a72b064c1d379eb457a0a05f7032651de45d3c207e3f1750fb  ./probes/processor-proposition-dispositions.tsv
+8fb9c29d598bcde79d1f2cc4574841baa51b23dec5a6ed69f8acbe26b34ba424  ./probes/required-preservation-audit.tsv
+56b3b337b30c2e824b4ba36a580901864fe2398ebb1ec62098b11ca31a831ddd  ./probes/validate069.sh
+16db5cb2f9d4f293ebd2704be4bb2417466d75c5891f64caff5393052f212f52  ./probes/validation-output.txt
+f826cf83d7e611e473169c5956c6e0c8c7d604a4f1eba5d66a40709189e1ccac  ./reference/02 Compatibility Ledger - Investigation 068.txt

@@ -1,0 +1,33 @@
+INVESTIGATION 051 OBSERVED OUTPUT SUMMARY
+
+All input was scripted and every run used a restored disposable disk image.
+
+T01 BASE051 portable control
+  BASE051 called public BDOS Function 9 and Function 12 through 0005h.
+  Output: "BASE051: public BDOS control" and "VERSION=22 PASS".
+  It returned normally to B>. Disk SHA-256 was unchanged.
+
+T02 IMSAI QTERM on unsupported Mostek hardware
+  QTERM 4.3e loaded and printed its banner through CP/M. With emulator trapping
+  unused ports, execution stopped at PC=0112h on IN port 23h. Disk unchanged.
+
+T03 Cromemco Dazzler KSCOPE on unsupported Mostek hardware
+  KSCOPE loaded and printed its sign-on through CP/M. Execution then stopped at
+  PC=0110h on OUT port 0Eh, the Dazzler control port. Disk unchanged.
+
+T04 IMSAI VIO VI/Open on unsupported Mostek hardware
+  VI/Open was invoked on the Mostek profile. It produced no portable console
+  UI and returned to B> during the bounded run. Its source writes the VIO window
+  at F000h and accesses ports 6Eh/6Fh; those effects are not visible as a VIO
+  display on the Mostek profile. Disk unchanged. No matching-profile display
+  behavior is claimed.
+
+T05 Mostek PROMMER corpus trial
+  The PROMMER distribution was mounted and the executable was invoked with
+  scripted input. The transcript did not yield a stable, interpretable program
+  UI before the bounded halt. This case is inconclusive and supplies no
+  experimental behavior claim. Its preserved patch source remains source-only
+  evidence of port, clock, interrupt, and terminal dependencies.
+
+No matching Dazzler, IMSAI VIO, EPROM programmer, or raw-controller peripheral
+was executed. No hardware success is inferred from source.

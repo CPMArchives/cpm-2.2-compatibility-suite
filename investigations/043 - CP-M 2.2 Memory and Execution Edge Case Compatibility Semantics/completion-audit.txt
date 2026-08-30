@@ -1,0 +1,20 @@
+Investigation 043 completion audit
+==================================
+
+PASS  Required investigation directory prepared.
+PASS  Report contains exactly 18 required numbered sections.
+PASS  Probe source, binaries, build instructions, harness, transcript,
+      observations, reference excerpts, and preserved disk images exist.
+PASS  All seven executable artifacts rebuild byte-identically.
+PASS  Both test disks are byte-identical before and after the controlled run.
+PASS  All 2,630 protected pre-existing BetterCP/M files verify against the
+      baseline manifest; no mismatch or missing file was reported.
+PASS  Authoritative ledger SHA-256 remains:
+      c2c3b7b9c48954eed4bebb7e594e9a054075ee2ca13764fa3feace28e9c4a8f5
+PASS  The Compatibility Ledger was not modified.
+PASS  No previous investigation artifact was modified.
+PASS  No BetterCP/M implementation change was made.
+PASS  No ZIP archive was created.
+
+The report proposes one new independently testable ledger entry and does not
+apply it. Remaining design choices are explicitly POLICY PENDING.

@@ -1,0 +1,78 @@
+Investigation 047 source analysis
+=================================
+
+Method
+------
+The preserved DRI sources were reviewed to identify externally relevant
+interfaces and to design tests.  Source evidence is class B; it does not by
+itself make a private algorithm or address a compatibility requirement.
+
+PIP
+---
+Uses BDOS console/reader/punch/list functions; reset/select; Open, Close,
+Search First/Next, Delete, sequential Read/Write, Make, Rename, Set DMA,
+set attributes, user-number, random Read/Write, and Set Random Record.
+It changes DMA among private 128-byte buffers and parses FCB drive fields.
+Some source paths contain Intel/ICOM port I/O, but ordinary disk-to-disk PIP
+uses BDOS; those hardware paths are profile-specific, not a universal ABI.
+
+STAT
+----
+Uses the page-zero IOBYTE, word at 0006h, default FCB at 005Ch, default DMA
+at 0080h, BDOS version/select/search/current-disk/DMA functions, and the
+login, allocation, read-only and DPB pointer services.  Its free-space and
+file-size displays consume configured BDOS disk structures rather than a
+hard-coded universal geometry.
+
+ED
+--
+Uses the word at 0006h to size workspace, default FCB and buffer, console
+input/output/status, buffered input, disk selection, Set DMA, and ordinary
+Open/Close/Search/Delete/Read/Write/Make/Rename operations.  Private source
+and destination buffers are selected through Function 26.
+
+ASM
+---
+AS0COM derives available memory through the operand of the page-zero BDOS
+jump.  AS1IO calls the public 0005h gateway for console and file operations,
+uses FCBs and DMA, and emits HEX/PRN output.  The multi-module assembler
+algorithm and exact diagnostics remain utility implementation details.
+
+LOAD
+----
+Uses the default FCB at 005Ch and buffer at 0080h.  It opens and sequentially
+reads HEX input, deletes/makes/writes/closes COM output, reports distinct
+read/write/open/close failures, and constructs a contiguous transient image.
+
+DDT
+---
+Uses the public page-zero WBOOT and BDOS jump, learns the configured BDOS
+target from the 0005h operand, and temporarily alters gateway state for its
+debug monitor.  Its source explicitly treats execution inside BDOS specially
+when setting breaks.  These facts support page-zero and writable-TPA
+compatibility, not a guarantee that the private BDOS target is callable by
+ordinary applications.
+
+SUBMIT
+------
+Uses the CCP-prepared default FCB/tail, opens the named SUB file, creates and
+writes A:$$$.SUB as counted command records, closes it, and enters WBOOT.
+It uses standard BDOS file functions and the documented default DMA.
+
+XSUB
+----
+Saves and redirects the operands of the page-zero WBOOT and BDOS gateways,
+chains the real BDOS entry, tracks Function 26 DMA changes, and intercepts
+Function 10.  It reads the next A:$$$.SUB record into the caller's counted
+buffer, then closes or deletes the submission file as appropriate.  This is
+shipped DRI ecosystem evidence for entries 0620-0621, but not a general
+private-gateway ABI.
+
+Overall conclusion
+------------------
+The eight utilities primarily compose already documented CCP, page-zero,
+BDOS, FCB/DMA, disk-state and lifecycle contracts.  STAT and XSUB are the
+strongest cross-layer consumers.  No newly independent compatibility
+proposition was found beyond existing ledger entries through Investigation
+046.
+

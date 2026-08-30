@@ -1,0 +1,120 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 18:39:29 2026	Page 1
+Source file: STACK27.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1         ORG 100H
+0100  ed 73 ae 01      2      2         LD (OLDSP),SP
+0104  31 33 02         3      3         LD SP,STKTOP
+0107  21 68 01         4      4         LD HL,BAN
+010a  cd 34 02         5      5         CALL PUTS
+010d  06 40            6      6         LD B,64
+010f  21 00 00         7      7 SLOOP:  LD HL,0
+0112  39               8      8         ADD HL,SP
+0113  22 b0 01         9      9         LD (PRE),HL
+0116  c5              10     10         PUSH BC
+0117  0e 0c           11     11         LD C,12
+0119  cd 05 00        12     12         CALL 5
+011c  c1              13     13         POP BC
+011d  21 00 00        14     14         LD HL,0
+0120  39              15     15         ADD HL,SP
+0121  22 b2 01        16     16         LD (POST),HL
+0124  2a b0 01        17     17         LD HL,(PRE)
+0127  ed 5b b2 01     18     18         LD DE,(POST)
+012b  b7              19     19         OR A
+012c  ed 52           20     20         SBC HL,DE
+012e  20 07           21     21         JR NZ,BAD
+0130  10 dd           22     22         DJNZ SLOOP
+0132  21 84 01        23     23         LD HL,OK
+0135  18 03           24     24         JR OUT
+0137  21 98 01        25     25 BAD:    LD HL,FAIL
+013a  cd 34 02        26     26 OUT:    CALL PUTS
+013d  2a b0 01        27     27         LD HL,(PRE)
+0140  cd 5b 02        28     28         CALL HEXW
+0143  cd 4c 02        29     29         CALL SPACE
+0146  2a b2 01        30     30         LD HL,(POST)
+0149  cd 5b 02        31     31         CALL HEXW
+014c  cd 4c 02        32     32         CALL SPACE
+014f  3a b4 01        33     33         LD A,(GUARD0)
+0152  cd 60 02        34     34         CALL HEXB
+0155  cd 4c 02        35     35         CALL SPACE
+0158  3a 33 02        36     36         LD A,(GUARD1)
+015b  cd 60 02        37     37         CALL HEXB
+015e  cd 51 02        38     38         CALL CRLF
+0161  ed 7b ae 01     39     39         LD SP,(OLDSP)
+0165  c3 77 02        40     40         JP EXIT
+0168  53 54 41 43     41     41 BAN:    DB 'STACK27 64 repeated calls',13,10,0
+016c  4b 32 37 20     41     42
+0170  36 34 20 72     41     43
+0174  65 70 65 61     41     44
+0178  74 65 64 20     41     45
+017c  63 61 6c 6c     41     46
+0180  73 0d 0a 00     41     47
+0184  4f 4b 20 70     42     48 OK:     DB 'OK pre post guards ',0
+0188  72 65 20 70     42     49
+018c  6f 73 74 20     42     50
+0190  67 75 61 72     42     51
+0194  64 73 20 00     42     52
+0198  46 41 49 4c     43     53 FAIL:   DB 'FAIL pre post guards ',0
+019c  20 70 72 65     43     54
+01a0  20 70 6f 73     43     55
+01a4  74 20 67 75     43     56
+01a8  61 72 64 73     43     57
+01ac  20 00           43     58
+01ae  00 00           44     59 OLDSP:  DW 0
+01b0  00 00           45     60 PRE:    DW 0
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 18:39:29 2026	Page 2
+Source file: STACK27.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+01b2  00 00           46     61 POST:   DW 0
+01b4  a5              47     62 GUARD0: DB 0A5H
+01b5                  48     63         DS 126,05AH
+0233                  49     64 STKTOP:
+0233  3c              50     65 GUARD1: DB 03CH
+0234  7e              51     66 PUTS:   LD A,(HL)
+0235  23              52     67         INC HL
+0236  b7              53     68         OR A
+0237  c8              54     69         RET Z
+0238  5f              55     70         LD E,A
+0239  cd 3e 02        56     71         CALL PUTC
+023c  18 f6           57     72         JR PUTS
+023e  f5              58     73 PUTC:   PUSH AF
+023f  c5              59     74         PUSH BC
+0240  d5              60     75         PUSH DE
+0241  e5              61     76         PUSH HL
+0242  0e 02           62     77         LD C,2
+0244  cd 05 00        63     78         CALL 5
+0247  e1              64     79         POP HL
+0248  d1              65     80         POP DE
+0249  c1              66     81         POP BC
+024a  f1              67     82         POP AF
+024b  c9              68     83         RET
+024c  1e 20           69     84 SPACE:  LD E,' '
+024e  c3 3e 02        70     85         JP PUTC
+0251  1e 0d           71     86 CRLF:   LD E,13
+0253  cd 3e 02        72     87         CALL PUTC
+0256  1e 0a           73     88         LD E,10
+0258  c3 3e 02        74     89         JP PUTC
+025b  7c              75     90 HEXW:   LD A,H
+025c  cd 60 02        76     91         CALL HEXB
+025f  7d              77     92         LD A,L
+0260  f5              78     93 HEXB:   PUSH AF
+0261  0f              79     94         RRCA
+0262  0f              80     95         RRCA
+0263  0f              81     96         RRCA
+0264  0f              82     97         RRCA
+0265  cd 69 02        83     98         CALL NIB
+0268  f1              84     99         POP AF
+0269  e6 0f           85    100 NIB:    AND 0FH
+026b  c6 30           86    101         ADD A,'0'
+026d  fe 3a           87    102         CP '9'+1
+026f  38 02           88    103         JR C,NOUT
+0271  c6 07           89    104         ADD A,7
+0273  5f              90    105 NOUT:   LD E,A
+0274  c3 3e 02        91    106         JP PUTC
+0277  0e 00           92    107 EXIT:   LD C,0
+0279  c3 05 00        93    108         JP 5
+                      94    109
+027c                  95    110         END

@@ -1,0 +1,77 @@
+BETTERCP/M CP/M 2.2 CONFORMANCE SPECIFICATION
+Version 1.0-rc1 — Frozen tables 1.0.0
+
+1. Authority and purpose
+
+This document publishes the I071 conformance framework without redesign. It
+evaluates Compatibility Ledger 072, SHA-256 eb16466fdbff8fb2bc07bd02a07198b8426fb6452be3dd1f256cbff4af0547d3. The included tables
+are byte-identical copies of I071 and retain their 1.0.0 identifiers/oracles.
+
+2. Inventory and traceability
+
+The inventory contains 62 immutable top-level test IDs. The case matrix has
+627 unique proposition-level IDs in `<parent>-P<entry>` form. Traceability maps
+every ledger entry 0001-0627 exactly once to a case and versioned oracle.
+Runners may share execution but emit separate result records for every case.
+
+3. Applicability and oracle rules
+
+REQUIRED uses a positive predicate and gates every applicable baseline claim.
+PROFILE REQUIRED gates only a selected stable profile. OPTIONAL is not
+applicable unless claimed and must preserve baseline behavior. NOT GUARANTEED
+accepts stated variation/nonassertion. OUTSIDE SCOPE is an anti-requirement and
+never a positive baseline gate. DRI equality is required only by an existing
+selected profile proposition.
+
+4. Parent aggregation
+
+PASS requires every applicable REQUIRED and PROFILE REQUIRED child to pass.
+Any applicable FAIL fails the parent and gated claim. BLOCKED or ERROR prevents
+PASS. NOT_APPLICABLE requires manifest proof that the profile/optional feature
+is unselected. Independent results remain reportable when a dependency blocks
+another case.
+
+5. Campaign structure
+
+Campaigns execute manifest, foundation, interface, storage, command/failure,
+ecosystem/profile, and review phases. Healthy prerequisites precede fault and
+recovery cases. Mutable fixtures restore from verified pristine images between
+scenarios. Dependencies reference exact result run IDs.
+
+6. Evidence
+
+The immutable campaign manifest binds candidate, ledger, test inventory, case
+matrix, oracle set, certification level, selected profiles, fixture manifest,
+runner/emulator/build manifest, environment, repetitions, reviewers, and
+artifact index by hash. Each case records raw/normalized observations, tool
+status, times, dependencies, failure class, and content-addressed artifacts.
+
+7. Certification levels
+
+BASELINE covers the generic transient, BDOS, CCP-visible and processor
+baseline scope declared by the campaign. INTERFACE adds selected documented
+BDOS/BIOS public interfaces. FULL-SYSTEM adds boot, CCP, BIOS-visible, disk,
+recovery and generic ecosystem commitments. PROFILE adds named registry IDs.
+OPTIONAL adds an explicit optional claim. DEVELOPMENT reports are not
+certification.
+
+8. Failure handling
+
+Results are PASS, FAIL, BLOCKED, NOT_APPLICABLE, or ERROR. Non-PASS records
+classify PRODUCT, FIXTURE, ENVIRONMENT, FRAMEWORK, or UNRESOLVED. Repair creates
+a new run ID and preserves prior evidence. Partial results are reports, not
+certificates, unless a separately declared lower scope satisfies every gate.
+
+9. Frozen normative tables
+
+The `tables/` directory contains the inventory, matrix, traceability, oracles,
+certification levels, schemas, failure rules, and phases. Their hashes are in
+the I074 normative artifact inventory and SHA-256 manifest. A semantic change
+requires a separately authorized framework/ledger update; publication editors
+may not alter them.
+
+10. Implementation status
+
+This specification defines validation but does not implement runners or issue
+a certificate. Candidate certification requires executable fixtures, a full
+campaign, preserved evidence, and independent verification.

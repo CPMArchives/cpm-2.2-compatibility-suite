@@ -1,0 +1,631 @@
+Investigation 039 — CP/M 2.2 IOBYTE and Runtime Device Assignment Semantics Prompt
+
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 038 is complete.
+
+The Compatibility Ledger incorporates findings through Investigation 038.
+
+Create Investigation 039 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports or artifacts.
+
+This is an evidence investigation only.
+
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Determine the CP/M 2.2 IOBYTE and runtime device assignment
+compatibility contract.
+
+Previous investigations established:
+
+- BDOS character-device behavior;
+- BIOS character-device behavior;
+- IOBYTE definitions;
+- device interfaces;
+- character-device runtime semantics.
+
+
+Investigation 039 determines how CP/M software interacts with dynamic
+device assignment and whether historical software depends upon specific
+IOBYTE behavior.
+
+Investigate:
+
+- logical device assignment;
+- physical device mapping;
+- runtime device switching;
+- STAT DEV behavior;
+- application-visible device state;
+- software assumptions about redirected devices.
+
+
+Determine:
+
+- which IOBYTE behaviors are compatibility requirements;
+- which device-assignment behaviors are implementation-specific;
+- which historical conventions must be preserved for software
+  compatibility.
+
+
+COMPATIBILITY STANDARD
+
+Consider:
+
+- documented CP/M 2.2 behavior;
+- Digital Research implementation behavior;
+- common CP/M programming practices;
+- historically significant software dependencies.
+
+
+Do not assume that documented IOBYTE semantics define the complete
+compatibility boundary.
+
+Do not require undocumented behavior without evidence.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+
+Investigation 018:
+
+    CP/M 2.2 Character Devices and IOBYTE Semantics.
+
+
+Investigation 020:
+
+    CP/M 2.2 BIOS Jump Table, Boot, and Character-IO Semantics.
+
+
+Investigation 026:
+
+    BDOS System State Functions and Application-Visible Environment
+    Semantics.
+
+
+Investigation 036:
+
+    CP/M 2.2 BIOS Runtime Environment and Hardware Abstraction
+    Boundary Semantics.
+
+
+Investigation 038:
+
+    CP/M 2.2 Character Device Runtime Semantics.
+
+
+Do not duplicate previous investigations.
+
+Focus on runtime device assignment as a compatibility boundary.
+
+SCOPE
+
+Investigate:
+
+- IOBYTE structure;
+- logical-to-physical device mapping;
+- runtime reassignment;
+- application-visible device state;
+- BDOS interaction;
+- BIOS interaction;
+- software usage patterns.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- BetterCP/M device architecture;
+- modern terminal or device abstraction models;
+- hardware-specific device implementations;
+- CP/M 3 device assignment extensions;
+- MP/M device management.
+
+
+Do not repeat:
+
+- basic IOBYTE definitions already established by Investigation 018;
+- basic character-device behavior established by Investigation 038;
+- BIOS jump-table behavior established by Investigation 020 and
+  Investigation 036.
+
+
+INVESTIGATION QUESTIONS
+
+
+1. IOBYTE COMPATIBILITY BOUNDARY
+
+Determine whether IOBYTE is only a BDOS/BIOS mechanism or a practical
+software compatibility interface.
+
+Investigate:
+
+- application access to IOBYTE;
+- utilities that modify device assignments;
+- software expectations after reassignment.
+
+
+Determine:
+
+- what behavior applications can observe;
+- what behavior applications reasonably depend upon.
+
+
+2. LOGICAL DEVICE ASSIGNMENT
+
+Determine the runtime semantics of logical devices.
+
+Investigate:
+
+- CON;
+- RDR;
+- PUN;
+- LST.
+
+
+Determine:
+
+- how logical devices map to physical devices;
+- how mappings change;
+- how applications observe those changes.
+
+
+3. DEVICE ASSIGNMENT STATE
+
+Determine where device assignment state exists and how it changes.
+
+Investigate:
+
+- IOBYTE location;
+- BDOS state;
+- BIOS state;
+- CCP interaction;
+- persistence across operations.
+
+
+Determine:
+
+- whether state survives BDOS calls;
+- whether state survives warm boot;
+- whether state survives transient program execution.
+
+
+4. STAT DEV AND DEVICE CONFIGURATION
+
+Determine the compatibility behavior of device configuration tools.
+
+Investigate:
+
+- STAT DEV;
+- device display;
+- device assignment changes;
+- reported state.
+
+
+Determine:
+
+- whether software depends upon STAT behavior;
+- whether displayed information is compatibility-visible.
+
+
+5. RUNTIME DEVICE SWITCHING
+
+Determine behavior when devices are reassigned during execution.
+
+Investigate:
+
+- changing device mappings;
+- active programs;
+- CCP environment;
+- BDOS operations.
+
+
+Determine:
+
+- whether applications observe changes immediately;
+- whether state is cached;
+- whether software depends upon a specific update model.
+
+
+6. BDOS INTERACTION
+
+Determine how BDOS character-device functions use device assignments.
+
+Investigate:
+
+- console functions;
+- reader functions;
+- punch functions;
+- list functions.
+
+
+Determine:
+
+- whether BDOS always follows current assignment;
+- whether exceptions exist;
+- whether applications depend upon specific behavior.
+
+
+7. BIOS INTERACTION
+
+Determine how BIOS character services relate to IOBYTE.
+
+Investigate:
+
+- BIOS entry points;
+- direct BIOS callers;
+- device selection.
+
+
+Determine:
+
+- whether direct BIOS users bypass or depend upon IOBYTE;
+- whether this is a compatibility concern.
+
+
+8. SOFTWARE ECOSYSTEM USAGE
+
+Investigate software that relies upon device reassignment.
+
+Include categories:
+
+- communications programs;
+- terminal programs;
+- printing utilities;
+- file transfer utilities;
+- development tools.
+
+
+Determine:
+
+- common usage patterns;
+- undocumented assumptions;
+- de facto compatibility requirements.
+
+
+9. ERROR AND INVALID CONFIGURATION BEHAVIOR
+
+Determine behavior when device assignments are invalid or unavailable.
+
+Investigate:
+
+- missing devices;
+- unavailable hardware;
+- invalid mappings;
+- device failures.
+
+
+Determine:
+
+- application-visible behavior;
+- required compatibility behavior.
+
+
+10. SOURCE ANALYSIS
+
+Review available source material for:
+
+- IOBYTE handling;
+- BDOS device selection;
+- CCP device commands;
+- STAT implementation;
+- BIOS device interaction.
+
+
+Extract:
+
+- documented behavior;
+- Digital Research implementation behavior;
+- application-visible conventions.
+
+
+Do not produce:
+
+- source walkthroughs;
+- BetterCP/M device implementation designs.
+
+11. EXPERIMENTAL PROGRAMS
+
+Create deterministic probes covering:
+
+
+IOBYTE39:
+
+    Observe IOBYTE state and modification behavior.
+
+
+DEVICE39:
+
+    Test logical-to-physical device assignment.
+
+
+STAT39:
+
+    Test device configuration reporting.
+
+
+SWITCH39:
+
+    Test runtime device reassignment behavior.
+
+
+BDOS39:
+
+    Test BDOS character functions under different device mappings.
+
+
+BIOS39:
+
+    Test direct BIOS character services with device assignments.
+
+
+Each probe must include:
+
+- purpose;
+- procedure;
+- observed behavior;
+- compatibility conclusion.
+
+
+12. CONTROLLED TEST MATRIX
+
+Include:
+
+
+DEVICE ASSIGNMENT
+
+- default assignments;
+- changed assignments;
+- invalid assignments;
+- restored assignments.
+
+
+DEVICE TYPES
+
+- console;
+- reader;
+- punch;
+- list.
+
+
+INTERFACES
+
+- CCP commands;
+- BDOS functions;
+- BIOS calls;
+- direct application access.
+
+
+RUNTIME STATE
+
+- before reassignment;
+- after reassignment;
+- after BDOS calls;
+- after program termination;
+- after warm boot.
+
+
+FAILURE CONDITIONS
+
+- unavailable device;
+- invalid configuration;
+- device operation failure.
+
+
+13. COMPATIBILITY CLASSIFICATION
+
+For each finding, determine:
+
+- whether software can observe the behavior;
+- whether existing CP/M software depends upon the behavior;
+- whether evidence supports requiring compatibility.
+
+
+Classify findings:
+
+REQUIRED
+
+    BetterCP/M shall reproduce the behavior.
+
+
+POLICY PENDING
+
+    Evidence exists, but a compatibility decision remains open.
+
+
+NOT REQUIRED
+
+    BetterCP/M need not reproduce the behavior.
+
+
+NOT GUARANTEED
+
+    Software should not depend upon the behavior.
+
+
+14. EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+
+    documented behavior.
+
+B:
+
+    Digital Research implementation behavior.
+
+I:
+
+    experimental observation.
+
+D:
+
+    unresolved policy.
+
+
+These classifications are internal investigation labels only.
+
+
+Ledger evidence must identify:
+
+    I038
+    DEVICE
+    IOBYTE
+    BDOS
+    BIOS
+    subsystem
+    IG
+    AG
+
+
+15. EXISTING LEDGER REVIEW
+
+Review affected Compatibility Ledger entries:
+
+- IOBYTE behavior;
+- character devices;
+- BDOS device functions;
+- BIOS character services;
+- device assignment;
+- CCP device configuration;
+- software compatibility assumptions.
+
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicate avoidance.
+
+
+Do not modify the Compatibility Ledger directly.
+
+
+The current Compatibility Ledger ends after Investigation 038.
+
+Determine the next available ledger entry number.
+
+Do not create duplicate propositions merely because a lower-level
+mechanism has been explained more fully.
+
+
+16. PROPOSED LEDGER ADDITIONS
+
+Include:
+
+Proposed Compatibility Ledger additions
+
+and:
+
+Proposed existing-entry updates.
+
+
+Each entry must contain:
+
+
+NNNN. Title
+
+    Description.
+
+    Disposition:
+
+    Evidence:
+
+    Conformance:
+
+
+17. REPORT STRUCTURE
+
+Create:
+
+Investigation 039 - CP/M 2.2 IOBYTE and Runtime Device Assignment
+Semantics.md
+
+
+Include:
+
+
+1. Objective and scope
+
+2. Compatibility standard
+
+3. Relationship to previous investigations
+
+4. IOBYTE compatibility boundary
+
+5. Documentation findings
+
+6. Source findings
+
+7. Logical device assignment
+
+8. Device assignment state
+
+9. STAT DEV behavior
+
+10. Runtime device switching
+
+11. BDOS interaction
+
+12. BIOS interaction
+
+13. Software ecosystem findings
+
+14. Error and invalid configuration behavior
+
+15. Experimental results
+
+16. Compatibility conclusions
+
+17. Proposed ledger additions
+
+18. Existing-entry updates
+
+19. Open questions
+
+20. Conformance implications
+
+
+18. FINAL REVIEW
+
+Before completing the investigation, verify:
+
+- IOBYTE compatibility boundaries are identified;
+- previous character-device investigations are not duplicated;
+- BDOS and BIOS behavior are distinguished;
+- hardware-specific behavior is separated from compatibility
+  requirements;
+- software dependencies are supported by evidence.
+
+
+Ensure conclusions distinguish:
+
+- documented CP/M behavior;
+- Digital Research implementation behavior;
+- historical software dependencies;
+- hardware or vendor conventions;
+- experimental observations;
+- unresolved policy.
+
+
+FINAL REQUIREMENT
+
+Do not implement BetterCP/M changes.
+
+Do not design BetterCP/M device assignment architecture.
+
+Do not replace CP/M IOBYTE semantics with modern device models.
+
+Determine the CP/M 2.2 IOBYTE and runtime device assignment
+compatibility contract only.
+
+The output must be an evidence report suitable for inclusion in the
+BetterCP/M compatibility investigation archive.

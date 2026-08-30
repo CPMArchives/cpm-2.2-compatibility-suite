@@ -1,0 +1,61 @@
+#!/usr/bin/expect -f
+# SPDX-License-Identifier: GPL-2.0-or-later
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set cpu [lindex $argv 2]
+if {$cpu eq ""} { set cpu "-z" }
+set timeout 60
+log_file -noappend $logfile
+source [file join [file dirname [info script]] cpmsim-path.exp]
+spawn $cpmsim $cpu -d $diskdir
+expect "A>"
+send -- "B:\r"
+expect "B>"
+
+# Returning line-buffer checks that need no special host byte or printer.
+send -- "CONSTEST /0123\r"
+expect "Type AB then Enter"
+send -- "AB\r"
+expect -exact "count=02; data=\[AB\]"
+send -- "Y"
+expect "0123  PASS"
+expect "B>"
+
+send -- "CONSTEST /0124\r"
+expect "Type Q then Enter"
+send -- "Q\r"
+expect "OBSERVED: return A="
+expect "0124  PASS"
+expect "1 observations"
+expect "B>"
+
+# z80pack's stock CP/M image exposes IOBYTE 00; the probes still require an
+# operator verdict because alternate routing is supplied by target profiles.
+foreach item {0442 0444} {
+    send -- "CONSTEST /$item\r"
+    expect "=00"
+    send -- "Y"
+    expect "$item  PASS"
+    expect "B>"
+}
+
+# A missing Reader is unavailable equipment, not a hang or conformance fail.
+foreach item {0436 0438} {
+    send -- "CONSTEST /$item\r"
+    expect "Is a Reader byte configured and already pending?"
+    send -- "U"
+    expect "$item  UNTESTED"
+    expect "Reader provider unavailable; not tested"
+    expect "0 pass, 0 fail, 0 error, 0 observations"
+    expect "B>"
+}
+
+send -- "CONSTEST /0446\r"
+expect "Is a nondefault IOBYTE route configured and verified?"
+send -- "U"
+expect "0446  UNTESTED"
+expect "Nondefault IOBYTE route unavailable; not tested"
+expect "B>"
+
+send "\034"
+expect eof

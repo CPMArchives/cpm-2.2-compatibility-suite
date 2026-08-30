@@ -1,0 +1,33 @@
+#!/usr/bin/expect -f
+set timeout 30
+if {$argc != 4} {
+    puts stderr "usage: run-disconnect065.exp emulator workdir transcript peerlog"
+    exit 2
+}
+set emulator [lindex $argv 0]
+set work [lindex $argv 1]
+set transcript [lindex $argv 2]
+set peerlog [lindex $argv 3]
+file delete -force "/tmp/.z80pack/imsaisim.sio2"
+log_file -noappend $transcript
+spawn -noecho $emulator -z -R -d [file join $work disks] -r [file join $work roms] -c [file join $work system-9600.conf]
+expect "54K CP/M 2.2"
+expect "A: R/W, Space: 8k"
+expect "A>"
+send "b:\r"
+expect "B>"
+send "qt-imsai\r"
+expect "QTERM  V4.3e"
+exec python3 [file join [file dirname [info script]] peer065.py] terminal --disconnect --log $peerlog &
+after 700
+send "\036u"
+expect "Enter modem channel A or B:"
+send "a\r"
+after 700
+send "CPM65-UP\r"
+expect "HOST65-DOWN"
+after 1200
+send "AFTER-DISCONNECT\r"
+after 3000
+send "\034"
+expect eof

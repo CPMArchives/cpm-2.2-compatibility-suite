@@ -1,0 +1,412 @@
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:27:49 2026	Page 1
+Source file: SEARCH29.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Investigation 029: BDOS directory search and DMA transfer probe
+                       2      2 ; Build: z80asm -fb -oDSRCH009.COM DSRCH009.ASM
+                       3      3
+                       4      4 	ORG	0100H
+                       5      5
+0100                   6      6 START:
+0100  31 ec 05         7      7 	LD	SP,STACKTOP
+0103  11 7f 03         8      8 	LD	DE,HEADER
+0106  0e 09            9      9 	LD	C,9
+0108  cd 05 00        10     10 	CALL	0005H
+                      11     11
+                      12     12 	; Exact match and exhausted continuation at default DMA buffer 1.
+010b  cd 70 02        13     13 	CALL	RESETA
+010e  21 1f 03        14     14 	LD	HL,FEXACT
+0111  cd 8d 02        15     15 	CALL	LOADFCB
+0114  0e 11           16     16 	LD	C,17
+0116  cd 05 00        17     17 	CALL	0005H
+0119  11 ab 03        18     18 	LD	DE,LEXACT
+011c  cd a0 02        19     19 	CALL	REPORT
+011f  0e 12           20     20 	LD	C,18
+0121  cd 05 00        21     21 	CALL	0005H
+0124  11 b4 03        22     22 	LD	DE,LEXNEXT
+0127  cd a0 02        23     23 	CALL	REPORT
+                      24     24
+                      25     25 	; Missing search: DMA is prefilled EE to diagnose failure behavior.
+012a  cd 70 02        26     26 	CALL	RESETA
+012d  21 2f 03        27     27 	LD	HL,FMISS
+0130  cd 8d 02        28     28 	CALL	LOADFCB
+0133  21 8c 04        29     29 	LD	HL,BUF1
+0136  3e ee           30     30 	LD	A,0EEH
+0138  cd 99 02        31     31 	CALL	FILL128
+013b  0e 11           32     32 	LD	C,17
+013d  cd 05 00        33     33 	CALL	0005H
+0140  11 bd 03        34     34 	LD	DE,LMISS
+0143  cd a0 02        35     35 	CALL	REPORT
+                      36     36
+                      37     37 	; Wildcard enumeration in physical directory order.
+0146  cd 70 02        38     38 	CALL	RESETA
+0149  21 3f 03        39     39 	LD	HL,FWILD
+014c  cd 8d 02        40     40 	CALL	LOADFCB
+014f  0e 11           41     41 	LD	C,17
+0151  cd 05 00        42     42 	CALL	0005H
+0154  11 c6 03        43     43 	LD	DE,LW1
+0157  cd a0 02        44     44 	CALL	REPORT
+015a  0e 12           45     45 	LD	C,18
+015c  cd 05 00        46     46 	CALL	0005H
+015f  11 cf 03        47     47 	LD	DE,LW2
+0162  cd a0 02        48     48 	CALL	REPORT
+0165  0e 12           49     49 	LD	C,18
+0167  cd 05 00        50     50 	CALL	0005H
+016a  11 d8 03        51     51 	LD	DE,LW3
+016d  cd a0 02        52     52 	CALL	REPORT
+0170  0e 12           53     53 	LD	C,18
+0172  cd 05 00        54     54 	CALL	0005H
+0175  11 e1 03        55     55 	LD	DE,LW4
+0178  cd a0 02        56     56 	CALL	REPORT
+017b  0e 12           57     57 	LD	C,18
+017d  cd 05 00        58     58 	CALL	0005H
+0180  11 ea 03        59     59 	LD	DE,LWEND
+0183  cd a0 02        60     60 	CALL	REPORT
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:27:49 2026	Page 2
+Source file: SEARCH29.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                      61     61
+                      62     62 	; Repeat from Search First to show stable order on unchanged media.
+0186  21 3f 03        63     63 	LD	HL,FWILD
+0189  cd 8d 02        64     64 	CALL	LOADFCB
+018c  0e 11           65     65 	LD	C,17
+018e  cd 05 00        66     66 	CALL	0005H
+0191  11 f3 03        67     67 	LD	DE,LR1
+0194  cd a0 02        68     68 	CALL	REPORT
+0197  0e 12           69     69 	LD	C,18
+0199  cd 05 00        70     70 	CALL	0005H
+019c  11 fc 03        71     71 	LD	DE,LR2
+019f  cd a0 02        72     72 	CALL	REPORT
+                      73     73
+                      74     74 	; Change DMA between first and next; continuation must survive function 26.
+01a2  cd 70 02        75     75 	CALL	RESETA
+01a5  21 3f 03        76     76 	LD	HL,FWILD
+01a8  cd 8d 02        77     77 	CALL	LOADFCB
+01ab  0e 11           78     78 	LD	C,17
+01ad  cd 05 00        79     79 	CALL	0005H
+01b0  11 05 04        80     80 	LD	DE,LDM1
+01b3  cd a0 02        81     81 	CALL	REPORT
+01b6  21 0c 05        82     82 	LD	HL,BUF2
+01b9  3e d2           83     83 	LD	A,0D2H
+01bb  cd 99 02        84     84 	CALL	FILL128
+01be  11 0c 05        85     85 	LD	DE,BUF2
+01c1  cd 83 02        86     86 	CALL	SETDMA
+01c4  0e 12           87     87 	LD	C,18
+01c6  cd 05 00        88     88 	CALL	0005H
+01c9  11 0f 04        89     89 	LD	DE,LDM2
+01cc  cd a0 02        90     90 	CALL	REPORT
+                      91     91
+                      92     92 	; Alternate DMA exact search; page-zero 0080 is a sentinel.
+01cf  cd 70 02        93     93 	CALL	RESETA
+01d2  3e e1           94     94 	LD	A,0E1H
+01d4  32 80 00        95     95 	LD	(0080H),A
+01d7  21 0c 05        96     96 	LD	HL,BUF2
+01da  3e e2           97     97 	LD	A,0E2H
+01dc  cd 99 02        98     98 	CALL	FILL128
+01df  11 0c 05        99     99 	LD	DE,BUF2
+01e2  cd 83 02       100    100 	CALL	SETDMA
+01e5  21 4f 03       101    101 	LD	HL,FDELTA
+01e8  cd 8d 02       102    102 	CALL	LOADFCB
+01eb  0e 11          103    103 	LD	C,17
+01ed  cd 05 00       104    104 	CALL	0005H
+01f0  11 19 04       105    105 	LD	DE,LALT
+01f3  cd a0 02       106    106 	CALL	REPORT
+                     107    107
+                     108    108 	; Explicit B search and continuation, with current A restored each call.
+01f6  cd 70 02       109    109 	CALL	RESETA
+01f9  21 5f 03       110    110 	LD	HL,FBWILD
+01fc  cd 8d 02       111    111 	CALL	LOADFCB
+01ff  0e 11          112    112 	LD	C,17
+0201  cd 05 00       113    113 	CALL	0005H
+0204  11 23 04       114    114 	LD	DE,LB1
+0207  cd a0 02       115    115 	CALL	REPORT
+020a  0e 12          116    116 	LD	C,18
+020c  cd 05 00       117    117 	CALL	0005H
+020f  11 2c 04       118    118 	LD	DE,LB2
+0212  cd a0 02       119    119 	CALL	REPORT
+0215  0e 12          120    120 	LD	C,18
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:27:49 2026	Page 3
+Source file: SEARCH29.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0217  cd 05 00       121    121 	CALL	0005H
+021a  11 35 04       122    122 	LD	DE,LBEND
+021d  cd a0 02       123    123 	CALL	REPORT
+                     124    124
+                     125    125 	; Default-drive search followed by a drive change: diagnostic only.
+0220  cd 70 02       126    126 	CALL	RESETA
+0223  21 3f 03       127    127 	LD	HL,FWILD
+0226  cd 8d 02       128    128 	CALL	LOADFCB
+0229  0e 11          129    129 	LD	C,17
+022b  cd 05 00       130    130 	CALL	0005H
+022e  11 3e 04       131    131 	LD	DE,LCH1
+0231  cd a0 02       132    132 	CALL	REPORT
+0234  1e 01          133    133 	LD	E,1
+0236  0e 0e          134    134 	LD	C,14
+0238  cd 05 00       135    135 	CALL	0005H
+023b  0e 12          136    136 	LD	C,18
+023d  cd 05 00       137    137 	CALL	0005H
+0240  11 47 04       138    138 	LD	DE,LCH2
+0243  cd a0 02       139    139 	CALL	REPORT
+                     140    140
+                     141    141 	; dr='?' special search: no auto-select and entries from any user number.
+0246  cd 70 02       142    142 	CALL	RESETA
+0249  21 6f 03       143    143 	LD	HL,FANYU
+024c  cd 8d 02       144    144 	CALL	LOADFCB
+024f  0e 11          145    145 	LD	C,17
+0251  cd 05 00       146    146 	CALL	0005H
+0254  11 50 04       147    147 	LD	DE,LU1
+0257  cd a0 02       148    148 	CALL	REPORT
+025a  06 07          149    149 	LD	B,7
+025c                 150    150 ULOOP:
+025c  c5             151    151 	PUSH	BC
+025d  0e 12          152    152 	LD	C,18
+025f  cd 05 00       153    153 	CALL	0005H
+0262  11 5a 04       154    154 	LD	DE,LUN
+0265  cd a0 02       155    155 	CALL	REPORT
+0268  c1             156    156 	POP	BC
+0269  10 f1          157    157 	DJNZ	ULOOP
+026b  0e 00          158    158 	LD C,0
+026d  c3 05 00       159    159 	JP 0005H
+                     160    160
+                     161    161 ; Function 13, then set A current and BUF1 as DMA.
+0270                 162    162 RESETA:
+0270  0e 0d          163    163 	LD	C,13
+0272  cd 05 00       164    164 	CALL	0005H
+0275  1e 00          165    165 	LD	E,0
+0277  0e 0e          166    166 	LD	C,14
+0279  cd 05 00       167    167 	CALL	0005H
+027c  11 8c 04       168    168 	LD	DE,BUF1
+027f  cd 83 02       169    169 	CALL	SETDMA
+0282  c9             170    170 	RET
+                     171    171
+0283                 172    172 SETDMA:
+0283  ed 53 64 04    173    173 	LD	(ACTDMA),DE
+0287  0e 1a          174    174 	LD	C,26
+0289  cd 05 00       175    175 	CALL	0005H
+028c  c9             176    176 	RET
+                     177    177
+028d                 178    178 LOADFCB:
+028d  11 68 04       179    179 	LD	DE,FCB
+0290  01 10 00       180    180 	LD	BC,16
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:27:49 2026	Page 4
+Source file: SEARCH29.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0293  ed b0          181    181 	LDIR
+0295  11 68 04       182    182 	LD	DE,FCB
+0298  c9             183    183 	RET
+                     184    184
+                     185    185 ; HL buffer, A fill
+0299                 186    186 FILL128:
+0299  06 80          187    187 	LD	B,128
+029b                 188    188 FILL0:
+029b  77             189    189 	LD	(HL),A
+029c  23             190    190 	INC	HL
+029d  10 fc          191    191 	DJNZ	FILL0
+029f  c9             192    192 	RET
+                     193    193
+                     194    194 ; A result, DE zero-terminated label. Print result, current disk, byte 0080,
+                     195    195 ; then all 128 bytes at the active DMA address.
+02a0                 196    196 REPORT:
+02a0  32 66 04       197    197 	LD	(RESULT),A
+02a3  d5             198    198 	PUSH	DE
+02a4  0e 19          199    199 	LD	C,25
+02a6  cd 05 00       200    200 	CALL	0005H
+02a9  32 67 04       201    201 	LD	(CURDISK),A
+02ac  e1             202    202 	POP	HL
+02ad  cd f4 02       203    203 	CALL	PUTS
+02b0  3a 66 04       204    204 	LD	A,(RESULT)
+02b3  cd 08 03       205    205 	CALL	HEXBYTE
+02b6  1e 20          206    206 	LD	E,' '
+02b8  cd e8 02       207    207 	CALL	PUTC
+02bb  3a 67 04       208    208 	LD	A,(CURDISK)
+02be  cd 08 03       209    209 	CALL	HEXBYTE
+02c1  1e 20          210    210 	LD	E,' '
+02c3  cd e8 02       211    211 	CALL	PUTC
+02c6  3a 80 00       212    212 	LD	A,(0080H)
+02c9  cd 08 03       213    213 	CALL	HEXBYTE
+02cc  1e 20          214    214 	LD	E,' '
+02ce  cd e8 02       215    215 	CALL	PUTC
+02d1  2a 64 04       216    216 	LD	HL,(ACTDMA)
+02d4  06 80          217    217 	LD	B,128
+02d6                 218    218 DUMP0:
+02d6  7e             219    219 	LD	A,(HL)
+02d7  23             220    220 	INC	HL
+02d8  e5             221    221 	PUSH	HL
+02d9  cd 08 03       222    222 	CALL	HEXBYTE
+02dc  1e 20          223    223 	LD	E,' '
+02de  cd e8 02       224    224 	CALL	PUTC
+02e1  e1             225    225 	POP	HL
+02e2  10 f2          226    226 	DJNZ	DUMP0
+02e4  cd fe 02       227    227 	CALL	CRLF
+02e7  c9             228    228 	RET
+                     229    229
+02e8                 230    230 PUTC:
+02e8  c5             231    231 	PUSH	BC
+02e9  d5             232    232 	PUSH	DE
+02ea  e5             233    233 	PUSH	HL
+02eb  0e 02          234    234 	LD	C,2
+02ed  cd 05 00       235    235 	CALL	0005H
+02f0  e1             236    236 	POP	HL
+02f1  d1             237    237 	POP	DE
+02f2  c1             238    238 	POP	BC
+02f3  c9             239    239 	RET
+02f4                 240    240 PUTS:
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:27:49 2026	Page 5
+Source file: SEARCH29.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+02f4  7e             241    241 	LD	A,(HL)
+02f5  23             242    242 	INC	HL
+02f6  b7             243    243 	OR	A
+02f7  c8             244    244 	RET	Z
+02f8  5f             245    245 	LD	E,A
+02f9  cd e8 02       246    246 	CALL	PUTC
+02fc  18 f6          247    247 	JR	PUTS
+02fe                 248    248 CRLF:
+02fe  1e 0d          249    249 	LD	E,13
+0300  cd e8 02       250    250 	CALL	PUTC
+0303  1e 0a          251    251 	LD	E,10
+0305  c3 e8 02       252    252 	JP	PUTC
+0308                 253    253 HEXBYTE:
+0308  f5             254    254 	PUSH	AF
+0309  0f             255    255 	RRCA
+030a  0f             256    256 	RRCA
+030b  0f             257    257 	RRCA
+030c  0f             258    258 	RRCA
+030d  cd 11 03       259    259 	CALL	NIBBLE
+0310  f1             260    260 	POP	AF
+0311                 261    261 NIBBLE:
+0311  e6 0f          262    262 	AND	0FH
+0313  c6 30          263    263 	ADD	A,'0'
+0315  fe 3a          264    264 	CP	'9'+1
+0317  38 02          265    265 	JR	C,NIBOUT
+0319  c6 07          266    266 	ADD	A,7
+031b                 267    267 NIBOUT:
+031b  5f             268    268 	LD	E,A
+031c  c3 e8 02       269    269 	JP	PUTC
+                     270    270
+                     271    271 ; Search FCBs use bytes dr,f1-f8,t1-t3,ex,s1,s2,rc (16 bytes).
+031f  00 42 45 54    272    272 FEXACT: DB 0,'BETA    ','TXT',0,0,0,0
+0323  41 20 20 20    272    273
+0327  20 54 58 54    272    274
+032b  00 00 00 00    272    275
+032f  00 41 42 53    273    276 FMISS:  DB 0,'ABSENT  ','TXT',0,0,0,0
+0333  45 4e 54 20    273    277
+0337  20 54 58 54    273    278
+033b  00 00 00 00    273    279
+033f  00 3f 3f 3f    274    280 FWILD:  DB 0,'????????','TXT','?',0,0,0
+0343  3f 3f 3f 3f    274    281
+0347  3f 54 58 54    274    282
+034b  3f 00 00 00    274    283
+034f  00 44 45 4c    275    284 FDELTA: DB 0,'DELTA   ','TXT',0,0,0,0
+0353  54 41 20 20    275    285
+0357  20 54 58 54    275    286
+035b  00 00 00 00    275    287
+035f  02 3f 3f 3f    276    288 FBWILD: DB 2,'????????','TXT','?',0,0,0
+0363  3f 3f 3f 3f    276    289
+0367  3f 54 58 54    276    290
+036b  3f 00 00 00    276    291
+036f  3f 3f 3f 3f    277    292 FANYU:  DB '?','????????','???','?',0,0,0
+0373  3f 3f 3f 3f    277    293
+0377  3f 3f 3f 3f    277    294
+037b  3f 00 00 00    277    295
+                     278    296
+037f  53 45 41 52    279    297 HEADER: DB 'SEARCH29 result current byte0080 dma[128]',13,10,'$'
+0383  43 48 32 39    279    298
+0387  20 72 65 73    279    299
+038b  75 6c 74 20    279    300
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:27:49 2026	Page 6
+Source file: SEARCH29.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+038f  63 75 72 72    279    301
+0393  65 6e 74 20    279    302
+0397  62 79 74 65    279    303
+039b  30 30 38 30    279    304
+039f  20 64 6d 61    279    305
+03a3  5b 31 32 38    279    306
+03a7  5d 0d 0a 24    279    307
+03ab  45 58 41 43    280    308 LEXACT: DB 'EXACT   ',0
+03af  54 20 20 20    280    309
+03b3  00             280    310
+03b4  45 58 2d 4e    281    311 LEXNEXT: DB 'EX-NEXT ',0
+03b8  45 58 54 20    281    312
+03bc  00             281    313
+03bd  4e 4f 2d 4d    282    314 LMISS: DB 'NO-MATCH',0
+03c1  41 54 43 48    282    315
+03c5  00             282    316
+03c6  57 49 4c 44    283    317 LW1: DB 'WILD-1  ',0
+03ca  2d 31 20 20    283    318
+03ce  00             283    319
+03cf  57 49 4c 44    284    320 LW2: DB 'WILD-2  ',0
+03d3  2d 32 20 20    284    321
+03d7  00             284    322
+03d8  57 49 4c 44    285    323 LW3: DB 'WILD-3  ',0
+03dc  2d 33 20 20    285    324
+03e0  00             285    325
+03e1  57 49 4c 44    286    326 LW4: DB 'WILD-4  ',0
+03e5  2d 34 20 20    286    327
+03e9  00             286    328
+03ea  57 49 4c 44    287    329 LWEND: DB 'WILD-END',0
+03ee  2d 45 4e 44    287    330
+03f2  00             287    331
+03f3  52 45 50 45    288    332 LR1: DB 'REPEAT-1',0
+03f7  41 54 2d 31    288    333
+03fb  00             288    334
+03fc  52 45 50 45    289    335 LR2: DB 'REPEAT-2',0
+0400  41 54 2d 32    289    336
+0404  00             289    337
+0405  44 4d 41 2d    290    338 LDM1: DB 'DMA-FIRST',0
+0409  46 49 52 53    290    339
+040d  54 00          290    340
+040f  44 4d 41 2d    291    341 LDM2: DB 'DMA-NEXT ',0
+0413  4e 45 58 54    291    342
+0417  20 00          291    343
+0419  41 4c 54 2d    292    344 LALT: DB 'ALT-DMA  ',0
+041d  44 4d 41 20    292    345
+0421  20 00          292    346
+0423  42 2d 57 49    293    347 LB1: DB 'B-WILD-1',0
+0427  4c 44 2d 31    293    348
+042b  00             293    349
+042c  42 2d 57 49    294    350 LB2: DB 'B-WILD-2',0
+0430  4c 44 2d 32    294    351
+0434  00             294    352
+0435  42 2d 45 4e    295    353 LBEND: DB 'B-END   ',0
+0439  44 20 20 20    295    354
+043d  00             295    355
+043e  43 48 41 4e    296    356 LCH1: DB 'CHANGE-1',0
+0442  47 45 2d 31    296    357
+0446  00             296    358
+0447  43 48 41 4e    297    359 LCH2: DB 'CHANGE-2',0
+044b  47 45 2d 32    297    360
+Z80/8080-Macro-Assembler  Release 2.1	Sun Aug 16 19:27:49 2026	Page 7
+Source file: SEARCH29.ASM
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+044f  00             297    361
+0450  41 4e 59 55    298    362 LU1: DB 'ANYUSER-1',0
+0454  53 45 52 2d    298    363
+0458  31 00          298    364
+045a  41 4e 59 55    299    365 LUN: DB 'ANYUSER-N',0
+045e  53 45 52 2d    299    366
+0462  4e 00          299    367
+                     300    368
+0464  8c 04          301    369 ACTDMA: DW BUF1
+0466  00             302    370 RESULT: DB 0
+0467  00             303    371 CURDISK: DB 0
+0468                 304    372 FCB: DS 36,0
+048c                 305    373 BUF1: DS 128,0
+050c                 306    374 BUF2: DS 128,0
+058c                 307    375 	DS 96
+05ec                 308    376 STACKTOP:
+05ec                 309    377 	END	START

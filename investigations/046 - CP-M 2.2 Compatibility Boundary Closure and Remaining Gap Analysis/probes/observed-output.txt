@@ -1,0 +1,61 @@
+Investigation 046 accepted observations
+=======================================
+
+Environment: z80pack cpmsim 1.39, DRI CP/M 2.2, Z80 CBIOS 1.2. Scripted
+command: GAP46 FIRST.TXT SECOND.BIN, followed by CROSS45.
+
+GAP46
+-----
+
+Purpose: Validate selected unresolved compatibility boundaries without
+promoting DRI behavior merely because it is repeatable.
+
+Procedure: Snapshot 16-byte prefixes at 005Ch and 006Ch plus the command tail;
+select/log B; mark it read-only; capture login/read-only vectors; call Function
+37 with B's vector bit; capture state/result; call 38, 39, and 41; reset disk
+state and DMA; print snapshots; RET.
+
+Observed:
+
+  FCB1[0..15]=00464952535420202054585400000006
+  FCB2[0..15]=005345434F4E44202042494E00000000
+  TAIL COUNT/TEXT=15/ FIRST.TXT SECOND.BIN
+  LOGIN/RO BEFORE->AFTER=0003/0002->0001/0000
+  F37 RET/CURRENT DRIVE=000001
+  F38/F39/F41=000000000000
+
+The tail count 15h is 21 decimal. The first FCB represented FIRST.TXT, the
+second represented SECOND.BIN, and the tail included its leading separating
+blank. First-FCB byte 15 contained 06h loader residue while the corresponding
+second-prefix byte was zero. Function 37 cleared B from both vectors, returned
+zero, and left current drive B. Functions 38/39 and selector 41 returned zero.
+
+Compatibility conclusion: these are DRI observations. Selector 41's zero is
+already REQUIRED. Function 37, exact second-FCB/control bytes, tail formatting,
+and reserved 38/39 behavior remain policy/private distinctions unless manuals
+or application dependencies strengthen them.
+
+CROSS45 follow-up
+-----------------
+
+Purpose: Confirm coherent cross-layer operation after the gap probe's unusual
+state transitions.
+
+Observed: CROSS45 repeated its accepted I045 output: configured gateways,
+version 0022h, alternate-DMA Search, explicit-drive/current-user filtering,
+current-drive preservation, direct BIOS CONST, Function-13 reset, and RET all
+worked. Both ready disk images were byte-identical after the run.
+
+Ledger audit
+------------
+
+The ledger contained 652 entry lines but 622 unique numbers, with no missing
+number from 0001 through 0622. Numbers 0248-0277 each occurred twice as a
+duplicated Investigation 011 block. There were 445 REQUIRED, 109 NOT
+GUARANTEED, 48 NOT REQUIRED, and 50 POLICY PENDING entry lines. The duplicate
+0276 accounts for one repeated policy line; 0435 and 0523 separately state the
+same unresolved Function-37 issue.
+
+Conclusion: the duplicate block and Function-37 overlap are ledger-maintenance
+defects, not uninvestigated runtime behavior. No conflicting disposition was
+found among them.

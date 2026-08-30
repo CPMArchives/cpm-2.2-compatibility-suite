@@ -1,0 +1,32 @@
+INVESTIGATION 065 OBSERVED OUTPUT SUMMARY
+
+T01 9600 terminal
+  HOST65-DOWN appeared at QTERM.
+  Peer received hex 43504d36352d55500d (CPM65-UP CR).
+  First-to-last peer receive interval: approximately 0.094 seconds.
+
+T02 XMODEM normal
+  Peer received a valid SOH block 1 and EOT and returned ACK to both.
+  QTERM displayed Transfer complete and returned to B>.
+
+T03 XMODEM injected NAK
+  QTERM displayed Non-ACK: 0x15 and one error, retransmitted block 1,
+  displayed Transfer complete, and returned to B>.
+
+T04 disconnect
+  Peer logged FORCED-DISCONNECT after receiving CPM65-UP CR.
+  QTERM did not diagnose or return during the bounded continuation.
+
+T05 unavailable
+  With no peer, QTERM remained in the selected direct-port path until the
+  harness stopped the emulator. No portable CP/M error was presented.
+
+T06 configured 1200
+  Exact bytes transferred. First-to-last peer receive interval was about
+  0.095 seconds, materially the same as the short 9600 case. No physical-baud
+  claim follows.
+
+T07 interrupted XMODEM
+  Peer received one valid block and logged FORCED-DISCONNECT-AFTER-BLOCK
+  without sending ACK. QTERM counted Non-ACK 0x15 and did not complete during
+  15 seconds; the harness then stopped the emulator.

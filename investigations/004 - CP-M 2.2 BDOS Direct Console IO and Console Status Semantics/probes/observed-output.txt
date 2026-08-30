@@ -1,0 +1,79 @@
+Investigation 004 raw observations
+==================================
+
+Reference system:
+
+  z80pack cpmsim Release 1.39, Z80 mode
+  DRI CP/M 2.2 CCP+BDOS with z80pack Z80 CBIOS V1.2
+  disposable cpm22-1.dsk copy
+
+Empty host-input case (no later command bytes queued):
+
+  A>DIO004 E
+
+  EMPTY 11,6FF,6FE: 00 00 00
+
+Fields are function 11, function 6 with E=FFh, and the undocumented DRI
+function-6 E=FEh branch.  The first two agree on not-ready/no-character.
+
+Deterministic one-character function-6 input case:
+
+  A>DIO004 6
+
+  PEND6 first,second: 5A 00 00
+
+The temporary BIOS harness returned ready once and supplied ASCII Z (5Ah).
+The first function-6 E=FFh call returned Z and consumed it.  The second
+returned 00h without blocking.
+
+Deterministic function-11 pending-buffer case:
+
+  A>DIO004 S
+
+  PEND11 first,second,6FF: 01 01 00
+
+The first function 11 call detected the scripted Z through BIOS, consumed it
+from BIOS, and retained it in DRI BDOS's kbchar byte.  The second function 11
+still reported ready.  Function 6 with E=FFh checked BIOS directly and returned
+00h rather than consuming kbchar.  After the probe returned, the CCP's buffered
+input path consumed and echoed the retained Z at the next prompt.
+
+Deterministic undocumented E=FEh case:
+
+  A>DIO004 F
+
+  PEND6FE first,second: 00 00 00
+
+Although the DRI handler branches to BIOS CONST for E=FEh, it does not copy
+the returned status into BDOS's common result word.  The application-visible
+result therefore remained zero even when the scripted BIOS returned FFh.
+
+Direct-output byte stream:
+
+  RAW-BEGIN[A<TAB>$<10h>B]RAW-END
+
+The angle-bracket names above describe raw captured bytes, not text printed by
+the probe.  Between the literal frame brackets the captured bytes were:
+
+  41 09 24 10 42
+
+Thus DRI function 6 passed A, TAB, dollar sign, Ctrl-P, and B directly to BIOS
+CONOUT.  TAB was not expanded and Ctrl-P was not interpreted by BDOS.
+
+Printer-echo case:
+
+Printer echo was enabled at the CCP prompt before DIO004 O.  The z80pack LIST
+sink contained:
+
+  DIO004 O\n\nRAW-BEGIN[]RAW-END\n\nA>
+
+The function-9 frame was copied to LIST, but none of the five direct function-6
+bytes between the brackets was copied.  z80pack's printer sink suppresses CR;
+that host behavior does not affect the discriminating empty brackets.
+
+Rejected timing-dependent run:
+
+An attempt to append a key to the same PTY write as a command did not make the
+key visible during the program; it appeared only at the next prompt.  No result
+from that run is used.  Ready-input conclusions above use the temporary BIOS
+vector harness described in README.txt and the report.

@@ -1,0 +1,20 @@
+Investigation 070A rebuild verification
+======================================
+
+CROSS70A first build:
+ec5fde1b90b62d253c71a576361754ff86721d327b1233990dc4ed5597cdf523  CROSS70A.first.COM
+
+CROSS70A final rebuild:
+ec5fde1b90b62d253c71a576361754ff86721d327b1233990dc4ed5597cdf523  CROSS70A.COM
+
+cmp result: byte-identical
+
+Accepted FAULT066 binary:
+2365c3bac5b06f36e584610a0da5d6b1d3d19e2f0496f70a8e4b18e23307f4ec  FAULT066.COM
+
+FAULT066 rebuild:
+2365c3bac5b06f36e584610a0da5d6b1d3d19e2f0496f70a8e4b18e23307f4ec  FAULT066.rebuilt.COM
+
+cmp result: byte-identical
+
+Assembler: Z80/8080 Macro Assembler Release 2.1 (1987-2024)

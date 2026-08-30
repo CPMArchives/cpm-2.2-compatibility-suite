@@ -1,0 +1,24 @@
+#!/usr/bin/expect -f
+# SPDX-License-Identifier: GPL-2.0-or-later
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set cpu [lindex $argv 2]
+if {$cpu eq ""} { set cpu "-z" }
+set timeout 120
+log_file -noappend $logfile
+source [file join [file dirname [info script]] cpmsim-path.exp]
+spawn $cpmsim $cpu -d $diskdir
+expect "A>"
+send -- "B:\r"
+expect "B>"
+foreach item {0196 0198 0200 0202 0204 0206 0208 0210 0212 0214 0216 0285 0286 0287 0288 0289 0290 0291 0294 0295 0296 0298 0299 0300 0301 0302 0303 0304 0305 0306 0307 0308 0310 0311 0315 0356 0357 0358 0359 0360 0361 0362 0363 0364 0365 0366 0367 0541 0542 0543 0544 0545 0546 0547 0548 0549 0559 0560 0561 0562 0563 0564 0565 0566} {
+ send -- "DIRTEST /$item\r"
+ expect "B>"
+}
+foreach cmd {"DIRTEST /SAFE" "DIRTEST /ALL" "DIRTEST /LIST"} {
+ send -- "$cmd\r"
+ expect "B>"
+}
+send "\034"
+expect eof
+exit 0

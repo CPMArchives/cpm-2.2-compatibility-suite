@@ -1,0 +1,18 @@
+--- failure-drivea.dsk
+0:
+attr.dat
+big.dat
+closeme.dat
+cross45.com
+dskfile.dat
+phys015.com
+rofile.dat
+--- normal-drivea.dsk
+0:
+attr.dat
+big.dat
+closeme.dat
+cross45.com
+dskfile.dat
+phys015.com
+rofile.dat

@@ -1,0 +1,451 @@
+INVESTIGATION 027 — CP/M 2.2 BDOS Call Interface Convention and Register-State Semantics
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 026 is complete.
+
+The authoritative Compatibility Ledger currently incorporates findings
+through Investigation 026.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify previous investigation reports, architecture documents,
+roadmaps, specifications, or other existing BetterCP/M files.
+
+Create Investigation 027 as a new evidence report with its own directory
+and preserved experimental artifacts.
+
+This is an evidence investigation only.
+Do not implement BetterCP/M changes.
+
+
+OBJECTIVE
+
+Define the general CP/M 2.2 BDOS calling convention and return-state
+contract.
+
+Previous investigations established individual BDOS function behavior.
+
+Investigation 027 determines the common interface rules surrounding every
+BDOS call:
+
+- how applications invoke BDOS;
+- which registers provide parameters;
+- which registers return results;
+- which registers are preserved;
+- which values are undefined;
+- what happens for unsupported function numbers;
+- what applications may safely assume after BDOS returns.
+
+The goal is to define the BDOS compatibility boundary without requiring
+private DRI implementation details.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read and incorporate:
+
+Investigation 001:
+    Initial CP/M architecture and BDOS boundary.
+
+Investigation 002:
+    BDOS invocation observations.
+
+Investigation 008:
+    FCB and BDOS file-operation foundations.
+
+Investigation 017:
+    Allocation and DPB state.
+
+Investigation 018:
+    Character services.
+
+Investigation 019:
+    BIOS boundary.
+
+Investigation 020:
+    BIOS entry conventions.
+
+Investigation 024:
+    Termination state.
+
+Investigation 025:
+    Error returns.
+
+Investigation 026:
+    BDOS system-state functions.
+
+Do not duplicate individual function semantics.
+
+Focus on the common BDOS interface contract.
+
+
+SCOPE
+
+Investigate:
+
+- CALL 0005h invocation;
+- C register function selection;
+- DE parameter passing;
+- HL result behavior;
+- A/B return relationships;
+- register preservation;
+- stack behavior;
+- unsupported function handling;
+- invalid parameter handling;
+- BDOS reentrancy assumptions;
+- BDOS behavior across calls.
+
+
+NON-GOALS
+
+Do not investigate:
+
+- individual file operation semantics already covered;
+- BIOS calling conventions;
+- CP/M 3 BDOS extensions;
+- MP/M;
+- private BDOS memory layout;
+- exact DRI addresses.
+
+
+KEY QUESTIONS
+
+
+1. BDOS ENTRY MECHANISM
+
+Determine:
+
+- how applications invoke BDOS;
+- role of address 0005h;
+- relationship between CALL 0005h and the BDOS entry vector;
+- whether applications may call BDOS directly elsewhere.
+
+Determine what is REQUIRED versus DRI-specific.
+
+
+2. FUNCTION NUMBER PASSING
+
+Determine:
+
+- C register semantics;
+- valid function range;
+- behavior above the implemented range;
+- behavior of reserved functions.
+
+
+3. PARAMETER PASSING
+
+Determine:
+
+- DE parameter semantics;
+- whether HL or other registers may be used;
+- whether unused registers must contain defined values.
+
+Avoid requiring implementation details.
+
+
+4. RETURN VALUE CONVENTION
+
+Determine:
+
+- A return value behavior;
+- HL return behavior;
+- relationship between A and L;
+- B register behavior;
+- functions returning values in other registers.
+
+
+5. REGISTER PRESERVATION
+
+Determine:
+
+After BDOS returns:
+
+- which registers are preserved;
+- which registers may be destroyed;
+- whether preservation differs by function;
+- whether applications may rely on undocumented preservation.
+
+
+6. STACK BEHAVIOR
+
+Determine:
+
+- whether BDOS preserves caller stack;
+- whether BDOS may alter SP temporarily;
+- return mechanism;
+- nested-call assumptions.
+
+
+7. UNSUPPORTED FUNCTIONS
+
+Determine:
+
+- return values;
+- whether unsupported calls return;
+- whether they terminate;
+- whether behavior differs between DRI source and documentation.
+
+
+8. INVALID PARAMETERS
+
+Determine:
+
+- invalid drive;
+- invalid user;
+- invalid FCB;
+- invalid memory pointer;
+- invalid function parameters.
+
+Separate:
+
+normal returned errors
+
+from:
+
+fatal/operator diagnostics.
+
+
+9. BDOS REENTRANCY
+
+Determine:
+
+- whether BDOS may be called recursively;
+- whether interrupts or resident extensions may safely enter BDOS;
+- what state assumptions exist.
+
+Do not design BetterCP/M behavior.
+
+
+10. DRI SOURCE ANALYSIS
+
+Review BDOS source for:
+
+- entry sequence;
+- register handling;
+- return paths;
+- common epilogue.
+
+Extract only compatibility-relevant behavior.
+
+
+11. EXPERIMENTAL PROGRAMS
+
+Create deterministic probes:
+
+CALL27:
+    BDOS entry and return register capture.
+
+REG27:
+    Register preservation tests.
+
+FUNC27:
+    Supported and unsupported function calls.
+
+STACK27:
+    Stack preservation observation.
+
+PARAM27:
+    Parameter variation tests.
+
+
+12. CONTROLLED TEST MATRIX
+
+Include:
+
+- normal BDOS call;
+- function returning value;
+- function returning no value;
+- unsupported function;
+- invalid parameter;
+- repeated BDOS calls;
+- register sentinel tests.
+
+
+13. EVIDENCE DISCIPLINE
+
+Use investigation evidence classes:
+
+A:
+    documented behavior.
+
+B:
+    DRI implementation behavior.
+
+I:
+    experimental observation.
+
+D:
+    unresolved policy.
+
+These are investigation labels only.
+
+Ledger evidence must use:
+
+    I027
+    BDOS
+    IG
+    AG
+
+
+14. COMPATIBILITY CLASSIFICATION
+
+Classify every conclusion:
+
+REQUIRED
+
+POLICY PENDING
+
+NOT REQUIRED
+
+NOT GUARANTEED
+
+
+Do not require:
+
+- DRI register side effects;
+- exact instruction paths;
+- private stack usage;
+- unsupported-function behavior unless applications observe it.
+
+
+15. EXISTING LEDGER REVIEW
+
+Review:
+
+0001-0034
+0080-0170
+0190-0247
+0509-0525
+
+Determine:
+
+- evidence strengthening;
+- corrections;
+- duplicates to avoid.
+
+
+16. PROPOSED LEDGER ADDITIONS
+
+The current ledger ends after Investigation 026.
+
+Begin proposed entries at:
+
+0526
+
+Do not modify the Compatibility Ledger.
+
+Include:
+
+Proposed Compatibility Ledger additions
+
+and:
+
+Proposed existing-entry updates.
+
+
+Each entry must contain:
+
+NNNN. Title
+
+    Description.
+
+    Disposition:
+
+    Evidence:
+
+    Conformance:
+
+
+17. REPORT STRUCTURE
+
+Create:
+
+Investigation 027 - CP/M 2.2 BDOS Call Interface Convention and
+Register-State Semantics.md
+
+
+Include:
+
+1. Objective and scope
+2. Relationship to previous investigations
+3. Documentation findings
+4. BDOS source findings
+5. Entry convention
+6. Parameter convention
+7. Return convention
+8. Register preservation
+9. Experimental results
+10. Compatibility conclusions
+11. Proposed ledger additions
+12. Existing-entry updates
+13. Open questions
+14. Artifact preservation audit
+15. Sources
+
+
+18. ARTIFACT REQUIREMENTS
+
+Create:
+
+Investigation 027/
+
+with:
+
+probes/
+
+Preserve:
+
+- source;
+- binaries;
+- listings;
+- harnesses;
+- transcripts;
+- memory dumps;
+- build instructions;
+- SHA-256 manifests.
+
+
+19. PRESERVATION AUDIT
+
+Before investigation:
+
+- hash current ledger;
+- record emulator version;
+- hash fixture images.
+
+After investigation:
+
+- verify ledger unchanged;
+- verify previous investigations unchanged;
+- verify protected files unchanged;
+- hash new artifacts.
+
+
+20. COMPLETION REPORT
+
+When complete report:
+
+- files created;
+- artifact count;
+- experiments performed;
+- principal findings;
+- proposed ledger range;
+- ledger hash before/after;
+- confirmation no protected files changed;
+- documentation reviewed.
+
+
+FINAL GOAL
+
+Define the CP/M 2.2 BDOS application interface contract:
+
+When a program executes CALL 0005h,
+what must a compatible BDOS accept,
+what must it return,
+and what machine state may the caller rely upon afterward?
+
+The result should establish the BDOS boundary needed for a compatible
+BetterCP/M implementation without requiring reproduction of DRI-private
+implementation details.

@@ -1,0 +1,7 @@
+Upstream: https://github.com/hperaza/ZSM4
+Commit: 96a9ac1081172e1c08291521b77d2a715ec59c8b
+Bundled CP/M binary: bin/zsm4.com
+Binary SHA-256: 3dbeed62bc303a07c62e0fd41a5df44d023c2f82c05b76785a97d20a633f6ef8
+
+This is an unmodified source snapshot retained as the corresponding source
+for the bundled ZSM4.COM. See LICENSE in this directory for GNU GPL v2 terms.

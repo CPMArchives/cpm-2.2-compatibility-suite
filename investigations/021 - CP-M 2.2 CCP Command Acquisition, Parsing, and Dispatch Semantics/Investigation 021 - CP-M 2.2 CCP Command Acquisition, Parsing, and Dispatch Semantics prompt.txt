@@ -1,0 +1,1164 @@
+INVESTIGATION 021 — CP/M 2.2 CCP Command Acquisition, Parsing, and
+Dispatch Semantics
+
+Continue the BetterCP/M CP/M 2.2 compatibility investigation series.
+
+Investigation 020 is complete.
+
+The authoritative Compatibility Ledger is now:
+
+    02 Compatibility Ledger - Investigation 020.txt
+
+It incorporates findings through Investigation 020 and currently ends at
+entry 0474.
+
+Do not modify the Compatibility Ledger.
+
+Do not modify any previous investigation report, architecture document,
+roadmap, source archive, or other pre-existing BetterCP/M file.
+
+Create Investigation 021 as a new evidence report with its own directory
+and associated probe/harness artifacts.
+
+This is an EVIDENCE INVESTIGATION, not BetterCP/M implementation work.
+
+
+OBJECTIVE
+
+Establish the CP/M 2.2 Console Command Processor command-acquisition,
+lexical parsing, command classification, and dispatch contract.
+
+This investigation begins the systematic CCP compatibility campaign.
+
+Concentrate on the path:
+
+    CCP prompt
+        |
+        v
+    command-line acquisition
+        |
+        v
+    lexical normalization/parsing
+        |
+        v
+    command-name recognition
+        |
+        +--------------------+
+        |                    |
+        v                    v
+    resident command     transient command
+        |                    |
+        v                    v
+    resident dispatch    transient lookup path
+
+The purpose is to determine the common command-processing machinery before
+separate investigations examine the detailed semantics of individual
+resident commands or transient-program loading.
+
+This investigation should establish:
+
+    - how the CCP obtains a command line;
+    - what constitutes an empty command;
+    - how command names and operands are separated;
+    - how whitespace is treated;
+    - how case is treated;
+    - how drive prefixes are recognized at command level;
+    - how the CCP recognizes resident commands;
+    - how it distinguishes resident from transient commands;
+    - what syntactic state is passed into those two paths;
+    - what happens for malformed or unrecognized command input;
+    - which observed behaviors are documented requirements, DRI CCP
+      implementation behavior, ecosystem-relevant behavior, or incidental
+      details.
+
+Do NOT attempt to specify all resident commands in this investigation.
+
+Do NOT attempt to specify the complete transient-program search/load process
+in this investigation.
+
+Those should be investigated separately after the common CCP parsing and
+dispatch machinery is understood.
+
+
+RELATIONSHIP TO EARLIER INVESTIGATIONS
+
+Read the current Compatibility Ledger and relevant previous investigations
+before designing experiments.
+
+In particular, use:
+
+    Investigation 001
+        Transient-program entry environment, command tail, default FCBs,
+        command-entry drive byte, CCP CALL 0100h path, entry stack, and
+        return to the command environment.
+
+    Investigation 002
+        BDOS call/return convention.
+
+    Investigations 003-006
+        BDOS console input/output and buffered-input behavior used beneath
+        the command environment.
+
+    Investigation 007
+        Current drive, disk selection, login state, and Function 25.
+
+    Investigation 008
+        FCB identification behavior relevant to CCP-created default FCBs.
+
+    Investigation 016
+        Console/system-interface interactions.
+
+    Investigation 018
+        Character-device and IOBYTE semantics.
+
+    Investigation 020
+        BOOT/WBOOT transfer to CCP, page-zero reconstruction, and the BIOS
+        character-I/O boundary.
+
+Investigation 001 is particularly important.
+
+It already established several externally visible results of CCP command
+processing, including:
+
+    - command-tail location and count;
+    - default FCB construction;
+    - command-entry drive state;
+    - some DRI CCP case conversion;
+    - leading command-tail blank behavior;
+    - NUL following the counted command tail;
+    - first and second default FCB behavior.
+
+Do not duplicate those propositions.
+
+Instead, Investigation 021 should determine the CCP parsing machinery that
+produces those results and identify whether Investigation 001's
+POLICY PENDING CCP-specific propositions can now be strengthened, retained,
+or reclassified.
+
+If Investigation 021 materially strengthens an existing proposition,
+propose an evidence/disposition update rather than inventing a duplicate
+entry.
+
+
+SCOPE BOUNDARY
+
+Investigation 021 is about the COMMON CCP command-processing path.
+
+It includes:
+
+    command acquisition
+    command-line normalization
+    tokenization
+    command-name parsing
+    drive-prefix parsing at command level
+    resident-command recognition
+    resident/transient classification
+    generic syntax rejection
+    unrecognized-command handling up to the point where the transient
+    lookup mechanism becomes command-specific
+
+It does not attempt a complete investigation of:
+
+    DIR
+    ERA
+    REN
+    SAVE
+    TYPE
+    USER
+
+or any other resident command individually.
+
+It also does not attempt a complete investigation of:
+
+    COM filename construction
+    drive search
+    transient file Open
+    transient loading
+    TPA capacity checking
+    COM execution
+    transient load errors
+
+except where a small portion of that path is unavoidable for identifying
+the resident-versus-transient dispatch boundary.
+
+Those subjects belong in subsequent CCP investigations.
+
+
+QUESTIONS TO RESOLVE
+
+
+1. CCP COMMAND-LOOP ENTRY
+
+Determine the externally relevant state when the CCP is ready to accept a
+new command.
+
+Establish:
+
+- how control reaches the CCP after cold BOOT;
+- how control reaches the CCP after WBOOT;
+- how control reaches the CCP after ordinary transient RET termination;
+- whether those paths enter the same command-reading loop;
+- what drive state is displayed/used;
+- what user-number state is active;
+- whether CCP performs disk reset or login operations before every command
+  or only on particular entry paths;
+- what state from a previous command is intentionally preserved.
+
+Do not duplicate BOOT/WBOOT propositions from Investigation 020.
+
+The purpose is to establish the CCP side of the handoff.
+
+
+2. COMMAND PROMPT
+
+Determine the CP/M 2.2 CCP prompt semantics.
+
+Establish:
+
+- the documented/reference prompt representation;
+- whether the current drive letter is part of the prompt;
+- whether the prompt contains `>`;
+- whether the user number is displayed;
+- when the prompt is emitted;
+- whether a new prompt follows an empty command;
+- whether prompt case is fixed;
+- whether exact spacing is compatibility-relevant;
+- whether prompt generation is documented or merely DRI CCP behavior.
+
+Distinguish semantic prompt information from exact presentation details.
+
+If exact DRI prompt text is not established as a compatibility requirement,
+do not classify it as REQUIRED merely because historical CP/M prints it.
+
+
+3. COMMAND-LINE ACQUISITION
+
+Determine how the DRI CCP acquires a command line.
+
+Trace:
+
+- which BDOS console service is used;
+- buffer location and size;
+- maximum accepted command length;
+- how the buffer is initialized;
+- how the terminating Return/CR is handled;
+- whether LF is involved;
+- whether the CCP itself performs editing or relies upon BDOS buffered
+  console input;
+- what happens at maximum length;
+- whether the command reader preserves or discards the terminating
+  character.
+
+Cross-check Investigation 006.
+
+Do not duplicate BDOS buffered-input semantics. Identify which consequences
+belong specifically to the CCP command environment.
+
+
+4. EMPTY COMMANDS
+
+Determine what the CCP considers an empty command.
+
+Test separately:
+
+    CR only
+    one space then CR
+    several spaces then CR
+    TAB where the input environment permits it
+    combinations of spaces and TABs if relevant
+
+Establish:
+
+- whether an empty line simply causes another prompt;
+- whether a whitespace-only line is equivalent to empty;
+- whether disk or other state changes;
+- whether any error is printed;
+- whether the command parser reaches resident/transient lookup.
+
+Do not assume all ASCII whitespace is interchangeable unless source or
+experiment establishes it.
+
+
+5. COMMAND-LEADING WHITESPACE
+
+Determine whether leading blanks before the command name are:
+
+    accepted and skipped
+    retained
+    rejected
+    treated as an empty command
+    interpreted in another way
+
+Test multiple leading blanks.
+
+If TAB is accepted as command-line input, test it independently rather than
+assuming it is equivalent to SPACE.
+
+Trace the DRI CCP source to determine the exact parser behavior.
+
+
+6. COMMAND-NAME TOKENIZATION
+
+Determine how the CCP identifies the command-name token.
+
+Establish:
+
+- permitted characters;
+- maximum meaningful command-name length;
+- termination by SPACE;
+- termination by drive colon;
+- termination by period;
+- termination by other punctuation;
+- behavior with multiple spaces;
+- behavior with no operand;
+- behavior with characters after the apparent command token;
+- whether the parser constructs an FCB-like representation internally.
+
+Test boundary cases chosen from source/documentation rather than an arbitrary
+ASCII fuzzing campaign.
+
+
+7. CASE NORMALIZATION
+
+Determine precisely where and when the DRI CCP converts command input to
+uppercase.
+
+Establish:
+
+- whether the entire command line is uppercased during acquisition;
+- whether only parsed tokens are uppercased;
+- whether command names are case-insensitive because of conversion;
+- whether operands are converted at the same stage;
+- whether punctuation is unaffected;
+- whether lowercase input is possible in the reference environment;
+- whether case conversion is a documented CP/M contract or DRI CCP behavior.
+
+Cross-check Investigation 001's findings concerning uppercase command tails
+and default FCBs.
+
+If the reference console path prevents lowercase from reaching CCP, use
+controlled injection or a suitable fixture rather than inferring behavior.
+
+
+8. COMMAND-SEPARATING WHITESPACE
+
+Determine the treatment of whitespace between command name and operands.
+
+Test, where meaningful:
+
+    one SPACE
+    multiple SPACEs
+    TAB
+    SPACE/TAB combinations
+
+Establish:
+
+- what terminates the command name;
+- how many separator characters are skipped;
+- whether separators survive into later operand parsing;
+- relationship to the leading blank placed in the transient command tail;
+- relationship to default-FCB construction.
+
+Be careful to distinguish the CCP's internal input buffer from the final
+transient command tail at 0080h.
+
+
+9. DRIVE PREFIX BEFORE COMMAND
+
+Investigate command forms such as:
+
+    B:
+    B:DIR
+    B:FOO
+    B:FOO ARG
+
+Determine whether CP/M 2.2 CCP permits a drive prefix before a command name
+and, if so:
+
+- whether `B:` alone changes the current drive;
+- whether `B:COMMAND` executes COMMAND with B as current/default drive;
+- whether the drive change persists after the command;
+- whether resident and transient commands behave identically;
+- when BDOS Function 14 is invoked;
+- what happens for an invalid drive letter;
+- what happens for malformed prefixes.
+
+Do not confuse command-level drive selection with an operand drive prefix
+such as:
+
+    DIR B:*.COM
+
+Those are separate parser roles.
+
+
+10. DRIVE-ONLY COMMAND
+
+Investigate the drive-selection form independently.
+
+At minimum test:
+
+    A:
+    B:
+    current-drive:
+    unavailable-drive:
+    malformed-letter:
+    multiple-colon forms where justified
+
+Establish:
+
+- whether drive-only selection is a special CCP command path;
+- whether it uses the same command parser;
+- whether it changes BDOS current drive;
+- whether the prompt changes immediately;
+- whether it performs disk login;
+- error behavior for an unavailable drive;
+- relationship to page-zero location 0004h.
+
+Cross-check Investigation 007.
+
+Do not duplicate Function 14/25 propositions; establish the CCP semantics
+built on them.
+
+
+11. RESIDENT-COMMAND RECOGNITION
+
+Identify the resident command names recognized by the DRI CP/M 2.2 CCP.
+
+Determine from documentation and DRI source the exact set applicable to this
+CCP version.
+
+Likely names must be verified rather than assumed, including such commands
+as:
+
+    DIR
+    ERA
+    REN
+    SAVE
+    TYPE
+    USER
+
+Establish:
+
+- exact recognized names;
+- whether abbreviations are accepted;
+- whether longer strings sharing a prefix are accepted or rejected;
+- whether recognition requires an exact token match;
+- whether case normalization precedes recognition;
+- whether resident-command recognition precedes transient-file lookup;
+- whether a `.COM` suffix can force transient interpretation of a name that
+  matches a resident command.
+
+Do not investigate each command's complete semantics here.
+
+The result should define only recognition and dispatch.
+
+
+12. RESIDENT-COMMAND PRECEDENCE
+
+Determine what happens if a transient `.COM` file has the same basename as a
+resident command.
+
+For example, using a controlled scratch disk if safe:
+
+    DIR.COM
+    TYPE.COM
+    SAVE.COM
+
+Determine:
+
+- whether the resident command always wins;
+- whether explicit `.COM` changes precedence;
+- whether a drive prefix changes precedence;
+- whether user area changes precedence;
+- whether another syntax can force execution of the transient.
+
+Preserve before/after disk images.
+
+Do not install experimental files into authoritative project disks without
+working from copies.
+
+
+13. RESIDENT DISPATCH BOUNDARY
+
+Trace the DRI CCP from successful resident-name recognition to the selected
+resident routine.
+
+Determine:
+
+- what parsed state is passed;
+- whether operands are reparsed by individual resident commands;
+- whether default FCB construction occurs before or after resident
+  recognition;
+- whether command-tail construction occurs for resident commands;
+- whether the transient entry environment at 005Ch/006Ch/0080h is built
+  even when no transient will run;
+- which state is common and which is command-specific.
+
+This is important for separating common CCP semantics from later resident
+command investigations.
+
+
+14. TRANSIENT DISPATCH BOUNDARY
+
+Trace the DRI CCP from failure to recognize a resident command to the point
+where transient-program lookup begins.
+
+Determine:
+
+- what representation of the command name exists at this boundary;
+- whether `.COM` has already been supplied or parsed;
+- whether a drive has been resolved;
+- whether default FCBs have been constructed;
+- whether the command tail has been constructed;
+- what current-drive/user state is in effect;
+- what generic validation has already occurred.
+
+STOP the investigation at the point where detailed transient file lookup and
+loading begin.
+
+Do not turn Investigation 021 into the full transient-loader investigation.
+
+
+15. COMMAND NAMES WITH PERIODS AND EXTENSIONS
+
+Determine generic parser treatment of forms such as:
+
+    FOO
+    FOO.COM
+    FOO.TXT
+    DIR.COM
+    B:FOO.COM
+
+Establish:
+
+- whether an explicit extension is permitted in command position;
+- whether `.COM` is accepted, ignored, rejected, or incorporated;
+- whether a non-COM extension is rejected before transient lookup;
+- whether resident recognition occurs before or after extension handling;
+- whether the behavior is documented or DRI-specific.
+
+This question may overlap the transient dispatch boundary but should not
+expand into actual COM loading.
+
+
+16. MALFORMED COMMAND SYNTAX
+
+Identify generic syntax errors recognized before individual resident-command
+semantics or transient lookup.
+
+Use source analysis to choose meaningful cases.
+
+Possible cases include:
+
+    invalid drive prefix
+    misplaced colon
+    multiple colons
+    invalid command-name punctuation
+    excessive command token length
+    malformed extension
+    extra unexpected token structure
+
+Determine:
+
+- which malformed forms are rejected by the common parser;
+- which are allowed through to resident commands;
+- which are treated as transient names and fail later;
+- whether a generic error message is produced;
+- what state changes survive the failure.
+
+Do not fuzz every possible byte.
+
+
+17. UNRECOGNIZED COMMAND
+
+Determine the common behavior for a syntactically valid command name that is
+not resident.
+
+Use a deliberately nonexistent name.
+
+Establish:
+
+- whether CCP immediately reports an error or attempts transient lookup;
+- what file specification it attempts to use;
+- whether current drive/user area are involved;
+- what happens after lookup failure;
+- exact error text and echo behavior in DRI CP/M;
+- whether exact presentation is documented or merely conventional;
+- whether the command loop then resumes normally.
+
+The detailed lookup algorithm belongs to a later investigation; this test
+should identify only the externally visible common failure path and the
+boundary into lookup.
+
+
+18. ERROR PRESENTATION
+
+Catalog generic CCP parser/dispatch error presentation separately from the
+semantics of individual resident commands.
+
+Determine:
+
+- whether the offending command/token is echoed;
+- whether `?` is used;
+- placement of CR/LF;
+- whether errors distinguish malformed syntax from missing transient;
+- whether the current drive prompt is immediately redisplayed;
+- whether exact wording/punctuation is documented;
+- whether errors alter drive/user state.
+
+Classify exact text conservatively.
+
+A famous or familiar DRI presentation is not automatically a REQUIRED
+compatibility behavior.
+
+
+19. COMMAND BUFFER SIZE AND BOUNDARIES
+
+Determine the maximum CCP command line accepted by the documented/reference
+environment.
+
+Establish:
+
+- buffer capacity;
+- whether the limit is inherited directly from BDOS Function 10;
+- whether the CCP imposes a smaller limit;
+- whether the CR is counted;
+- whether truncation, bell, rejection, or another behavior occurs at the
+  limit;
+- whether the final transient command-tail limit is identical to the CCP
+  input-buffer limit.
+
+Cross-check Investigation 001's 0080h command-tail representation and
+Investigation 006's buffered-input semantics.
+
+Do not assume those limits are identical without evidence.
+
+
+20. CCP INTERNAL PARSER STATE VERSUS EXTERNAL CONTRACT
+
+Trace enough DRI CCP source to understand parser operation, but distinguish
+carefully between:
+
+    internal implementation
+        and
+    externally observable compatibility behavior
+
+Examples of internal details that should not automatically become ledger
+requirements include:
+
+    exact CCP RAM addresses
+    internal labels
+    temporary buffer placement
+    exact register allocation
+    exact call graph
+    exact loop structure
+    exact comparison order
+
+Propose ledger entries only for behavior software or the command user can
+observe, or behavior required at an established CP/M component boundary.
+
+
+21. CONTROLLED COMMAND-PARSER HARNESS
+
+Construct a deterministic harness capable of submitting command lines to the
+reference CCP and preserving raw output.
+
+Prefer automated input over manually typed experiments.
+
+The harness should make it practical to test a matrix including, where
+supported:
+
+    empty line
+    spaces-only line
+    lowercase command
+    mixed-case command
+    leading spaces
+    multiple separators
+    drive-only command
+    drive-prefixed resident command
+    drive-prefixed nonexistent transient
+    exact resident name
+    resident-name prefix
+    resident-name suffix
+    explicit `.COM`
+    non-COM extension
+    nonexistent command
+    selected malformed forms
+
+Record exact input bytes and exact console output.
+
+Where the emulator or normal BDOS console path transforms input before CCP
+sees it, document that fact and use a controlled injection fixture if needed
+to answer the CCP-specific question.
+
+
+22. TRANSIENT-ENTRY OBSERVATION
+
+Reuse or adapt a small transient probe where useful to observe the results of
+CCP parsing at program entry.
+
+At minimum, where relevant, record:
+
+    0004h
+    005Ch onward
+    006Ch onward
+    0080h count
+    0081h onward
+
+Use this only to answer parsing questions not already settled by
+Investigation 001.
+
+Do not create duplicate ledger propositions for already-established
+transient-entry behavior.
+
+Instead, use the new evidence to determine whether existing POLICY PENDING
+entries can be strengthened.
+
+
+23. RESIDENT-PRECEDENCE FIXTURE
+
+If needed to resolve resident-versus-transient precedence, construct harmless
+COM files whose only action is to print a unique marker and return.
+
+Use copies of reference disks.
+
+Possible controlled filenames include resident-command basenames.
+
+Record:
+
+    command entered
+    whether marker executes
+    resident-command output
+    disk/user context
+    exact resulting prompt
+
+Preserve disk images and hashes.
+
+Remove no historical/reference files merely to create the test.
+
+
+24. SOURCE ANALYSIS
+
+Trace DRI `OS2CCP.ASM` sufficiently to identify:
+
+    command-loop entry
+    command input
+    normalization
+    token parsing
+    drive parsing
+    resident-command table/recognition
+    resident dispatch
+    transition to transient lookup
+    generic error paths
+    default-FCB construction
+    command-tail construction
+
+Do not produce a line-by-line CCP commentary.
+
+Analyze only what is necessary to establish Investigation 021.
+
+
+25. DOCUMENTATION ANALYSIS
+
+Consult the primary DRI documentation for the documented command environment.
+
+Determine which behaviors are explicitly promised to users and which are
+only visible in CCP source.
+
+Pay particular attention to:
+
+    command syntax
+    drive selection
+    resident command names
+    transient command syntax
+    filename syntax
+    command-line length
+    case expectations
+    error behavior
+
+Do not elevate DRI source behavior to documented CP/M behavior when the
+manuals are silent.
+
+
+EVIDENCE DISCIPLINE
+
+Use the established evidence hierarchy and terminology inside the
+investigation report.
+
+Where useful, distinguish:
+
+    A - documented CP/M 2.2 interface/command behavior
+    B - DRI CP/M 2.2 CCP/source behavior
+    I - incidental/reference-environment observation
+    D - unresolved BetterCP/M policy
+
+These are evidence CLASSES inside the investigation report.
+
+They are NOT Compatibility Ledger source abbreviations.
+
+Do not put bare A, B, I, or D evidence-class labels into proposed ledger
+Evidence fields.
+
+For proposed ledger entries identify actual sources such as:
+
+    I021
+    IG
+    AG
+    CCP
+
+and other specifically identified primary sources where appropriate.
+
+
+PRIMARY SOURCES
+
+At minimum consult, where relevant:
+
+- Digital Research CP/M 2.0 Interface Guide;
+- Digital Research CP/M 2.2 Alteration Guide;
+- original DRI CP/M 2.2 CCP source (`OS2CCP.ASM`);
+- original DRI CP/M 2.2 BDOS source where CCP/BDOS interaction matters;
+- existing BetterCP/M Investigations, especially I001, I006, I007,
+  I008, I016, I018, and I020;
+- current Compatibility Ledger.
+
+If another DRI CP/M 2.2 user/programmer document in the project sources
+contains relevant command syntax, consult it and identify it explicitly.
+
+Do not use later CP/M 3, MP/M, ZCPR, Z-System, or third-party CCP behavior as
+evidence for baseline CP/M 2.2 unless clearly separated as comparative
+evidence.
+
+The later ecosystem compatibility survey is a separate roadmap activity.
+
+
+REFERENCE-ENVIRONMENT LIMITATIONS
+
+The reference z80pack environment may impose behavior above or below the CCP,
+including:
+
+    terminal input transformation
+    host keyboard behavior
+    emulator line handling
+    disk contents
+    installed transient commands
+    available drives
+    exact CCP address
+    exact CCP error presentation caused by terminal configuration
+
+None becomes a universal CP/M 2.2 requirement merely because it is observed.
+
+Use DRI source and controlled fixtures to distinguish CCP behavior from
+emulator behavior.
+
+
+EXPERIMENTAL REQUIREMENTS
+
+All experiments must be deterministic and reproducible.
+
+Prefer scripted input and captured transcripts.
+
+Where disk modifications are necessary:
+
+- begin with preserved copies;
+- hash before and after;
+- install only minimal controlled probe files;
+- record directory listings;
+- preserve generated binaries and source;
+- verify rebuilds byte-identically where practical.
+
+Where memory instrumentation is necessary:
+
+- preserve original values;
+- modify the smallest possible surface;
+- restore state where practical;
+- document every patch;
+- do not promote instrumentation behavior into CP/M requirements.
+
+Preserve raw evidence separately from interpretation.
+
+
+COMPATIBILITY CLASSIFICATION
+
+For every proposed compatibility proposition classify it as:
+
+    REQUIRED
+    POLICY PENDING
+    NOT REQUIRED
+    NOT GUARANTEED
+
+Apply these conservatively.
+
+Be especially cautious about:
+
+    exact prompt text
+    exact error text
+    exact punctuation
+    exact CCP memory addresses
+    internal parser buffer addresses
+    exact CCP call order
+    residual registers
+    exact number of BDOS calls
+    z80pack keyboard behavior
+    lowercase behavior if lowercase cannot naturally reach CCP
+    stale bytes in internal buffers
+
+Do not classify a behavior as REQUIRED merely because DRI CCP happens to do
+it.
+
+
+EXISTING POLICY-PENDING ENTRIES
+
+Investigation 021 should explicitly revisit CCP-related POLICY PENDING
+propositions from Investigation 001 where the new evidence is relevant.
+
+In particular examine existing propositions concerning:
+
+    second default FCB
+    default-FCB drive-prefix parsing
+    default-FCB wildcard expansion
+    default-FCB case and padding
+    default-FCB unopened control fields
+    leading blank in command tail
+    uppercase command-tail representation
+    NUL after counted command tail
+
+For each relevant existing proposition conclude one of:
+
+    - no change;
+    - stronger evidence only;
+    - upgrade to REQUIRED;
+    - downgrade/reclassification;
+    - remain POLICY PENDING.
+
+Do not renumber or modify the ledger.
+
+List proposed changes separately in the report.
+
+
+BETTERCP/M RELEVANCE
+
+This investigation will eventually constrain the BetterCP/M CCP.
+
+Nevertheless, do NOT design BetterCP/M's CCP implementation here.
+
+Do not decide:
+
+    parser data structures
+    implementation language/assembly organization
+    internal buffers
+    dispatch tables
+    command extension mechanisms
+    aliases
+    shell enhancements
+    path search
+    future BetterCP/M commands
+
+First establish the CP/M 2.2 command contract.
+
+Future BetterCP/M enhancements can later be designed around that baseline.
+
+
+PROPOSED COMPATIBILITY LEDGER ADDITIONS
+
+The authoritative Ledger 020 currently ends at:
+
+    0474
+
+Therefore Investigation 021 proposals, if any, begin at:
+
+    0475
+
+Do not modify the Compatibility Ledger.
+
+Include a report section:
+
+    Proposed Compatibility Ledger additions
+
+containing only genuinely new compatibility propositions established by
+Investigation 021.
+
+Do not duplicate I001 propositions concerning the transient entry environment.
+
+If Investigation 021 strengthens or changes an existing entry, identify it
+under a separate section:
+
+    Proposed corrections/evidence/disposition updates to existing entries
+
+State the existing ledger number and exact proposed change.
+
+Do not silently rewrite existing propositions.
+
+Each proposed new entry should be suitable for later conversion to the
+established ledger format:
+
+    NNNN. Short title
+
+        Description.
+
+        Disposition: REQUIRED / POLICY PENDING /
+                     NOT REQUIRED / NOT GUARANTEED
+
+        Evidence:    I021; CCP; IG; ...
+
+        Conformance: Independently testable statement.
+
+Use actual source references in Evidence.
+
+Do not use A/B/I/D evidence-class letters as ledger source abbreviations.
+
+
+REPORT STRUCTURE
+
+Create:
+
+    Investigation 021 - CP-M 2.2 CCP Command Acquisition, Parsing, and
+    Dispatch Semantics.md
+
+Use the organization and evidentiary discipline of Investigations 015-020.
+
+Include at least:
+
+1. Objective and scope
+2. Method and evidence classification
+3. Documentation findings
+4. DRI CCP source findings
+5. Command-loop and prompt findings
+6. Command acquisition findings
+7. Lexical parsing and normalization findings
+8. Drive-prefix and drive-only findings
+9. Resident-command recognition and precedence
+10. Resident/transient dispatch boundary
+11. Generic syntax/error findings
+12. Experimental design
+13. Experimental results
+14. Relationship to Investigation 001 transient-entry findings
+15. Compatibility conclusions
+16. Proposed Compatibility Ledger additions (not applied)
+17. Proposed corrections/evidence/disposition updates to existing entries
+18. Incomplete and unresolved cases
+19. Artifact and preservation audit
+20. Sources
+
+Add subsections where useful.
+
+
+ARTIFACT DIRECTORY
+
+Create a new Investigation 021 directory and an appropriate probes/
+subdirectory.
+
+Preserve all newly created material necessary to reproduce the investigation,
+including as applicable:
+
+- transient-entry probe source and COM;
+- resident-precedence probe source and COM files;
+- assembler listings;
+- deterministic command-input harness;
+- exact command-input corpus;
+- raw console transcripts;
+- normalized/parsed observations;
+- memory dumps;
+- before/after disk images;
+- directory listings;
+- build instructions;
+- run instructions;
+- SHA-256 records;
+- emulator/version/commit identification.
+
+Do not overwrite previous investigation artifacts.
+
+
+PRESERVATION AUDIT
+
+Before beginning:
+
+- hash the authoritative Compatibility Ledger;
+- record the hash;
+- identify the reference emulator/version/commit;
+- hash any pre-existing system/disk images that will be copied or used.
+
+At completion:
+
+- hash the authoritative Compatibility Ledger again;
+- verify byte-for-byte identity;
+- verify no previous investigation was modified;
+- verify no architecture or roadmap document was modified;
+- record hashes of all new source/binary artifacts;
+- rebuild probes where practical and verify byte identity;
+- preserve raw evidence separately from interpretation.
+
+If the authoritative ledger hash changes, stop and investigate rather than
+accepting the change.
+
+
+COMPLETION REPORT
+
+When Investigation 021 is complete, report succinctly:
+
+- files created;
+- number and kinds of preserved artifacts;
+- experiments performed;
+- principal documented CCP findings;
+- principal DRI CCP source findings;
+- principal experimental findings;
+- command acquisition/parsing rules established;
+- resident/transient dispatch rules established;
+- generic error behavior established;
+- any POLICY PENDING questions;
+- proposed updates to existing I001-era ledger entries;
+- proposed new ledger-entry range;
+- authoritative ledger SHA-256 before and after;
+- confirmation that the Compatibility Ledger and all other pre-existing
+  BetterCP/M files remained unchanged;
+- primary documentation reviewed.
+
+
+IMPORTANT CONSTRAINTS
+
+Do not modify the Compatibility Ledger.
+
+Do not modify BetterCP/M implementation code.
+
+Do not modify earlier investigations.
+
+Do not modify architecture or roadmap documents.
+
+Do not create or update a project ZIP unless explicitly requested.
+
+Do not investigate individual resident commands in full.
+
+Do not investigate the complete transient loader in this investigation.
+
+Do not turn DRI CCP internal addresses into compatibility requirements.
+
+Do not turn exact source-code control flow into compatibility requirements.
+
+Do not assume all whitespace characters behave like SPACE.
+
+Do not assume lowercase behavior without establishing what bytes reach CCP.
+
+Do not assume `.COM` command syntax or resident-command precedence from
+modern shell conventions.
+
+Do not duplicate Investigation 001 transient-entry propositions.
+
+Do not use A/B/I/D evidence-class letters as Compatibility Ledger source
+abbreviations.
+
+Do not infer requirements from z80pack behavior where DRI documentation and
+source leave implementation freedom.
+
+
+FINAL GOAL
+
+Investigation 021 should answer this question precisely:
+
+    Given a line of console input at the CP/M 2.2 command prompt, how does
+    the DRI CCP acquire, normalize, parse, classify, and dispatch that line
+    before the semantics of a particular resident command or the detailed
+    transient-program loader take over?
+
+The result should define the common CP/M 2.2 command-processing boundary
+rigorously enough that subsequent investigations can study resident commands
+and transient loading without repeatedly rediscovering or conflating the
+shared CCP parser behavior.

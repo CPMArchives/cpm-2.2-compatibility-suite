@@ -1,0 +1,49 @@
+Investigation 040 completion audit
+==================================
+
+Scope preservation
+------------------
+
+PASS  The authoritative Compatibility Ledger remained:
+      <project-root>/compatibility/02 Compatibility Ledger - Investigation 039.txt
+PASS  Its SHA-256 remained:
+      0a43b9ef28eefb8035072398eef163f6b575efb841d0640a1d3772f2513b1016
+PASS  All 2,413 pre-existing BetterCP/M files matched protected-before.sha256.
+PASS  No previous investigation, ledger, or implementation file was modified.
+
+Required matrix
+---------------
+
+PASS  Empty IBM 3740 disk.
+PASS  Normal populated IBM 3740 disk.
+PASS  Nearly full IBM 3740 disk.
+PASS  Deliberately damaged duplicate-allocation IBM 3740 disk.
+PASS  Alternate large hard-disk definition crossing the 8/16-bit map boundary.
+PASS  Direct BDOS Functions 27 and 31 plus lifecycle ALV changes.
+PASS  Direct BIOS selection/track/translation/sector/DMA/read/write trace.
+PASS  DRI STAT DSK: utility interpretation.
+PASS  Independent raw-directory/allocation parser and fsck cross-check.
+
+Artifact integrity
+------------------
+
+PASS  DPB040.COM rebuilt byte-identically from DPB040.ASM.
+PASS  BIOS040.COM rebuilt byte-identically from BIOS040.ASM.
+PASS  All five read-only images-after match their images-before counterparts.
+PASS  Native before/after hashes record expected controlled A: changes and
+      byte-identical B: disks.
+PASS  The report contains exactly 21 numbered sections.
+PASS  Proposed ledger entries 0613-0618 appear only in the report.
+PASS  Source, build, transcript, image, hash, and reproducibility artifacts exist.
+PASS  No ZIP archive was created.
+
+Explicit limitations and policy questions
+-----------------------------------------
+
+- The active reference BIOS advertises IBM 3740 drives; the alternate hard-disk
+  definition was therefore tested structurally, not falsely claimed as mounted
+  by that BIOS.
+- The damaged-media case establishes detectable structural conflict, not a
+  documented CP/M repair algorithm.
+- BetterCP/M's advertised legacy profiles and raw-image interchange promises
+  remain policy pending.

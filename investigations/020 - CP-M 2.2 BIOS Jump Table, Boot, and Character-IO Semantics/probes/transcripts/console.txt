@@ -1,0 +1,55 @@
+spawn cpmsim -z -d /tmp/inv020-run
+
+#######  #####    ###            #####    ###   #     #
+     #  #     #  #   #          #     #    #    ##   ##
+    #   #     # #     #         #          #    # # # #
+   #     #####  #     #  #####   #####     #    #  #  #
+  #     #     # #     #               #    #    #     #
+ #      #     #  #   #          #     #    #    #     #
+#######  #####    ###            #####    ###   #     #
+
+Release 1.39, Copyright (C) 1987-2025 by Udo Munk and others
+
+CPU speed is unlimited, CPU executes undocumented instructions
+
+Booting...
+
+64K CP/M Vers. 2.2 (Z80 CBIOS V1.2 for Z80SIM, Copyright 1988-2007 by Udo Munk)
+
+A>BIOS020
+BIOS020 PZ00-07: C3 03 FA 00 00 C3 06 EC 
+BIOS BASE: FA00
+VECTORS index opcode target:
+00 C3 FB3E
+01 C3 FB51
+02 C3 FBBC
+03 C3 FBBF
+04 C3 FBC2
+05 C3 FBC6
+06 C3 FBCD
+07 C3 FBD1
+08 C3 FBD4
+09 C3 FBD9
+0A C3 FC05
+0B C3 FC09
+0C C3 FC1E
+0D C3 FC25
+0E C3 FC29
+0F C3 FBCA
+10 C3 FC0D
+DIRECT CONST0 CONST1 CONIN READER LISTST0 LISTST1 OUTN: 00 FF 41 52 00 FF 06 
+OUTPUT PAIRS device-byte: 43 09 4C 10 50 1A 
+
+A>WBOOT20
+WBOOT20 BEFORE PZ00-07: C3 03 FA 00 00 C3 06 EC 
+WBOOT20: setting 0000h and 0005h opcodes to 00, then WBOOT
+
+A>PZERO20
+PZERO20 AFTER WBOOT PZ00-07: C3 03 FA 00 00 C3 06 EC 
+
+A>[0;31mE (7517) IO: can't read console 0[0m
+
+User Interrupt at 0xfbc1
+I/O ran for 10 ms, waited for 0 ms
+CPU executed 1267593 t-states in 0 ms
+Clock frequency 1530.90 MHz

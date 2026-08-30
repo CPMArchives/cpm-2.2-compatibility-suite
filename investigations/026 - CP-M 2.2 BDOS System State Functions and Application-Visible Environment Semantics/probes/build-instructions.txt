@@ -1,0 +1,11 @@
+From this probes directory run:
+
+    chmod +x build.sh
+    ./build.sh
+
+Required assembler:
+    z80asm
+
+Compare the resulting COM files with rebuild.sha256. The build script expands
+COMMON26.INC mechanically and preserves one listing per source.
+

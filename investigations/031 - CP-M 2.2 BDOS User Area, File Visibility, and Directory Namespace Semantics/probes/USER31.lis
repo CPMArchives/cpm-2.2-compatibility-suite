@@ -1,0 +1,606 @@
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:51:16 2026	Page 1
+Source file: USER31.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+                       1      1 ; Purpose: current-user changes and restoration within the namespace suite.
+                       2      2 ; Investigation 012 delete/rename probe
+                       3      3 ; Build: z80asm -fb -oDELREN012.COM DELREN012.ASM
+                       4      4 	ORG 0100H
+0100                   5      5 START:
+0100  31 42 08         6      6 	LD SP,STACKTOP
+0103  11 3f 05         7      7 	LD DE,HEADER
+0106  0e 09            8      8 	LD C,9
+0108  cd 05 00         9      9 	CALL 0005H
+                      10     10
+010b  21 cf 03        11     11 	LD HL,FDELONE
+010e  11 67 05        12     12 	LD DE,LSDB
+0111  cd 0c 03        13     13 	CALL SEARCHREPORT
+0114  21 cf 03        14     14 	LD HL,FDELONE
+0117  cd d9 02        15     15 	CALL LOADFCB
+011a  0e 13           16     16 	LD C,19
+011c  cd cf 02        17     17 	CALL CALLFCB
+011f  11 7a 05        18     18 	LD DE,LDELONE
+0122  cd 58 03        19     19 	CALL REPORT
+0125  21 cf 03        20     20 	LD HL,FDELONE
+0128  11 86 05        21     21 	LD DE,LSDA
+012b  cd 0c 03        22     22 	CALL SEARCHREPORT
+                      23     23
+012e  21 df 03        24     24 	LD HL,FNOFILE
+0131  cd d9 02        25     25 	CALL LOADFCB
+0134  0e 13           26     26 	LD C,19
+0136  cd cf 02        27     27 	CALL CALLFCB
+0139  11 98 05        28     28 	LD DE,LDELNO
+013c  cd 58 03        29     29 	CALL REPORT
+                      30     30
+013f  21 ef 03        31     31 	LD HL,FWILD
+0142  11 a5 05        32     32 	LD DE,LSWB
+0145  cd 0c 03        33     33 	CALL SEARCHREPORT
+0148  21 ef 03        34     34 	LD HL,FWILD
+014b  cd d9 02        35     35 	CALL LOADFCB
+014e  0e 13           36     36 	LD C,19
+0150  cd cf 02        37     37 	CALL CALLFCB
+0153  11 b9 05        38     38 	LD DE,LDELWILD
+0156  cd 58 03        39     39 	CALL REPORT
+0159  21 ef 03        40     40 	LD HL,FWILD
+015c  11 ca 05        41     41 	LD DE,LSWA
+015f  cd 0c 03        42     42 	CALL SEARCHREPORT
+                      43     43
+                      44     44 	; Open, delete by another FCB, then read through original open FCB.
+0162  21 ff 03        45     45 	LD HL,FOPENDEL
+0165  cd d9 02        46     46 	CALL LOADFCB
+0168  0e 0f           47     47 	LD C,15
+016a  cd cf 02        48     48 	CALL CALLFCB
+016d  af              49     49 	XOR A
+016e  32 fa 06        50     50 	LD (FCB+32),A
+0171  21 da 06        51     51 	LD HL,FCB
+0174  11 fe 06        52     52 	LD DE,SAVEDFCB
+0177  01 24 00        53     53 	LD BC,36
+017a  ed b0           54     54 	LDIR
+017c  21 ff 03        55     55 	LD HL,FOPENDEL
+017f  cd d9 02        56     56 	CALL LOADFCB
+0182  0e 13           57     57 	LD C,19
+0184  cd cf 02        58     58 	CALL CALLFCB
+0187  21 fe 06        59     59 	LD HL,SAVEDFCB
+018a  11 da 06        60     60 	LD DE,FCB
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:51:16 2026	Page 2
+Source file: USER31.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+018d  01 24 00        61     61 	LD BC,36
+0190  ed b0           62     62 	LDIR
+0192  11 22 07        63     63 	LD DE,BUF
+0195  0e 1a           64     64 	LD C,26
+0197  cd 05 00        65     65 	CALL 0005H
+019a  0e 14           66     66 	LD C,20
+019c  cd cf 02        67     67 	CALL CALLFCB
+019f  11 dd 05        68     68 	LD DE,LOPENDEL
+01a2  cd 58 03        69     69 	CALL REPORT
+                      70     70
+                      71     71 	; Delete then recreate/write; allocation reuse is visible in FCB/directory.
+01a5  21 0f 04        72     72 	LD HL,FREUSE
+01a8  11 f0 05        73     73 	LD DE,LSRB
+01ab  cd 0c 03        74     74 	CALL SEARCHREPORT
+01ae  21 0f 04        75     75 	LD HL,FREUSE
+01b1  cd d9 02        76     76 	CALL LOADFCB
+01b4  0e 13           77     77 	LD C,19
+01b6  cd cf 02        78     78 	CALL CALLFCB
+01b9  21 0f 04        79     79 	LD HL,FREUSE
+01bc  cd d9 02        80     80 	CALL LOADFCB
+01bf  0e 16           81     81 	LD C,22
+01c1  cd cf 02        82     82 	CALL CALLFCB
+01c4  3e 4e           83     83 	LD A,'N'
+01c6  cd ff 02        84     84 	CALL FILLBUF
+01c9  0e 15           85     85 	LD C,21
+01cb  cd cf 02        86     86 	CALL CALLFCB
+01ce  11 05 06        87     87 	LD DE,LREWRITE
+01d1  cd 58 03        88     88 	CALL REPORT
+01d4  0e 10           89     89 	LD C,16
+01d6  cd cf 02        90     90 	CALL CALLFCB
+01d9  21 0f 04        91     91 	LD HL,FREUSE
+01dc  11 15 06        92     92 	LD DE,LSRA
+01df  cd 0c 03        93     93 	CALL SEARCHREPORT
+                      94     94
+                      95     95 	; Explicit B delete.
+01e2  21 1f 04        96     96 	LD HL,FBDEL
+01e5  cd d9 02        97     97 	CALL LOADFCB
+01e8  0e 13           98     98 	LD C,19
+01ea  cd cf 02        99     99 	CALL CALLFCB
+01ed  11 29 06       100    100 	LD DE,LBDEL
+01f0  cd 58 03       101    101 	CALL REPORT
+                     102    102
+                     103    103 	; User isolation: user 0 cannot see user 1, user 1 can delete it.
+01f3  21 2f 04       104    104 	LD HL,FU1
+01f6  cd d9 02       105    105 	CALL LOADFCB
+01f9  0e 13          106    106 	LD C,19
+01fb  cd cf 02       107    107 	CALL CALLFCB
+01fe  11 33 06       108    108 	LD DE,LU0DEL
+0201  cd 58 03       109    109 	CALL REPORT
+0204  1e 01          110    110 	LD E,1
+0206  0e 20          111    111 	LD C,32
+0208  cd 05 00       112    112 	CALL 0005H
+020b  21 2f 04       113    113 	LD HL,FU1
+020e  cd d9 02       114    114 	CALL LOADFCB
+0211  0e 13          115    115 	LD C,19
+0213  cd cf 02       116    116 	CALL CALLFCB
+0216  11 44 06       117    117 	LD DE,LU1DEL
+0219  cd 58 03       118    118 	CALL REPORT
+021c  1e 00          119    119 	LD E,0
+021e  0e 20          120    120 	LD C,32
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:51:16 2026	Page 3
+Source file: USER31.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0220  cd 05 00       121    121 	CALL 0005H
+                     122    122
+                     123    123 	; Simple rename and search both identities.
+0223  21 7f 04       124    124 	LD HL,ROLDNEW
+0226  cd ec 02       125    125 	CALL LOADREN
+0229  0e 17          126    126 	LD C,23
+022b  cd cf 02       127    127 	CALL CALLFCB
+022e  11 55 06       128    128 	LD DE,LRENAME
+0231  cd 58 03       129    129 	CALL REPORT
+0234  21 3f 04       130    130 	LD HL,FOLD
+0237  11 64 06       131    131 	LD DE,LSOLD
+023a  cd 0c 03       132    132 	CALL SEARCHREPORT
+023d  21 4f 04       133    133 	LD HL,FNEW
+0240  11 70 06       134    134 	LD DE,LSNEW
+0243  cd 0c 03       135    135 	CALL SEARCHREPORT
+                     136    136
+                     137    137 	; Destination exists: outside documented safety; DRI creates duplicate.
+0246  21 9f 04       138    138 	LD HL,RSRCDEST
+0249  cd ec 02       139    139 	CALL LOADREN
+024c  0e 17          140    140 	LD C,23
+024e  cd cf 02       141    141 	CALL CALLFCB
+0251  11 7c 06       142    142 	LD DE,LRENDEST
+0254  cd 58 03       143    143 	CALL REPORT
+                     144    144
+0257  21 bf 04       145    145 	LD HL,RNOSRC
+025a  cd ec 02       146    146 	CALL LOADREN
+025d  0e 17          147    147 	LD C,23
+025f  cd cf 02       148    148 	CALL CALLFCB
+0262  11 90 06       149    149 	LD DE,LRENNONE
+0265  cd 58 03       150    150 	CALL REPORT
+                     151    151
+                     152    152 	; Wildcard source/destination behavior.
+0268  21 df 04       153    153 	LD HL,RWILD
+026b  cd ec 02       154    154 	CALL LOADREN
+026e  0e 17          155    155 	LD C,23
+0270  cd cf 02       156    156 	CALL CALLFCB
+0273  11 9d 06       157    157 	LD DE,LRENWILD
+0276  cd 58 03       158    158 	CALL REPORT
+0279  21 5f 04       159    159 	LD HL,FXREN
+027c  11 ae 06       160    160 	LD DE,LSXREN
+027f  cd 0c 03       161    161 	CALL SEARCHREPORT
+                     162    162
+                     163    163 	; Explicit B rename.
+0282  21 ff 04       164    164 	LD HL,RBOLDNEW
+0285  cd ec 02       165    165 	CALL LOADREN
+0288  0e 17          166    166 	LD C,23
+028a  cd cf 02       167    167 	CALL CALLFCB
+028d  11 bb 06       168    168 	LD DE,LBREN
+0290  cd 58 03       169    169 	CALL REPORT
+                     170    170
+                     171    171 	; Rename an open file, then read through old activated FCB.
+0293  21 6f 04       172    172 	LD HL,FOPNREN
+0296  cd d9 02       173    173 	CALL LOADFCB
+0299  0e 0f          174    174 	LD C,15
+029b  cd cf 02       175    175 	CALL CALLFCB
+029e  af             176    176 	XOR A
+029f  32 fa 06       177    177 	LD (FCB+32),A
+02a2  21 da 06       178    178 	LD HL,FCB
+02a5  11 fe 06       179    179 	LD DE,SAVEDFCB
+02a8  01 24 00       180    180 	LD BC,36
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:51:16 2026	Page 4
+Source file: USER31.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+02ab  ed b0          181    181 	LDIR
+02ad  21 1f 05       182    182 	LD HL,ROPNREN
+02b0  cd ec 02       183    183 	CALL LOADREN
+02b3  0e 17          184    184 	LD C,23
+02b5  cd cf 02       185    185 	CALL CALLFCB
+02b8  21 fe 06       186    186 	LD HL,SAVEDFCB
+02bb  11 da 06       187    187 	LD DE,FCB
+02be  01 24 00       188    188 	LD BC,36
+02c1  ed b0          189    189 	LDIR
+02c3  0e 14          190    190 	LD C,20
+02c5  cd cf 02       191    191 	CALL CALLFCB
+02c8  11 c5 06       192    192 	LD DE,LOPNREN
+02cb  cd 58 03       193    193 	CALL REPORT
+02ce  c9             194    194 	RET
+                     195    195
+02cf                 196    196 CALLFCB:
+02cf  11 da 06       197    197 	LD DE,FCB
+02d2  cd 05 00       198    198 	CALL 0005H
+02d5  32 d8 06       199    199 	LD (RESULT),A
+02d8  c9             200    200 	RET
+02d9                 201    201 LOADFCB:
+02d9  11 da 06       202    202 	LD DE,FCB
+02dc  01 10 00       203    203 	LD BC,16
+02df  ed b0          204    204 	LDIR
+02e1  af             205    205 	XOR A
+02e2  21 ea 06       206    206 	LD HL,FCB+16
+02e5  06 14          207    207 	LD B,20
+02e7  77             208    208 LF0: LD (HL),A
+02e8  23             209    209 	INC HL
+02e9  10 fc          210    210 	DJNZ LF0
+02eb  c9             211    211 	RET
+02ec                 212    212 LOADREN:
+02ec  11 da 06       213    213 	LD DE,FCB
+02ef  01 20 00       214    214 	LD BC,32
+02f2  ed b0          215    215 	LDIR
+02f4  af             216    216 	XOR A
+02f5  21 fa 06       217    217 	LD HL,FCB+32
+02f8  06 04          218    218 	LD B,4
+02fa  77             219    219 LR0: LD (HL),A
+02fb  23             220    220 	INC HL
+02fc  10 fc          221    221 	DJNZ LR0
+02fe  c9             222    222 	RET
+02ff                 223    223 FILLBUF:
+02ff  21 22 07       224    224 	LD HL,BUF
+0302  77             225    225 	LD (HL),A
+0303  23             226    226 	INC HL
+0304  06 7f          227    227 	LD B,127
+0306  af             228    228 	XOR A
+0307  77             229    229 FB0: LD (HL),A
+0308  23             230    230 	INC HL
+0309  10 fc          231    231 	DJNZ FB0
+030b  c9             232    232 	RET
+                     233    233
+                     234    234 ; HL exact/wild template, DE label; result plus matching directory entry.
+030c                 235    235 SEARCHREPORT:
+030c  d5             236    236 	PUSH DE
+030d  cd d9 02       237    237 	CALL LOADFCB
+0310  11 22 07       238    238 	LD DE,BUF
+0313  0e 1a          239    239 	LD C,26
+0315  cd 05 00       240    240 	CALL 0005H
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:51:16 2026	Page 5
+Source file: USER31.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0318  11 da 06       241    241 	LD DE,FCB
+031b  0e 11          242    242 	LD C,17
+031d  cd 05 00       243    243 	CALL 0005H
+0320  32 d8 06       244    244 	LD (RESULT),A
+0323  47             245    245 	LD B,A
+0324  e1             246    246 	POP HL
+0325  cd a4 03       247    247 	CALL PUTS
+0328  3a d8 06       248    248 	LD A,(RESULT)
+032b  cd b8 03       249    249 	CALL HEXBYTE
+032e  1e 20          250    250 	LD E,' '
+0330  cd 98 03       251    251 	CALL PUTC
+0333  78             252    252 	LD A,B
+0334  fe 04          253    253 	CP 4
+0336  30 1c          254    254 	JR NC,SEND
+0338  0f             255    255 	RRCA
+0339  0f             256    256 	RRCA
+033a  0f             257    257 	RRCA
+033b  e6 60          258    258 	AND 60H
+033d  5f             259    259 	LD E,A
+033e  16 00          260    260 	LD D,0
+0340  21 22 07       261    261 	LD HL,BUF
+0343  19             262    262 	ADD HL,DE
+0344  06 20          263    263 	LD B,32
+0346  7e             264    264 SD0: LD A,(HL)
+0347  23             265    265 	INC HL
+0348  e5             266    266 	PUSH HL
+0349  cd b8 03       267    267 	CALL HEXBYTE
+034c  1e 20          268    268 	LD E,' '
+034e  cd 98 03       269    269 	CALL PUTC
+0351  e1             270    270 	POP HL
+0352  10 f2          271    271 	DJNZ SD0
+0354  cd ae 03       272    272 SEND: CALL CRLF
+0357  c9             273    273 	RET
+                     274    274
+0358                 275    275 REPORT:
+0358  d5             276    276 	PUSH DE
+0359  0e 19          277    277 	LD C,25
+035b  cd 05 00       278    278 	CALL 0005H
+035e  32 d9 06       279    279 	LD (CURDISK),A
+0361  e1             280    280 	POP HL
+0362  cd a4 03       281    281 	CALL PUTS
+0365  3a d8 06       282    282 	LD A,(RESULT)
+0368  cd b8 03       283    283 	CALL HEXBYTE
+036b  1e 20          284    284 	LD E,' '
+036d  cd 98 03       285    285 	CALL PUTC
+0370  3a d9 06       286    286 	LD A,(CURDISK)
+0373  cd b8 03       287    287 	CALL HEXBYTE
+0376  1e 20          288    288 	LD E,' '
+0378  cd 98 03       289    289 	CALL PUTC
+037b  21 da 06       290    290 	LD HL,FCB
+037e  06 21          291    291 	LD B,33
+0380  7e             292    292 RD0: LD A,(HL)
+0381  23             293    293 	INC HL
+0382  e5             294    294 	PUSH HL
+0383  cd b8 03       295    295 	CALL HEXBYTE
+0386  1e 20          296    296 	LD E,' '
+0388  cd 98 03       297    297 	CALL PUTC
+038b  e1             298    298 	POP HL
+038c  10 f2          299    299 	DJNZ RD0
+038e  3a 22 07       300    300 	LD A,(BUF)
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:51:16 2026	Page 6
+Source file: USER31.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0391  cd b8 03       301    301 	CALL HEXBYTE
+0394  cd ae 03       302    302 	CALL CRLF
+0397  c9             303    303 	RET
+0398                 304    304 PUTC:
+0398  c5             305    305 	PUSH BC
+0399  d5             306    306 	PUSH DE
+039a  e5             307    307 	PUSH HL
+039b  0e 02          308    308 	LD C,2
+039d  cd 05 00       309    309 	CALL 0005H
+03a0  e1             310    310 	POP HL
+03a1  d1             311    311 	POP DE
+03a2  c1             312    312 	POP BC
+03a3  c9             313    313 	RET
+03a4  7e             314    314 PUTS: LD A,(HL)
+03a5  23             315    315 	INC HL
+03a6  b7             316    316 	OR A
+03a7  c8             317    317 	RET Z
+03a8  5f             318    318 	LD E,A
+03a9  cd 98 03       319    319 	CALL PUTC
+03ac  18 f6          320    320 	JR PUTS
+03ae  1e 0d          321    321 CRLF: LD E,13
+03b0  cd 98 03       322    322 	CALL PUTC
+03b3  1e 0a          323    323 	LD E,10
+03b5  c3 98 03       324    324 	JP PUTC
+03b8                 325    325 HEXBYTE:
+03b8  f5             326    326 	PUSH AF
+03b9  0f             327    327 	RRCA
+03ba  0f             328    328 	RRCA
+03bb  0f             329    329 	RRCA
+03bc  0f             330    330 	RRCA
+03bd  cd c1 03       331    331 	CALL NIBBLE
+03c0  f1             332    332 	POP AF
+03c1                 333    333 NIBBLE:
+03c1  e6 0f          334    334 	AND 0FH
+03c3  c6 30          335    335 	ADD A,'0'
+03c5  fe 3a          336    336 	CP '9'+1
+03c7  38 02          337    337 	JR C,NOUT
+03c9  c6 07          338    338 	ADD A,7
+03cb  5f             339    339 NOUT: LD E,A
+03cc  c3 98 03       340    340 	JP PUTC
+                     341    341
+                     342    342 ; dr,name,type,ex,s1,s2,rc
+03cf  00 44 45 4c    343    343 FDELONE: DB 0,'DELONE  ','DAT',0,0,0,0
+03d3  4f 4e 45 20    343    344
+03d7  20 44 41 54    343    345
+03db  00 00 00 00    343    346
+03df  00 4e 4f 46    344    347 FNOFILE: DB 0,'NOFILE  ','DAT',0,0,0,0
+03e3  49 4c 45 20    344    348
+03e7  20 44 41 54    344    349
+03eb  00 00 00 00    344    350
+03ef  00 57 49 4c    345    351 FWILD: DB 0,'WILD?   ','DAT',0,0,0,0
+03f3  44 3f 20 20    345    352
+03f7  20 44 41 54    345    353
+03fb  00 00 00 00    345    354
+03ff  00 4f 50 45    346    355 FOPENDEL: DB 0,'OPENDEL ','DAT',0,0,0,0
+0403  4e 44 45 4c    346    356
+0407  20 44 41 54    346    357
+040b  00 00 00 00    346    358
+040f  00 52 45 55    347    359 FREUSE: DB 0,'REUSE   ','DAT',0,0,0,0
+0413  53 45 20 20    347    360
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:51:16 2026	Page 7
+Source file: USER31.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0417  20 44 41 54    347    361
+041b  00 00 00 00    347    362
+041f  02 42 44 45    348    363 FBDEL: DB 2,'BDEL    ','DAT',0,0,0,0
+0423  4c 20 20 20    348    364
+0427  20 44 41 54    348    365
+042b  00 00 00 00    348    366
+042f  00 55 31 46    349    367 FU1: DB 0,'U1FILE  ','DAT',0,0,0,0
+0433  49 4c 45 20    349    368
+0437  20 44 41 54    349    369
+043b  00 00 00 00    349    370
+043f  00 4f 4c 44    350    371 FOLD: DB 0,'OLDNAME ','DAT',0,0,0,0
+0443  4e 41 4d 45    350    372
+0447  20 44 41 54    350    373
+044b  00 00 00 00    350    374
+044f  00 4e 45 57    351    375 FNEW: DB 0,'NEWNAME ','DAT',0,0,0,0
+0453  4e 41 4d 45    351    376
+0457  20 44 41 54    351    377
+045b  00 00 00 00    351    378
+045f  00 58 52 45    352    379 FXREN: DB 0,'XREN?   ','DAT',0,0,0,0
+0463  4e 3f 20 20    352    380
+0467  20 44 41 54    352    381
+046b  00 00 00 00    352    382
+046f  00 4f 50 4e    353    383 FOPNREN: DB 0,'OPNREN  ','DAT',0,0,0,0
+0473  52 45 4e 20    353    384
+0477  20 44 41 54    353    385
+047b  00 00 00 00    353    386
+                     354    387 ; source 16 bytes then destination 16 bytes (destination drive byte zero)
+047f  00 4f 4c 44    355    388 ROLDNEW: DB 0,'OLDNAME ','DAT',0,0,0,0, 0,'NEWNAME ','DAT',0,0,0,0
+0483  4e 41 4d 45    355    389
+0487  20 44 41 54    355    390
+048b  00 00 00 00    355    391
+048f  00 4e 45 57    355    392
+0493  4e 41 4d 45    355    393
+0497  20 44 41 54    355    394
+049b  00 00 00 00    355    395
+049f  00 53 52 43    356    396 RSRCDEST: DB 0,'SRCFILE ','DAT',0,0,0,0, 0,'DEST    ','DAT',0,0,0,0
+04a3  46 49 4c 45    356    397
+04a7  20 44 41 54    356    398
+04ab  00 00 00 00    356    399
+04af  00 44 45 53    356    400
+04b3  54 20 20 20    356    401
+04b7  20 44 41 54    356    402
+04bb  00 00 00 00    356    403
+04bf  00 4e 4f 53    357    404 RNOSRC: DB 0,'NOSRC   ','DAT',0,0,0,0, 0,'WONT    ','DAT',0,0,0,0
+04c3  52 43 20 20    357    405
+04c7  20 44 41 54    357    406
+04cb  00 00 00 00    357    407
+04cf  00 57 4f 4e    357    408
+04d3  54 20 20 20    357    409
+04d7  20 44 41 54    357    410
+04db  00 00 00 00    357    411
+04df  00 57 52 45    358    412 RWILD: DB 0,'WREN?   ','DAT',0,0,0,0, 0,'XREN?   ','DAT',0,0,0,0
+04e3  4e 3f 20 20    358    413
+04e7  20 44 41 54    358    414
+04eb  00 00 00 00    358    415
+04ef  00 58 52 45    358    416
+04f3  4e 3f 20 20    358    417
+04f7  20 44 41 54    358    418
+04fb  00 00 00 00    358    419
+04ff  02 42 4f 4c    359    420 RBOLDNEW: DB 2,'BOLD    ','DAT',0,0,0,0, 0,'BNEW    ','DAT',0,0,0,0
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:51:16 2026	Page 8
+Source file: USER31.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+0503  44 20 20 20    359    421
+0507  20 44 41 54    359    422
+050b  00 00 00 00    359    423
+050f  00 42 4e 45    359    424
+0513  57 20 20 20    359    425
+0517  20 44 41 54    359    426
+051b  00 00 00 00    359    427
+051f  00 4f 50 4e    360    428 ROPNREN: DB 0,'OPNREN  ','DAT',0,0,0,0, 0,'OPNNEW  ','DAT',0,0,0,0
+0523  52 45 4e 20    360    429
+0527  20 44 41 54    360    430
+052b  00 00 00 00    360    431
+052f  00 4f 50 4e    360    432
+0533  4e 45 57 20    360    433
+0537  20 44 41 54    360    434
+053b  00 00 00 00    360    435
+                     361    436
+053f  44 45 4c 52    362    437 HEADER: DB 'DELREN012 result current fcb[33] dma0',13,10,'$'
+0543  45 4e 30 31    362    438
+0547  32 20 72 65    362    439
+054b  73 75 6c 74    362    440
+054f  20 63 75 72    362    441
+0553  72 65 6e 74    362    442
+0557  20 66 63 62    362    443
+055b  5b 33 33 5d    362    444
+055f  20 64 6d 61    362    445
+0563  30 0d 0a 24    362    446
+0567  53 45 41 52    363    447 LSDB: DB 'SEARCH-DEL-BEFORE ',0
+056b  43 48 2d 44    363    448
+056f  45 4c 2d 42    363    449
+0573  45 46 4f 52    363    450
+0577  45 20 00       363    451
+057a  44 45 4c 45    364    452 LDELONE: DB 'DELETE-ONE ',0
+057e  54 45 2d 4f    364    453
+0582  4e 45 20 00    364    454
+0586  53 45 41 52    365    455 LSDA: DB 'SEARCH-DEL-AFTER ',0
+058a  43 48 2d 44    365    456
+058e  45 4c 2d 41    365    457
+0592  46 54 45 52    365    458
+0596  20 00          365    459
+0598  44 45 4c 45    366    460 LDELNO: DB 'DELETE-NONE ',0
+059c  54 45 2d 4e    366    461
+05a0  4f 4e 45 20    366    462
+05a4  00             366    463
+05a5  53 45 41 52    367    464 LSWB: DB 'SEARCH-WILD-BEFORE ',0
+05a9  43 48 2d 57    367    465
+05ad  49 4c 44 2d    367    466
+05b1  42 45 46 4f    367    467
+05b5  52 45 20 00    367    468
+05b9  44 45 4c 45    368    469 LDELWILD: DB 'DELETE-WILDCARD ',0
+05bd  54 45 2d 57    368    470
+05c1  49 4c 44 43    368    471
+05c5  41 52 44 20    368    472
+05c9  00             368    473
+05ca  53 45 41 52    369    474 LSWA: DB 'SEARCH-WILD-AFTER ',0
+05ce  43 48 2d 57    369    475
+05d2  49 4c 44 2d    369    476
+05d6  41 46 54 45    369    477
+05da  52 20 00       369    478
+05dd  4f 50 45 4e    370    479 LOPENDEL: DB 'OPEN-AFTER-DELETE ',0
+05e1  2d 41 46 54    370    480
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:51:16 2026	Page 9
+Source file: USER31.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+05e5  45 52 2d 44    370    481
+05e9  45 4c 45 54    370    482
+05ed  45 20 00       370    483
+05f0  53 45 41 52    371    484 LSRB: DB 'SEARCH-REUSE-BEFORE ',0
+05f4  43 48 2d 52    371    485
+05f8  45 55 53 45    371    486
+05fc  2d 42 45 46    371    487
+0600  4f 52 45 20    371    488
+0604  00             371    489
+0605  52 45 43 52    372    490 LREWRITE: DB 'RECREATE-WRITE ',0
+0609  45 41 54 45    372    491
+060d  2d 57 52 49    372    492
+0611  54 45 20 00    372    493
+0615  53 45 41 52    373    494 LSRA: DB 'SEARCH-REUSE-AFTER ',0
+0619  43 48 2d 52    373    495
+061d  45 55 53 45    373    496
+0621  2d 41 46 54    373    497
+0625  45 52 20 00    373    498
+0629  44 45 4c 45    374    499 LBDEL: DB 'DELETE-B ',0
+062d  54 45 2d 42    374    500
+0631  20 00          374    501
+0633  55 53 45 52    375    502 LU0DEL: DB 'USER0-DELETE-U1 ',0
+0637  30 2d 44 45    375    503
+063b  4c 45 54 45    375    504
+063f  2d 55 31 20    375    505
+0643  00             375    506
+0644  55 53 45 52    376    507 LU1DEL: DB 'USER1-DELETE-U1 ',0
+0648  31 2d 44 45    376    508
+064c  4c 45 54 45    376    509
+0650  2d 55 31 20    376    510
+0654  00             376    511
+0655  52 45 4e 41    377    512 LRENAME: DB 'RENAME-SIMPLE ',0
+0659  4d 45 2d 53    377    513
+065d  49 4d 50 4c    377    514
+0661  45 20 00       377    515
+0664  53 45 41 52    378    516 LSOLD: DB 'SEARCH-OLD ',0
+0668  43 48 2d 4f    378    517
+066c  4c 44 20 00    378    518
+0670  53 45 41 52    379    519 LSNEW: DB 'SEARCH-NEW ',0
+0674  43 48 2d 4e    379    520
+0678  45 57 20 00    379    521
+067c  52 45 4e 41    380    522 LRENDEST: DB 'RENAME-TO-EXISTING ',0
+0680  4d 45 2d 54    380    523
+0684  4f 2d 45 58    380    524
+0688  49 53 54 49    380    525
+068c  4e 47 20 00    380    526
+0690  52 45 4e 41    381    527 LRENNONE: DB 'RENAME-NONE ',0
+0694  4d 45 2d 4e    381    528
+0698  4f 4e 45 20    381    529
+069c  00             381    530
+069d  52 45 4e 41    382    531 LRENWILD: DB 'RENAME-WILDCARD ',0
+06a1  4d 45 2d 57    382    532
+06a5  49 4c 44 43    382    533
+06a9  41 52 44 20    382    534
+06ad  00             382    535
+06ae  53 45 41 52    383    536 LSXREN: DB 'SEARCH-XREN ',0
+06b2  43 48 2d 58    383    537
+06b6  52 45 4e 20    383    538
+06ba  00             383    539
+06bb  52 45 4e 41    384    540 LBREN: DB 'RENAME-B ',0
+Z80/8080-Macro-Assembler  Release 2.1	Mon Aug 17 20:51:16 2026	Page 10
+Source file: USER31.build.asm
+
+
+LOC   OBJECT CODE   LINE   STMT SOURCE CODE
+06bf  4d 45 2d 42    384    541
+06c3  20 00          384    542
+06c5  4f 50 45 4e    385    543 LOPNREN: DB 'OPEN-AFTER-RENAME ',0
+06c9  2d 41 46 54    385    544
+06cd  45 52 2d 52    385    545
+06d1  45 4e 41 4d    385    546
+06d5  45 20 00       385    547
+                     386    548
+06d8  00             387    549 RESULT: DB 0
+06d9  00             388    550 CURDISK: DB 0
+06da                 389    551 FCB: DS 36,0
+06fe                 390    552 SAVEDFCB: DS 36,0
+0722                 391    553 BUF: DS 128,0
+07a2                 392    554 	DS 160
+0842                 393    555 STACKTOP:
+0842                 394    556 	END START

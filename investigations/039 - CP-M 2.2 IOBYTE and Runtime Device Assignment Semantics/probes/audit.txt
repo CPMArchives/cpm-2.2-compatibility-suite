@@ -1,0 +1,48 @@
+Investigation 039 Completion Audit
+==================================
+
+Scope preservation
+------------------
+
+PASS  The authoritative ledger remained:
+      <project-root>/compatibility/02 Compatibility Ledger - Investigation 038.txt
+PASS  Its SHA-256 remained:
+      5df1313f85b34dadb9590f47a49277667d3ca4dea4bba7bdba35d0bdb977d1d1
+PASS  The ledger ends after Investigation 038 at entry 0608.
+PASS  All 2,363 protected pre-existing files matched protected-before.sha256.
+PASS  No pre-existing BetterCP/M file was modified.
+
+Probe and experiment checks
+---------------------------
+
+PASS  IOBYTE39.COM rebuilt byte-identically from IOBYTE39.ASM.
+PASS  DEVICE39.COM rebuilt byte-identically from DEVICE39.ASM.
+PASS  STAT39.COM rebuilt byte-identically from STAT39.ASM.
+PASS  SWITCH39.COM rebuilt byte-identically from SWITCH39.ASM.
+PASS  BDOS39.COM rebuilt byte-identically from BDOS39.ASM.
+PASS  BIOS39.COM rebuilt byte-identically from BIOS39.ASM.
+PASS  The initial/default, valid-assignment, invalid-assignment,
+      runtime-switch, warm-boot, BDOS-path, and BIOS-path cases ran.
+PASS  Console evidence is preserved in transcripts/console.txt.
+PASS  Condensed results are preserved in observed-output.txt.
+PASS  Both controlled disk images matched their before-images after testing.
+
+Artifact checks
+---------------
+
+PASS  The report contains exactly 20 numbered sections.
+PASS  Proposed ledger additions 0609-0612 occur only in the report.
+PASS  Existing-entry update recommendations occur only in the report.
+PASS  Required source, executable, transcript, image, build, and hash
+      artifacts are present.
+PASS  No ZIP archive was created.
+
+Unresolved policy questions
+---------------------------
+
+- Which named physical-device assignments each BetterCP/M hardware profile
+  will advertise and implement.
+- Whether BetterCP/M will preserve or reinitialize IOBYTE on warm boot.
+- The profile-specific behavior of assignments to unavailable devices.
+- Whether conformance should explicitly test direct writes to address 0003h
+  in addition to BDOS Functions 7 and 8.

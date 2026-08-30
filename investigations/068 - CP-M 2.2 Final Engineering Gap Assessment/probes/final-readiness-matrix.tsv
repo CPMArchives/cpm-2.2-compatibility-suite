@@ -1,0 +1,16 @@
+compatibility area	investigations reviewed	evidence status	remaining concerns	release classification
+Public CCP/BDOS/BIOS interface	I001-I046,I061-I062	Documented, source-backed, narrow probes, differential and pilot evidence	None material for baseline semantics	RELEASE READY
+File/storage semantics	I008-I015,I025,I029-I031,I037,I040,I061,I064	Extensive FCB/DMA/image and application evidence	Device-specific failure timing is outside baseline	RELEASE READY
+Physical fault/recovery	I015,I033,I066	Pre-transfer, repeated, unavailable-media and completion-before-error evidence	Torn-sector/controller-specific guarantees must remain unclaimed	RELEASE READY
+Console/system state	I003-I006,I016,I038-I039,I054	Documented and experimental core behavior	Exact editing/presentation/pending-key profile choices	POLICY PENDING
+Processor/instruction profile	I051,I063-I064,I067	Controlled 8080/Z80/undocumented/timing evidence	Established propositions missing from numbered ledger	TARGETED FOLLOW-UP REQUIRED
+Software toolchains	I047-I048,I053,I064	DRI tools plus Turbo Pascal and FORTRAN/LINK normal/failure workflows	Fixture tier/version policy only	RELEASE READY
+Application ecosystem	I049,I053-I054,I064	Word processor, BASIC, games and compiler workflows	Spreadsheet, database, business, BBS and printer absent	TARGETED FOLLOW-UP REQUIRED
+Communications profile	I050,I053,I065	Matched byte exchange/XMODEM/retry and endpoint failures	Only IMSAI/QTERM socket-backed profile validated	RELEASE READY
+Hardware/profile boundary	I036,I040-I041,I051,I063,I065-I067	Matched/mismatched machine, processor and peripheral evidence	Named untested profiles must not be advertised	RELEASE READY
+Cross-implementation portability	I061-I062	DRI CP/M versus CDOS differential and pilot evidence	Small implementation sample limits confidence, not baseline definition	RELEASE READY
+Ledger semantic consistency	I045-I046,I052,I060,I068	No conflicting duplicate dispositions or new behavioral contradiction	30 duplicate identifiers and I063 incorporation omission	TARGETED FOLLOW-UP REQUIRED
+Policy applicability	I046,I052,I055-I060,I068	Pending inventory mechanically recoverable	50 pending lines/45 IDs lack release disposition manifest	POLICY PENDING
+Conformance framework	I052,I059,I062	Method and pilot demonstrated	Compound tests need stable subcases, exact oracles and aggregation/dependency rules	TARGETED FOLLOW-UP REQUIRED
+Evidence preservation	I001-I068	Strong per-investigation artifacts and hashes	No immutable release-wide manifest/result bundle	TARGETED FOLLOW-UP REQUIRED
+Narrow semantic specification	I001-I068	No missing generic subsystem; closure campaigns support boundary	Normative editorial/process gates remain before freeze	TARGETED FOLLOW-UP REQUIRED

@@ -1,0 +1,31 @@
+entry	occurrences	title	dispositions
+0248	2	Function 22 convention	REQUIRED
+0249	2	Make uniqueness precondition	REQUIRED
+0250	2	New empty file	REQUIRED
+0251	2	Make activates FCB	REQUIRED
+0252	2	Make success result	REQUIRED
+0253	2	Make directory-full result	REQUIRED
+0254	2	Immediate empty-file visibility	REQUIRED
+0255	2	Data-full empty Make	REQUIRED
+0256	2	Make on existing name	NOT GUARANTEED
+0257	2	Ambiguous Make name	NOT GUARANTEED
+0258	2	Immediate data-block reservation	NOT REQUIRED
+0259	2	Function 21 convention	REQUIRED
+0260	2	Write activation precondition	REQUIRED
+0261	2	Write source position	REQUIRED
+0262	2	Successful write result	REQUIRED
+0263	2	Write transfer size	REQUIRED
+0264	2	Current DMA source	REQUIRED
+0265	2	Partial-record length	NOT GUARANTEED
+0266	2	CR advance after write	REQUIRED
+0267	2	RC extension	REQUIRED
+0268	2	Existing-record overwrite	REQUIRED
+0269	2	On-demand allocation	REQUIRED
+0270	2	Exact allocation choice	NOT GUARANTEED
+0271	2	Automatic write extent transition	REQUIRED
+0272	2	Successful transition state	REQUIRED
+0273	2	Full last record remains successful	REQUIRED
+0274	2	Next-extent failure result	REQUIRED
+0275	2	Allocation-full failure	REQUIRED
+0276	2	Exact write failure codes	POLICY PENDING
+0277	2	Unactivated write behavior	NOT GUARANTEED

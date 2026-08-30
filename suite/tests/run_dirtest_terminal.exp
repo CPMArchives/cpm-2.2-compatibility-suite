@@ -1,0 +1,20 @@
+#!/usr/bin/expect -f
+# SPDX-License-Identifier: GPL-2.0-or-later
+set diskdir [lindex $argv 0]
+set logfile [lindex $argv 1]
+set cpu [lindex $argv 2]
+set item [lindex $argv 3]
+set timeout 30
+log_file -noappend $logfile
+source [file join [file dirname [info script]] cpmsim-path.exp]
+spawn $cpmsim $cpu -d $diskdir
+expect "A>"
+send -- "B:\r"
+expect "B>"
+send -- "DIRTEST /$item\r"
+expect "Bdos Err On B: File R/O"
+send -- "\r"
+expect "B>"
+send "\034"
+expect eof
+exit 0
