@@ -78,6 +78,5 @@ pass.
 ### Historical development versions
 
 The repository preserves every recovered source and COM revision under
-`suite/archive/dev-versions/`. GitHub release assets will expose those
-revisions individually as historical pre-releases; they are retained for
-research and reproducibility, not recommended in place of the current build.
+`suite/archive/dev-versions/`. They are retained for research and
+reproducibility, not recommended in place of the current build.
