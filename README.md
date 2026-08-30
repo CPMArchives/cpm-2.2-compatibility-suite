@@ -9,7 +9,7 @@ Research, specifications, fixtures, and the CP/M 2.2 Compatibility Suite.
   build tools, validation material, and maintained disk images.
 - `external/` contains pinned convenience binaries that are not suite-owned.
 
-SYSINFO is maintained independently in the sibling `../sysinfo` repository.
+SYSINFO is maintained in the sibling `../cpm-tools` repository.
 Its pinned binary remains on the runtime disk for operator convenience.
 
 Start with `docs/USER-MANUAL.md` to install, operate, and interpret the eleven
