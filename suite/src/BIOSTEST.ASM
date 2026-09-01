@@ -3252,11 +3252,15 @@ CREAD: CALL    0000H
         OR      A
         JP      Z,WRROK
         LD      (IOFAIL),A
-WRROK: LD      (WRSTATUS),A
+; Patch 2026-09-02: WRSTATUS originally held both wrappers' return value.
+; A traced disk operation may itself cross the other wrapper, so that shared
+; byte was not a safe return-value journal. Keep each status on the caller's
+; stack while updating the counters, exactly as a transparent shim should.
+WRROK: PUSH    AF
         LD      A,(READCNT)
         INC     A
         LD      (READCNT),A
-        LD      A,(WRSTATUS)
+        POP     AF
         RET
 WRWRITE:
         ; Keep one bit for each WRITE type seen: 0, 1 and 2.
@@ -3282,11 +3286,11 @@ CWRITE:CALL    0000H
         OR      A
         JP      Z,WWOK
         LD      (IOFAIL),A
-WWOK:  LD      (WRSTATUS),A
+WWOK:  PUSH    AF
         LD      A,(WRITECNT)
         INC     A
         LD      (WRITECNT),A
-        LD      A,(WRSTATUS)
+        POP     AF
         RET
 WRXLT: PUSH    HL
         ; Save both input words and the translated sector returned in HL.
@@ -4184,7 +4188,6 @@ DIRDMA: DB 0
 XLTVALID:DB 0
 XLTCHAIN:DB 0
 IOFAIL: DB 0
-WRSTATUS:DB 0
 CONFSEL:DB 0
 ABSENTSEL:DB 0
 TRACECOUNT:DB 0
