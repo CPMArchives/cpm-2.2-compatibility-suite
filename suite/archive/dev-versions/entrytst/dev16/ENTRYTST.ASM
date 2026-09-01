@@ -115,7 +115,8 @@ BADCOMMAND:
         CALL    PUTS
         RET
 
-; Copy and fold exactly one selector; reject a second nonblank token.
+; Copy and fold the selector from the first token. Operand-sensitive entry
+; tests deliberately retain later tokens in the command tail/default FCBs.
 GETARG:XOR     A
         LD      (ARGBUF),A
         LD      A,(0080H)
@@ -148,21 +149,12 @@ PSTORE:LD      (DE),A
         INC     HL
         DEC     B
         JP      PCOPY
-PTRAIL:INC     HL
-        DEC     B
-PTRLP: LD      A,B
-        OR      A
-        JP      Z,PDONE
-        LD      A,(HL)
-        CP      ' '
-        JP      NZ,PBAD
-        INC     HL
-        DEC     B
-        JP      PTRLP
+; Patch 2026-09-02: the old generic selector parser rejected any second token,
+; making the documented /0012, /0014, /0015, and /0020 procedures impossible.
+; Stop after the selector; the individual oracle reads its public entry state.
+PTRAIL:
 PDONE: XOR     A
         LD      (DE),A
-        RET
-PBAD:  OR      1
         RET
 
 ARGIS: LD      HL,ARGBUF

@@ -37,7 +37,7 @@ BIOSTEST	dev29	biostest/dev29/BIOSTEST.ASM	biostest/dev29/BIOSTEST.COM	a34dd95ff
 BIOSTEST	dev3	biostest/dev3/BIOSTEST.ASM	biostest/dev3/BIOSTEST.COM	af223771fea554d50d457a1f964fa37c300ce4aa1f4a68521d59816c6c8cf197	current source/build
 BIOSTEST	dev30	biostest/dev30/BIOSTEST.ASM	biostest/dev30/BIOSTEST.COM	ebd281c5e60bfd3ee24aed32eac2c2f48fe55bc98cf2c5c3e8e1d47170c2d444	current source/build
 BIOSTEST	dev31	biostest/dev31/BIOSTEST.ASM	biostest/dev31/BIOSTEST.COM	3b4093cfbf12d746ae2a0419d1f90d34d8e81d21da441949a28372b29bd7d06b	current source/build
-BIOSTEST	dev32	biostest/dev32/BIOSTEST.ASM	biostest/dev32/BIOSTEST.COM	fbd2c274694e78739ad96917f1eed216fa721d9e4253c2eea658cbf0d978afff	current source/build
+BIOSTEST	dev32	biostest/dev32/BIOSTEST.ASM	biostest/dev32/BIOSTEST.COM	e62a67529cbef91d7177028668644882c8d1ea4ec753894880f71c16a3b3f922	current source/build
 BIOSTEST	dev4	biostest/dev4/BIOSTEST.ASM	biostest/dev4/BIOSTEST.COM	f52365249eff7b45e16dcbad65e2dddf24af40e2744c9a258535dec5a3e57e04	current source/build
 BIOSTEST	dev5	biostest/dev5/BIOSTEST.ASM	biostest/dev5/BIOSTEST.COM	2e6e56c52d6982ad43835335043bb93aa0f40c7d80ba592419fc0e87f6e024ae	current source/build
 BIOSTEST	dev6	biostest/dev6/BIOSTEST.ASM	biostest/dev6/BIOSTEST.COM	e14714fe07a802560767c6c1fc155805b4e351d6f19ecbcaf5878fc565d3f7ee	current source/build
@@ -137,7 +137,7 @@ ENTRYTST	dev12	entrytst/dev12/ENTRYTST.ASM	entrytst/dev12/ENTRYTST.COM	daa8bf046
 ENTRYTST	dev13	entrytst/dev13/ENTRYTST.ASM	entrytst/dev13/ENTRYTST.COM	98950a81c7b7a143c5f199f4c994d6654056bdcc49f3d5e0f041912e8069bf21	current source/build
 ENTRYTST	dev14	entrytst/dev14/ENTRYTST.ASM	entrytst/dev14/ENTRYTST.COM	b35a4b288fa6b36c852bac1a9ea7137f387468d563194fb061ae2911640012a3	current source/build
 ENTRYTST	dev15	entrytst/dev15/ENTRYTST.ASM	entrytst/dev15/ENTRYTST.COM	ec90288c4dd9e364553bb4124d84579038612eba21d73ebbff6bb4710bd6e8fd	current source/build
-ENTRYTST	dev16	entrytst/dev16/ENTRYTST.ASM	entrytst/dev16/ENTRYTST.COM	6feb6d954a82e7da5bf3e9d817291a4b523d60d485b215e1a0babf2620f6112a	current source/build
+ENTRYTST	dev16	entrytst/dev16/ENTRYTST.ASM	entrytst/dev16/ENTRYTST.COM	29dc25ecc1a2fa9c14f81e7eba47540817aedf1812dd76817190061c596bc06a	current source/build
 ENTRYTST	dev2	NOT RECOVERED	entrytst/dev2/ENTRYTST.COM	b80ba28d16a68b1ef4bdb52b1fb28df962d08e5dedfc81ec572fcdc7edbf77dd	suite/fixtures/trs80-montezuma-entrytst/entrytst-dev2-b-200k.dmk
 ENTRYTST	dev3	NOT RECOVERED	entrytst/dev3/ENTRYTST.COM	0094e7adf6a1e85f80dc8b2347d9485fb572ec16f2d523345550196ca6e478a6	suite/fixtures/trs80-montezuma-entrytst/entrytst-dev3-b-200k.dmk
 ENTRYTST	dev4	NOT RECOVERED	entrytst/dev4/ENTRYTST.COM	a8ededeb08e47c6fd37b23ac7564edde974053c2d6f2b4ace802ceaecaf34df6	suite/fixtures/trs80-montezuma-entrytst/entrytst-dev4-b-200k.dmk
