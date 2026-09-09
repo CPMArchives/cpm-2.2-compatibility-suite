@@ -10,7 +10,7 @@
   ECOTEST dev2, CPUTEST dev2, FILETEST dev28, CONSTEST dev13, DIRTEST dev13,
   CCPTEST dev15, SCRATCH dev4, BDOSTEST dev10, ENTRYTST dev10, and ERRTEST dev8
   have received the corresponding programmer-commentary pass.
-- Functional `/LIST` grouping is complete for all eleven ledger utilities;
+- Functional `/LIST` grouping is complete for all twelve test executables;
   group counts and totals reconcile with each assigned catalog.
 - Aggregate reports with one or more failures now append a compact
   `Failed items:` selector list in every ledger utility. Clean reports omit

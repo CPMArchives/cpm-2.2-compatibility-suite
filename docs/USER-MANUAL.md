@@ -2,8 +2,8 @@
 
 ## 1. Introduction
 
-The CP/M 2.2 Compatibility Suite is a collection of eleven logical CP/M 2.2
-test utilities, delivered as twelve transient programs, for examining the behavior presented to applications. It is
+The CP/M 2.2 Compatibility Suite is a collection of twelve CP/M 2.2 test
+executables for examining the behavior presented to applications. It is
 intended for system implementers, emulator authors, maintainers, and experienced
 operators who need more than a simple “boots CP/M” test.
 
@@ -29,11 +29,12 @@ The ledger is the suite's frozen catalog of 627 propositions, numbered `0001`
 through `0627`. A ledger number is a stable reference to one question; it is
 not a sequence in which the tests must run and it is not a severity ranking.
 
-Each ledger entry is assigned to exactly one of the eleven utilities:
+Each ledger entry is assigned to exactly one of the twelve test executables:
 
 | Utility | Assigned items | General area |
 | --- | ---: | --- |
-| `FILETEST` and `RANDTEST` | 142 | FCB file operations and record I/O |
+| `FILETEST` | 93 | FCB file operations and sequential record I/O |
+| `RANDTEST` | 49 | Random record I/O, protection, and file lifecycle behavior |
 | `CONSTEST` | 87 | Console and character-device behavior |
 | `BDOSTEST` | 86 | BDOS gateway, results, and system state |
 | `DIRTEST` | 72 | Directory operations, searches, and user areas |
@@ -156,7 +157,7 @@ lists and multi-stage procedures.
 
 ## 3. Common command interface
 
-The eleven ledger-owning utilities share the following command forms. A tool
+The twelve test executables share the following command forms. A tool
 may omit a form only when it has no meaningful operation for it.
 
 ```text
@@ -317,9 +318,9 @@ checks in a safer order or an order which preserves fixtures and state.
 `FILETEST` and its companion `RANDTEST` jointly own 142 ledger items concerning FCB interpretation, Open, Close,
 Make, sequential and random I/O, file size, random-record fields, partial final
 records, extent boundaries, explicit drives, and related lifecycle behavior.
-It is the largest logical utility because file semantics contain many related
-but independently reportable boundary cases. It is split into two executables
-so both load below the `C400h` BDOS boundary used by common 48K CP/M systems:
+File semantics contain many related but independently reportable boundary
+cases. They are divided between two executables so both load below the `C400h`
+BDOS boundary used by common 48K CP/M systems:
 `FILETEST` contains the 93 FCB, Open, sequential-read, and sequential-write
 items; `RANDTEST` contains the 49 random-I/O, protection, and lifecycle items.
 

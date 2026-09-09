@@ -1,10 +1,12 @@
 # CP/M 2.2 compatibility suite
 
 For installation, common commands, result terminology, and instructions for
-all eleven ledger-owning tools, see [`../docs/USER-MANUAL.md`](../docs/USER-MANUAL.md).
+all twelve test executables, see [`../docs/USER-MANUAL.md`](../docs/USER-MANUAL.md).
+For the complete end-to-end operator workflow, see
+[`../docs/Manual-Conformance-Campaign.md`](../docs/Manual-Conformance-Campaign.md).
 
-The suite consists of eleven logical ledger-owning utilities in twelve test
-executables, plus the Intel 8080-compatible `SCRATCH` support program:
+The suite consists of twelve test executables, plus the Intel 8080-compatible
+`SCRATCH` support program:
 
 - `FILETEST`, `RANDTEST`, `DIRTEST`, `CONSTEST`, `BDOSTEST`, `ENTRYTST`, `CCPTEST`,
   `DISKTEST`, `BIOSTEST`, `ERRTEST`, `ECOTEST`, and `CPUTEST` exercise the corresponding
