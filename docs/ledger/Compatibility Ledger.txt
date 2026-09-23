@@ -9080,17 +9080,23 @@ compatibility proposition or disposition.
 
 0578. CCP USER accepted range
 
-      Resident USER accepts decimal 0-15, changes shared BDOS
-      current-user state, and affects subsequent commands/transients;
-      higher BDOS user codes are not accepted by DRI CCP USER.
+      USER supports every decimal user number from 0 through 15,
+      changes shared BDOS current-user state, and affects subsequent
+      commands/transients. Support for additional user numbers is an
+      implementation extension and does not fail this requirement.
+      DRI CCP's rejection of higher numbers is historical behavior,
+      not a requirement that compatible implementations impose it.
 
       Disposition: REQUIRED
 
       Evidence:    I032; CCP; BDOS; IG; I026; I031.; I045 CROSS-LAYER SYSTEM
                    COMPATIBILITY subsystem IG AG.
 
-      Conformance: Test 0, 1, 15, 16 and a following transient
-                   Function-32 query.
+      Conformance: Test every USER value 0 through 15. After each,
+                   verify the selected user with a transient BDOS
+                   Function-32 query (E=FFh), then restore the original
+                   user. Record higher values separately as extensions;
+                   their acceptance or rejection does not affect 0578.
 ----
 
 
