@@ -1,77 +1,82 @@
 ; SPDX-License-Identifier: GPL-2.0-or-later
-;
-;***********************************************************************
-;*                                                                     *
-;*              B I O S T E S T   --   RELEASE DEV32                  *
-;*                                                                     *
-;*          CP/M 2.2 BIOS CONFORMANCE AND EXERCISE PROGRAM             *
-;*                                                                     *
-;***********************************************************************
-;
-; Version 0.1.0-dev32 - item 0426 DPB/ALV diagnostic evidence
-;
-; ASSEMBLY: ZSM4, THEN DIGITAL RESEARCH LINK.  ONLY 8080 OPERATIONS ARE USED.
-; LOAD AT:   0100H
-;
-; This is not a collection of entry-point calls.  A PASS is entered only
-; when the complete test has been made.  Tests which require a special disk,
-; a device connection, or loss of the transient are left '-' until their
-; prescribed run has been completed.
-;
-;------------------------- PROGRAMMER'S NOTES --------------------------
-;
-; Several tests must see the arguments which arrive at the BIOS, yet must
-; still allow the resident BIOS to do the work.  The disk trace therefore
-; substitutes the address fields of selected BIOS JMPs with addresses of
-; small routines in this transient.  Each routine saves its arguments and
-; then jumps through a private transfer instruction to the old address.
-; Thus the added code is in series with, and not in place of, the BIOS.
-;
-; PATCHONE will touch a vector only if its opcode is JMP and both bytes of
-; the new address can be written and read back.  The old address is saved
-; before alteration.  PATCHCNT is also an unwind count: if installation
-; stops half way, only those JMPs already changed are put back.  Do not put
-; a BDOS call between changing a disk vector and putting it back.
-;
-; The character test uses a different kind of intercept.  CONOUT, LIST,
-; PUNCH and READER are counting stubs and normally do NOT pass the call on.
-; This observes BDOS logical routing without sending test characters to an
-; unknown device.  SETDMA is passed on, since suppressing it would disturb
-; the disk system.  The original READER address is kept in JOREADER for the
-; separate, operator-arranged reader test.
-;
-; BOOT and WBOOT cannot return to the caller.  BTBOOT.DAT is consequently a
-; one-record continuation card.  A pending operation is written before the
-; transfer; the next copy of BIOSTEST checks the rebuilt low memory and turns
-; the pending bit into a completed bit.  The final /ALL merely reads these
-; completed bits.  This is why the three boot selections are run twice.
-;
-; BTRDR.DAT performs the same office for the two READER arrangements.  The
-; first run records the normal-reader byte and returns to the CCP so STAT may
-; change the assignment.  The second run records the absent-reader byte.
-;
-; The disk tests use three further dodges worth noting:
-;   (1) Known bytes are placed at 0080H and at ALTDMA.  Calls are then made
-;       through the character intercepts.  Damage to either set detects an
-;       illicit DMA selection or use.
-;   (2) The trace calculates the expected track from the FCB allocation
-;       entry, record number, DPB and translation result.  It does not use
-;       the captured SETTRK value to predict itself.
-;   (3) The write-protect test requires a real failing WRITE.  Its non-zero
-;       return is saved as test data and removed from IOFAIL; a failure after
-;       the disk is made writable again is still an ordinary trace failure.
-;
-; All altered vectors, DPB bytes, DMA addresses and command-tail bytes have
-; a matching restore path.  When adding a test, provide the restore path
-; first.  A test program which leaves the machine changed proves very little.
-;
-;***********************************************************************
 
-; LINK establishes the CP/M transient load address at 0100h.
+; ********************************************************************************
+; *                  CP/M 2.2 Conformance Suite -- BIOSTEST                     *
+; *                                                                              *
+; * Exercises the public CP/M 2.2 BIOS interface, including disk, character,     *
+; * boot, DPH/DPB, IOBYTE, and transient-memory behavior. Tests requiring        *
+; * special media, device arrangements, or loss of the transient remain explicit*
+; * rather than being counted as performed by an aggregate run.                  *
+; ********************************************************************************
+
+  ; Version 0.1.0-dev32 - item 0426 DPB/ALV diagnostic evidence
+
+  ; ASSEMBLY: ZSM4, THEN DIGITAL RESEARCH LINK.  ONLY 8080 OPERATIONS ARE USED.
+  ; LOAD AT:   0100H
+
+  ; PROGRAMMER'S NOTES
+  ; ------------------
+  ;
+  ; Several tests must see the arguments which arrive at the BIOS, yet must
+  ; still allow the resident BIOS to do the work.  The disk trace therefore
+  ; substitutes the address fields of selected BIOS JMPs with addresses of
+  ; small routines in this transient.  Each routine saves its arguments and
+  ; then jumps through a private transfer instruction to the old address.
+  ; Thus the added code is in series with, and not in place of, the BIOS.
+  ;
+  ; PATCHONE will touch a vector only if its opcode is JMP and both bytes of
+  ; the new address can be written and read back.  The old address is saved
+  ; before alteration.  PATCHCNT is also an unwind count: if installation
+  ; stops half way, only those JMPs already changed are put back.  Do not put
+  ; a BDOS call between changing a disk vector and putting it back.
+  ;
+  ; The character test uses a different kind of intercept.  CONOUT, LIST,
+  ; PUNCH and READER are counting stubs and normally do NOT pass the call on.
+  ; This observes BDOS logical routing without sending test characters to an
+  ; unknown device.  SETDMA is passed on, since suppressing it would disturb
+  ; the disk system.  The original READER address is kept in JOREADER for the
+  ; separate, operator-arranged reader test.
+  ;
+  ; BOOT and WBOOT cannot return to the caller.  BTBOOT.DAT is consequently a
+  ; one-record continuation card.  A pending operation is written before the
+  ; transfer; the next copy of BIOSTEST checks the rebuilt low memory and turns
+  ; the pending bit into a completed bit.  The final /ALL merely reads these
+  ; completed bits.  This is why the three boot selections are run twice.
+  ;
+  ; BTRDR.DAT performs the same office for the two READER arrangements.  The
+  ; first run records the normal-reader byte and returns to the CCP so STAT may
+  ; change the assignment.  The second run records the absent-reader byte.
+  ;
+  ; The disk tests use three further dodges worth noting:
+  ;   (1) Known bytes are placed at 0080H and at ALTDMA.  Calls are then made
+  ;       through the character intercepts.  Damage to either set detects an
+  ;       illicit DMA selection or use.
+  ;   (2) The trace calculates the expected track from the FCB allocation
+  ;       entry, record number, DPB and translation result.  It does not use
+  ;       the captured SETTRK value to predict itself.
+  ;   (3) The write-protect test requires a real failing WRITE.  Its non-zero
+  ;       return is saved as test data and removed from IOFAIL; a failure after
+  ;       the disk is made writable again is still an ordinary trace failure.
+  ;
+  ; All altered vectors, DPB bytes, DMA addresses and command-tail bytes have
+  ; a matching restore path.  When adding a test, provide the restore path
+  ; first.  A test program which leaves the machine changed proves very little.
+  ;
+  ;***********************************************************************
+
+  ; LINK establishes the CP/M transient load address at 0100h.
 BDOS    EQU     0005H
 NCASES  EQU     46
 
-START:  LD      SP,STACKTOP
+; ================================================================================
+; =                   Command Interface and Catalog Selection                    =
+; =                                                                              =
+; = Parses the command tail and selects safe, aggregate, grouped, manual, or     =
+; = numeric tests while keeping destructive and operator-dependent work          =
+; = explicit.                                                                    =
+; ================================================================================
+
+START:  LD      SP,STACKTOP             ; enter BIOSTEST command dispatcher
         XOR     A
         LD      (FAULTREQ),A
         LD      (READERREQ),A
@@ -144,21 +149,23 @@ START:  LD      SP,STACKTOP
         JP      Z,HPROFILES
         CALL    ITEMARG
         JP      Z,RUNONE
-BADCOMMAND:
+
+BADCOMMAND:                             ; badcommand
         LD      DE,BADSEL
         JP      PUTS
 
-; Decode command tail.
-; Exit: A=1 HELP, 2 LIST, 3 ALL, 4 NUMBER, 5 INFO,
-;       A=6 RESULTS, 7 PROFILES, 8 SAFE.
-GETARG:XOR     A
+  ; Decode command tail.
+  ; Exit: A=1 HELP, 2 LIST, 3 ALL, 4 NUMBER, 5 INFO,
+
+GETARG:XOR     A                        ; getarg
         LD      (ARGBUF),A
         LD      A,(0080H)
         OR      A
         RET     Z
         LD      B,A
         LD      HL,0081H
-PSKIP: LD      A,(HL)
+
+PSKIP: LD      A,(HL)                   ; pskip
         CP      ' '
         JP      NZ,PSTART
         INC     HL
@@ -166,8 +173,10 @@ PSKIP: LD      A,(HL)
         JP      NZ,PSKIP
         XOR     A
         RET
-PSTART:LD      DE,ARGBUF
-PCOPY: LD      A,B
+
+PSTART:LD      DE,ARGBUF                ; pstart
+
+PCOPY: LD      A,B                      ; pcopy
         OR      A
         JP      Z,PDONE
         LD      A,(HL)
@@ -178,14 +187,17 @@ PCOPY: LD      A,B
         CP      'z'+1
         JP      NC,PSTORE
         SUB     20H
-PSTORE:LD      (DE),A
+
+PSTORE:LD      (DE),A                   ; pstore
         INC     DE
         INC     HL
         DEC     B
         JP      PCOPY
-PTRAIL:INC     HL
+
+PTRAIL:INC     HL                       ; ptrail
         DEC     B
-PTRLP: LD      A,B
+
+PTRLP: LD      A,B                      ; ptrlp
         OR      A
         JP      Z,PDONE
         LD      A,(HL)
@@ -194,15 +206,18 @@ PTRLP: LD      A,B
         INC     HL
         DEC     B
         JP      PTRLP
-PDONE: XOR     A
+
+PDONE: XOR     A                        ; pdone
         LD      (DE),A
         CP      A
         RET
-PBAD:  OR      1
+
+PBAD:  OR      1                        ; pbad
         RET
 
-ARGIS: LD      HL,ARGBUF
-PACMP: LD      A,(DE)
+ARGIS: LD      HL,ARGBUF                ; argis
+
+PACMP: LD      A,(DE)                   ; pacmp
         CP      (HL)
         RET     NZ
         OR      A
@@ -211,7 +226,7 @@ PACMP: LD      A,(DE)
         INC     HL
         JP      PACMP
 
-ITEMARG:
+ITEMARG:                                ; itemarg
         XOR     A
         LD      (REPORTMODE),A
         LD      HL,ARGBUF
@@ -221,7 +236,8 @@ ITEMARG:
         INC     HL
         LD      DE,SELBUF
         LD      B,4
-PNUM:  LD      A,(HL)
+
+PNUM:  LD      A,(HL)                   ; pnum
         CP      '0'
         JP      C,PIBAD
         CP      '9'+1
@@ -235,7 +251,8 @@ PNUM:  LD      A,(HL)
         OR      A
         RET     Z
         LD      DE,SREPORT
-PIRPT: LD      A,(DE)
+
+PIRPT: LD      A,(DE)                   ; pirpt
         CP      (HL)
         JP      NZ,PIBAD
         OR      A
@@ -243,36 +260,44 @@ PIRPT: LD      A,(DE)
         INC     DE
         INC     HL
         JP      PIRPT
-PIROK: LD      A,1
+
+PIROK: LD      A,1                      ; pirok
         LD      (REPORTMODE),A
         XOR     A
         RET
-PIBAD: OR      1
+
+PIBAD: OR      1                        ; pibad
         RET
 
-HELP:  LD      DE,HLPMSG
+HELP:  LD      DE,HLPMSG                ; help
         CALL    PUTS
         RET
-LIST:  LD      DE,LSTMSG
+
+LIST:  LD      DE,LSTMSG                ; list
         CALL    PUTS
         RET
-INFO:  LD      DE,INFMSG
+
+INFO:  LD      DE,INFMSG                ; info
         CALL    PUTS
         RET
-VERSION:LD     DE,VERMSG
+
+VERSION:LD     DE,VERMSG                ; version
         JP      PUTS
-GROUPLIST:LD   DE,GRPLIST
+
+GROUPLIST:LD   DE,GRPLIST               ; grouplist
         JP      PUTS
-HRESULTS:
+
+HRESULTS:                               ; hresults
         LD      DE,RESMSG
         CALL    PUTS
         RET
-HPROFILES:
+
+HPROFILES:                              ; hprofiles
         LD      DE,PRFMSG
         CALL    PUTS
         RET
 
-RUNALL:LD      A,1
+RUNALL:LD      A,1                      ; runall
         LD      (FAULTREQ),A
         LD      (READERREQ),A
         CALL    AUTOTESTS
@@ -281,14 +306,17 @@ RUNALL:LD      A,1
         CALL    CONTROLGATE
         CALL    CHARGATE
         JP      RUNROWS
-RUNSAFE:
+
+RUNSAFE:                                ; runsafe
         CALL    AUTOTESTS
-RUNROWS:
+
+RUNROWS:                                ; runrows
         LD      DE,HEADMSG
         CALL    PUTS
         LD      HL,CASES
         LD      B,NCASES
-RALOOP:PUSH    BC
+
+RALOOP:PUSH    BC                       ; raloop
         PUSH    HL
         CALL    PRINTROW
         POP     HL
@@ -299,33 +327,40 @@ RALOOP:PUSH    BC
         JP      NZ,RALOOP
         JP      SUMMARY
 
-; Functional groups are contiguous views of the catalog.  Only the five safe
-; returning checks run automatically; provider, scratch-media, and boot work
-; remains selected and explicit.
-RUNALLOCATION:
+  ; Functional groups are contiguous views of the catalog.  Only the five safe
+  ; returning checks run automatically; provider, scratch-media, and boot work
+  ; remains selected and explicit.
+
+RUNALLOCATION:                          ; runallocation
         LD      HL,CASES
         LD      B,13
         JP      RUNRANGE
-RUNDEVICES:
+
+RUNDEVICES:                             ; rundevices
         LD      HL,CASES+104
         LD      B,7
         JP      RUNRANGE
-RUNDISK:
+
+RUNDISK:                                ; rundisk
         LD      HL,CASES+160
         LD      B,15
         JP      RUNRANGE
-RUNBOOT:
+
+RUNBOOT:                                ; runboot
         LD      HL,CASES+280
         LD      B,4
         JP      RUNRANGE
-RUNCHARACTER:
+
+RUNCHARACTER:                           ; runcharacter
         LD      HL,CASES+312
         LD      B,6
         JP      RUNRANGE
-RUNPROCESSOR:
+
+RUNPROCESSOR:                           ; runprocessor
         LD      HL,CASES+360
         LD      B,1
-RUNRANGE:
+
+RUNRANGE:                               ; runrange
         PUSH    HL
         PUSH    BC
         CALL    AUTOTESTS
@@ -333,7 +368,8 @@ RUNRANGE:
         CALL    PUTS
         POP     BC
         POP     HL
-RGRLP: PUSH    BC
+
+RGRLP: PUSH    BC                       ; rgrlp
         PUSH    HL
         CALL    PRINTROW
         POP     HL
@@ -345,24 +381,28 @@ RGRLP: PUSH    BC
         LD      DE,GRPSUM
         JP      PUTS
 
-RUNREQUIRED:
+RUNREQUIRED:                            ; runrequired
         XOR     A
         LD      (FILTERMODE),A
         JP      RUNFILTER
-RUNOBSERVATION:
+
+RUNOBSERVATION:                         ; runobservation
         LD      A,1
         LD      (FILTERMODE),A
         JP      RUNFILTER
-RUNMANUAL:
+
+RUNMANUAL:                              ; runmanual
         LD      A,2
         LD      (FILTERMODE),A
-RUNFILTER:
+
+RUNFILTER:                              ; runfilter
         CALL    AUTOTESTS
         LD      DE,HEADMSG
         CALL    PUTS
         LD      HL,CASES
         LD      B,NCASES
-RFLP:  LD      (CARDPTR),HL
+
+RFLP:  LD      (CARDPTR),HL             ; rflp
         PUSH    BC
         LD      DE,4
         ADD     HL,DE
@@ -380,7 +420,8 @@ RFLP:  LD      (CARDPTR),HL
         LD      HL,CLOPT
         CALL    DEISEQ
         JP      NZ,RFSKIP
-RFMSTAT:
+
+RFMSTAT:                                ; rfmstat
         LD      HL,(CARDPTR)
         INC     HL
         INC     HL
@@ -391,17 +432,21 @@ RFMSTAT:
         CALL    DEISEQ
         JP      NZ,RFSKIP
         JP      RFPRINT
-RFREQ: LD      HL,CLREQ
+
+RFREQ: LD      HL,CLREQ                 ; rfreq
         CALL    DEISEQ
         JP      NZ,RFSKIP
         JP      RFPRINT
-RFOBS: LD      HL,CLNG
+
+RFOBS: LD      HL,CLNG                  ; rfobs
         CALL    DEISEQ
         JP      NZ,RFSKIP
-RFPRINT:
+
+RFPRINT:                                ; rfprint
         LD      HL,(CARDPTR)
         CALL    PRINTROW
-RFSKIP:
+
+RFSKIP:                                 ; rfskip
         LD      HL,(CARDPTR)
         LD      DE,8
         ADD     HL,DE
@@ -418,15 +463,16 @@ RFSKIP:
         LD      DE,MANSUM
         JP      PUTS
 
-; Z means the pointer in DE equals the pointer in HL.
-DEISEQ:LD      A,L
+  ; Z means the pointer in DE equals the pointer in HL.
+
+DEISEQ:LD      A,L                      ; deiseq
         CP      E
         RET     NZ
         LD      A,H
         CP      D
         RET
 
-RUNONE:
+RUNONE:                                 ; runone
         CALL    ISFAULT
         LD      (FAULTREQ),A
         CALL    ISREADER
@@ -445,7 +491,8 @@ RUNONE:
         CALL    NZ,BOOTGATE
         LD      HL,CASES
         LD      B,NCASES
-ROLOOP:PUSH    BC
+
+ROLOOP:PUSH    BC                       ; roloop
         PUSH    HL
         LD      E,(HL)
         INC     HL
@@ -453,7 +500,8 @@ ROLOOP:PUSH    BC
         EX      DE,HL
         LD      DE,SELBUF
         LD      C,4
-ROCMP: LD      A,(DE)
+
+ROCMP: LD      A,(DE)                   ; rocmp
         CP      (HL)
         JP      NZ,RONEXT
         INC     DE
@@ -469,11 +517,13 @@ ROCMP: LD      A,(DE)
         OR      A
         JP      Z,ROSHORT
         CALL    SHOWDETAIL
-ROSHORT:
+
+ROSHORT:                                ; roshort
         LD      DE,ONESUM
         CALL    PUTS
         RET
-RONEXT:POP     HL
+
+RONEXT:POP     HL                       ; ronext
         LD      DE,8
         ADD     HL,DE
         POP     BC
@@ -483,11 +533,21 @@ RONEXT:POP     HL
         CALL    PUTS
         RET
 
-;--------------------------- PRINT A ROW -------------------------------
-; HL points to four words: item, status, class and explanation.
-; The first three fields are fixed width; the explanation gets the rest of
-; the 80-column line.
-PRINTROW:
+; ================================================================================
+; =                              Catalog Reporting                               =
+; =                                                                              =
+; = Formats fixed-width item, status, and class fields while leaving the         =
+; = remainder of the 80-column display for each test explanation.                =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Print a Catalog Row
+; -------------------------------------------------------------------------------
+
+  ; HL points to four words: item, status, class and explanation.
+  ; The first three fields are fixed width; the explanation gets the rest of
+  ; the 80-column line.
+
+PRINTROW:                               ; print catalog result row
         LD      E,(HL)
         INC     HL
         LD      D,(HL)
@@ -519,13 +579,15 @@ PRINTROW:
         LD      DE,CRLF
         JP      PUTS
 
-; Print $ string at DE in a field B characters wide.
-; Clip on the right, or fill the unused part with spaces.
-PUTFIELD:
+  ; Print $ string at DE in a field B characters wide.
+  ; Clip on the right, or fill the unused part with spaces.
+
+PUTFIELD:                               ; putfield
         PUSH    HL
         PUSH    BC
         EX      DE,HL
-PFCHAR:LD      A,B
+
+PFCHAR:LD      A,B                      ; pfchar
         OR      A
         JP      Z,PFDONE
         LD      A,(HL)
@@ -541,7 +603,8 @@ PFCHAR:LD      A,B
         POP     HL
         DEC     B
         JP      PFCHAR
-PFSPACE:
+
+PFSPACE:                                ; pfspace
         LD      E,' '
         LD      C,2
         PUSH    HL
@@ -551,11 +614,12 @@ PFSPACE:
         POP     HL
         DEC     B
         JP      NZ,PFSPACE
-PFDONE:POP     BC
+
+PFDONE:POP     BC                       ; pfdone
         POP     HL
         RET
 
-PUTS:  PUSH    HL
+PUTS:  PUSH    HL                       ; puts
         PUSH    BC
         LD      C,9
         CALL    BDOS
@@ -563,8 +627,9 @@ PUTS:  PUSH    HL
         POP     HL
         RET
 
-; A=1 if selected item belongs to the controlled disk group.
-ISCONTROL:
+  ; A=1 if selected item belongs to the controlled disk group.
+
+ISCONTROL:                              ; iscontrol
         LD      A,(SELBUF)
         CP      '0'
         JP      NZ,ICNO
@@ -580,28 +645,33 @@ ISCONTROL:
         JP      Z,IC44
         CP      '5'
         JP      Z,IC45
-ICNO:  XOR     A
+
+ICNO:  XOR     A                        ; icno
         RET
-IC42:  LD      A,(SELBUF+3)
+
+IC42:  LD      A,(SELBUF+3)             ; ic42
         CP      '4'
         JP      C,ICNO
         CP      '8'
         JP      NC,ICNO
         LD      A,1
         RET
-IC43:  LD      A,(SELBUF+3)
+
+IC43:  LD      A,(SELBUF+3)             ; ic43
         CP      '1'
         JP      C,ICNO
         CP      '4'
         JP      NC,ICNO
         LD      A,1
         RET
-IC44:  LD      A,(SELBUF+3)
+
+IC44:  LD      A,(SELBUF+3)             ; ic44
         CP      '9'
         JP      NZ,ICNO
         LD      A,1
         RET
-IC45:  LD      A,(SELBUF+3)
+
+IC45:  LD      A,(SELBUF+3)             ; ic45
         CP      '0'
         JP      Z,ICYES
         CP      '3'
@@ -614,14 +684,16 @@ IC45:  LD      A,(SELBUF+3)
         JP      Z,ICYES
         CP      '8'
         JP      NZ,ICNO
-ICYES: LD      A,1
+
+ICYES: LD      A,1                      ; icyes
         RET
 
-ISFAULT:
+ISFAULT:                                ; isfault
         LD      HL,SELBUF
         LD      DE,I0457
         LD      B,4
-IFLOOP:LD      A,(DE)
+
+IFLOOP:LD      A,(DE)                   ; ifloop
         CP      (HL)
         JP      NZ,IFNO
         INC     DE
@@ -630,11 +702,13 @@ IFLOOP:LD      A,(DE)
         JP      NZ,IFLOOP
         LD      A,1
         RET
-IFNO:  XOR     A
+
+IFNO:  XOR     A                        ; ifno
         RET
 
-; A=1 if selected item belongs to the character group.
-ISCHAR:LD      A,(SELBUF)
+  ; A=1 if selected item belongs to the character group.
+
+ISCHAR:LD      A,(SELBUF)               ; ischar
         CP      '0'
         JP      NZ,ICNO
         LD      A,(SELBUF+1)
@@ -651,23 +725,27 @@ ISCHAR:LD      A,(SELBUF)
         JP      Z,ICH7
         XOR     A
         RET
-ICH3:  LD      A,(SELBUF+3)
+
+ICH3:  LD      A,(SELBUF+3)             ; ich3
         CP      '9'
         JP      Z,ICYES
         JP      ICNO
-ICH4:  LD      A,(SELBUF+3)
+
+ICH4:  LD      A,(SELBUF+3)             ; ich4
         CP      '5'
         JP      Z,ICYES
         CP      '8'
         JP      Z,ICYES
         JP      ICNO
-ICH6:  LD      A,(SELBUF+3)
+
+ICH6:  LD      A,(SELBUF+3)             ; ich6
         CP      '8'
         JP      Z,ICYES
         CP      '9'
         JP      Z,ICYES
         JP      ICNO
-ICH7:  LD      A,(SELBUF+3)
+
+ICH7:  LD      A,(SELBUF+3)             ; ich7
         CP      '0'
         JP      Z,ICYES
         CP      '1'
@@ -676,11 +754,12 @@ ICH7:  LD      A,(SELBUF+3)
         JP      Z,ICYES
         JP      ICNO
 
-ISREADER:
+ISREADER:                               ; isreader
         LD      HL,SELBUF
         LD      DE,I0471
         LD      B,4
-IRLOOP:LD      A,(DE)
+
+IRLOOP:LD      A,(DE)                   ; irloop
         CP      (HL)
         JP      NZ,IRNO
         INC     DE
@@ -689,10 +768,11 @@ IRLOOP:LD      A,(DE)
         JP      NZ,IRLOOP
         LD      A,1
         RET
-IRNO:  XOR     A
+
+IRNO:  XOR     A                        ; irno
         RET
 
-ISBOOT:LD      A,(SELBUF)
+ISBOOT:LD      A,(SELBUF)               ; isboot
         CP      '0'
         JP      NZ,ICNO
         LD      A,(SELBUF+1)
@@ -708,12 +788,13 @@ ISBOOT:LD      A,(SELBUF)
         JP      NC,ICNO
         JP      ICYES
 
-;---------------------- GET THE SCRATCH DRIVE --------------------------
-; Ask here, rather than in the command decoder, since the following work
-; makes and erases BTBIO.TMP.  Q leaves the group unrun.
-CONTROLGATE:
+  ; Ask here, rather than in the command decoder, since the following work
+  ; makes and erases BTBIO.TMP.  Q leaves the group unrun.
+
+CONTROLGATE:                            ; controlgate
         CALL    SAVEENV
-CGASK: LD      DE,CGMSG
+
+CGASK: LD      DE,CGMSG                 ; cgask
         CALL    PUTS
         CALL    GETKEY
         CP      'Q'
@@ -738,14 +819,16 @@ CGASK: LD      DE,CGMSG
         RET     NZ
         CALL    RUNCONTROL
         RET
-CGBAD: LD      DE,CGBADMSG
-        CALL    PUTS
-        JP      CGASK
-CGSAME:LD      DE,CGSAMEMSG
+
+CGBAD: LD      DE,CGBADMSG              ; cgbad
         CALL    PUTS
         JP      CGASK
 
-SAVEENV:
+CGSAME:LD      DE,CGSAMEMSG             ; cgsame
+        CALL    PUTS
+        JP      CGASK
+
+SAVEENV:                                ; saveenv
         LD      C,25
         CALL    BDOS
         LD      (OLDDRV),A
@@ -754,7 +837,8 @@ SAVEENV:
         CALL    BDOS
         LD      (OLDUSR),A
         RET
-RESTENV:
+
+RESTENV:                                ; restenv
         LD      DE,0080H
         LD      C,26
         CALL    BDOS
@@ -769,16 +853,17 @@ RESTENV:
         LD      C,14
         CALL    BDOS
         RET
-GETKEY:LD      C,1
+
+GETKEY:LD      C,1                      ; getkey
         CALL    BDOS
         AND     5FH
         RET
 
-;---------------------- CHARACTER TEST CONTROL -------------------------
-; CONST and CONIN are called at their real entries with the operator's K.
-; The logical-output calls are made with the temporary vectors installed.
-; No result is entered until the old vectors and DMA have been restored.
-CHARGATE:
+  ; CONST and CONIN are called at their real entries with the operator's K.
+  ; The logical-output calls are made with the temporary vectors installed.
+  ; No result is entered until the old vectors and DMA have been restored.
+
+CHARGATE:                               ; chargate
         LD      DE,CHGMSG
         CALL    PUTS
         CALL    GETKEY
@@ -808,11 +893,13 @@ CHARGATE:
         OR      A
         CALL    NZ,READERWORK
         JP      CHDONE
-CHNTRACE:
+
+CHNTRACE:                               ; chntrace
         CALL    CHARRESTORE
         LD      DE,CHARBAD
         CALL    PUTS
-CHDONE:CALL    RESTSENT
+
+CHDONE:CALL    RESTSENT                 ; chdone
         LD      A,(CHCOUNT)
         LD      B,A
         LD      A,(REMCNT)
@@ -820,9 +907,10 @@ CHDONE:CALL    RESTSENT
         LD      (REMCNT),A
         RET
 
-; Test the real status/input pair.  First status must be empty.  Two ready
-; polls must not eat the K, and CONIN must return that same character.
-CONSOLETEST:
+  ; Test the real status/input pair.  First status must be empty.  Two ready
+  ; polls must not eat the K, and CONIN must return that same character.
+
+CONSOLETEST:                            ; consoletest
         LD      A,1
         LD      (CSTRES),A
         LD      (CINRES),A
@@ -834,9 +922,11 @@ CONSOLETEST:
         JP      NZ,CSWAIT
         XOR     A
         LD      (CSTRES),A
-CSWAIT:LD      DE,CKEYMSG
+
+CSWAIT:LD      DE,CKEYMSG               ; cswait
         CALL    PUTS
-CSLOOP:CALL    BIOSADDR
+
+CSLOOP:CALL    BIOSADDR                 ; csloop
         LD      DE,6
         ADD     HL,DE
         CALL    CALLHL
@@ -855,7 +945,8 @@ CSLOOP:CALL    BIOSADDR
         JP      NZ,CSIN
         XOR     A
         LD      (CSTRES),A
-CSIN:  CALL    BIOSADDR
+
+CSIN:  CALL    BIOSADDR                 ; csin
         LD      DE,9
         ADD     HL,DE
         CALL    CALLHL             ; CONIN
@@ -864,7 +955,8 @@ CSIN:  CALL    BIOSADDR
         JP      NZ,CSPOST
         XOR     A
         LD      (CINRES),A
-CSPOST:CALL    BIOSADDR
+
+CSPOST:CALL    BIOSADDR                 ; cspost
         LD      DE,6
         ADD     HL,DE
         CALL    CALLHL
@@ -874,17 +966,17 @@ CSPOST:CALL    BIOSADDR
         LD      (CSTRES),A
         RET
 
-BIOSADDR:
+BIOSADDR:                               ; biosaddr
         LD      HL,(0001H)
         DEC     HL
         DEC     HL
         DEC     HL
         RET
 
-;--------------------------- DMA CANARIES -------------------------------
-; Save four bytes at 0080H.  Put one pattern there and another at ALTDMA,
-; then select ALTDMA.  RESTSENT selects 0080H again and restores its bytes.
-PREPSENT:
+  ; Save four bytes at 0080H.  Put one pattern there and another at ALTDMA,
+  ; then select ALTDMA.  RESTSENT selects 0080H again and restores its bytes.
+
+PREPSENT:                               ; prepsent
         LD      HL,0080H
         LD      DE,DMASAVE
         LD      B,4
@@ -901,7 +993,8 @@ PREPSENT:
         LD      C,26
         CALL    BDOS
         RET
-RESTSENT:
+
+RESTSENT:                               ; restore DMA canaries
         LD      DE,0080H
         LD      C,26
         CALL    BDOS
@@ -911,10 +1004,10 @@ RESTSENT:
         CALL    COPY4
         RET
 
-;----------------------- READER CONTINUATION ---------------------------
-; BTRDR.DAT carries the first READER result across the return to CCP which
-; is needed for the intervening STAT assignment.
-LOADRDPASS:
+  ; BTRDR.DAT carries the first READER result across the return to CCP which
+  ; is needed for the intervening STAT assignment.
+
+LOADRDPASS:                             ; loadrdpass
         CALL    LOADRDREC
         LD      A,(RDSTAGE)
         CP      2
@@ -928,7 +1021,7 @@ LOADRDPASS:
         LD      (REMCNT),A
         RET
 
-LOADRDREC:
+LOADRDREC:                              ; loadrdrec
         XOR     A
         LD      (RDSTAGE),A
         CALL    INITRDFCB
@@ -964,11 +1057,12 @@ LOADRDREC:
         LD      (RDSTAGE),A
         RET
 
-SAVERDREC:
+SAVERDREC:                              ; saverdrec
         LD      HL,RDBUF
         LD      B,128
         XOR     A
-SRDCLR:LD      (HL),A
+
+SRDCLR:LD      (HL),A                   ; srdclr
         INC     HL
         DEC     B
         JP      NZ,SRDCLR
@@ -1006,25 +1100,28 @@ SRDCLR:LD      (HL),A
         CALL    BDOS
         XOR     A
         RET
-SRDFAIL:
+
+SRDFAIL:                                ; srdfail
         LD      DE,0080H
         LD      C,26
         CALL    BDOS
         LD      A,1
         RET
 
-INITRDFCB:
+INITRDFCB:                              ; initrdfcb
         LD      HL,RDFCB
         LD      B,36
         XOR     A
-IRFCLR:LD      (HL),A
+
+IRFCLR:LD      (HL),A                   ; irfclr
         INC     HL
         DEC     B
         JP      NZ,IRFCLR
         LD      HL,RDNAME
         LD      DE,RDFCB+1
         LD      B,11
-IRFNAME:
+
+IRFNAME:                                ; irfname
         LD      A,(HL)
         LD      (DE),A
         INC     HL
@@ -1033,12 +1130,12 @@ IRFNAME:
         JP      NZ,IRFNAME
         RET
 
-;------------------------- BOOT CONTINUATION ---------------------------
-; BTBOOT.DAT contains a pending operation, completed bits, and enough of the
-; old gateway layout to reject a record belonging to another system image.
-; Comes here after reloading BIOSTEST.  Only a completed bit earns a PASS.
-; ERA BTBOOT.DAT starts the sequence over.
-LOADBPASS:
+  ; BTBOOT.DAT contains a pending operation, completed bits, and enough of the
+  ; old gateway layout to reject a record belonging to another system image.
+  ; Comes here after reloading BIOSTEST.  Only a completed bit earns a PASS.
+  ; ERA BTBOOT.DAT starts the sequence over.
+
+LOADBPASS:                              ; loadbpass
         CALL    LOADBREC
         OR      A
         RET     NZ
@@ -1057,7 +1154,8 @@ LOADBPASS:
         LD      A,(BOOTCOUNT)
         INC     A
         LD      (BOOTCOUNT),A
-LBP65: LD      A,(BOOTBITS)
+
+LBP65: LD      A,(BOOTBITS)             ; lbp65
         AND     2
         JP      Z,LBP66
         XOR     A
@@ -1067,7 +1165,8 @@ LBP65: LD      A,(BOOTBITS)
         LD      A,(BOOTCOUNT)
         INC     A
         LD      (BOOTCOUNT),A
-LBP66: LD      A,(BOOTBITS)
+
+LBP66: LD      A,(BOOTBITS)             ; lbp66
         AND     4
         JP      Z,LBPDONE
         XOR     A
@@ -1077,7 +1176,8 @@ LBP66: LD      A,(BOOTBITS)
         LD      A,(BOOTCOUNT)
         INC     A
         LD      (BOOTCOUNT),A
-LBPDONE:
+
+LBPDONE:                                ; lbpdone
         LD      A,(BOOTCOUNT)
         LD      B,A
         LD      A,(REMCNT)
@@ -1085,7 +1185,7 @@ LBPDONE:
         LD      (REMCNT),A
         RET
 
-BOOTMATCH:
+BOOTMATCH:                              ; bootmatch
         LD      A,(0000H)
         CP      0C3H
         JP      NZ,TFAIL
@@ -1115,7 +1215,7 @@ BOOTMATCH:
         XOR     A
         RET
 
-BOOTGATE:
+BOOTGATE:                               ; bootgate
         ; Comes here on both halves of a boot test.  No pending byte means
         ; arm the continuation record and transfer control.  A matching
         ; pending byte means this is the copy loaded after that transfer.
@@ -1139,7 +1239,7 @@ BOOTGATE:
         CALL    PUTS
         RET
 
-BOOTSTART:
+BOOTSTART:                              ; bootstart
         LD      DE,BSTARTMSG
         CALL    PUTS
         CALL    GETKEY
@@ -1169,16 +1269,18 @@ BOOTSTART:
         XOR     A
         LD      (0000H),A
         LD      (0005H),A
-DOWBOOT:
+
+DOWBOOT:                                ; dowboot
         LD      A,(BOOTDRV)
         LD      C,A
         LD      HL,(BOOTWBOOT)
         JP      (HL)
-DOBOOT:LD      C,0
+
+DOBOOT:LD      C,0                      ; doboot
         CALL    BIOSADDR
         JP      (HL)
 
-BOOTVERIFY:
+BOOTVERIFY:                             ; bootverify
         ; We are running after BOOT/WBOOT.  Check the public low-memory state,
         ; current drive where applicable, and the two repaired gateways.
         CALL    CHECKPUBLIC
@@ -1194,7 +1296,8 @@ BOOTVERIFY:
         LD      A,1
         LD      (BOOTRES),A
         JP      BVFINISH
-BVDRIVE:
+
+BVDRIVE:                                ; bvdrive
         LD      C,25
         CALL    BDOS
         LD      HL,BOOTDRV
@@ -1202,7 +1305,8 @@ BVDRIVE:
         JP      Z,BVGATE
         LD      A,1
         LD      (BOOTRES),A
-BVGATE:LD      A,(BOOTSEL)
+
+BVGATE:LD      A,(BOOTSEL)              ; bvgate
         CP      3
         JP      NZ,BVFINISH
         LD      HL,(0001H)
@@ -1225,9 +1329,11 @@ BVGATE:LD      A,(BOOTSEL)
         LD      A,L
         CP      E
         JP      Z,BVFINISH
-BVBAD: LD      A,1
+
+BVBAD: LD      A,1                      ; bvbad
         LD      (BOOTRES),A
-BVFINISH:
+
+BVFINISH:                               ; bvfinish
         XOR     A
         LD      (BOOTPEND),A
         LD      A,(BOOTRES)
@@ -1238,12 +1344,14 @@ BVFINISH:
         LD      A,(BOOTBITS)
         OR      B
         LD      (BOOTBITS),A
-BVSAVE:CALL    SAVEBOOT
+
+BVSAVE:CALL    SAVEBOOT                 ; bvsave
         OR      A
         JP      Z,BVRESULT
         LD      A,1
         LD      (BOOTRES),A
-BVRESULT:
+
+BVRESULT:                               ; bvresult
         LD      A,(BOOTSEL)
         CP      1
         JP      Z,BVR64
@@ -1252,12 +1360,15 @@ BVRESULT:
         LD      HL,CASES+296
         LD      DE,V0466
         JP      BVRSET
-BVR64: LD      HL,CASES+280
+
+BVR64: LD      HL,CASES+280             ; bvr64
         LD      DE,V0464
         JP      BVRSET
-BVR65: LD      HL,CASES+288
+
+BVR65: LD      HL,CASES+288             ; bvr65
         LD      DE,V0465
-BVRSET:LD      A,(BOOTRES)
+
+BVRSET:LD      A,(BOOTRES)              ; bvrset
         CALL    SETRESULT
         LD      A,(REMCNT)
         DEC     A
@@ -1269,7 +1380,7 @@ BVRSET:LD      A,(BOOTRES)
         CALL    PUTS
         RET
 
-BOOTMASK:
+BOOTMASK:                               ; bootmask
         LD      A,(BOOTSEL)
         CP      1
         LD      A,1
@@ -1281,7 +1392,7 @@ BOOTMASK:
         LD      A,4
         RET
 
-CHECKPUBLIC:
+CHECKPUBLIC:                            ; checkpublic
         LD      A,(0000H)
         CP      0C3H
         JP      NZ,TFAIL
@@ -1303,12 +1414,12 @@ CHECKPUBLIC:
         XOR     A
         RET
 
-BOOTSTOREBAD:
+BOOTSTOREBAD:                           ; bootstorebad
         LD      DE,BSTOREMSG
         CALL    PUTS
         RET
 
-LOADBREC:
+LOADBREC:                               ; loadbrec
         XOR     A
         LD      (BOOTBITS),A
         LD      (BOOTPEND),A
@@ -1352,16 +1463,18 @@ LOADBREC:
         LD      (BOOTBDOS),HL
         XOR     A
         RET
-LBNONE:LD      A,1
+
+LBNONE:LD      A,1                      ; lbnone
         RET
 
-SAVEBOOT:
+SAVEBOOT:                               ; saveboot
         ; Rewrite, rather than update, the continuation record.  A magic word
         ; and saved gateway addresses keep stale evidence from earning PASS.
         LD      HL,BOOTBUF
         LD      B,128
         XOR     A
-SBCLR: LD      (HL),A
+
+SBCLR: LD      (HL),A                   ; sbclr
         INC     HL
         DEC     B
         JP      NZ,SBCLR
@@ -1407,24 +1520,27 @@ SBCLR: LD      (HL),A
         CALL    BDOS
         XOR     A
         RET
-SBFAIL:LD      DE,0080H
+
+SBFAIL:LD      DE,0080H                 ; sbfail
         LD      C,26
         CALL    BDOS
         LD      A,1
         RET
 
-INITBOOTFCB:
+INITBOOTFCB:                            ; initbootfcb
         LD      HL,BOOTFCB
         LD      B,36
         XOR     A
-IBFCLR:LD      (HL),A
+
+IBFCLR:LD      (HL),A                   ; ibfclr
         INC     HL
         DEC     B
         JP      NZ,IBFCLR
         LD      HL,BOOTNAME
         LD      DE,BOOTFCB+1
         LD      B,11
-IBFNAME:
+
+IBFNAME:                                ; ibfname
         LD      A,(HL)
         LD      (DE),A
         INC     HL
@@ -1433,12 +1549,12 @@ IBFNAME:
         JP      NZ,IBFNAME
         RET
 
-;----------------------- CONTROLLED DISK RUN ---------------------------
-; Order is important.  Look at the blank ALV before making a file.  Keep the
-; make/write/erase test next to the trace; selecting other media after the
-; directory has changed may make a removable disk read-only.  SETRESULT is
-; called only after the complete check has returned.
-RUNCONTROL:
+  ; Order is important.  Look at the blank ALV before making a file.  Keep the
+  ; make/write/erase test next to the trace; selecting other media after the
+  ; directory has changed may make a removable disk read-only.  SETRESULT is
+  ; called only after the complete check has returned.
+
+RUNCONTROL:                             ; runcontrol
         XOR     A
         LD      E,A
         LD      C,32
@@ -1505,21 +1621,23 @@ RUNCONTROL:
         LD      A,(TRACECOUNT)
         ADD     A,B
         LD      B,A
-RCREM:  LD      A,(REMCNT)
+
+RCREM:  LD      A,(REMCNT)              ; rcrem
         SUB     B
         LD      (REMCNT),A
         CALL    RESTENV
         RET
 
-SELECTSCR:
+SELECTSCR:                              ; selectscr
         LD      A,(SCRDRV)
         LD      E,A
         LD      C,14
         CALL    BDOS
         RET
 
-; Save current DPB and ALV addresses.  Null or malformed objects fail here.
-GETMETA:
+  ; Save current DPB and ALV addresses.  Null or malformed objects fail here.
+
+GETMETA:                                ; getmeta
         LD      C,31
         CALL    BDOS
         LD      A,H
@@ -1538,11 +1656,11 @@ GETMETA:
         XOR     A
         RET
 
-;---------------------------- CHECK DPB --------------------------------
-; Entry: HL -> 15-byte DPB.  No particular disk size is assumed.  Check SPT,
-; BSH/BLM, DSM, DRM and the directory reservation mask for agreement.
-; Exit: A=0 good, A=1 bad.  HL preserved.
-VALIDDPB:
+  ; Entry: HL -> 15-byte DPB.  No particular disk size is assumed.  Check SPT,
+  ; BSH/BLM, DSM, DRM and the directory reservation mask for agreement.
+  ; Exit: A=0 good, A=1 bad.  HL preserved.
+
+VALIDDPB:                               ; validdpb
         PUSH    HL
         LD      A,(HL)
         INC     HL
@@ -1554,11 +1672,13 @@ VALIDDPB:
         CP      8
         JP      NC,VDFAIL
         LD      A,1
-VDSH:  DEC     B
+
+VDSH:  DEC     B                        ; vdsh
         JP      M,VDSHDONE
         ADD     A,A
         JP      VDSH
-VDSHDONE:
+
+VDSHDONE:                               ; vdshdone
         DEC     A
         INC     HL
         CP      (HL)               ; BLM
@@ -1582,18 +1702,20 @@ VDSHDONE:
         POP     HL
         XOR     A
         RET
-VDFAIL:POP     HL
-TFAIL: LD      A,1
+
+VDFAIL:POP     HL                       ; vdfail
+
+TFAIL: LD      A,1                      ; tfail
         RET
 
-T0424: CALL    SELECTSCR
+T0424: CALL    SELECTSCR                ; t0424
         CALL    GETMETA
         RET
 
-;---------------------------- CHECK ALV --------------------------------
-; A SCRATCH /BLANK disk has only its directory blocks in use.  First see that
-; all following ALV bytes are zero; then compare the first two with AL0/AL1.
-T0425: CALL    SELECTSCR
+  ; A SCRATCH /BLANK disk has only its directory blocks in use.  First see that
+  ; all following ALV bytes are zero; then compare the first two with AL0/AL1.
+
+T0425: CALL    SELECTSCR                ; t0425
         CALL    GETMETA
         OR      A
         RET     NZ
@@ -1610,7 +1732,8 @@ T0425: CALL    SELECTSCR
         INC     HL
         DEC     B
         DEC     B
-T25LP: LD      A,B
+
+T25LP: LD      A,B                      ; t25lp
         OR      A
         JP      Z,TPASS
         LD      A,(HL)
@@ -1620,7 +1743,7 @@ T25LP: LD      A,B
         DEC     B
         JP      T25LP
 
-T0426: CALL    SELECTSCR
+T0426: CALL    SELECTSCR                ; t0426
         XOR     A
         LD      (T26AL0),A
         LD      (T26AL1),A
@@ -1649,11 +1772,13 @@ T0426: CALL    SELECTSCR
         LD      (T26AV1),A
         CP      C
         JP      NZ,TFAIL
-TPASS: XOR     A
+
+TPASS: XOR     A                        ; tpass
         RET
 
-; Preserve the test result in A while exposing the exact 0426 operands.
-SHOW0426:
+  ; Preserve the test result in A while exposing the exact 0426 operands.
+
+SHOW0426:                               ; show0426
         PUSH    AF
         LD      DE,T26MSG1
         CALL    PUTS
@@ -1672,8 +1797,9 @@ SHOW0426:
         POP     AF
         RET
 
-; Return DE=(DSM/8)+1, number of bytes occupied by this ALV.
-ALVLENGTH:
+  ; Return DE=(DSM/8)+1, number of bytes occupied by this ALV.
+
+ALVLENGTH:                              ; alvlength
         LD      HL,(DPBPTR)
         LD      DE,5
         ADD     HL,DE
@@ -1704,11 +1830,11 @@ ALVLENGTH:
         INC     DE
         RET
 
-;----------------------- ONE-BLOCK ALV TEST ----------------------------
-; Make BTBIO.TMP and write one record.  Decode its first allocation entry
-; from the FCB and see that the corresponding ALV bit came on.  Erase the
-; file, obtain the ALV again, and see that the same bit went off.
-T0427: CALL    SELECTSCR
+  ; Make BTBIO.TMP and write one record.  Decode its first allocation entry
+  ; from the FCB and see that the corresponding ALV bit came on.  Erase the
+  ; file, obtain the ALV again, and see that the same bit went off.
+
+T0427: CALL    SELECTSCR                ; t0427
         CALL    GETMETA
         OR      A
         RET     NZ
@@ -1747,7 +1873,8 @@ T0427: CALL    SELECTSCR
         JP      NZ,T27HAVE
         LD      DE,E27BLOCK
         JP      T27ABORT
-T27HAVE:
+
+T27HAVE:                                ; t27have
         PUSH    DE
         LD      DE,D27BLOCK
         CALL    PUTS
@@ -1761,7 +1888,8 @@ T27HAVE:
         LD      A,1
         LD      (T27WROTE),A
         JP      T27DELETE
-T27DELETE:
+
+T27DELETE:                              ; t27delete
         LD      DE,TESTFCB
         LD      C,19
         CALL    BDOS
@@ -1787,27 +1915,31 @@ T27DELETE:
         JP      NZ,T27ERR
         XOR     A
         RET
-T27ABORT:
+
+T27ABORT:                               ; t27abort
         PUSH    DE
         LD      DE,TESTFCB
         LD      C,19
         CALL    BDOS
         POP     DE
-T27ERR:CALL    PUTS
+
+T27ERR:CALL    PUTS                     ; t27err
         JP      TFAIL
 
-INITFCB:
+INITFCB:                                ; initfcb
         LD      HL,TESTFCB+1
         LD      B,35
         XOR     A
-IFCLR: LD      (HL),A
+
+IFCLR: LD      (HL),A                   ; ifclr
         INC     HL
         DEC     B
         JP      NZ,IFCLR
         LD      HL,TNAME
         LD      DE,TESTFCB+1
         LD      B,11
-IFNAME:LD      A,(HL)
+
+IFNAME:LD      A,(HL)                   ; ifname
         LD      (DE),A
         INC     HL
         INC     DE
@@ -1815,8 +1947,9 @@ IFNAME:LD      A,(HL)
         JP      NZ,IFNAME
         RET
 
-; Return first FCB allocation entry in DE.  DSM selects byte or word form.
-FCBLOCK:
+  ; Return first FCB allocation entry in DE.  DSM selects byte or word form.
+
+FCBLOCK:                                ; fcblock
         LD      HL,(DPBPTR)
         LD      DE,6
         ADD     HL,DE
@@ -1827,20 +1960,24 @@ FCBLOCK:
         LD      E,(HL)
         LD      D,0
         RET
-FBWORD:LD      E,(HL)
+
+FBWORD:LD      E,(HL)                   ; fbword
         INC     HL
         LD      D,(HL)
         RET
 
-; Test allocation block DE in current ALV.  Exit A=0 clear, A<>0 set.
-ALVBIT:LD      HL,(ALVPTR)
-ABBYTE:LD      A,D
+  ; Test allocation block DE in current ALV.  Exit A=0 clear, A<>0 set.
+
+ALVBIT:LD      HL,(ALVPTR)              ; alvbit
+
+ABBYTE:LD      A,D                      ; abbyte
         OR      A
         JP      NZ,ABSUB
         LD      A,E
         CP      8
         JP      C,ABMASK
-ABSUB: LD      A,E
+
+ABSUB: LD      A,E                      ; absub
         SUB     8
         LD      E,A
         LD      A,D
@@ -1848,9 +1985,11 @@ ABSUB: LD      A,E
         LD      D,A
         INC     HL
         JP      ABBYTE
-ABMASK:LD      B,E
+
+ABMASK:LD      B,E                      ; abmask
         LD      C,080H
-ABSHIFT:
+
+ABSHIFT:                                ; abshift
         LD      A,B
         OR      A
         JP      Z,ABTEST
@@ -1860,18 +1999,21 @@ ABSHIFT:
         LD      C,A
         DEC     B
         JP      ABSHIFT
-ABTEST:LD      A,(HL)
+
+ABTEST:LD      A,(HL)                   ; abtest
         AND     C
         RET
 
-T0431: CALL    CAPTURE2
-        RET
-T0432: CALL    CAPTURE2
+T0431: CALL    CAPTURE2                 ; t0431
         RET
 
-; Check complete DPBs for old and scratch drives.  Shared DPBs are permitted;
-; a bad pointer or bad contents are not.
-CAPTURE2:
+T0432: CALL    CAPTURE2                 ; t0432
+        RET
+
+  ; Check complete DPBs for old and scratch drives.  Shared DPBs are permitted;
+  ; a bad pointer or bad contents are not.
+
+CAPTURE2:                               ; capture2
         LD      A,(OLDDRV)
         LD      E,A
         LD      C,14
@@ -1901,8 +2043,10 @@ CAPTURE2:
         CALL    COPY15
         XOR     A
         RET
-COPY15:LD      B,15
-C15LP: LD      A,(HL)
+
+COPY15:LD      B,15                     ; copy15
+
+C15LP: LD      A,(HL)                   ; c15lp
         LD      (DE),A
         INC     HL
         INC     DE
@@ -1910,11 +2054,11 @@ C15LP: LD      A,(HL)
         JP      NZ,C15LP
         RET
 
-;------------------------- LIVE DPB TEST -------------------------------
-; Change OFF high in the live DPB, ask for the DPB again, and verify the
-; changed byte through the returned address.  Restore the byte BEFORE making
-; another disk call.  MODPTR is kept solely for this immediate restoration.
-T0433: CALL    SELECTSCR
+  ; Change OFF high in the live DPB, ask for the DPB again, and verify the
+  ; changed byte through the returned address.  Restore the byte BEFORE making
+  ; another disk call.  MODPTR is kept solely for this immediate restoration.
+
+T0433: CALL    SELECTSCR                ; t0433
         LD      C,31
         CALL    BDOS
         LD      A,H
@@ -1943,17 +2087,17 @@ T0433: CALL    SELECTSCR
         XOR     A
         RET
 
-;========================== DISK TRACE ================================
-;
-; Put seven shims in series with SELDSK, SETTRK, SETSEC, SETDMA, READ,
-; WRITE and SECTRAN.  Only the two address bytes of each public JMP are
-; changed.  PREPTRAMP puts the saved addresses into private CALLs or JMPs
-; below; this avoids calling through a vector which now points back at us.
-;
-; TRACEINSTALL may fail after any patch.  PATCHCNT tells TRACERESTORE how
-; much must be undone.  RUNTRACE has no exit which bypasses restoration.
-;
-RUNTRACE:
+  ;
+  ; Put seven shims in series with SELDSK, SETTRK, SETSEC, SETDMA, READ,
+  ; WRITE and SECTRAN.  Only the two address bytes of each public JMP are
+  ; changed.  PREPTRAMP puts the saved addresses into private CALLs or JMPs
+  ; below; this avoids calling through a vector which now points back at us.
+  ;
+  ; TRACEINSTALL may fail after any patch.  PATCHCNT tells TRACERESTORE how
+  ; much must be undone.  RUNTRACE has no exit which bypasses restoration.
+  ;
+
+RUNTRACE:                               ; runtrace
         CALL    TRACEINSTALL
         OR      A
         RET     NZ
@@ -1963,7 +2107,18 @@ RUNTRACE:
         CALL    TRACEJUDGE
         RET
 
-TRACEINSTALL:
+; ================================================================================
+; =                               BIOS Disk Trace                                =
+; =                                                                              =
+; = Places transparent shims in series with selected public BIOS JMP vectors,    =
+; = records arguments and results, and restores every installed vector on all    =
+; = return paths.                                                                =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Trace Installation
+; -------------------------------------------------------------------------------
+
+TRACEINSTALL:                           ; install BIOS disk trace
         XOR     A
         LD      (PATCHCNT),A
         LD      HL,(0001H)
@@ -2029,21 +2184,26 @@ TRACEINSTALL:
         CALL    PREPTRAMP
         XOR     A
         RET
-TIBAD: CALL    TRACERESTORE
+
+TIBAD: CALL    TRACERESTORE             ; tibad
         LD      DE,TRACEBAD
         CALL    PUTS
         LD      A,1
         RET
 
-;-------------------------- PATCH ONE JMP ------------------------------
-; Entry: HL -> low address byte of public JMP
-;        DE = address of shim
-;        BC -> word which receives old address
-; Exit:  A=0 installed, A=1 refused
-;
-; Check opcode, save old word, install new word, then read it back.  On a
-; read-only or otherwise unsuitable vector, replace the old word at once.
-PATCHONE:
+; -------------------------------------------------------------------------------
+; Patch One BIOS Jump
+; -------------------------------------------------------------------------------
+
+  ; Entry: HL -> low address byte of public JMP
+  ;        DE = address of shim
+  ;        BC -> word which receives old address
+  ; Exit:  A=0 installed, A=1 refused
+  ;
+  ; Check opcode, save old word, install new word, then read it back.  On a
+  ; read-only or otherwise unsuitable vector, replace the old word at once.
+
+PATCHONE:                               ; patch one BIOS jump
         LD      (PATCHLOC),HL
         EX      DE,HL
         LD      (PATCHNEW),HL
@@ -2082,7 +2242,8 @@ PATCHONE:
         LD      (PATCHCNT),A
         XOR     A
         RET
-POREST:LD      HL,(PATCHSAVE)
+
+POREST:LD      HL,(PATCHSAVE)           ; porest
         LD      E,(HL)
         INC     HL
         LD      D,(HL)
@@ -2094,7 +2255,7 @@ POREST:LD      HL,(PATCHSAVE)
         LD      (HL),A
         JP      TFAIL
 
-PREPTRAMP:
+PREPTRAMP:                              ; prepare private BIOS transfers
         ; Fill the address fields of our private transfers.  These are the
         ; escape route from each shim to the original BIOS routine.
         LD      HL,ORGSEL
@@ -2117,7 +2278,8 @@ PREPTRAMP:
         CALL    COPYWORD
         LD      HL,ORGXLT
         LD      DE,CXLT+1
-COPYWORD:
+
+COPYWORD:                               ; copyword
         LD      A,(HL)
         LD      (DE),A
         INC     HL
@@ -2126,7 +2288,7 @@ COPYWORD:
         LD      (DE),A
         RET
 
-TRACERESTORE:
+TRACERESTORE:                           ; restore BIOS trace vectors
         ; Unwind in reverse order.  PATCHCNT also makes a partial install safe.
         LD      A,(PATCHCNT)
         CP      7
@@ -2152,27 +2314,35 @@ TRACERESTORE:
         XOR     A
         LD      (PATCHCNT),A
         RET
-RXLT:  LD      DE,49
+
+RXLT:  LD      DE,49                    ; rxlt
         LD      BC,ORGXLT
         JP      RESTONE
-RWRITE:LD      DE,43
+
+RWRITE:LD      DE,43                    ; rwrite
         LD      BC,ORGWRITE
         JP      RESTONE
-RREAD: LD      DE,40
+
+RREAD: LD      DE,40                    ; rread
         LD      BC,ORGREAD
         JP      RESTONE
-RDMA:  LD      DE,37
+
+RDMA:  LD      DE,37                    ; rdma
         LD      BC,ORGDMA
         JP      RESTONE
-RSEC:  LD      DE,34
+
+RSEC:  LD      DE,34                    ; rsec
         LD      BC,ORGSEC
         JP      RESTONE
-RTRK:  LD      DE,31
+
+RTRK:  LD      DE,31                    ; rtrk
         LD      BC,ORGTRK
         JP      RESTONE
-RSEL:  LD      DE,28
+
+RSEL:  LD      DE,28                    ; rsel
         LD      BC,ORGSEL
-RESTONE:
+
+RESTONE:                                ; restone
         LD      HL,(BIOSBASE)
         ADD     HL,DE
         LD      A,(BC)
@@ -2183,17 +2353,28 @@ RESTONE:
         LD      (HL),A
         RET
 
-;====================== CHARACTER INTERCEPT ===========================
-;
-; CONOUT, LIST, PUNCH and READER are replaced by counting stubs.  They do
-; not call the old device routine: the object here is to see which logical
-; entry BDOS selected and what byte it supplied.  This also keeps test bytes
-; away from an unknown printer, punch or modem.  WREADER returns ^Z.
-;
-; SETDMA is different.  WCDMA counts the call and jumps on to the old SETDMA;
-; otherwise a later BDOS operation would run with a false DMA address.
-; JOREADER holds a separate path to the real READER for test 0471.
-CHARINSTALL:
+; ================================================================================
+; =                          Character-Device Intercept                          =
+; =                                                                              =
+; = Temporarily replaces logical character vectors with counting stubs so BDOS   =
+; = routing can be observed without sending test bytes to unknown physical       =
+; = devices.                                                                     =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Character Intercept
+; -------------------------------------------------------------------------------
+
+  ;
+  ; CONOUT, LIST, PUNCH and READER are replaced by counting stubs.  They do
+  ; not call the old device routine: the object here is to see which logical
+  ; entry BDOS selected and what byte it supplied.  This also keeps test bytes
+  ; away from an unknown printer, punch or modem.  WREADER returns ^Z.
+  ;
+  ; SETDMA is different.  WCDMA counts the call and jumps on to the old SETDMA;
+  ; otherwise a later BDOS operation would run with a false DMA address.
+  ; JOREADER holds a separate path to the real READER for test 0471.
+
+CHARINSTALL:                            ; install character intercepts
         XOR     A
         LD      (PATCHCNT),A
         CALL    BIOSADDR
@@ -2245,11 +2426,12 @@ CHARINSTALL:
         CALL    COPYWORD
         XOR     A
         RET
-CIBAD: CALL    CHARRESTORE
+
+CIBAD: CALL    CHARRESTORE              ; cibad
         LD      A,1
         RET
 
-CHARRESTORE:
+CHARRESTORE:                            ; charrestore
         LD      A,(PATCHCNT)
         CP      5
         CALL    NC,RCDMA
@@ -2268,98 +2450,118 @@ CHARRESTORE:
         XOR     A
         LD      (PATCHCNT),A
         RET
-RCDMA: LD      DE,37
+
+RCDMA: LD      DE,37                    ; rcdma
         LD      BC,ORGCDMA
         JP      RESTONE
-RCREADER:
+
+RCREADER:                               ; rcreader
         LD      DE,22
         LD      BC,ORGREADER
         JP      RESTONE
-RCPUNCH:
+
+RCPUNCH:                                ; rcpunch
         LD      DE,19
         LD      BC,ORGPUNCH
         JP      RESTONE
-RCLIST:LD      DE,16
+
+RCLIST:LD      DE,16                    ; rclist
         LD      BC,ORGLIST
         JP      RESTONE
-RCCO:  LD      DE,13
+
+RCCO:  LD      DE,13                    ; rcco
         LD      BC,ORGCO
         JP      RESTONE
 
-; The output stubs save the first two bytes and a total count.  Do not use A
-; as the character; C must be sampled before doing the bookkeeping.
-WCONOUT:
+  ; The output stubs save the first two bytes and a total count.  Do not use A
+  ; as the character; C must be sampled before doing the bookkeeping.
+
+WCONOUT:                                ; wconout
         LD      A,(COCNT)
         OR      A
         JP      NZ,WCO2
         LD      A,C
         LD      (COBYTE1),A
         JP      WCOFLAG
-WCO2:  CP      1
+
+WCO2:  CP      1                        ; wco2
         JP      NZ,WCOFLAG
         LD      A,C
         LD      (COBYTE2),A
-WCOFLAG:
+
+WCOFLAG:                                ; wcoflag
         LD      A,C
         CP      9
         JP      NZ,WCOCNT
         LD      A,1
         LD      (COTAB),A
-WCOCNT:LD      A,(COCNT)
+
+WCOCNT:LD      A,(COCNT)                ; wcocnt
         INC     A
         LD      (COCNT),A
         RET
-WLIST: LD      A,(LISTCNT)
+
+WLIST: LD      A,(LISTCNT)              ; wlist
         OR      A
         JP      NZ,WLI2
         LD      A,C
         LD      (LIST1),A
         JP      WLICNT
-WLI2:  CP      1
+
+WLI2:  CP      1                        ; wli2
         JP      NZ,WLICNT
         LD      A,C
         LD      (LIST2),A
-WLICNT:LD      A,C
+
+WLICNT:LD      A,C                      ; wlicnt
         LD      (LASTLIST),A
         LD      A,(LISTCNT)
         INC     A
         LD      (LISTCNT),A
         RET
-WPUNCH:
+
+WPUNCH:                                 ; wpunch
         LD      A,(PUNCHCNT)
         OR      A
         JP      NZ,WPU2
         LD      A,C
         LD      (PUNCH1),A
         JP      WPUCNT
-WPU2:  CP      1
+
+WPU2:  CP      1                        ; wpu2
         JP      NZ,WPUCNT
         LD      A,C
         LD      (PUNCH2),A
-WPUCNT:LD      A,(PUNCHCNT)
+
+WPUCNT:LD      A,(PUNCHCNT)             ; wpucnt
         INC     A
         LD      (PUNCHCNT),A
         RET
-WREADER:
+
+WREADER:                                ; wreader
         LD      A,(READERCNT)
         INC     A
         LD      (READERCNT),A
         LD      A,01AH
         RET
-WCDMA: LD      A,(CDMACNT)
+
+WCDMA: LD      A,(CDMACNT)              ; wcdma
         INC     A
         LD      (CDMACNT),A
-JCDMA: JP      0000H
-JOREADER:
+
+JCDMA: JP      0000H                    ; jcdma
+
+JOREADER:                               ; joreader
         JP      0000H
 
-CHARWORK:
+CHARWORK:                               ; charwork
         ; Clear the notebook and assume failure.  Each section clears only
         ; its own result byte after every count and saved character agrees.
         LD      HL,CHARLOG
         LD      B,CHAREND-CHARLOG
         XOR     A
-CWCLR: LD      (HL),A
+
+CWCLR: LD      (HL),A                   ; cwclr
         INC     HL
         DEC     B
         JP      NZ,CWCLR
@@ -2394,7 +2596,8 @@ CWCLR: LD      (HL),A
 
         ; 0445 -- Three IOBYTE values must still dispatch functions 3/4/5 to
         ; the fixed logical READER/PUNCH/LIST public entries.
-CW45:  XOR     A
+
+CW45:  XOR     A                        ; cw45
         LD      (READERCNT),A
         LD      (PUNCHCNT),A
         LD      (LISTCNT),A
@@ -2423,7 +2626,8 @@ CW45:  XOR     A
         ; 0470 -- Every logical output vector receives a graphic byte and
         ; a control byte unchanged in C.  The temporary entries are the exact
         ; logical boundary and deliberately suppress physical device output.
-CW70:  XOR     A
+
+CW70:  XOR     A                        ; cw70
         LD      (COCNT),A
         LD      (LISTCNT),A
         LD      (PUNCHCNT),A
@@ -2494,7 +2698,8 @@ CW70:  XOR     A
 
         ; 0473: direct CONOUT receives raw TAB; BDOS Function 2 expands it
         ; into one or more spaces before the same logical BIOS boundary.
-CW73:  XOR     A
+
+CW73:  XOR     A                        ; cw73
         LD      (COCNT),A
         LD      (COTAB),A
         CALL    BIOSADDR
@@ -2524,11 +2729,12 @@ CW73:  XOR     A
         LD      (R0473),A
 
         ; 0448: no character operation may select or overwrite DMA.
-CWSENT:CALL    CHECKSENT
+
+CWSENT:CALL    CHECKSENT                ; cwsent
         LD      (R0448),A
         RET
 
-ROUTESET:
+ROUTESET:                               ; routeset
         LD      E,A
         LD      C,8
         CALL    BDOS
@@ -2542,7 +2748,7 @@ ROUTESET:
         CALL    BDOS
         RET
 
-CHECKSENT:
+CHECKSENT:                              ; checksent
         LD      A,(CDMACNT)
         OR      A
         JP      NZ,TFAIL
@@ -2555,7 +2761,8 @@ CHECKSENT:
         LD      HL,DMAPAT2
         LD      DE,ALTDMA
         LD      B,4
-CMPEQ: LD      A,(DE)
+
+CMPEQ: LD      A,(DE)                   ; cmpeq
         CP      (HL)
         JP      NZ,TFAIL
         INC     DE
@@ -2565,7 +2772,7 @@ CMPEQ: LD      A,(DE)
         XOR     A
         RET
 
-CHJUDGE:
+CHJUDGE:                                ; chjudge
         LD      A,(R0439)
         LD      HL,CASES+112
         LD      DE,V0439
@@ -2590,18 +2797,19 @@ CHJUDGE:
         LD      (CHCOUNT),A
         RET
 
-;---------------------- TWO-PASS READER TEST ---------------------------
-; Pass one calls the saved real READER with the normal assignment and writes
-; BTRDR.DAT.  Pass two, after the operator changes STAT, calls it again for
-; the absent-device result.  JOREADER bypasses our ^Z intercept.
-READERWORK:
+  ; Pass one calls the saved real READER with the normal assignment and writes
+  ; BTRDR.DAT.  Pass two, after the operator changes STAT, calls it again for
+  ; the absent-device result.  JOREADER bypasses our ^Z intercept.
+
+READERWORK:                             ; readerwork
         CALL    LOADRDREC
         LD      A,(RDSTAGE)
         CP      2
         RET     Z
         CP      1
         JP      Z,RWAASK
-RWNASK:LD      DE,RDNORMAL
+
+RWNASK:LD      DE,RDNORMAL              ; rwnask
         CALL    PUTS
         CALL    GETKEY
         PUSH    AF
@@ -2624,7 +2832,8 @@ RWNASK:LD      DE,RDNORMAL
         LD      DE,RDNEXT
         CALL    PUTS
         RET
-RWNFAIL:
+
+RWNFAIL:                                ; rwnfail
         LD      A,1
         LD      HL,CASES+336
         LD      DE,V0471
@@ -2633,7 +2842,8 @@ RWNFAIL:
         INC     A
         LD      (CHCOUNT),A
         RET
-RWAASK:LD      DE,RDABSENT
+
+RWAASK:LD      DE,RDABSENT              ; rwaask
         CALL    PUTS
         CALL    GETKEY
         PUSH    AF
@@ -2658,7 +2868,8 @@ RWAASK:LD      DE,RDABSENT
         CALL    SAVERDREC
         OR      A
         JP      NZ,RDSTOREBAD
-RWJUDGE:
+
+RWJUDGE:                                ; rwjudge
         LD      A,(R0471)
         LD      HL,CASES+336
         LD      DE,V0471
@@ -2667,18 +2878,20 @@ RWJUDGE:
         INC     A
         LD      (CHCOUNT),A
         RET
-RDSTOREBAD:
+
+RDSTOREBAD:                             ; rdstorebad
         LD      DE,RDSTORE
         CALL    PUTS
         RET
 
-TRACEWORK:
+TRACEWORK:                              ; tracework
         ; Make the ordinary file traffic which drives the shims.  BTBIO.TMP
         ; is erased on entry and on every useful exit.
         LD      HL,TRACELOG
         LD      B,TRACEEND-TRACELOG
         XOR     A
-TWCLR: LD      (HL),A
+
+TWCLR: LD      (HL),A                   ; twclr
         INC     HL
         DEC     B
         JP      NZ,TWCLR
@@ -2728,23 +2941,23 @@ TWCLR: LD      (HL),A
         JP      Z,TWFAIL
         XOR     A
         RET
-TWFAIL:LD      A,1
+
+TWFAIL:LD      A,1                      ; twfail
         LD      (IOFAIL),A
         LD      DE,TESTFCB
         LD      C,19
         CALL    BDOS
         RET
 
-;---------------------- TRACK BOUNDARY TEST ----------------------------
-; Extend the open file until SETTRK advances.  Before each write, decode the
-; FCB allocation entry and record position and calculate:
-;
-;       TRACK = ((BLOCK << BSH) + RECORD-IN-BLOCK) / SPT + OFF
-;
-; Compare this independent value with the last value caught by WRTRK.  Stop
-; after SPT+1 writes if no adjacent-track change is seen.  A zero OFF cannot
-; exercise the reserved-track addition and leaves 0453 unrun.
-BOUNDARYWORK:
+  ; Extend the open file until SETTRK advances.  Before each write, decode the
+  ; FCB allocation entry and record position and calculate:
+  ;
+  ;
+  ; Compare this independent value with the last value caught by WRTRK.  Stop
+  ; after SPT+1 writes if no adjacent-track change is seen.  A zero OFF cannot
+  ; exercise the reserved-track addition and leaves 0453 unrun.
+
+BOUNDARYWORK:                           ; boundarywork
         LD      A,1
         LD      (OFFRESULT),A
         XOR     A
@@ -2790,7 +3003,8 @@ BOUNDARYWORK:
         LD      (OFFAVAIL),A
         INC     HL                 ; at most SPT+1 writes reach a boundary
         LD      (WRLEFT),HL
-BWLOOP:LD      A,(TESTFCB+32)
+
+BWLOOP:LD      A,(TESTFCB+32)           ; bwloop
         LD      (RINDEX),A
         LD      DE,TESTFCB
         LD      C,21
@@ -2829,7 +3043,8 @@ BWLOOP:LD      A,(TESTFCB+32)
         XOR     A
         LD      (OFFRESULT),A
         RET
-BWSTORE:
+
+BWSTORE:                                ; bwstore
         LD      HL,(CURRENTTRK)
         LD      (PREVTRK),HL
         LD      A,1
@@ -2843,11 +3058,13 @@ BWSTORE:
         LD      DE,BWNOMSG
         CALL    PUTS
         RET
-BWIOFAIL:
+
+BWIOFAIL:                               ; bwiofail
         LD      A,1
         LD      (IOFAIL),A
         RET
-BWMAPFAIL:
+
+BWMAPFAIL:                              ; bwmapfail
         LD      DE,BWMAPMSG
         CALL    PUTS
         LD      HL,(CURRENTTRK)
@@ -2861,18 +3078,19 @@ BWMAPFAIL:
         LD      A,1
         RET
 
-;---------------------- REAL TRANSFER TEST -----------------------------
-; Fill one sector with 00,01,...7F and WRITE it through the saved BIOS entry.
-; Clear memory, READ it back and compare all 128 bytes.  If /ALL requested
-; the fault test, ask the operator to protect the disk and repeat the WRITE.
-; The failing status must come from the BIOS--it is never manufactured here.
-TRANSFERWORK:
+  ; Fill one sector with 00,01,...7F and WRITE it through the saved BIOS entry.
+  ; Clear memory, READ it back and compare all 128 bytes.  If /ALL requested
+  ; the fault test, ask the operator to protect the disk and repeat the WRITE.
+  ; The failing status must come from the BIOS--it is never manufactured here.
+
+TRANSFERWORK:                           ; transferwork
         XOR     A
         LD      (XFERGOOD),A
         LD      (FAVAIL),A
         LD      HL,TESTDMA
         LD      B,128
-TFILL: LD      (HL),A
+
+TFILL: LD      (HL),A                   ; tfill
         INC     A
         INC     HL
         DEC     B
@@ -2886,7 +3104,8 @@ TFILL: LD      (HL),A
         LD      HL,TESTDMA
         LD      B,128
         XOR     A
-TZERO: LD      (HL),A
+
+TZERO: LD      (HL),A                   ; tzero
         INC     HL
         DEC     B
         JP      NZ,TZERO
@@ -2898,7 +3117,8 @@ TZERO: LD      (HL),A
         LD      HL,TESTDMA
         LD      B,128
         LD      C,0
-TCMP:  LD      A,(HL)
+
+TCMP:  LD      A,(HL)                   ; tcmp
         CP      C
         RET     NZ
         INC     C
@@ -2910,7 +3130,8 @@ TCMP:  LD      A,(HL)
         LD      A,(FAULTREQ)
         OR      A
         RET     Z
-TFPROMPT:
+
+TFPROMPT:                               ; tfprompt
         LD      DE,FAULTASK
         CALL    PUTS
         CALL    GETKEY
@@ -2931,7 +3152,8 @@ TFPROMPT:
         ; put it in IOFAIL; remove it so it does not also fail trace 0449.
         XOR     A
         LD      (IOFAIL),A
-TFREST:LD      DE,FAULTREST
+
+TFREST:LD      DE,FAULTREST             ; tfrest
         CALL    PUTS
         CALL    GETKEY
         PUSH    AF
@@ -2966,11 +3188,12 @@ TFREST:LD      DE,FAULTREST
         XOR     A
         LD      (FRESULT),A
         RET
-TFFAIL:LD      A,1
+
+TFFAIL:LD      A,1                      ; tffail
         LD      (FRESULT),A
         RET
 
-EXPECTTRACK:
+EXPECTTRACK:                            ; expecttrack
         ; Work out expected track without consulting LASTTRK.  RINDEX selects
         ; an allocation slot; DSM high says whether that slot is 8 or 16 bits.
         ; Repeated subtraction is used for the 16-bit divide by SPT so this
@@ -2985,7 +3208,8 @@ EXPECTTRACK:
         LD      A,(BWBSH)
         LD      C,A
         LD      A,B
-ETSLOT:LD      B,A
+
+ETSLOT:LD      B,A                      ; etslot
         LD      A,C
         OR      A
         LD      A,B
@@ -2994,7 +3218,8 @@ ETSLOT:LD      B,A
         RRA
         DEC     C
         JP      ETSLOT
-ETHAVESLOT:
+
+ETHAVESLOT:                             ; ethaveslot
         LD      E,A
         LD      D,0
         LD      A,(BWDSMH)
@@ -3003,7 +3228,8 @@ ETHAVESLOT:
         LD      A,E
         ADD     A,A
         LD      E,A
-ETPTR: LD      HL,TESTFCB+16
+
+ETPTR: LD      HL,TESTFCB+16            ; etptr
         ADD     HL,DE
         LD      E,(HL)
         LD      D,0
@@ -3012,18 +3238,21 @@ ETPTR: LD      HL,TESTFCB+16
         JP      Z,ETBLOCK
         INC     HL
         LD      D,(HL)
-ETBLOCK:
+
+ETBLOCK:                                ; etblock
         EX      DE,HL              ; HL = allocation block number
         LD      A,(BWBSH)
         LD      B,A
-ETSHIFT:
+
+ETSHIFT:                                ; etshift
         LD      A,B
         OR      A
         JP      Z,ETPOS
         ADD     HL,HL
         DEC     B
         JP      ETSHIFT
-ETPOS: LD      A,(RECPOS)
+
+ETPOS: LD      A,(RECPOS)               ; etpos
         LD      E,A
         LD      D,0
         ADD     HL,DE              ; absolute logical sector after OFF
@@ -3033,7 +3262,8 @@ ETPOS: LD      A,(RECPOS)
         LD      C,L
         POP     HL
         LD      DE,0               ; quotient track before OFF
-ETDIV:
+
+ETDIV:                                  ; etdiv
         LD      A,H
         CP      B
         JP      C,ETDIVDONE
@@ -3041,7 +3271,8 @@ ETDIV:
         LD      A,L
         CP      C
         JP      C,ETDIVDONE
-ETSUB: LD      A,L
+
+ETSUB: LD      A,L                      ; etsub
         SUB     C
         LD      L,A
         LD      A,H
@@ -3049,14 +3280,15 @@ ETSUB: LD      A,L
         LD      H,A
         INC     DE
         JP      ETDIV
-ETDIVDONE:
+
+ETDIVDONE:                              ; etdivdone
         LD      HL,(BWOFF)
         ADD     HL,DE
         LD      (CURRENTTRK),HL
         XOR     A
         RET
 
-TRACEJUDGE:
+TRACEJUDGE:                             ; tracejudge
         ; Comes here only after all public vectors have been restored.  Turn
         ; the trace notebook into individual report rows.
         LD      A,4
@@ -3078,8 +3310,10 @@ TRACEJUDGE:
         JP      NZ,TJ49F
         XOR     A
         JP      TJ49S
-TJ49F: LD      A,1
-TJ49S: LD      HL,CASES+160
+
+TJ49F: LD      A,1                      ; tj49f
+
+TJ49S: LD      HL,CASES+160             ; tj49s
         LD      DE,V0449
         CALL    SETRESULT
         LD      A,(CONFSEL)
@@ -3093,7 +3327,8 @@ TJ49S: LD      HL,CASES+160
         CALL    SETRESULT
         LD      A,5
         LD      (TRACECOUNT),A
-TJ50SKIP:
+
+TJ50SKIP:                               ; tj50skip
         LD      A,(OFFAVAIL)
         OR      A
         JP      Z,TJ53SKIP
@@ -3104,7 +3339,8 @@ TJ50SKIP:
         LD      A,(TRACECOUNT)
         INC     A
         LD      (TRACECOUNT),A
-TJ53SKIP:
+
+TJ53SKIP:                               ; tj53skip
         LD      A,(XLTCHAIN)
         XOR     1
         LD      HL,CASES+200
@@ -3132,21 +3368,24 @@ TJ53SKIP:
         LD      A,(TRACECOUNT)
         INC     A
         LD      (TRACECOUNT),A
-TJ57SKIP:
+
+TJ57SKIP:                               ; tj57skip
         LD      A,(WRTYPES)
         CP      7
         LD      A,0
         JP      Z,TJ58S
         INC     A
-TJ58S: LD      HL,CASES+232
+
+TJ58S: LD      HL,CASES+232             ; tj58s
         LD      DE,V0458
         CALL    SETRESULT
         XOR     A
         RET
 
-; Call old SELDSK through CSEL.  Scratch drive must return a DPH; at least
-; one other A-P number must be refused.  Re-select scratch before returning.
-TESTSEL:
+  ; Call old SELDSK through CSEL.  Scratch drive must return a DPH; at least
+  ; one other A-P number must be refused.  Re-select scratch before returning.
+
+TESTSEL:                                ; testsel
         LD      A,(SCRDRV)
         LD      C,A
         CALL    CSEL
@@ -3155,8 +3394,10 @@ TESTSEL:
         JP      Z,TSABS
         LD      A,1
         LD      (CONFSEL),A
-TSABS: LD      C,15
-TSLOOP:LD      A,C
+
+TSABS: LD      C,15                     ; tsabs
+
+TSLOOP:LD      A,C                      ; tsloop
         LD      B,A
         LD      A,(SCRDRV)
         CP      B
@@ -3168,25 +3409,29 @@ TSLOOP:LD      A,C
         LD      A,1
         LD      (ABSENTSEL),A
         JP      TSREST
-TSNEXT:DEC     C
+
+TSNEXT:DEC     C                        ; tsnext
         JP      P,TSLOOP
-TSREST:CALL    SELECTSCR
+
+TSREST:CALL    SELECTSCR                ; tsrest
         RET
 
-;---------------------------- TRACE SHIMS ------------------------------
-; Save arguments, counts and return status, then continue at the old BIOS
-; routine.  JTRK/JSEC/JDMA are JMPs so the old routine returns directly to
-; its original caller.  CSEL/CREAD/CWRITE/CXLT are CALLs because their return
-; values must also be recorded.
-WRSEL: LD      A,C
+  ; Save arguments, counts and return status, then continue at the old BIOS
+  ; routine.  JTRK/JSEC/JDMA are JMPs so the old routine returns directly to
+  ; its original caller.  CSEL/CREAD/CWRITE/CXLT are CALLs because their return
+  ; values must also be recorded.
+
+WRSEL: LD      A,C                      ; wrsel
         LD      (LASTSEL),A
-CSEL:  CALL    0000H
+
+CSEL:  CALL    0000H                    ; csel
         LD      (SELRESULT),HL
         LD      A,(SELCNT)
         INC     A
         LD      (SELCNT),A
         RET
-WRTRK: PUSH    HL
+
+WRTRK: PUSH    HL                       ; wrtrk
         LD      H,B
         LD      L,C
         LD      (LASTTRK),HL
@@ -3196,8 +3441,10 @@ WRTRK: PUSH    HL
         INC     A
         LD      (TRKCNT),A
         POP     AF
-JTRK:  JP      0000H
-WRSEC: PUSH    HL
+
+JTRK:  JP      0000H                    ; jtrk
+
+WRSEC: PUSH    HL                       ; wrsec
         LD      H,B
         LD      L,C
         LD      (LASTSEC),HL
@@ -3213,7 +3460,8 @@ WRSEC: PUSH    HL
         JP      Z,WSNO
         LD      A,1
         LD      (XLTCHAIN),A
-WSNO:  XOR     A
+
+WSNO:  XOR     A                        ; wsno
         LD      (XLTVALID),A
         POP     HL
         PUSH    AF
@@ -3221,8 +3469,10 @@ WSNO:  XOR     A
         INC     A
         LD      (SECCNT),A
         POP     AF
-JSEC:  JP      0000H
-WRDMA: PUSH    HL
+
+JSEC:  JP      0000H                    ; jsec
+
+WRDMA: PUSH    HL                       ; wrdma
         LD      H,B
         LD      L,C
         LD      (LASTDMA),HL
@@ -3235,34 +3485,42 @@ WRDMA: PUSH    HL
         CP      B
         LD      A,1
         JP      Z,WDAPP
-WDOTHER:
+
+WDOTHER:                                ; wdother
         LD      A,1
         LD      (DIRDMA),A
         JP      WDDONE
-WDAPP: LD      (APPDMA),A
-WDDONE:POP     HL
+
+WDAPP: LD      (APPDMA),A               ; wdapp
+
+WDDONE:POP     HL                       ; wddone
         PUSH    AF
         LD      A,(DMACNT)
         INC     A
         LD      (DMACNT),A
         POP     AF
-JDMA:  JP      0000H
-WRREAD:
-CREAD: CALL    0000H
+
+JDMA:  JP      0000H                    ; jdma
+
+WRREAD:                                 ; wrread
+
+CREAD: CALL    0000H                    ; cread
         OR      A
         JP      Z,WRROK
         LD      (IOFAIL),A
-; Patch 2026-09-02: WRSTATUS originally held both wrappers' return value.
-; A traced disk operation may itself cross the other wrapper, so that shared
-; byte was not a safe return-value journal. Keep each status on the caller's
-; stack while updating the counters, exactly as a transparent shim should.
-WRROK: PUSH    AF
+  ; Patch 2026-09-02: WRSTATUS originally held both wrappers' return value.
+  ; A traced disk operation may itself cross the other wrapper, so that shared
+  ; byte was not a safe return-value journal. Keep each status on the caller's
+  ; stack while updating the counters, exactly as a transparent shim should.
+
+WRROK: PUSH    AF                       ; wrrok
         LD      A,(READCNT)
         INC     A
         LD      (READCNT),A
         POP     AF
         RET
-WRWRITE:
+
+WRWRITE:                                ; wrwrite
         ; Keep one bit for each WRITE type seen: 0, 1 and 2.
         PUSH    BC
         PUSH    AF
@@ -3273,26 +3531,32 @@ WRWRITE:
         JP      Z,WW2
         LD      A,1
         JP      WWSET
-WW1:   LD      A,2
+
+WW1:   LD      A,2                      ; ww1
         JP      WWSET
-WW2:   LD      A,4
-WWSET: LD      B,A
+
+WW2:   LD      A,4                      ; ww2
+
+WWSET: LD      B,A                      ; wwset
         LD      A,(WRTYPES)
         OR      B
         LD      (WRTYPES),A
         POP     AF
         POP     BC
-CWRITE:CALL    0000H
+
+CWRITE:CALL    0000H                    ; cwrite
         OR      A
         JP      Z,WWOK
         LD      (IOFAIL),A
-WWOK:  PUSH    AF
+
+WWOK:  PUSH    AF                       ; wwok
         LD      A,(WRITECNT)
         INC     A
         LD      (WRITECNT),A
         POP     AF
         RET
-WRXLT: PUSH    HL
+
+WRXLT: PUSH    HL                       ; wrxlt
         ; Save both input words and the translated sector returned in HL.
         LD      H,B
         LD      L,C
@@ -3301,7 +3565,8 @@ WRXLT: PUSH    HL
         LD      (XLTPTR),HL
         EX      DE,HL
         POP     HL
-CXLT:  CALL    0000H
+
+CXLT:  CALL    0000H                    ; cxlt
         LD      (XLTOUT),HL
         LD      A,1
         LD      (XLTVALID),A
@@ -3310,11 +3575,11 @@ CXLT:  CALL    0000H
         LD      (XLTCNT),A
         RET
 
-;--------------------------- SAFE TESTS --------------------------------
-; These five checks need no scratch disk, device arrangement or loss of the
-; transient.  CASES is in writable TPA; SETRESULT replaces its initial '-'
-; pointer and explanatory pointer with the result of this particular run.
-AUTOTESTS:
+  ; These five checks need no scratch disk, device arrangement or loss of the
+  ; transient.  CASES is in writable TPA; SETRESULT replaces its initial '-'
+  ; pointer and explanatory pointer with the result of this particular run.
+
+AUTOTESTS:                              ; autotests
         XOR     A
         LD      (PASSCNT),A
         LD      (FAILCNT),A
@@ -3342,9 +3607,14 @@ AUTOTESTS:
         CALL    SETRESULT
         RET
 
-; Enter one result in CASES.
-; Entry: A=0 pass, A<>0 fail; HL -> row; DE -> success explanation.
-SETRESULT:
+; -------------------------------------------------------------------------------
+; Catalog Result Update
+; -------------------------------------------------------------------------------
+
+  ; Enter one result in CASES.
+  ; Entry: A=0 pass, A<>0 fail; HL -> row; DE -> success explanation.
+
+SETRESULT:                              ; record completed test result
         PUSH    AF
         PUSH    HL
         LD      BC,6
@@ -3363,7 +3633,8 @@ SETRESULT:
         INC     A
         LD      (PASSCNT),A
         JP      SRSTORE
-SRFAIL:LD      A,(FAILCNT)
+
+SRFAIL:LD      A,(FAILCNT)              ; srfail
         INC     A
         LD      (FAILCNT),A
         LD      DE,STFAIL
@@ -3375,13 +3646,15 @@ SRFAIL:LD      A,(FAILCNT)
         INC     HL
         LD      (HL),B
         POP     HL
-SRSTORE:LD     (HL),E
+
+SRSTORE:LD     (HL),E                   ; srstore
         INC     HL
         LD      (HL),D
         RET
 
-; Print totals accumulated by SETRESULT.  Nothing is pre-counted as a PASS.
-SUMMARY:LD     DE,SUMA
+  ; Print totals accumulated by SETRESULT.  Nothing is pre-counted as a PASS.
+
+SUMMARY:LD     DE,SUMA                  ; summary
         CALL    PUTS
         LD      A,(PASSCNT)
         CALL    PUTDEC
@@ -3402,7 +3675,8 @@ SUMMARY:LD     DE,SUMA
         CALL    PUTS
         LD      HL,CASES
         LD      B,NCASES
-FSLP:  PUSH    BC
+
+FSLP:  PUSH    BC                       ; fslp
         PUSH    HL
         INC     HL
         INC     HL
@@ -3421,20 +3695,24 @@ FSLP:  PUSH    BC
         LD      DE,FSSPACE
         CALL    PUTS
         POP     HL
-FSNEXT:LD      DE,8
+
+FSNEXT:LD      DE,8                     ; fsnext
         ADD     HL,DE
         POP     BC
         DEC     B
         JP      NZ,FSLP
         LD      DE,CRLF
         JP      PUTS
-PUTDEC:LD      B,0
-PD10:  CP      10
+
+PUTDEC:LD      B,0                      ; putdec
+
+PD10:  CP      10                       ; pd10
         JP      C,PDDONE
         SUB     10
         INC     B
         JP      PD10
-PDDONE:LD      (DECTMP),A
+
+PDDONE:LD      (DECTMP),A               ; pddone
         LD      A,B
         OR      A
         JP      Z,PDONES
@@ -3442,17 +3720,19 @@ PDDONE:LD      (DECTMP),A
         LD      E,A
         LD      C,2
         CALL    BDOS
-PDONES:LD      A,(DECTMP)
+
+PDONES:LD      A,(DECTMP)               ; pdones
         ADD     A,'0'
         LD      E,A
         LD      C,2
         JP      BDOS
 
-PUTHEX16:
+PUTHEX16:                               ; puthex16
         LD      A,H
         CALL    PUTHEX8
         LD      A,L
-PUTHEX8:PUSH   AF
+
+PUTHEX8:PUSH   AF                       ; puthex8
         RRCA
         RRCA
         RRCA
@@ -3461,18 +3741,21 @@ PUTHEX8:PUSH   AF
         CALL    PUTNIB
         POP     AF
         AND     0FH
-PUTNIB:CP      10
+
+PUTNIB:CP      10                       ; putnib
         JP      C,PNDIGIT
         ADD     A,7
-PNDIGIT:
+
+PNDIGIT:                                ; pndigit
         ADD     A,'0'
         LD      E,A
         LD      C,2
         JP      BDOS
 
-; Print operating notes for a selected manual test.  The table row says what
-; must agree; these messages say how to arrange and restore the equipment.
-SHOWDETAIL:
+  ; Print operating notes for a selected manual test.  The table row says what
+  ; must agree; these messages say how to arrange and restore the equipment.
+
+SHOWDETAIL:                             ; showdetail
         LD      A,(REPORTMODE)
         OR      A
         JP      NZ,DETSTART
@@ -3484,21 +3767,24 @@ SHOWDETAIL:
         LD      A,(BOOTBITS)
         AND     B
         RET     NZ                 ; retained boot test already completed
-DETCHARCHK:
+
+DETCHARCHK:                             ; detcharchk
         CALL    ISCHAR
         OR      A
         JP      Z,DETDISKCHK
         LD      A,(CHCOUNT)
         OR      A
         RET     NZ                 ; selected character test already ran
-DETDISKCHK:
+
+DETDISKCHK:                             ; detdiskchk
         CALL    ISCONTROL
         OR      A
         JP      Z,DETSTART
         LD      A,(REMCNT)
         CP      23
         RET     Z                  ; selected controlled test already ran
-DETSTART:
+
+DETSTART:                               ; detstart
         LD      A,(SELBUF)
         CP      '0'
         RET     NZ
@@ -3521,17 +3807,20 @@ DETSTART:
         CP      '7'
         JP      Z,DETDEV
         RET
-DET06: LD      A,(SELBUF+2)
+
+DET06: LD      A,(SELBUF+2)             ; det06
         CP      '2'
         RET     NZ
         JP      DETGEN
-DET42: LD      A,(SELBUF+3)
+
+DET42: LD      A,(SELBUF+3)             ; det42
         CP      '4'
         RET     C
         CP      '8'
         JP      C,DETDISK
         RET
-DET43: LD      A,(SELBUF+3)
+
+DET43: LD      A,(SELBUF+3)             ; det43
         CP      '1'
         JP      Z,DETDPB
         CP      '2'
@@ -3545,7 +3834,8 @@ DET43: LD      A,(SELBUF+3)
         CP      '9'
         JP      Z,DETDEV
         RET
-DET44: LD      A,(SELBUF+3)
+
+DET44: LD      A,(SELBUF+3)             ; det44
         CP      '5'
         JP      Z,DETDEV
         CP      '8'
@@ -3553,13 +3843,15 @@ DET44: LD      A,(SELBUF+3)
         CP      '9'
         JP      Z,DETDISK
         JP      DETGEN
-DET45: LD      A,(SELBUF+3)
+
+DET45: LD      A,(SELBUF+3)             ; det45
         CP      '3'
         RET     C
         CP      '9'
         JP      C,DETDISK
         RET
-DET46: LD      A,(SELBUF+3)
+
+DET46: LD      A,(SELBUF+3)             ; det46
         CP      '4'
         JP      C,DETGEN
         CP      '7'
@@ -3569,23 +3861,29 @@ DET46: LD      A,(SELBUF+3)
         CP      '9'
         JP      Z,DETDEV
         JP      DETGEN
-DETDISK:LD     DE,DISKPROC
-        JP      PUTS
-DETDPB:LD      DE,DPBPROC
-        JP      PUTS
-DETBOOT:LD     DE,BOOTPROC
-        JP      PUTS
-DETDEV:LD      DE,DEVPROC
-        JP      PUTS
-DETFN37:LD     DE,FN37PROC
-        JP      PUTS
-DETGEN:LD      DE,GENPROC
+
+DETDISK:LD     DE,DISKPROC              ; detdisk
         JP      PUTS
 
-;--------------------------- IOBYTE TEST -------------------------------
-; Read with 7, complement one bit, write with 8, and compare function 7 with
-; location 0003H.  The entry value is always written back before return.
-P0443: LD      C,7
+DETDPB:LD      DE,DPBPROC               ; detdpb
+        JP      PUTS
+
+DETBOOT:LD     DE,BOOTPROC              ; detboot
+        JP      PUTS
+
+DETDEV:LD      DE,DEVPROC               ; detdev
+        JP      PUTS
+
+DETFN37:LD     DE,FN37PROC              ; detfn37
+        JP      PUTS
+
+DETGEN:LD      DE,GENPROC               ; detgen
+        JP      PUTS
+
+  ; Read with 7, complement one bit, write with 8, and compare function 7 with
+  ; location 0003H.  The entry value is always written back before return.
+
+P0443: LD      C,7                      ; probe catalog item 443
         CALL    BDOS
         LD      (IOBORIG),A
         XOR     1
@@ -3602,24 +3900,26 @@ P0443: LD      C,7
         JP      Z,P43MEM
         INC     A
         LD      (PROBERES),A
-P43MEM:LD      A,(0003H)
+
+P43MEM:LD      A,(0003H)                ; p43mem
         LD      HL,IOBNEW
         CP      (HL)
         JP      Z,P43REST
         LD      A,(PROBERES)
         INC     A
         LD      (PROBERES),A
-P43REST:LD     A,(IOBORIG)
+
+P43REST:LD     A,(IOBORIG)              ; p43rest
         LD      E,A
         LD      C,8
         CALL    BDOS
         LD      A,(PROBERES)
         RET
 
-;--------------------------- DPH TEST ----------------------------------
-; Call public SELDSK for the current drive.  Check the DPH pointers and see
-; that its DPB address is the same address returned by function 31.
-P0451: LD      C,25
+  ; Call public SELDSK for the current drive.  Check the DPH pointers and see
+  ; that its DPB address is the same address returned by function 31.
+
+P0451: LD      C,25                     ; probe catalog item 451
         CALL    BDOS
         LD      C,A
         LD      HL,(0001H)
@@ -3664,14 +3964,16 @@ P0451: LD      C,25
         XOR     A
         RET
 
-; Find BIOS from the WBOOT address at 0001H.  There must be seventeen adjacent
-; three-byte JMP entries.  No assembled-in BIOS address is used.
-P0461: LD      HL,(0001H)
+  ; Find BIOS from the WBOOT address at 0001H.  There must be seventeen adjacent
+  ; three-byte JMP entries.  No assembled-in BIOS address is used.
+
+P0461: LD      HL,(0001H)               ; probe catalog item 461
         DEC     HL
         DEC     HL
         DEC     HL
         LD      B,17
-P61LP: LD      A,(HL)
+
+P61LP: LD      A,(HL)                   ; p61lp
         CP      0C3H
         JP      NZ,PFAIL
         INC     HL
@@ -3681,12 +3983,13 @@ P61LP: LD      A,(HL)
         JP      NZ,P61LP
         XOR     A
         RET
-P0463: JP      P0461
 
-;---------------------- SELF-MODIFYING TPA TEST ------------------------
-; Copy "LD A,n / RET" to two work areas, alter n in each copy, and CALL the
-; work areas.  Both instruction fetches must see the bytes just stored.
-P0622: LD      HL,SMCODE
+P0463: JP      P0461                    ; probe catalog item 463
+
+  ; Copy "LD A,n / RET" to two work areas, alter n in each copy, and CALL the
+  ; work areas.  Both instruction fetches must see the bytes just stored.
+
+P0622: LD      HL,SMCODE                ; probe catalog item 622
         LD      DE,SMBUF1
         LD      B,4
         CALL    COPY4
@@ -3708,22 +4011,26 @@ P0622: LD      HL,SMCODE
         JP      NZ,PFAIL
         XOR     A
         RET
-COPY4: LD      A,(HL)
+
+COPY4: LD      A,(HL)                   ; copy4
         LD      (DE),A
         INC     HL
         INC     DE
         DEC     B
         JP      NZ,COPY4
         RET
-; Call address in HL without a self-modifying CALL instruction.
-CALLHL:LD      DE,CALLRET
+  ; Call address in HL without a self-modifying CALL instruction.
+
+CALLHL:LD      DE,CALLRET               ; call address in HL
         PUSH    DE
         JP      (HL)
-CALLRET:RET
-PFAIL: LD      A,1
+
+CALLRET:RET                             ; callret
+
+PFAIL: LD      A,1                      ; pfail
         RET
 
-HLPMSG:DB 13,10,'BIOSTEST 0.1.0-dev32',13,10,13,10
+HLPMSG:DB 13,10,'BIOSTEST 0.1.0-dev32',13,10,13,10 ; hlpmsg
         DB '  BIOSTEST /NNNN[:REPORT]     Run, explain, or report one item',13,10
         DB '  BIOSTEST /ALL               Run checks and report all items',13,10
         DB '  BIOSTEST /SAFE              Run checks requiring no destructive media',13,10
@@ -3734,45 +4041,52 @@ HLPMSG:DB 13,10,'BIOSTEST 0.1.0-dev32',13,10,13,10
         DB '  BIOSTEST /H, /HELP          Show concise command help',13,10
         DB '  BIOSTEST /INFO              Show build information',13,10
         DB '  BIOSTEST /VER, /VERSION     Show name and version',13,10,'$'
-VERMSG:DB 13,10,'BIOSTEST 0.1.0-dev32',13,10,'$'
-INFMSG:DB 13,10,'BIOSTEST 0.1.0-dev32',13,10
+
+VERMSG:DB 13,10,'BIOSTEST 0.1.0-dev32',13,10,'$' ; vermsg
+INFMSG:DB 13,10,'BIOSTEST 0.1.0-dev32',13,10 ; infmsg
         DB 'Catalog: BIO-001 through BIO-046 (46 rows)',13,10
         DB 'Processor required: Intel 8080',13,10
         DB 'Returning checks: 5 safe, 14 disk, 8 character, 3 boot',13,10
         DB '0457 requires operator-controlled scratch-disk write protection.',13,10
         DB 'Delete BTBOOT.DAT to reset retained boot evidence.',13,10,'$'
-RESMSG:DB 13,10,'PASS and FAIL are emitted only after the complete oracle runs.',13,10
+
+RESMSG:DB 13,10,'PASS and FAIL are emitted only after the complete oracle runs.',13,10 ; resmsg
         DB 'UNTESTED identifies a required procedure not yet automated.',13,10
         DB 'OBSERVED records a permitted variation without claiming PASS.',13,10,'$'
-PRFMSG:DB 13,10,'OPT-FN37: optional undocumented Function 37 compatibility.',13,10
+
+PRFMSG:DB 13,10,'OPT-FN37: optional undocumented Function 37 compatibility.',13,10 ; prfmsg
         DB 'Device-dependent rows require a declared hardware provider.',13,10,'$'
-BADSEL:DB 13,10,'BIOSTEST: unknown selector. Use BIOSTEST /HELP.',13,10
+
+BADSEL:DB 13,10,'BIOSTEST: unknown selector. Use BIOSTEST /HELP.',13,10 ; badsel
         DB 'Use BIOSTEST /GROUP:LIST for available groups.',13,10,'$'
-HEADMSG:DB 13,10,'STATUS: P=Pass F=Fail -=Not-run O=Observed',13,10
+
+HEADMSG:DB 13,10,'STATUS: P=Pass F=Fail -=Not-run O=Observed',13,10 ; headmsg
         DB 'CLASS:  R=Required N=Not-guaranteed S=Out-of-scope X=Optional',13,10,13,10
         DB 'ITEM  S  C  OBSERVED',13,10
         DB '----  -  -  -------------------------------------------------------------------',13,10,'$'
-SUMA:   DB 'Summary: $'
-SUMB:   DB ' pass, $'
-SUMC1:  DB ' fail, 0 error, 11 observations',13,10,'$'
-SUMC2:  DB ' scope/required/profile procedures remain untested.',13,10,'$'
-FAILMSG:DB 'Failed items: $'
-FSSPACE:DB ' $'
-T26MSG1:DB '0426 evidence: DPB AL0/AL1=$'
+
+SUMA:   DB 'Summary: $'                 ; suma
+SUMB:   DB ' pass, $'                   ; sumb
+SUMC1:  DB ' fail, 0 error, 11 observations',13,10,'$' ; sumc1
+SUMC2:  DB ' scope/required/profile procedures remain untested.',13,10,'$' ; sumc2
+FAILMSG:DB 'Failed items: $'            ; failmsg
+FSSPACE:DB ' $'                         ; fsspace
+T26MSG1:DB '0426 evidence: DPB AL0/AL1=$' ; t26msg1
 T26MSG2:DB '; ALV[0/1]=$'
-ONESUM:DB 'Summary: selected row reported above.',13,10,'$'
+ONESUM:DB 'Summary: selected row reported above.',13,10,'$' ; onesum
 GRPSUM:DB 'Group rows shown; safe returning checks ran where applicable.',13,10,'$'
 REQSUM:DB '30 REQUIRED items shown: 5 safe checks ran; 25 require providers.',13,10,'$'
-OBSSUM:DB '11 NOT GUARANTEED observations shown.',13,10,'$'
+OBSSUM:DB '11 NOT GUARANTEED observations shown.',13,10,'$' ; obssum
 MANSUM:DB '27 manual/provider procedures listed; none executed.',13,10,'$'
-SP2:    DB '  $'
-CRLF:   DB 13,10,'$'
-BWNOMSG:DB '0453: no adjacent track boundary reached.',13,10,'$'
-BWMAPMSG:DB '0453: expected SETTRK $'
-BWACTMSG:DB ', observed $'
+SP2:    DB '  $'                        ; sp2
+CRLF:   DB 13,10,'$'                    ; crlf
+BWNOMSG:DB '0453: no adjacent track boundary reached.',13,10,'$' ; bwnomsg
+BWMAPMSG:DB '0453: expected SETTRK $'   ; bwmapmsg
+BWACTMSG:DB ', observed $'              ; bwactmsg
 
-; Keep catalog entries within an 80-column display.
-LSTMSG:DB 13,10,'CLASS: R=Required N=Not-guaranteed S=Out-of-scope X=Profile',13,10
+  ; Keep catalog entries within an 80-column display.
+
+LSTMSG:DB 13,10,'CLASS: R=Required N=Not-guaranteed S=Out-of-scope X=Profile',13,10 ; lstmsg
         DB 13,10,'ALLOCATION AND DPB (13)',13,10
         DB '  0423 S Function 34 is not Compute File Size',13,10
         DB '  0424 R Function 27 allocation-vector pointer',13,10
@@ -3827,7 +4141,7 @@ LSTMSG:DB 13,10,'CLASS: R=Required N=Not-guaranteed S=Out-of-scope X=Profile',13
         DB '  0622 R Self-modifying transient execution',13,10
         DB 13,10,'TOTAL: 46 ITEMS',13,10,'$'
 
-GRPLIST:DB 13,10,'BIOSTEST GROUPS',13,10,13,10
+GRPLIST:DB 13,10,'BIOSTEST GROUPS',13,10,13,10 ; grplist
         DB 'FUNCTIONAL',13,10
         DB '  ALLOCATION  13  Allocation vector and DPB behavior',13,10
         DB '  DEVICES      7  Logical-device and IOBYTE behavior',13,10
@@ -3840,141 +4154,141 @@ GRPLIST:DB 13,10,'BIOSTEST GROUPS',13,10,13,10
         DB '  OBSERVATION 11  NOT GUARANTEED observations',13,10
         DB '  MANUAL      27  Manual/provider procedures (lists only)',13,10,'$'
 
-STOUT: DB '-$'
-STOBS: DB 'O$'
-STPASS:DB 'P$'
-STFAIL:DB 'F$'
-CLREQ: DB 'R$'
-CLNG:  DB 'N$'
-CLOUT: DB 'S$'
-CLOPT: DB 'X$'
+STOUT: DB '-$'                          ; stout
+STOBS: DB 'O$'                          ; stobs
+STPASS:DB 'P$'                          ; stpass
+STFAIL:DB 'F$'                          ; stfail
+CLREQ: DB 'R$'                          ; clreq
+CLNG:  DB 'N$'                          ; clng
+CLOUT: DB 'S$'                          ; clout
+CLOPT: DB 'X$'                          ; clopt
 
-I0423: DB '0423$'
-I0424: DB '0424$'
-I0425: DB '0425$'
-I0426: DB '0426$'
-I0427: DB '0427$'
-I0428: DB '0428$'
-I0429: DB '0429$'
-I0430: DB '0430$'
-I0431: DB '0431$'
-I0432: DB '0432$'
-I0433: DB '0433$'
-I0434: DB '0434$'
-I0435: DB '0435$'
-I0437: DB '0437$'
-I0439: DB '0439$'
-I0441: DB '0441$'
-I0443: DB '0443$'
-I0445: DB '0445$'
-I0447: DB '0447$'
-I0448: DB '0448$'
-I0449: DB '0449$'
-I0450: DB '0450$'
-I0451: DB '0451$'
-I0452: DB '0452$'
-I0453: DB '0453$'
-I0454: DB '0454$'
-I0455: DB '0455$'
-I0456: DB '0456$'
-I0457: DB '0457$'
-I0458: DB '0458$'
-I0459: DB '0459$'
-I0460: DB '0460$'
-I0461: DB '0461$'
-I0462: DB '0462$'
-I0463: DB '0463$'
-I0464: DB '0464$'
-I0465: DB '0465$'
-I0466: DB '0466$'
-I0467: DB '0467$'
-I0468: DB '0468$'
-I0469: DB '0469$'
-I0470: DB '0470$'
-I0471: DB '0471$'
-I0472: DB '0472$'
-I0473: DB '0473$'
-I0622: DB '0622$'
+I0423: DB '0423$'                       ; i0423
+I0424: DB '0424$'                       ; i0424
+I0425: DB '0425$'                       ; i0425
+I0426: DB '0426$'                       ; i0426
+I0427: DB '0427$'                       ; i0427
+I0428: DB '0428$'                       ; i0428
+I0429: DB '0429$'                       ; i0429
+I0430: DB '0430$'                       ; i0430
+I0431: DB '0431$'                       ; i0431
+I0432: DB '0432$'                       ; i0432
+I0433: DB '0433$'                       ; i0433
+I0434: DB '0434$'                       ; i0434
+I0435: DB '0435$'                       ; i0435
+I0437: DB '0437$'                       ; i0437
+I0439: DB '0439$'                       ; i0439
+I0441: DB '0441$'                       ; i0441
+I0443: DB '0443$'                       ; i0443
+I0445: DB '0445$'                       ; i0445
+I0447: DB '0447$'                       ; i0447
+I0448: DB '0448$'                       ; i0448
+I0449: DB '0449$'                       ; i0449
+I0450: DB '0450$'                       ; i0450
+I0451: DB '0451$'                       ; i0451
+I0452: DB '0452$'                       ; i0452
+I0453: DB '0453$'                       ; i0453
+I0454: DB '0454$'                       ; i0454
+I0455: DB '0455$'                       ; i0455
+I0456: DB '0456$'                       ; i0456
+I0457: DB '0457$'                       ; i0457
+I0458: DB '0458$'                       ; i0458
+I0459: DB '0459$'                       ; i0459
+I0460: DB '0460$'                       ; i0460
+I0461: DB '0461$'                       ; i0461
+I0462: DB '0462$'                       ; i0462
+I0463: DB '0463$'                       ; i0463
+I0464: DB '0464$'                       ; i0464
+I0465: DB '0465$'                       ; i0465
+I0466: DB '0466$'                       ; i0466
+I0467: DB '0467$'                       ; i0467
+I0468: DB '0468$'                       ; i0468
+I0469: DB '0469$'                       ; i0469
+I0470: DB '0470$'                       ; i0470
+I0471: DB '0471$'                       ; i0471
+I0472: DB '0472$'                       ; i0472
+I0473: DB '0473$'                       ; i0473
+I0622: DB '0622$'                       ; i0622
 
-O0423: DB 'No baseline Function 34 assertion$'
-O0424: DB 'Use SCRATCH /BLANK and two controlled disks$'
-O0425: DB 'Needs DPB-derived ALV and controlled files$'
-O0426: DB 'Needs controlled empty disk$'
-O0427: DB 'Needs controlled one-record lifecycle$'
-O0428: DB 'Fixed address/lifetime is not portable$'
-O0429: DB 'Applications must not depend on ALV writes$'
-O0430: DB 'Post-Function-28 ALV accuracy may vary$'
-O0431: DB 'Needs two configured drives and DPB decode$'
-O0432: DB 'Shared or distinct valid DPBs accepted$'
-O0433: DB 'Needs guarded modify, re-query, and restore$'
-O0434: DB 'Fixed DPB address/lifetime is not portable$'
-O0435: DB 'Run only when OPT-FN37 is claimed$'
-O0437: DB 'Reader/device provider behavior may vary$'
-O0439: DB 'Needs declared punch provider$'
-O0441: DB 'Character-output return values may vary$'
-O0443: DB 'Needs set/query/restore IOBYTE round trip$'
-O0445: DB 'Needs declared routes at multiple IOBYTE values$'
-O0447: DB 'No initialization side effect is guaranteed$'
-O0448: DB 'Needs device provider and DMA sentinels$'
-O0449: DB 'Needs direct BIOS disk-call sequence$'
-O0450: DB 'Needs configured/absent drives and deferred I/O$'
-O0451: DB 'Needs current-drive DPH pointer validation$'
-O0452: DB 'Fixed DPH/private workspace is not portable$'
-O0453: DB 'Needs boundary tracks with nonzero OFF$'
-O0454: DB 'Needs controlled nonidentity XLT$'
-O0455: DB 'Table or equivalent algorithm is accepted$'
-O0456: DB 'Needs application/directory DMA tracing$'
-O0457: DB 'Needs successful and injected-fault transfers$'
-O0458: DB 'Needs controlled WRITE type-code lifecycle$'
-O0459: DB 'Physical mapping is outside the public contract$'
-O0460: DB 'Nested disk-call state is not guaranteed$'
-O0461: DB 'Needs independent jump-vector validation$'
-O0462: DB 'No fixed BIOS vector address is portable$'
-O0463: DB 'Needs page-zero-only BIOS-base discovery$'
-O0464: DB 'Needs cold-start state validation$'
-O0465: DB 'Needs programmed warm-restart validation$'
-O0466: DB 'Needs controlled gateway reconstruction test$'
-O0467: DB 'Boot implementation is outside public contract$'
-O0468: DB 'Needs queued character and status transitions$'
-O0469: DB 'Needs controlled raw console input$'
-O0470: DB 'Needs captured bytes at each output vector$'
-O0471: DB 'Needs reader and absent-device provider$'
-O0472: DB 'Needs declared LISTST result profile$'
-O0473: DB 'Needs direct/BDOS character comparison$'
-O0622: DB 'Needs patch/execute at multiple TPA placements$'
+O0423: DB 'No baseline Function 34 assertion$' ; observation record for item 423
+O0424: DB 'Use SCRATCH /BLANK and two controlled disks$' ; observation record for item 424
+O0425: DB 'Needs DPB-derived ALV and controlled files$' ; observation record for item 425
+O0426: DB 'Needs controlled empty disk$' ; observation record for item 426
+O0427: DB 'Needs controlled one-record lifecycle$' ; observation record for item 427
+O0428: DB 'Fixed address/lifetime is not portable$' ; observation record for item 428
+O0429: DB 'Applications must not depend on ALV writes$' ; observation record for item 429
+O0430: DB 'Post-Function-28 ALV accuracy may vary$' ; observation record for item 430
+O0431: DB 'Needs two configured drives and DPB decode$' ; observation record for item 431
+O0432: DB 'Shared or distinct valid DPBs accepted$' ; observation record for item 432
+O0433: DB 'Needs guarded modify, re-query, and restore$' ; observation record for item 433
+O0434: DB 'Fixed DPB address/lifetime is not portable$' ; observation record for item 434
+O0435: DB 'Run only when OPT-FN37 is claimed$' ; observation record for item 435
+O0437: DB 'Reader/device provider behavior may vary$' ; observation record for item 437
+O0439: DB 'Needs declared punch provider$' ; observation record for item 439
+O0441: DB 'Character-output return values may vary$' ; observation record for item 441
+O0443: DB 'Needs set/query/restore IOBYTE round trip$' ; observation record for item 443
+O0445: DB 'Needs declared routes at multiple IOBYTE values$' ; observation record for item 445
+O0447: DB 'No initialization side effect is guaranteed$' ; observation record for item 447
+O0448: DB 'Needs device provider and DMA sentinels$' ; observation record for item 448
+O0449: DB 'Needs direct BIOS disk-call sequence$' ; observation record for item 449
+O0450: DB 'Needs configured/absent drives and deferred I/O$' ; observation record for item 450
+O0451: DB 'Needs current-drive DPH pointer validation$' ; observation record for item 451
+O0452: DB 'Fixed DPH/private workspace is not portable$' ; observation record for item 452
+O0453: DB 'Needs boundary tracks with nonzero OFF$' ; observation record for item 453
+O0454: DB 'Needs controlled nonidentity XLT$' ; observation record for item 454
+O0455: DB 'Table or equivalent algorithm is accepted$' ; observation record for item 455
+O0456: DB 'Needs application/directory DMA tracing$' ; observation record for item 456
+O0457: DB 'Needs successful and injected-fault transfers$' ; observation record for item 457
+O0458: DB 'Needs controlled WRITE type-code lifecycle$' ; observation record for item 458
+O0459: DB 'Physical mapping is outside the public contract$' ; observation record for item 459
+O0460: DB 'Nested disk-call state is not guaranteed$' ; observation record for item 460
+O0461: DB 'Needs independent jump-vector validation$' ; observation record for item 461
+O0462: DB 'No fixed BIOS vector address is portable$' ; observation record for item 462
+O0463: DB 'Needs page-zero-only BIOS-base discovery$' ; observation record for item 463
+O0464: DB 'Needs cold-start state validation$' ; observation record for item 464
+O0465: DB 'Needs programmed warm-restart validation$' ; observation record for item 465
+O0466: DB 'Needs controlled gateway reconstruction test$' ; observation record for item 466
+O0467: DB 'Boot implementation is outside public contract$' ; observation record for item 467
+O0468: DB 'Needs queued character and status transitions$' ; observation record for item 468
+O0469: DB 'Needs controlled raw console input$' ; observation record for item 469
+O0470: DB 'Needs captured bytes at each output vector$' ; observation record for item 470
+O0471: DB 'Needs reader and absent-device provider$' ; observation record for item 471
+O0472: DB 'Needs declared LISTST result profile$' ; observation record for item 472
+O0473: DB 'Needs direct/BDOS character comparison$' ; observation record for item 473
+O0622: DB 'Needs patch/execute at multiple TPA placements$' ; observation record for item 622
 V0443: DB 'Function 7/8 and 0003h were coherent; restored$'
-V0424: DB 'Function 27 returned current scratch-disk ALV$'
-V0425: DB 'DPB-derived ALV length and bits matched blank disk$'
-V0426: DB 'AL0/AL1 matched reserved ALV directory bits$'
-V0427: DB 'One-record block set then cleared its ALV bit$'
-V0431: DB 'Decoded valid 15-byte DPBs for both drives$'
+V0424: DB 'Function 27 returned current scratch-disk ALV$' ; v0424
+V0425: DB 'DPB-derived ALV length and bits matched blank disk$' ; v0425
+V0426: DB 'AL0/AL1 matched reserved ALV directory bits$' ; v0426
+V0427: DB 'One-record block set then cleared its ALV bit$' ; v0427
+V0431: DB 'Decoded valid 15-byte DPBs for both drives$' ; v0431
 V0432: DB 'Both configured DPBs valid; sharing accepted$'
-V0433: DB 'DPB field changed, re-queried, and restored$'
-V0439: DB 'Function 4 delivered graphic/control bytes to PUNCH$'
-V0445: DB 'Functions 3/4/5 kept fixed logical dispatch$'
-V0448: DB 'Character calls preserved DMA selection and sentinels$'
-V0449: DB 'Traced persistent track/sector/DMA write context$'
-V0450: DB 'SELDSK accepted scratch and rejected absent drive$'
-V0453: DB 'Traced boundary SETTRK equaled logical track plus OFF$'
-V0454: DB 'SECTRAN result was passed to SETSEC$'
-V0456: DB 'Traced application and directory DMA addresses$'
+V0433: DB 'DPB field changed, re-queried, and restored$' ; v0433
+V0439: DB 'Function 4 delivered graphic/control bytes to PUNCH$' ; v0439
+V0445: DB 'Functions 3/4/5 kept fixed logical dispatch$' ; v0445
+V0448: DB 'Character calls preserved DMA selection and sentinels$' ; v0448
+V0449: DB 'Traced persistent track/sector/DMA write context$' ; v0449
+V0450: DB 'SELDSK accepted scratch and rejected absent drive$' ; v0450
+V0453: DB 'Traced boundary SETTRK equaled logical track plus OFF$' ; v0453
+V0454: DB 'SECTRAN result was passed to SETSEC$' ; v0454
+V0456: DB 'Traced application and directory DMA addresses$' ; v0456
 V0457: DB '128-byte transfer passed; physical fault returned nonzero$'
-V0458: DB 'Observed WRITE type codes 0, 1, and 2$'
-V0451: DB 'Current DPH pointers and Function 31 agreed$'
-V0461: DB 'Found 17 consecutive public JMP vectors$'
-V0463: DB 'BIOS base derived only from WBOOT gateway$'
-V0464: DB 'BOOT resumed CCP with reconstructed public state$'
-V0465: DB 'WBOOT resumed CCP on the requested drive$'
-V0466: DB 'WBOOT reconstructed both damaged gateway opcodes$'
-V0468: DB 'CONST reported empty/ready/ready/empty without consume$'
-V0469: DB 'CONIN returned the controlled zero-parity K byte$'
-V0470: DB 'CONOUT/LIST/PUNCH accepted graphic and control C bytes$'
+V0458: DB 'Observed WRITE type codes 0, 1, and 2$' ; v0458
+V0451: DB 'Current DPH pointers and Function 31 agreed$' ; v0451
+V0461: DB 'Found 17 consecutive public JMP vectors$' ; v0461
+V0463: DB 'BIOS base derived only from WBOOT gateway$' ; v0463
+V0464: DB 'BOOT resumed CCP with reconstructed public state$' ; v0464
+V0465: DB 'WBOOT resumed CCP on the requested drive$' ; v0465
+V0466: DB 'WBOOT reconstructed both damaged gateway opcodes$' ; v0466
+V0468: DB 'CONST reported empty/ready/ready/empty without consume$' ; v0468
+V0469: DB 'CONIN returned the controlled zero-parity K byte$' ; v0469
+V0470: DB 'CONOUT/LIST/PUNCH accepted graphic and control C bytes$' ; v0470
 V0471: DB 'READER returned R; absent READER returned Ctrl-Z$'
 V0473: DB 'Direct TAB stayed raw; BDOS TAB was formatted$'
-V0622: DB 'Modified code executed at two TPA locations$'
-VFAIL: DB 'Returning oracle check failed$'
+V0622: DB 'Modified code executed at two TPA locations$' ; v0622
+VFAIL: DB 'Returning oracle check failed$' ; vfail
 
-DISKPROC:DB 13,10,'SETUP: use an empty, expendable disk and a declared BIOS',13,10
+DISKPROC:DB 13,10,'SETUP: use an empty, expendable disk and a declared BIOS',13,10 ; diskproc
         DB 'trace/fault provider when the selected row requires one.',13,10
         DB '0453 requires a freshly formatted SYSTEM disk with nonzero OFF.',13,10
         DB 'SCRATCH /BLANK is only needed to clear previously used media.',13,10
@@ -3982,94 +4296,116 @@ DISKPROC:DB 13,10,'SETUP: use an empty, expendable disk and a declared BIOS',13,
         DB 'SUCCESS: the trace and result match the selected ledger oracle.',13,10
         DB 'FAILURE: any wrong argument, order, transfer, or result is FAIL.',13,10
         DB 'RESTORE: discard/remount the scratch disk and reset the disk system.',13,10,'$'
-DPBPROC:DB 13,10,'SETUP: mount two configured disks with declared geometries.',13,10
+
+DPBPROC:DB 13,10,'SETUP: mount two configured disks with declared geometries.',13,10 ; dpbproc
         DB 'ACTION: obtain and decode each DPH/DPB/ALV without fixed addresses.',13,10
         DB 'SUCCESS: every public field and selected-drive relationship agrees.',13,10
         DB 'FAILURE: a null, incoherent, or incorrectly shared object is FAIL.',13,10
         DB 'RESTORE: restore any guarded field before another BDOS disk call.',13,10,'$'
-BOOTPROC:DB 13,10,'TERMINAL TEST: preserve the current gateways and capture CCP output.',13,10
+
+BOOTPROC:DB 13,10,'TERMINAL TEST: preserve the current gateways and capture CCP output.',13,10 ; bootproc
         DB 'Perform the selected BOOT/WBOOT action exactly as named above.',13,10
         DB 'SUCCESS: CCP resumes and documented page-zero/DMA state is rebuilt.',13,10
         DB 'FAILURE: return to caller, hang, or invalid public state is FAIL.',13,10
         DB 'RESTORE: cold boot the pristine system image after recording evidence.',13,10,'$'
-DEVPROC:DB 13,10,'SETUP: declare and connect the required reader/punch/list/console',13,10
+
+DEVPROC:DB 13,10,'SETUP: declare and connect the required reader/punch/list/console',13,10 ; devproc
         DB 'capture or loopback provider; record its ready/not-ready encodings.',13,10
         DB 'ACTION: run the selected raw BIOS and mediated BDOS operations.',13,10
         DB 'SUCCESS: bytes, status, nonconsumption, and layering match the oracle.',13,10
         DB 'FAILURE: transformed, lost, consumed, or misrouted data is FAIL.',13,10
         DB 'RESTORE: restore IOBYTE and drain only provider-supplied input.',13,10,'$'
-FN37PROC:DB 13,10,'OPTIONAL PROFILE: select OPT-FN37 only when the candidate',13,10
+
+FN37PROC:DB 13,10,'OPTIONAL PROFILE: select OPT-FN37 only when the candidate',13,10 ; fn37proc
         DB 'claims the undocumented Function 37 compatibility behavior.',13,10
         DB 'Test inactive, current, multiple, and read-only-vector inputs.',13,10
         DB 'SUCCESS: every declared state effect matches the profile.',13,10
         DB 'RESTORE: reset the disk system and remount pristine test media.',13,10,'$'
-GENPROC:DB 13,10,'REPORT: the returning oracle executed through public CP/M and BIOS',13,10
+
+GENPROC:DB 13,10,'REPORT: the returning oracle executed through public CP/M and BIOS',13,10 ; genproc
         DB 'interfaces; the result row above records its complete verdict.',13,10
         DB 'No provider, destructive medium, or retained restart state was used.',13,10,'$'
-CGMSG: DB 13,10,'Controlled tests require an empty, expendable disk.',13,10
+
+CGMSG: DB 13,10,'Controlled tests require an empty, expendable disk.',13,10 ; cgmsg
         DB 'For 0453 use a freshly formatted SYSTEM disk with nonzero OFF.',13,10
         DB 'Use SCRATCH /BLANK only to clear a previously used disk.',13,10
         DB 'Enter its configured drive letter, or Q to skip (B-P or Q): $'
-CGBADMSG:DB 13,10,'Enter a configured drive B through P, or Q.',13,10,'$'
-CGSAMEMSG:DB 13,10,'The scratch drive must differ from the utility drive.',13,10,'$'
-CGCONF:DB 13,10,'BIOSTEST will create and delete BTBIO.TMP, then leave the',13,10
+
+CGBADMSG:DB 13,10,'Enter a configured drive B through P, or Q.',13,10,'$' ; cgbadmsg
+CGSAMEMSG:DB 13,10,'The scratch drive must differ from the utility drive.',13,10,'$' ; cgsamemsg
+CGCONF:DB 13,10,'BIOSTEST will create and delete BTBIO.TMP, then leave the',13,10 ; cgconf
         DB 'scratch disk empty. Continue (Y/N)? $'
-FAULTASK:DB 13,10,'0457 fault stage: make the scratch disk WRITE-PROTECTED.',13,10
+
+FAULTASK:DB 13,10,'0457 fault stage: make the scratch disk WRITE-PROTECTED.',13,10 ; faultask
         DB 'Press Y when protected, or Q to leave 0457 UNTESTED: $'
-FAULTREST:DB 13,10,'Make the scratch disk writable again, then press Y: $'
-FSTATMSG:DB '0457 protected WRITE status: $'
+
+FAULTREST:DB 13,10,'Make the scratch disk writable again, then press Y: $' ; faultrest
+FSTATMSG:DB '0457 protected WRITE status: $' ; fstatmsg
 RSTATMSG:DB '; restored WRITE status: $'
-CHGMSG:DB 13,10,'Run controlled console/logical-device tests (Y/N)? $'
-CKEYMSG:DB 13,10,'Type one uppercase K now: $'
-CHARBAD:DB 13,10,'Character trace unavailable: BIOS JMP operands are not writable.',13,10,'$'
-RDNORMAL:DB 13,10,'0471 stage 1: before this run assign RDR:=PTR: with STAT.',13,10
+CHGMSG:DB 13,10,'Run controlled console/logical-device tests (Y/N)? $' ; chgmsg
+CKEYMSG:DB 13,10,'Type one uppercase K now: $' ; ckeymsg
+CHARBAD:DB 13,10,'Character trace unavailable: BIOS JMP operands are not writable.',13,10,'$' ; charbad
+RDNORMAL:DB 13,10,'0471 stage 1: before this run assign RDR:=PTR: with STAT.',13,10 ; rdnormal
         DB 'Y calls READER; type uppercase R when it waits. Y=call, Q=skip: $'
-RDNEXT:DB 13,10,'0471 stage 1 saved. Stage 2 needs a separately configured',13,10
+
+RDNEXT:DB 13,10,'0471 stage 1 saved. Stage 2 needs a separately configured',13,10 ; rdnext
         DB 'READER provider known to return Ctrl-Z immediately.',13,10
         DB 'Return to the CCP, configure/verify it, then rerun /0471.',13,10,'$'
-RDABSENT:DB 13,10,'0471 stage 2 needs READER to return Ctrl-Z immediately.',13,10
+
+RDABSENT:DB 13,10,'0471 stage 2 needs READER to return Ctrl-Z immediately.',13,10 ; rdabsent
         DB 'STAT assignment names are standard; their drivers are BIOS-specific.',13,10
         DB 'Montezuma UR1:/UR2: may block. Use Q unless a provider is verified.',13,10
         DB 'Y=call verified provider, Q=leave 0471 UNTESTED: $'
-RDSTORE:DB 13,10,'Unable to retain 0471 evidence in BTRDR.DAT.',13,10,'$'
-BSTARTMSG:DB 13,10,'This test transfers control to BOOT/WBOOT and cannot return.',13,10
+
+RDSTORE:DB 13,10,'Unable to retain 0471 evidence in BTRDR.DAT.',13,10,'$' ; rdstore
+BSTARTMSG:DB 13,10,'This test transfers control to BOOT/WBOOT and cannot return.',13,10 ; bstartmsg
         DB 'BIOSTEST will save BTBOOT.DAT; rerun this selector after CCP resumes.',13,10
         DB 'Run tests in this order: 1) /0465 two times; 2) /0466 two times;',13,10
         DB '3) /0464 two times. Then run /ALL. Then ERA BTBOOT.DAT.',13,10
         DB 'Continue (Y/N)? $'
-BTRANSFER:DB 13,10,'Evidence saved. Transferring control now...',13,10,'$'
-BPENDMSG:DB 13,10,'Another boot selector is pending. Rerun that selector first,',13,10
-        DB 'or delete BTBOOT.DAT to reset retained boot evidence.',13,10,'$'
-BCOLDMSG:DB 13,10,'Did cold BOOT first resume at the CCP on drive A (Y/N)? $'
-BSTOREMSG:DB 13,10,'Unable to write BTBOOT.DAT; boot transfer cancelled.',13,10,'$'
-BRETAINMSG:DB 13,10,'BTBOOT.DAT is retained so /ALL can include this result.',13,10
-        DB 'After the final /ALL, ERA BTBOOT.DAT resets the boot tests.',13,10,'$'
-R0424: DB 13,10,'Running controlled item 0424...',13,10,'$'
-R0425: DB 'Running controlled item 0425...',13,10,'$'
-R0426: DB 'Running controlled item 0426...',13,10,'$'
-R0427: DB 'Running controlled item 0427...',13,10,'$'
-R0431: DB 'Running controlled item 0431...',13,10,'$'
-R0432: DB 'Running controlled item 0432...',13,10,'$'
-R0433: DB 'Running controlled item 0433...',13,10,'$'
-RTRACE:DB 'Installing guarded BIOS disk trace...',13,10,'$'
-TRACEBAD:DB 'Trace unavailable: BIOS JMP operands are not safely writable.',13,10,'$'
-TWMAKE:DB 'Trace: Make...',13,10,'$'
-TWWR1: DB 'Trace: first sequential write...',13,10,'$'
-TWWR2: DB 'Trace: second sequential write...',13,10,'$'
-TWCLOSE:DB 'Trace: Close/Delete...',13,10,'$'
-E27MAKE:DB '0427 FAIL: could not create BTBIO.TMP.',13,10,'$'
-E27WRITE:DB '0427 FAIL: one-record write was rejected.',13,10,'$'
-E27CLOSE:DB '0427 FAIL: close was rejected.',13,10,'$'
-E27BLOCK:DB '0427 FAIL: no allocation block appeared in the FCB.',13,10,'$'
-E27SET: DB '0427 FAIL: allocated block was not set in the ALV.',13,10,'$'
-E27DELETE:DB '0427 FAIL: delete was rejected.',13,10,'$'
-E27STATE:DB '0427 FAIL: lifecycle did not reach allocated state.',13,10,'$'
-E27CLEAR:DB '0427 FAIL: released block remained set in the ALV.',13,10,'$'
-D27BLOCK:DB '0427: allocation block decoded.',13,10,'$'
-D27SET:DB '0427: allocation bit set after write.',13,10,'$'
-D27DELETE:DB '0427: temporary file deleted.',13,10,'$'
 
-CASES: DW I0423,STOUT,CLOUT,O0423
+BTRANSFER:DB 13,10,'Evidence saved. Transferring control now...',13,10,'$' ; btransfer
+BPENDMSG:DB 13,10,'Another boot selector is pending. Rerun that selector first,',13,10 ; bpendmsg
+        DB 'or delete BTBOOT.DAT to reset retained boot evidence.',13,10,'$'
+
+BCOLDMSG:DB 13,10,'Did cold BOOT first resume at the CCP on drive A (Y/N)? $' ; bcoldmsg
+BSTOREMSG:DB 13,10,'Unable to write BTBOOT.DAT; boot transfer cancelled.',13,10,'$'
+BRETAINMSG:DB 13,10,'BTBOOT.DAT is retained so /ALL can include this result.',13,10 ; bretainmsg
+        DB 'After the final /ALL, ERA BTBOOT.DAT resets the boot tests.',13,10,'$'
+
+R0424: DB 13,10,'Running controlled item 0424...',13,10,'$' ; catalog record for item 424
+R0425: DB 'Running controlled item 0425...',13,10,'$' ; catalog record for item 425
+R0426: DB 'Running controlled item 0426...',13,10,'$' ; catalog record for item 426
+R0427: DB 'Running controlled item 0427...',13,10,'$' ; catalog record for item 427
+R0431: DB 'Running controlled item 0431...',13,10,'$' ; catalog record for item 431
+R0432: DB 'Running controlled item 0432...',13,10,'$' ; catalog record for item 432
+R0433: DB 'Running controlled item 0433...',13,10,'$' ; catalog record for item 433
+RTRACE:DB 'Installing guarded BIOS disk trace...',13,10,'$' ; rtrace
+TRACEBAD:DB 'Trace unavailable: BIOS JMP operands are not safely writable.',13,10,'$' ; tracebad
+TWMAKE:DB 'Trace: Make...',13,10,'$'    ; twmake
+TWWR1: DB 'Trace: first sequential write...',13,10,'$' ; twwr1
+TWWR2: DB 'Trace: second sequential write...',13,10,'$' ; twwr2
+TWCLOSE:DB 'Trace: Close/Delete...',13,10,'$' ; twclose
+E27MAKE:DB '0427 FAIL: could not create BTBIO.TMP.',13,10,'$' ; e27make
+E27WRITE:DB '0427 FAIL: one-record write was rejected.',13,10,'$' ; e27write
+E27CLOSE:DB '0427 FAIL: close was rejected.',13,10,'$' ; e27close
+E27BLOCK:DB '0427 FAIL: no allocation block appeared in the FCB.',13,10,'$' ; e27block
+E27SET: DB '0427 FAIL: allocated block was not set in the ALV.',13,10,'$' ; e27set
+E27DELETE:DB '0427 FAIL: delete was rejected.',13,10,'$' ; e27delete
+E27STATE:DB '0427 FAIL: lifecycle did not reach allocated state.',13,10,'$' ; e27state
+E27CLEAR:DB '0427 FAIL: released block remained set in the ALV.',13,10,'$' ; e27clear
+D27BLOCK:DB '0427: allocation block decoded.',13,10,'$' ; d27block
+D27SET:DB '0427: allocation bit set after write.',13,10,'$' ; d27set
+D27DELETE:DB '0427: temporary file deleted.',13,10,'$' ; d27delete
+
+; ================================================================================
+; =                       Conformance Catalog and Messages                       =
+; =                                                                              =
+; = Defines the writable case catalog, group tables, help and result text,       =
+; = explanations, and manual-operation notes used by the runner.                 =
+; ================================================================================
+
+CASES: DW I0423,STOUT,CLOUT,O0423       ; conformance case catalog
        DW I0424,STOUT,CLREQ,O0424
        DW I0425,STOUT,CLREQ,O0425
        DW I0426,STOUT,CLREQ,O0426
@@ -4116,181 +4452,200 @@ CASES: DW I0423,STOUT,CLOUT,O0423
        DW I0473,STOUT,CLREQ,O0473
        DW I0622,STOUT,CLREQ,O0622
 
-SELBUF:DS 4
-REPORTMODE:DB 0
-FILTERMODE:DB 0
-CARDPTR:DW 0
-ARGBUF:DS 32
-SH:     DB '/H',0
-SHELP:  DB '/HELP',0
-SLIST:  DB '/LIST',0
-SALL:   DB '/ALL',0
-SSAFE:  DB '/SAFE',0
-SINFO:  DB '/INFO',0
-SVER:   DB '/VER',0
-SVERSION:DB '/VERSION',0
-SGLIST: DB '/GROUP:LIST',0
-SGREQ:  DB '/GROUP:REQUIRED',0
-SGOBS:  DB '/GROUP:OBSERVATION',0
-SGMAN:  DB '/GROUP:MANUAL',0
-SGALLOC:DB '/GROUP:ALLOCATION',0
-SGDEV:  DB '/GROUP:DEVICES',0
-SGDISK: DB '/GROUP:DISK',0
-SGBOOT: DB '/GROUP:BOOT',0
-SGCHAR: DB '/GROUP:CHARACTER',0
-SGCPU:  DB '/GROUP:PROCESSOR',0
-SHR:    DB '/H:RESULTS',0
-SHP:    DB '/H:PROFILES',0
-SREPORT:DB ':REPORT',0
-PASSCNT:DB 0
-FAILCNT:DB 0
-REMCNT: DB 30
-DECTMP: DB 0
-T26AL0: DB 0
-T26AL1: DB 0
-T26AV0: DB 0
-T26AV1: DB 0
-DPHPTR:DW 0
-DPBPTR:DW 0
-ALVPTR:DW 0
-DPBOLD:DW 0
-DPBSCR:DW 0
-MODPTR:DW 0
-TESTBLK:DW 0
-BIOSBASE:DW 0
-PATCHLOC:DW 0
-PATCHNEW:DW 0
-PATCHSAVE:DW 0
-PATCHCNT:DB 0
-ORGSEL: DW 0
-ORGTRK: DW 0
-ORGSEC: DW 0
-ORGDMA: DW 0
-ORGREAD:DW 0
-ORGWRITE:DW 0
-ORGXLT: DW 0
-ORGCO:  DW 0
-ORGLIST:DW 0
-ORGPUNCH:DW 0
-ORGREADER:DW 0
-ORGCDMA:DW 0
-TRACELOG:
-SELCNT: DB 0
-TRKCNT: DB 0
-SECCNT: DB 0
-DMACNT: DB 0
-READCNT:DB 0
-WRITECNT:DB 0
-XLTCNT: DB 0
-WRTYPES:DB 0
-APPDMA: DB 0
-DIRDMA: DB 0
-XLTVALID:DB 0
-XLTCHAIN:DB 0
-IOFAIL: DB 0
-CONFSEL:DB 0
-ABSENTSEL:DB 0
-TRACECOUNT:DB 0
-OFFAVAIL:DB 0
-OFFRESULT:DB 0
-BWBSH:  DB 0
-BWBLM:  DB 0
-BWDSMH: DB 0
-RINDEX: DB 0
-RECPOS: DB 0
-PREVVALID:DB 0
-BWSPT:  DW 0
-BWOFF:  DW 0
-WRLEFT: DW 0
-PREVTRK:DW 0
-CURRENTTRK:DW 0
-XFERGOOD:DB 0
-FAVAIL: DB 0
-FRESULT:DB 1
-FSTATUS:DB 0
-RSTATUS:DB 0
-LASTSEL:DB 0
-SELRESULT:DW 0
-LASTTRK:DW 0
-LASTSEC:DW 0
-LASTDMA:DW 0
-XLTIN:  DW 0
-XLTPTR: DW 0
-XLTOUT: DW 0
-TRACEEND:
-FAULTREQ:DB 0
-READERREQ:DB 0
-CHARLOG:
-COCNT:  DB 0
-COBYTE1:DB 0
-COBYTE2:DB 0
-COTAB:  DB 0
-LISTCNT:DB 0
-LASTLIST:DB 0
-LIST1:  DB 0
-LIST2:  DB 0
-PUNCHCNT:DB 0
-PUNCH1:DB 0
-PUNCH2:DB 0
-READERCNT:DB 0
-CDMACNT:DB 0
-CHIOBORIG:DB 0
-R0439:  DB 1
-R0445:  DB 1
-R0448:  DB 1
-R0470:  DB 1
-R0473:  DB 1
-CHAREND:
-CHCOUNT:DB 0
-R0471:  DB 1
-RDNBYTE:DB 0
-RDABYTE:DB 0
-CSTRES: DB 1
-CINRES: DB 1
-OLDDRV:DB 0
-OLDUSR:DB 0
-SCRDRV:DB 0
-MODORIG:DB 0
-MODNEW:DB 0
-T27WROTE:DB 0
-IOBORIG:DB 0
-IOBNEW: DB 0
-PROBERES:DB 0
-BOOTBITS:DB 0
-BOOTPEND:DB 0
-BOOTSEL: DB 0
-BOOTDRV: DB 0
-BOOTRES: DB 0
-BOOTIO:  DB 0
-BOOTCOUNT:DB 0
-BOOTWBOOT:DW 0
-BOOTBDOS:DW 0
-BOOTMAGIC:DB 'BTB8'
-BOOTNAME:DB 'BTBOOT  DAT'
-BOOTFCB: DB 0
+SELBUF:DS 4                             ; selbuf
+REPORTMODE:DB 0                         ; reportmode
+FILTERMODE:DB 0                         ; filtermode
+CARDPTR:DW 0                            ; cardptr
+ARGBUF:DS 32                            ; argbuf
+SH:     DB '/H',0                       ; sh
+SHELP:  DB '/HELP',0                    ; shelp
+SLIST:  DB '/LIST',0                    ; slist
+SALL:   DB '/ALL',0                     ; sall
+SSAFE:  DB '/SAFE',0                    ; ssafe
+SINFO:  DB '/INFO',0                    ; sinfo
+SVER:   DB '/VER',0                     ; sver
+SVERSION:DB '/VERSION',0                ; sversion
+SGLIST: DB '/GROUP:LIST',0              ; sglist
+SGREQ:  DB '/GROUP:REQUIRED',0          ; sgreq
+SGOBS:  DB '/GROUP:OBSERVATION',0       ; sgobs
+SGMAN:  DB '/GROUP:MANUAL',0            ; sgman
+SGALLOC:DB '/GROUP:ALLOCATION',0        ; sgalloc
+SGDEV:  DB '/GROUP:DEVICES',0           ; sgdev
+SGDISK: DB '/GROUP:DISK',0              ; sgdisk
+SGBOOT: DB '/GROUP:BOOT',0              ; sgboot
+SGCHAR: DB '/GROUP:CHARACTER',0         ; sgchar
+SGCPU:  DB '/GROUP:PROCESSOR',0         ; sgcpu
+SHR:    DB '/H:RESULTS',0               ; shr
+SHP:    DB '/H:PROFILES',0              ; shp
+SREPORT:DB ':REPORT',0                  ; sreport
+PASSCNT:DB 0                            ; passcnt
+FAILCNT:DB 0                            ; failcnt
+REMCNT: DB 30                           ; remcnt
+DECTMP: DB 0                            ; dectmp
+T26AL0: DB 0                            ; t26al0
+T26AL1: DB 0                            ; t26al1
+T26AV0: DB 0                            ; t26av0
+T26AV1: DB 0                            ; t26av1
+DPHPTR:DW 0                             ; dphptr
+DPBPTR:DW 0                             ; dpbptr
+ALVPTR:DW 0                             ; alvptr
+DPBOLD:DW 0                             ; dpbold
+DPBSCR:DW 0                             ; dpbscr
+MODPTR:DW 0                             ; modptr
+TESTBLK:DW 0                            ; testblk
+BIOSBASE:DW 0                           ; biosbase
+PATCHLOC:DW 0                           ; patchloc
+PATCHNEW:DW 0                           ; patchnew
+PATCHSAVE:DW 0                          ; patchsave
+PATCHCNT:DB 0                           ; patchcnt
+ORGSEL: DW 0                            ; orgsel
+ORGTRK: DW 0                            ; orgtrk
+ORGSEC: DW 0                            ; orgsec
+ORGDMA: DW 0                            ; orgdma
+ORGREAD:DW 0                            ; orgread
+ORGWRITE:DW 0                           ; orgwrite
+ORGXLT: DW 0                            ; orgxlt
+ORGCO:  DW 0                            ; orgco
+ORGLIST:DW 0                            ; orglist
+ORGPUNCH:DW 0                           ; orgpunch
+ORGREADER:DW 0                          ; orgreader
+ORGCDMA:DW 0                            ; orgcdma
+
+; ================================================================================
+; =                     Trace, Continuation, and Test State                      =
+; =                                                                              =
+; = Defines saved BIOS entries, trace notebooks, continuation state, DMA         =
+; = canaries, fixtures, buffers, and other transient working storage.            =
+; ================================================================================
+
+TRACELOG:                               ; disk trace notebook
+
+SELCNT: DB 0                            ; selcnt
+TRKCNT: DB 0                            ; trkcnt
+SECCNT: DB 0                            ; seccnt
+DMACNT: DB 0                            ; dmacnt
+READCNT:DB 0                            ; readcnt
+WRITECNT:DB 0                           ; writecnt
+XLTCNT: DB 0                            ; xltcnt
+WRTYPES:DB 0                            ; wrtypes
+APPDMA: DB 0                            ; appdma
+DIRDMA: DB 0                            ; dirdma
+XLTVALID:DB 0                           ; xltvalid
+XLTCHAIN:DB 0                           ; xltchain
+IOFAIL: DB 0                            ; iofail
+CONFSEL:DB 0                            ; confsel
+ABSENTSEL:DB 0                          ; absentsel
+TRACECOUNT:DB 0                         ; tracecount
+OFFAVAIL:DB 0                           ; offavail
+OFFRESULT:DB 0                          ; offresult
+BWBSH:  DB 0                            ; bwbsh
+BWBLM:  DB 0                            ; bwblm
+BWDSMH: DB 0                            ; bwdsmh
+RINDEX: DB 0                            ; rindex
+RECPOS: DB 0                            ; recpos
+PREVVALID:DB 0                          ; prevvalid
+BWSPT:  DW 0                            ; bwspt
+BWOFF:  DW 0                            ; bwoff
+WRLEFT: DW 0                            ; wrleft
+PREVTRK:DW 0                            ; prevtrk
+CURRENTTRK:DW 0                         ; currenttrk
+XFERGOOD:DB 0                           ; xfergood
+FAVAIL: DB 0                            ; favail
+FRESULT:DB 1                            ; fresult
+FSTATUS:DB 0                            ; fstatus
+RSTATUS:DB 0                            ; rstatus
+LASTSEL:DB 0                            ; lastsel
+SELRESULT:DW 0                          ; selresult
+LASTTRK:DW 0                            ; lasttrk
+LASTSEC:DW 0                            ; lastsec
+LASTDMA:DW 0                            ; lastdma
+XLTIN:  DW 0                            ; xltin
+XLTPTR: DW 0                            ; xltptr
+XLTOUT: DW 0                            ; xltout
+
+TRACEEND:                               ; traceend
+
+FAULTREQ:DB 0                           ; faultreq
+READERREQ:DB 0                          ; readerreq
+
+CHARLOG:                                ; charlog
+
+COCNT:  DB 0                            ; cocnt
+COBYTE1:DB 0                            ; cobyte1
+COBYTE2:DB 0                            ; cobyte2
+COTAB:  DB 0                            ; cotab
+LISTCNT:DB 0                            ; listcnt
+LASTLIST:DB 0                           ; lastlist
+LIST1:  DB 0                            ; list1
+LIST2:  DB 0                            ; list2
+PUNCHCNT:DB 0                           ; punchcnt
+PUNCH1:DB 0                             ; punch1
+PUNCH2:DB 0                             ; punch2
+READERCNT:DB 0                          ; readercnt
+CDMACNT:DB 0                            ; cdmacnt
+CHIOBORIG:DB 0                          ; chioborig
+R0439:  DB 1                            ; catalog record for item 439
+R0445:  DB 1                            ; catalog record for item 445
+R0448:  DB 1                            ; catalog record for item 448
+R0470:  DB 1                            ; catalog record for item 470
+R0473:  DB 1                            ; catalog record for item 473
+
+CHAREND:                                ; charend
+
+CHCOUNT:DB 0                            ; chcount
+R0471:  DB 1                            ; catalog record for item 471
+RDNBYTE:DB 0                            ; rdnbyte
+RDABYTE:DB 0                            ; rdabyte
+CSTRES: DB 1                            ; cstres
+CINRES: DB 1                            ; cinres
+OLDDRV:DB 0                             ; olddrv
+OLDUSR:DB 0                             ; oldusr
+SCRDRV:DB 0                             ; scrdrv
+MODORIG:DB 0                            ; modorig
+MODNEW:DB 0                             ; modnew
+T27WROTE:DB 0                           ; t27wrote
+IOBORIG:DB 0                            ; ioborig
+IOBNEW: DB 0                            ; iobnew
+PROBERES:DB 0                           ; proberes
+BOOTBITS:DB 0                           ; bootbits
+BOOTPEND:DB 0                           ; bootpend
+BOOTSEL: DB 0                           ; bootsel
+BOOTDRV: DB 0                           ; bootdrv
+BOOTRES: DB 0                           ; bootres
+BOOTIO:  DB 0                           ; bootio
+BOOTCOUNT:DB 0                          ; bootcount
+BOOTWBOOT:DW 0                          ; bootwboot
+BOOTBDOS:DW 0                           ; bootbdos
+BOOTMAGIC:DB 'BTB8'                     ; bootmagic
+BOOTNAME:DB 'BTBOOT  DAT'               ; bootname
+BOOTFCB: DB 0                           ; bootfcb
         DS 35
-BOOTBUF:DS 128
-RDSTAGE:DB 0
-RDIO:   DB 0
-RDMAGIC:DB 'BTR1'
-RDNAME: DB 'BTRDR   DAT'
-RDFCB:  DB 0
+
+BOOTBUF:DS 128                          ; bootbuf
+RDSTAGE:DB 0                            ; rdstage
+RDIO:   DB 0                            ; rdio
+RDMAGIC:DB 'BTR1'                       ; rdmagic
+RDNAME: DB 'BTRDR   DAT'                ; rdname
+RDFCB:  DB 0                            ; rdfcb
         DS 35
-RDBUF:  DS 128
-DMASAVE:DS 4
-DMAPAT1:DB 055H,0AAH,033H,0CCH
-DMAPAT2:DB 012H,034H,056H,078H
-ALTDMA: DS 128
-SMCODE:DB 03EH,00H,0C9H,00H
-SMBUF1:DS 4
-SMBUF2:DS 4
-DPBCOPY1:DS 15
-DPBCOPY2:DS 15
-TESTFCB:DB 0
+
+RDBUF:  DS 128                          ; rdbuf
+DMASAVE:DS 4                            ; dmasave
+DMAPAT1:DB 055H,0AAH,033H,0CCH          ; dmapat1
+DMAPAT2:DB 012H,034H,056H,078H          ; dmapat2
+ALTDMA: DS 128                          ; altdma
+SMCODE:DB 03EH,00H,0C9H,00H             ; smcode
+SMBUF1:DS 4                             ; smbuf1
+SMBUF2:DS 4                             ; smbuf2
+DPBCOPY1:DS 15                          ; dpbcopy1
+DPBCOPY2:DS 15                          ; dpbcopy2
+TESTFCB:DB 0                            ; testfcb
         DS 35
-TNAME:  DB 'BTBIO   TMP'
-TESTDMA:DB 'BIOSTEST-CONTROLLED-RECORD'
+
+TNAME:  DB 'BTBIO   TMP'                ; tname
+TESTDMA:DB 'BIOSTEST-CONTROLLED-RECORD' ; testdma
         DS 102
         DS 128
-STACKTOP:
+
+STACKTOP:                               ; top of private test stack
         END     START

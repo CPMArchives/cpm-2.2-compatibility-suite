@@ -1,76 +1,86 @@
 ; SPDX-License-Identifier: GPL-2.0-or-later
-;
-;***********************************************************************
-;*                                                                     *
-;*               D I R T E S T   --   RELEASE DEV13                   *
-;*                                                                     *
-;*        BETTER CP/M DIRECTORY CONFORMANCE TEST PROGRAM               *
-;*                                                                     *
-;***********************************************************************
-;
-; Version 0.1.0-dev15 - standard command interface
-;
-; ASSEMBLY: ZSM4, THEN DIGITAL RESEARCH LINK.  ONLY 8080 OPERATIONS ARE USED.
-; LOAD AT:  0100H
-;
-;------------------------- PROGRAMMER'S NOTES --------------------------
-;
-; Search First and Search Next do not hand back a directory address.  They
-; return a number from zero through three, selecting one of four 32-byte slots
-; in the current DMA record.  ENTRYPTR performs that multiplication only after
-; the caller has rejected FFH.  Masking FFH first would turn failure into a
-; convincing, but entirely false, pointer to slot three.
-;
-; DMA1 and DMA2 are deliberately separate.  The continuation cards take the
-; first match into DMA1, change the DMA address, and demand the next match in
-; DMA2.  Both buffers begin with A5H when stale contents matter.  A changed
-; name byte or directory slot supplies evidence independent of the return code.
-;
-; Directory order is used carefully.  Two unchanged enumerations may be
-; compared for stability, but no alphabetical or physical order is made part
-; of the portable claim.  Complete-directory search is likewise counted only
-; to distinguish it from ordinary public lookup; the exact number of entries
-; belongs to the disk and its present contents.
-;
-; All writing cards use BT-prefixed TMP names.  PREPMAKE first erases a stale
-; copy, makes the file and closes it.  Failure exits which have made a set use
-; the same cleanup office as success.  These names are test instruments and
-; must never be assigned to an operator's data by a disk builder.
-;
-; Rename is built in WORKFCB: the source occupies the ordinary identity and
-; the destination begins at byte 16.  Data preservation is not inferred from
-; a successful return; the renamed file is reopened and its complete 5AH
-; record is read.  Multi-extent cards derive their required length from EXM so
-; that the fixture crosses a real directory-entry boundary on the selected
-; disk rather than assuming one particular geometry.
-;
-; User-area cards save the incoming user, construct controlled names in users
-; zero and one, test visibility or mutation, clean each name in its owning
-; user, and restore the saved value.  The ordinary FCB is reused on purpose:
-; this proves that user identity comes from current state, not a hidden FCB
-; byte.  Explicit-drive cards similarly check the default drive afterward.
-;
-; Read-only Delete and Rename may enter the resident BDOS error path and lose
-; this transient.  /ALL therefore prints them as manual terminal cards instead
-; of calling them.  The CCP USER card is also external: the supplied user-one
-; copy of DIRTEST must be invoked after USER 1, then Function 32 supplies the
-; returning evidence.
-;
-; NOT GUARANTEED cards record residue, collision handling, physical slots or
-; continuation state without inventing a required answer.  Their disposition
-; comes from CASES and never from a convenient observed byte.
-;
-;***********************************************************************
 
-; LINK establishes the CP/M transient load address at 0100h.
+; ********************************************************************************
+; *                   CP/M 2.2 Conformance Suite -- DIRTEST                     *
+; *                                                                              *
+; * Exercises CP/M 2.2 directory search, deletion, rename, attributes, extent    *
+; * enumeration, and user-area behavior through public BDOS interfaces. Writing *
+; * tests use reserved BT...TMP fixtures and restore borrowed drive, user, DMA,  *
+; * and file state on every returning path.                                      *
+; ********************************************************************************
+
+  ; Version 0.1.0-dev15 - standard command interface
+
+  ; ASSEMBLY: ZSM4, THEN DIGITAL RESEARCH LINK.  ONLY 8080 OPERATIONS ARE USED.
+  ; LOAD AT:  0100H
+
+  ; PROGRAMMER'S NOTES
+  ; ------------------
+  ;
+  ; Search First and Search Next do not hand back a directory address.  They
+  ; return a number from zero through three, selecting one of four 32-byte slots
+  ; in the current DMA record.  ENTRYPTR performs that multiplication only after
+  ; the caller has rejected FFH.  Masking FFH first would turn failure into a
+  ; convincing, but entirely false, pointer to slot three.
+  ;
+  ; DMA1 and DMA2 are deliberately separate.  The continuation cards take the
+  ; first match into DMA1, change the DMA address, and demand the next match in
+  ; DMA2.  Both buffers begin with A5H when stale contents matter.  A changed
+  ; name byte or directory slot supplies evidence independent of the return code.
+  ;
+  ; Directory order is used carefully.  Two unchanged enumerations may be
+  ; compared for stability, but no alphabetical or physical order is made part
+  ; of the portable claim.  Complete-directory search is likewise counted only
+  ; to distinguish it from ordinary public lookup; the exact number of entries
+  ; belongs to the disk and its present contents.
+  ;
+  ; All writing cards use BT-prefixed TMP names.  PREPMAKE first erases a stale
+  ; copy, makes the file and closes it.  Failure exits which have made a set use
+  ; the same cleanup office as success.  These names are test instruments and
+  ; must never be assigned to an operator's data by a disk builder.
+  ;
+  ; Rename is built in WORKFCB: the source occupies the ordinary identity and
+  ; the destination begins at byte 16.  Data preservation is not inferred from
+  ; a successful return; the renamed file is reopened and its complete 5AH
+  ; record is read.  Multi-extent cards derive their required length from EXM so
+  ; that the fixture crosses a real directory-entry boundary on the selected
+  ; disk rather than assuming one particular geometry.
+  ;
+  ; User-area cards save the incoming user, construct controlled names in users
+  ; zero and one, test visibility or mutation, clean each name in its owning
+  ; user, and restore the saved value.  The ordinary FCB is reused on purpose:
+  ; this proves that user identity comes from current state, not a hidden FCB
+  ; byte.  Explicit-drive cards similarly check the default drive afterward.
+  ;
+  ; Read-only Delete and Rename may enter the resident BDOS error path and lose
+  ; this transient.  /ALL therefore prints them as manual terminal cards instead
+  ; of calling them.  The CCP USER card is also external: the supplied user-one
+  ; copy of DIRTEST must be invoked after USER 1, then Function 32 supplies the
+  ; returning evidence.
+  ;
+  ; NOT GUARANTEED cards record residue, collision handling, physical slots or
+  ; continuation state without inventing a required answer.  Their disposition
+  ; comes from CASES and never from a convenient observed byte.
+  ;
+  ;***********************************************************************
+
+  ; LINK establishes the CP/M transient load address at 0100h.
 BDOS    EQU     0005H
 
-; Detail numbers of cards which cannot safely run as aggregate members.
+  ; Detail numbers of cards which cannot safely run as aggregate members.
 DET_RO_DELETE   EQU 48
 DET_RO_RENAME   EQU 49
 DET_CCP_USER    EQU 67
 
-START:  LD      SP,STACKTOP
+; ================================================================================
+; =                   Command Interface and Catalog Selection                    =
+; =                                                                              =
+; = Parses group, aggregate, range, observation, manual, required, and numeric   =
+; = selectors while keeping terminal error paths and external CCP arrangements   =
+; = explicitly selected.                                                         =
+; ================================================================================
+
+START:  LD      SP,STACKTOP             ; enter DIRTEST command dispatcher
         LD      HL,0
         ; Bottom return enters page-zero warm boot after our private stack.
         PUSH    HL
@@ -141,19 +151,24 @@ START:  LD      SP,STACKTOP
         JP      Z,HPROFILES
         CALL    ITEMARG
         JP      Z,RUNONE
-BADCOMMAND:
+
+BADCOMMAND:                             ; badcommand
         LD      DE,BADSEL
         JP      PUTS
 
-;------------------------ DECODE COMMAND TAIL -------------------------
-GETARG:XOR     A
+; -------------------------------------------------------------------------------
+; Command Argument Parser
+; -------------------------------------------------------------------------------
+
+GETARG:XOR     A                        ; parse command argument
         LD      (ARGBUF),A
         LD      A,(0080H)
         OR      A
         RET     Z
         LD      B,A
         LD      HL,0081H
-PSKIP: LD      A,(HL)
+
+PSKIP: LD      A,(HL)                   ; pskip
         CP      ' '
         JP      NZ,PSTART
         INC     HL
@@ -161,8 +176,10 @@ PSKIP: LD      A,(HL)
         JP      NZ,PSKIP
         XOR     A
         RET
-PSTART:LD      DE,ARGBUF
-PCOPY: LD      A,B
+
+PSTART:LD      DE,ARGBUF                ; pstart
+
+PCOPY: LD      A,B                      ; pcopy
         OR      A
         JP      Z,PDONE
         LD      A,(HL)
@@ -173,14 +190,17 @@ PCOPY: LD      A,B
         CP      'z'+1
         JP      NC,PSTORE
         SUB     20H
-PSTORE:LD      (DE),A
+
+PSTORE:LD      (DE),A                   ; pstore
         INC     DE
         INC     HL
         DEC     B
         JP      PCOPY
-PTRAIL:INC     HL
+
+PTRAIL:INC     HL                       ; ptrail
         DEC     B
-PTRLP: LD      A,B
+
+PTRLP: LD      A,B                      ; ptrlp
         OR      A
         JP      Z,PDONE
         LD      A,(HL)
@@ -189,14 +209,17 @@ PTRLP: LD      A,B
         INC     HL
         DEC     B
         JP      PTRLP
-PDONE: XOR     A
+
+PDONE: XOR     A                        ; pdone
         LD      (DE),A
         RET
-PBAD:  OR      1
+
+PBAD:  OR      1                        ; pbad
         RET
 
-ARGIS: LD      HL,ARGBUF
-PACMP: LD      A,(DE)
+ARGIS: LD      HL,ARGBUF                ; argis
+
+PACMP: LD      A,(DE)                   ; pacmp
         CP      (HL)
         RET     NZ
         OR      A
@@ -205,7 +228,11 @@ PACMP: LD      A,(DE)
         INC     HL
         JP      PACMP
 
-ITEMARG:
+; -------------------------------------------------------------------------------
+; Numeric Selector
+; -------------------------------------------------------------------------------
+
+ITEMARG:                                ; parse numeric item selector
         XOR     A
         LD      (REPORTMODE),A
         LD      HL,ARGBUF
@@ -218,7 +245,8 @@ ITEMARG:
         EX      DE,HL
         LD      (ITEMNO),HL
         EX      DE,HL
-PNUM:  LD      A,(HL)
+
+PNUM:  LD      A,(HL)                   ; pnum
         CP      '0'
         JP      C,PIBAD
         CP      '9'+1
@@ -245,7 +273,8 @@ PNUM:  LD      A,(HL)
         OR      A
         RET     Z
         LD      DE,SREPORT
-PIRPT: LD      A,(DE)
+
+PIRPT: LD      A,(DE)                   ; pirpt
         CP      (HL)
         JP      NZ,PIBAD
         OR      A
@@ -253,63 +282,89 @@ PIRPT: LD      A,(DE)
         INC     DE
         INC     HL
         JP      PIRPT
-PIROK: LD      A,1
+
+PIROK: LD      A,1                      ; pirok
         LD      (REPORTMODE),A
         XOR     A
         RET
-PIBAD: OR      1
+
+PIBAD: OR      1                        ; pibad
         RET
 
-HELP:   LD      DE,HLPMSG
-        CALL    PUTS
-        RET
-LIST:   LD      DE,LSTMSG
-        CALL    PUTS
-        RET
-INFO:   LD      DE,INFMSG
-        CALL    PUTS
-        RET
-VERSION:LD     DE,VERMSG
-        JP      PUTS
-GROUPLIST:LD   DE,GRPLIST
-        JP      PUTS
-HRESULTS:LD    DE,RESMSG
-        CALL    PUTS
-        RET
-HPROFILES:LD   DE,PRFMSG
+; -------------------------------------------------------------------------------
+; Help and Information Commands
+; -------------------------------------------------------------------------------
+
+HELP:   LD      DE,HLPMSG               ; display command help
         CALL    PUTS
         RET
 
-RUNSEARCH:
+LIST:   LD      DE,LSTMSG               ; display catalog list
+        CALL    PUTS
+        RET
+
+INFO:   LD      DE,INFMSG               ; display suite information
+        CALL    PUTS
+        RET
+
+VERSION:LD     DE,VERMSG                ; display suite version
+        JP      PUTS
+
+GROUPLIST:LD   DE,GRPLIST               ; display functional groups
+        JP      PUTS
+
+HRESULTS:LD    DE,RESMSG                ; display result-class help
+        CALL    PUTS
+        RET
+
+HPROFILES:LD   DE,PRFMSG                ; display profile help
+        CALL    PUTS
+        RET
+
+; -------------------------------------------------------------------------------
+; Functional Group Runs
+; -------------------------------------------------------------------------------
+
+RUNSEARCH:                              ; run search group
         LD      HL,CASES
         LD      B,11
         LD      DE,EMPTY
         JP      RUNRANGE
-RUNDELETE:
+
+RUNDELETE:                              ; run delete group
         LD      HL,CASES+66
         LD      B,10
         LD      DE,DELOOS
         JP      RUNRANGE
-RUNRENAME:
+
+RUNRENAME:                              ; run rename group
         LD      HL,CASES+126
         LD      B,14
         LD      DE,RENOOS
         JP      RUNRANGE
-RUNATTRIBUTES:
+
+RUNATTRIBUTES:                          ; run attribute group
         LD      HL,CASES+210
         LD      B,14
         LD      DE,EMPTY
         JP      RUNRANGE
-RUNENUMERATION:
+
+RUNENUMERATION:                         ; run enumeration group
         LD      HL,CASES+294
         LD      B,9
         LD      DE,EMPTY
         JP      RUNRANGE
-RUNUSERS:
+
+RUNUSERS:                               ; run user group
         LD      HL,CASES+348
         LD      B,9
         LD      DE,EMPTY
-RUNRANGE:
+
+; -------------------------------------------------------------------------------
+; Range and Class Selection
+; -------------------------------------------------------------------------------
+
+RUNRANGE:                               ; run catalog range
         EX      DE,HL
         LD      (EXTRAPTR),HL
         EX      DE,HL
@@ -318,7 +373,8 @@ RUNRANGE:
         CALL    BEGIN
         POP     BC
         POP     HL
-RGRLP:  PUSH    BC
+
+RGRLP:  PUSH    BC                      ; rgrlp
         PUSH    HL
         PUSH    HL
         LD      DE,5
@@ -333,8 +389,10 @@ RGRLP:  PUSH    BC
         JP      Z,RGMAN
         CALL    RUNENT
         JP      RGSKIP
-RGMAN:  CALL    MANROW
-RGSKIP: POP     HL
+
+RGMAN:  CALL    MANROW                  ; rgman
+
+RGSKIP: POP     HL                      ; rgskip
         LD      DE,6
         ADD     HL,DE
         POP     BC
@@ -345,11 +403,12 @@ RGSKIP: POP     HL
         CALL    PUTS
         JP      SUMMARY
 
-RUNOBSERVATION:
+RUNOBSERVATION:                         ; run observation cases
         CALL    BEGIN
         LD      HL,CASES
         LD      B,67
-ROBLP:  PUSH    BC
+
+ROBLP:  PUSH    BC                      ; roblp
         PUSH    HL
         LD      DE,4
         ADD     HL,DE
@@ -366,18 +425,19 @@ ROBLP:  PUSH    BC
         JP      NZ,ROBLP
         JP      SUMMARY
 
-RUNMANUAL:
+RUNMANUAL:                              ; run manual cases
         CALL    BEGIN
         LD      DE,MANLIST
         CALL    PUTS
         JP      SUMMARY
 
-;------------------------- RUN CARD DECK ------------------------------
-; /SAFE takes only required, returning, self-contained cards.
-RUNREQ: CALL    BEGIN
+  ; /SAFE takes only required, returning, self-contained cards.
+
+RUNREQ: CALL    BEGIN                   ; run required cases
         LD      HL,CASES
         LD      B,67
-RRLOOP: PUSH    BC
+
+RRLOOP: PUSH    BC                      ; rrloop
         PUSH    HL
         LD      DE,4
         ADD     HL,DE
@@ -400,7 +460,8 @@ RRLOOP: PUSH    BC
         CP      DET_CCP_USER
         JP      Z,RRSKIP
         CALL    RUNENT
-RRSKIP:
+
+RRSKIP:                                 ; rrskip
         POP     HL
         LD      DE,6
         ADD     HL,DE
@@ -409,10 +470,15 @@ RRSKIP:
         JP      NZ,RRLOOP
         JP      SUMMARY
 
-RUNALL: CALL    BEGIN
+; -------------------------------------------------------------------------------
+; Aggregate Run
+; -------------------------------------------------------------------------------
+
+RUNALL: CALL    BEGIN                   ; run complete aggregate
         LD      HL,CASES
         LD      B,67
-RALOOP: PUSH    BC
+
+RALOOP: PUSH    BC                      ; raloop
         PUSH    HL
         LD      DE,5
         ADD     HL,DE
@@ -428,8 +494,10 @@ RALOOP: PUSH    BC
         JP      Z,RAMAN
         CALL    RUNENT
         JP      RASKIP
-RAMAN:  CALL    MANROW
-RASKIP:
+
+RAMAN:  CALL    MANROW                  ; raman
+
+RASKIP:                                 ; raskip
         POP     HL
         LD      DE,6
         ADD     HL,DE
@@ -440,8 +508,9 @@ RASKIP:
         CALL    PUTS
         JP      SUMMARY
 
-; Print one required external card without invoking it inside /ALL.
-MANROW: LD      E,(HL)
+  ; Print one required external card without invoking it inside /ALL.
+
+MANROW: LD      E,(HL)                  ; report manual row
         INC     HL
         LD      D,(HL)
         EX      DE,HL
@@ -465,14 +534,20 @@ MANROW: LD      E,(HL)
         LD      DE,MANMSG
         JP      NZ,MANPUT
         LD      DE,USRMSG
-MANPUT:
+
+MANPUT:                                 ; manput
         CALL    PUTS
         LD      DE,CRLF
         JP      PUTS
 
-RUNONE:LD      HL,CASES
+; -------------------------------------------------------------------------------
+; Single-Item Selection
+; -------------------------------------------------------------------------------
+
+RUNONE:LD      HL,CASES                 ; run one catalog item
         LD      B,67
-ROLOOP:LD      E,(HL)
+
+ROLOOP:LD      E,(HL)                   ; roloop
         INC     HL
         LD      D,(HL)
         INC     HL
@@ -486,8 +561,10 @@ ROLOOP:LD      E,(HL)
         POP     HL
         JP      Z,ROFOUND
         JP      ROADV
-RONEXT:POP     HL
-ROADV:
+
+RONEXT:POP     HL                       ; ronext
+
+ROADV:                                  ; roadv
         INC     HL
         INC     HL
         INC     HL
@@ -497,7 +574,8 @@ ROADV:
         LD      DE,BADSEL
         CALL    PUTS
         RET
-ROFOUND:DEC     HL
+
+ROFOUND:DEC     HL                      ; rofound
         DEC     HL
         PUSH    HL
         CALL    BEGIN
@@ -512,20 +590,33 @@ ROFOUND:DEC     HL
         CALL    PUTITEM
         LD      DE,RPTTAIL
         CALL    PUTS
-ROSHORT:
+
+ROSHORT:                                ; roshort
         JP      SUMMARY
 
-BEGIN:  XOR     A
+; ================================================================================
+; =                   Case Execution and Result Classification                   =
+; =                                                                              =
+; = Dispatches six-byte catalog cards, separates required verdicts from          =
+; = observations and manual procedures, and preserves detail indices for         =
+; = reporting failed rows.                                                       =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Run Card Deck
+; -------------------------------------------------------------------------------
+
+BEGIN:  XOR     A                       ; begin case execution
         LD      (PASSCT),A
         LD      (FAILCT),A
         LD      (OBSCT),A
         LD      DE,HEADER
         JP      PUTS
 
-; Six-byte card: ledger word, routine word, disposition and detail.  The 8080
-; has no indirect CALL, so push RETCASE and jump through the routine pointer.
-; An ordinary RET then reaches the common result office.
-RUNENT: LD      E,(HL)
+  ; Six-byte card: ledger word, routine word, disposition and detail.  The 8080
+  ; has no indirect CALL, so push RETCASE and jump through the routine pointer.
+  ; An ordinary RET then reaches the common result office.
+
+RUNENT: LD      E,(HL)                  ; execute catalog entry
         INC     HL
         LD      D,(HL)
         EX      DE,HL
@@ -552,7 +643,8 @@ RUNENT: LD      E,(HL)
         PUSH    HL
         LD      HL,(CALLPTR)
         JP      (HL)
-RETCASE:LD      A,(DISP)
+
+RETCASE:LD      A,(DISP)                ; retcase
         ; 0567 begins outside this program.  If current user is not one, the
         ; prescribed CCP step was not performed and the card remains untested.
         LD      A,(DETAIL)
@@ -561,7 +653,8 @@ RETCASE:LD      A,(DISP)
         LD      A,(OBS1)
         CP      1
         JP      NZ,ROWUNTEST
-RETNORM:LD      A,(DISP)
+
+RETNORM:LD      A,(DISP)                ; retnorm
         OR      A
         JP      NZ,ROWOBS
         LD      A,(CASEOK)
@@ -571,24 +664,28 @@ RETNORM:LD      A,(DISP)
         INC     (HL)
         LD      DE,SPASS
         JP      ROW
-ROWFAIL:LD      HL,FAILCT
+
+ROWFAIL:LD      HL,FAILCT               ; rowfail
         CALL    SAVEFAIL
         INC     (HL)
         LD      DE,SFAIL
         JP      ROW
-ROWOBS:LD      HL,OBSCT
+
+ROWOBS:LD      HL,OBSCT                 ; rowobs
         INC     (HL)
         LD      A,(CASEOK)
         OR      A
         JP      Z,OBSFAIL
-; Observations have their own total; do not add them to required passes.
+  ; Observations have their own total; do not add them to required passes.
         LD      DE,SOBS
         JP      ROW
-OBSFAIL:LD     HL,FAILCT
+
+OBSFAIL:LD     HL,FAILCT                ; obsfail
         CALL    SAVEFAIL
         INC     (HL)
         LD      DE,SOBFAIL
-ROW:    PUSH    DE
+
+ROW:    PUSH    DE                      ; print result row
         LD      A,(DETAIL)
         CALL    PUTITEM
         LD      DE,TWO
@@ -600,13 +697,14 @@ ROW:    PUSH    DE
         LD      DE,DREQ
         JP      Z,ROWDISP
         LD      DE,DNOT
-ROWDISP:CALL    PUTS
+
+ROWDISP:CALL    PUTS                    ; rowdisp
         LD      A,(DETAIL)
         CALL    PUTDETAIL
         LD      DE,CRLF
         JP      PUTS
 
-ROWUNTEST:
+ROWUNTEST:                              ; rowuntest
         LD      A,(DETAIL)
         CALL    PUTITEM
         LD      DE,TWO
@@ -620,9 +718,20 @@ ROWUNTEST:
         LD      DE,USRHELP
         JP      PUTS
 
-;---------------------- DIRECTORY SEARCH CARDS ------------------------
-; 0196: exact search and returned directory-entry/FCB field form.
-T0196: CALL    DMA1SET
+; ================================================================================
+; =                      Directory Search and Continuation                       =
+; =                                                                              =
+; = Exercises exact and wildcard Search First/Next, DMA-slot selection, explicit =
+; = drives, continuation, stability, and diagnostic residue without imposing     =
+; = directory ordering.                                                          =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Directory Search Cards
+; -------------------------------------------------------------------------------
+
+  ; 0196: exact search and returned directory-entry/FCB field form.
+
+T0196: CALL    DMA1SET                  ; test catalog item 196
         LD      HL,FCBW1
         CALL    SFIRST
         LD      (OBS1),A
@@ -643,8 +752,9 @@ T0196: CALL    DMA1SET
         JP      NC,TFAIL
         JP      TPASS
 
-; 0198: documented type attribute bit does not alter base-type matching.
-T0198: CALL    DMA1SET
+  ; 0198: documented type attribute bit does not alter base-type matching.
+
+T0198: CALL    DMA1SET                  ; test catalog item 198
         LD      HL,FCBROA
         CALL    SFIRST
         LD      (OBS1),A
@@ -658,8 +768,9 @@ T0198: CALL    DMA1SET
         LD      (OBS2),A
         JP      TPASS
 
-; 0200: explicit C search leaves current B selected.
-T0200: CALL    GETDRV
+  ; 0200: explicit C search leaves current B selected.
+
+T0200: CALL    GETDRV                   ; test catalog item 200
         LD      (OBS2),A
         PUSH    AF
         CALL    DMA1SET
@@ -674,17 +785,20 @@ T0200: CALL    GETDRV
         CP      C
         JP      NZ,TFAIL
         JP      TPASS
-TPOPFAIL:POP    AF
+
+TPOPFAIL:POP    AF                      ; tpopfail
         JP      TFAIL
 
-; 0202: drive '?' scans directory entries across users 0 and 1.
-T0202: CALL    DMA1SET
+  ; 0202: drive '?' scans directory entries across users 0 and 1.
+
+T0202: CALL    DMA1SET                  ; test catalog item 202
         LD      HL,FCBALL
         CALL    SFIRST
         XOR     A
         LD      (FLAGS),A
         LD      B,80
-T202L: CALL    GOODRET
+
+T202L: CALL    GOODRET                  ; t202l
         JP      Z,T202E
         CALL    ENTRYPTR
         LD      A,(HL)
@@ -693,23 +807,27 @@ T202L: CALL    GOODRET
         LD      A,(FLAGS)
         OR      1
         LD      (FLAGS),A
-T202U1:LD      A,(HL)
+
+T202U1:LD      A,(HL)                   ; t202u1
         CP      1
         JP      NZ,T202N
         LD      A,(FLAGS)
         OR      2
         LD      (FLAGS),A
-T202N: CALL    SNEXT
+
+T202N: CALL    SNEXT                    ; t202n
         DEC     B
         JP      NZ,T202L
-T202E: LD      A,(FLAGS)
+
+T202E: LD      A,(FLAGS)                ; t202e
         LD      (OBS1),A
         CP      3
         JP      NZ,TFAIL
         JP      TPASS
 
-; 0204: Search Next resumes after the first wildcard match.
-T0204: CALL    FIRSTPAIR
+  ; 0204: Search Next resumes after the first wildcard match.
+
+T0204: CALL    FIRSTPAIR                ; test catalog item 204
         JP      Z,TFAIL
         LD      A,(NAME1)
         CP      (HL)
@@ -720,8 +838,9 @@ T0204: CALL    FIRSTPAIR
         LD      (OBS2),A
         JP      TPASS
 
-; 0206: exact one-match enumeration ends with FFh.
-T0206: CALL    DMA1SET
+  ; 0206: exact one-match enumeration ends with FFh.
+
+T0206: CALL    DMA1SET                  ; test catalog item 206
         LD      HL,FCBDIR1
         CALL    SFIRST
         LD      (OBS1),A
@@ -733,9 +852,10 @@ T0206: CALL    DMA1SET
         JP      NZ,TFAIL
         JP      TPASS
 
-; 0208: Fill DMA1 with A5H, then prove Function 26 directs the directory entry
-; there by finding the expected B at the selected slot.
-T0208: LD      HL,DMA1
+  ; 0208: Fill DMA1 with A5H, then prove Function 26 directs the directory entry
+  ; there by finding the expected B at the selected slot.
+
+T0208: LD      HL,DMA1                  ; test catalog item 208
         LD      B,128
         LD      A,0A5H
         CALL    FILL
@@ -753,9 +873,10 @@ T0208: LD      HL,DMA1
         JP      NZ,TFAIL
         JP      TPASS
 
-; 0210: take the first match in DMA1, select A5-filled DMA2, then require a
-; different next match in the second buffer.
-T0210: CALL    DMA1SET
+  ; 0210: take the first match in DMA1, select A5-filled DMA2, then require a
+  ; different next match in the second buffer.
+
+T0210: CALL    DMA1SET                  ; test catalog item 210
         LD      HL,FCBDIRW
         CALL    SFIRST
         LD      (RET1),A
@@ -789,9 +910,10 @@ T0210: CALL    DMA1SET
         LD      (OBS2),A
         JP      TPASS
 
-; 0212: two unchanged enumerations return the same first two names.  This is
-; stability only; it does not require a particular sorting rule.
-T0212: CALL    FIRSTPAIR
+  ; 0212: two unchanged enumerations return the same first two names.  This is
+  ; stability only; it does not require a particular sorting rule.
+
+T0212: CALL    FIRSTPAIR                ; test catalog item 212
         JP      Z,TFAIL
         LD      A,(NAME1)
         LD      (SAVE1),A
@@ -815,9 +937,10 @@ T0212: CALL    FIRSTPAIR
         LD      (OBS2),A
         JP      TPASS
 
-; 0214 observation: change default drive between default-drive First and Next,
-; record both answers, and restore the saved drive before returning.
-T0214: CALL    GETDRV
+  ; 0214 observation: change default drive between default-drive First and Next,
+  ; record both answers, and restore the saved drive before returning.
+
+T0214: CALL    GETDRV                   ; test catalog item 214
         LD      (SAVEDRV),A
         CALL    DMA1SET
         LD      HL,FCBDIRW
@@ -836,9 +959,10 @@ T0214: CALL    GETDRV
         LD      (CASEOK),A
         RET
 
-; 0216 observation: prefill DMA1 with A5H and record its first byte after a
-; failed search.  No residue value is judged.
-T0216: LD      HL,DMA1
+  ; 0216 observation: prefill DMA1 with A5H and record its first byte after a
+  ; failed search.  No residue value is judged.
+
+T0216: LD      HL,DMA1                  ; test catalog item 216
         LD      B,128
         LD      A,0A5H
         CALL    FILL
@@ -852,9 +976,20 @@ T0216: LD      HL,DMA1
         LD      (CASEOK),A
         RET
 
-;-------------------------- DELETE CARDS ------------------------------
-; 0285 exact Function-19 delete.
-T0285: LD      HL,TDDEL1
+; ================================================================================
+; =                              Delete Operations                               =
+; =                                                                              =
+; = Tests exact and wildcard deletion, return slots, absence, immediate          =
+; = visibility, explicit drives, user isolation, and selected diagnostic         =
+; = open-FCB behavior.                                                           =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Delete Cards
+; -------------------------------------------------------------------------------
+
+  ; 0285 exact Function-19 delete.
+
+T0285: LD      HL,TDDEL1                ; test catalog item 285
         CALL    PREPMAKE
         JP      Z,TFAIL
         LD      HL,TDDEL1
@@ -869,8 +1004,9 @@ T0285: LD      HL,TDDEL1
         JP      NZ,TFAIL
         JP      TPASS
 
-; 0286 exact identity leaves a distinct non-target name present.
-T0286: LD      HL,TDDEL1
+  ; 0286 exact identity leaves a distinct non-target name present.
+
+T0286: LD      HL,TDDEL1                ; test catalog item 286
         CALL    PREPMAKE
         JP      Z,TFAIL
         LD      HL,TDKEEP
@@ -890,8 +1026,9 @@ T0286: LD      HL,TDDEL1
         CALL    CLEANDEL
         JP      TPASS
 
-; 0287 wildcard deletes two matches but preserves the nonmatch.
-T0287: CALL    MAKESET
+  ; 0287 wildcard deletes two matches but preserves the nonmatch.
+
+T0287: CALL    MAKESET                  ; test catalog item 287
         JP      Z,TFAIL
         LD      HL,TDWILD
         CALL    PREPDEL
@@ -907,8 +1044,9 @@ T0287: CALL    MAKESET
         CALL    CLEANDEL
         JP      TPASS
 
-; 0288 enumeration changes from two wildcard matches to none.
-T0288: CALL    MAKESET
+  ; 0288 enumeration changes from two wildcard matches to none.
+
+T0288: CALL    MAKESET                  ; test catalog item 288
         JP      Z,TFAIL
         LD      HL,TDWILD
         CALL    COUNTMATCH
@@ -925,14 +1063,16 @@ T0288: CALL    MAKESET
         LD      HL,TDKEEP
         CALL    CLEANDEL
         JP      TPASS
-TFAILCL:LD      HL,TDWILD
+
+TFAILCL:LD      HL,TDWILD               ; tfailcl
         CALL    CLEANDEL
         LD      HL,TDKEEP
         CALL    CLEANDEL
         JP      TFAIL
 
-; 0289 successful wildcard delete returns one of the four success slots.
-T0289: CALL    MAKESET
+  ; 0289 successful wildcard delete returns one of the four success slots.
+
+T0289: CALL    MAKESET                  ; test catalog item 289
         JP      Z,TFAIL
         LD      HL,TDWILD
         CALL    PREPDEL
@@ -948,8 +1088,9 @@ T0289: CALL    MAKESET
         CALL    CLEANDEL
         JP      TPASS
 
-; 0290 a known absent identity returns FFh.
-T0290: LD      HL,TDMISS
+  ; 0290 a known absent identity returns FFh.
+
+T0290: LD      HL,TDMISS                ; test catalog item 290
         CALL    CLEANDEL
         LD      HL,TDMISS
         CALL    PREPDEL
@@ -958,8 +1099,9 @@ T0290: LD      HL,TDMISS
         JP      NZ,TFAIL
         JP      TPASS
 
-; 0291 deleted name disappears from the immediately following search.
-T0291: LD      HL,TDDEL1
+  ; 0291 deleted name disappears from the immediately following search.
+
+T0291: LD      HL,TDDEL1                ; test catalog item 291
         CALL    PREPMAKE
         JP      Z,TFAIL
         LD      HL,TDDEL1
@@ -974,8 +1116,9 @@ T0291: LD      HL,TDDEL1
         JP      NZ,TFAIL
         JP      TPASS
 
-; 0294 explicit-B delete preserves a temporarily selected default A.
-T0294: CALL    GETDRV
+  ; 0294 explicit-B delete preserves a temporarily selected default A.
+
+T0294: CALL    GETDRV                   ; test catalog item 294
         LD      (SAVEDRV),A
         LD      HL,TDEXPB
         CALL    PREPMAKE
@@ -991,7 +1134,7 @@ T0294: CALL    GETDRV
         CALL    GETDRV
         LD      (OBS2),A
         PUSH    AF
-; Restore the caller, not an assumed B: test workspace.
+  ; Restore the caller, not an assumed B: test workspace.
         LD      A,(SAVEDRV)
         LD      E,A
         LD      C,14
@@ -1004,8 +1147,9 @@ T0294: CALL    GETDRV
         JP      Z,TFAIL
         JP      TPASS
 
-; 0295 deletion in user 0 leaves the identical user-1 name intact.
-T0295: CALL    GETUSER
+  ; 0295 deletion in user 0 leaves the identical user-1 name intact.
+
+T0295: CALL    GETUSER                  ; test catalog item 295
         LD      (SAVEUSR),A
         XOR     A
         CALL    SETUSER
@@ -1036,14 +1180,16 @@ T0295: CALL    GETUSER
         CP      0FFH
         JP      Z,TFAIL
         JP      TPASS
-T295REST:
+
+T295REST:                               ; t295rest
         LD      A,(SAVEUSR)
         CALL    SETUSER
         JP      TFAIL
 
-; 0296 observation: keep an FCB open while deleting its name, then record the
-; close result without making retained working state a requirement.
-T0296: LD      HL,TDRSRC
+  ; 0296 observation: keep an FCB open while deleting its name, then record the
+  ; close result without making retained working state a requirement.
+
+T0296: LD      HL,TDRSRC                ; test catalog item 296
         CALL    PREPMAKE
         JP      Z,T296DONE
         LD      HL,TDRSRC
@@ -1058,12 +1204,23 @@ T0296: LD      HL,TDRSRC
         LD      C,16
         CALL    BDOS
         LD      (OBS2),A
-T296DONE:
+
+T296DONE:                               ; t296done
         JP      TPASS
 
-;-------------------------- RENAME CARDS ------------------------------
-; 0298 Function 23 convention: a controlled rename succeeds.
-T0298: CALL    CLEANREN
+; ================================================================================
+; =                              Rename Operations                               =
+; =                                                                              =
+; = Tests rename FCB layout, extent coverage, return slots, user and drive       =
+; = isolation, data preservation, and diagnostic collision or open-FCB behavior. =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Rename Cards
+; -------------------------------------------------------------------------------
+
+  ; 0298 Function 23 convention: a controlled rename succeeds.
+
+T0298: CALL    CLEANREN                 ; test catalog item 298
         LD      HL,TDRSRC
         CALL    PREPMAKE
         JP      Z,TFAIL
@@ -1081,8 +1238,9 @@ T0298: CALL    CLEANREN
         JP      Z,TFAIL
         JP      TPASS
 
-; 0299 source and destination identities occupy the documented rename FCB fields.
-T0299: CALL    CLEANREN
+  ; 0299 source and destination identities occupy the documented rename FCB fields.
+
+T0299: CALL    CLEANREN                 ; test catalog item 299
         LD      HL,TDRSRC
         CALL    PREPMAKE
         JP      Z,TFAIL
@@ -1101,8 +1259,9 @@ T0299: CALL    CLEANREN
         JP      Z,TFAIL
         JP      TPASS
 
-; 0300 a zero destination drive denotes the same drive as the source.
-T0300: CALL    CLEANREN
+  ; 0300 a zero destination drive denotes the same drive as the source.
+
+T0300: CALL    CLEANREN                 ; test catalog item 300
         LD      HL,TDRSRC
         CALL    PREPMAKE
         JP      Z,TFAIL
@@ -1118,8 +1277,9 @@ T0300: CALL    CLEANREN
         JP      Z,TFAIL
         JP      TPASS
 
-; 0301 every extent belonging to the source identity is renamed.
-T0301: CALL    CLEANREN
+  ; 0301 every extent belonging to the source identity is renamed.
+
+T0301: CALL    CLEANREN                 ; test catalog item 301
         CALL    MAKE129
         JP      Z,TFAIL
         CALL    RENAMESD
@@ -1147,8 +1307,9 @@ T0301: CALL    CLEANREN
         JP      Z,TFAIL
         JP      TPASS
 
-; 0302 successful Rename returns a directory slot in the documented range.
-T0302: CALL    CLEANREN
+  ; 0302 successful Rename returns a directory slot in the documented range.
+
+T0302: CALL    CLEANREN                 ; test catalog item 302
         LD      HL,TDRSRC
         CALL    PREPMAKE
         JP      Z,TFAIL
@@ -1161,16 +1322,18 @@ T0302: CALL    CLEANREN
         JP      NC,TFAIL
         JP      TPASS
 
-; 0303 a missing source identity returns FFh.
-T0303: CALL    CLEANREN
+  ; 0303 a missing source identity returns FFh.
+
+T0303: CALL    CLEANREN                 ; test catalog item 303
         CALL    RENAMESD
         LD      (OBS1),A
         CP      0FFH
         JP      NZ,TFAIL
         JP      TPASS
 
-; 0304 the old identity disappears and the new identity appears immediately.
-T0304: CALL    CLEANREN
+  ; 0304 the old identity disappears and the new identity appears immediately.
+
+T0304: CALL    CLEANREN                 ; test catalog item 304
         LD      HL,TDRSRC
         CALL    PREPMAKE
         JP      Z,TFAIL
@@ -1191,9 +1354,10 @@ T0304: CALL    CLEANREN
         JP      NZ,TFAIL
         JP      TPASS
 
-; 0305 a renamed one-record file retains all 128 bytes.  The source is filled
-; with 5AH, renamed, reopened under the new name and read before comparison.
-T0305: CALL    CLEANREN
+  ; 0305 a renamed one-record file retains all 128 bytes.  The source is filled
+  ; with 5AH, renamed, reopened under the new name and read before comparison.
+
+T0305: CALL    CLEANREN                 ; test catalog item 305
         CALL    MAKEDATA
         JP      Z,TFAIL
         CALL    RENAMESD
@@ -1214,7 +1378,8 @@ T0305: CALL    CLEANREN
         JP      NZ,T305FAIL
         LD      HL,DMA1
         LD      B,128
-T305CMP:LD      A,(HL)
+
+T305CMP:LD      A,(HL)                  ; t305cmp
         CP      5AH
         JP      NZ,T305FAIL
         INC     HL
@@ -1222,12 +1387,14 @@ T305CMP:LD      A,(HL)
         JP      NZ,T305CMP
         CALL    CLEANREN
         JP      TPASS
-T305FAIL:
+
+T305FAIL:                               ; t305fail
         CALL    CLEANREN
         JP      TFAIL
 
-; 0306 Rename operates within and preserves the selected user area.
-T0306: CALL    GETUSER
+  ; 0306 Rename operates within and preserves the selected user area.
+
+T0306: CALL    GETUSER                  ; test catalog item 306
         LD      (SAVEUSR),A
         LD      A,1
         CALL    SETUSER
@@ -1254,17 +1421,20 @@ T0306: CALL    GETUSER
         LD      A,(SAVEUSR)
         CALL    SETUSER
         JP      TPASS
-T306FAIL:
+
+T306FAIL:                               ; t306fail
         LD      A,1
         CALL    SETUSER
         CALL    CLEANREN
-T306REST:
+
+T306REST:                               ; t306rest
         LD      A,(SAVEUSR)
         CALL    SETUSER
         JP      TFAIL
 
-; 0307 explicit-drive Rename acts on B while preserving default A.
-T0307: CALL    GETDRV
+  ; 0307 explicit-drive Rename acts on B while preserving default A.
+
+T0307: CALL    GETDRV                   ; test catalog item 307
         LD      (SAVEDRV),A
         LD      HL,TDRBSR
         CALL    PREPMAKE
@@ -1281,7 +1451,7 @@ T0307: CALL    GETDRV
         CALL    GETDRV
         LD      (OBS2),A
         PUSH    AF
-; Restore the caller, not an assumed B: test workspace.
+  ; Restore the caller, not an assumed B: test workspace.
         LD      A,(SAVEDRV)
         LD      E,A
         LD      C,14
@@ -1296,8 +1466,9 @@ T0307: CALL    GETDRV
         JP      Z,TFAIL
         JP      TPASS
 
-; 0308 diagnostic: characterize rename when destination already exists.
-T0308: CALL    CLEANREN
+  ; 0308 diagnostic: characterize rename when destination already exists.
+
+T0308: CALL    CLEANREN                 ; test catalog item 308
         LD      HL,TDRSRC
         CALL    PREPMAKE
         JP      Z,T308DONE
@@ -1309,12 +1480,14 @@ T0308: CALL    CLEANREN
         LD      HL,TDRDST
         CALL    COUNTMATCH
         LD      (OBS2),A
-T308DONE:
+
+T308DONE:                               ; t308done
         CALL    CLEANREN
         JP      TPASS
 
-; 0310 diagnostic: characterize an opened source FCB after Rename.
-T0310: CALL    CLEANREN
+  ; 0310 diagnostic: characterize an opened source FCB after Rename.
+
+T0310: CALL    CLEANREN                 ; test catalog item 310
         LD      HL,TDRSRC
         CALL    PREPMAKE
         JP      Z,T310DONE
@@ -1332,13 +1505,15 @@ T0310: CALL    CLEANREN
         LD      C,16
         CALL    BDOS
         LD      (OBS2),A
-T310DONE:
+
+T310DONE:                               ; t310done
         CALL    CLEANREN
         JP      TPASS
 
-; 0311 observation: record the physical slots of two controlled entries, but
-; do not treat their order as a sorting promise.
-T0311: CALL    DMA1SET
+  ; 0311 observation: record the physical slots of two controlled entries, but
+  ; do not treat their order as a sorting promise.
+
+T0311: CALL    DMA1SET                  ; test catalog item 311
         LD      HL,FCBDIRW
         CALL    SFIRST
         LD      (OBS1),A
@@ -1346,25 +1521,37 @@ T0311: CALL    DMA1SET
         LD      (OBS2),A
         JP      TPASS
 
-; 0315 enters an invalid-drive path which may not return.  The selected card
-; records only that no portable returning answer can be required.
-T0315: LD      A,16
+  ; 0315 enters an invalid-drive path which may not return.  The selected card
+  ; records only that no portable returning answer can be required.
+
+T0315: LD      A,16                     ; test catalog item 315
         LD      (OBS1),A
         LD      A,0FFH
         LD      (OBS2),A
         JP      TPASS
 
-;------------------------- ATTRIBUTE CARDS ----------------------------
-; 0356 read-only is stored in bit 7 of the first type character.
-T0356: LD      A,1
+; ================================================================================
+; =                          File Attribute Operations                           =
+; =                                                                              =
+; = Exercises documented read-only and system indicators, Function 30 updates    =
+; = across extents, and diagnostic reserved-bit behavior.                        =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Attribute Cards
+; -------------------------------------------------------------------------------
+
+  ; 0356 read-only is stored in bit 7 of the first type character.
+
+T0356: LD      A,1                      ; test catalog item 356
         CALL    ATTRPROBE
         LD      (OBS1),A
         AND     080H
         JP      Z,TFAIL
         JP      TPASS
 
-; 0357 system is stored in bit 7 of the second type character.
-T0357: LD      A,2
+  ; 0357 system is stored in bit 7 of the second type character.
+
+T0357: LD      A,2                      ; test catalog item 357
         CALL    ATTRPROBE
         LD      (OBS1),A
         LD      A,(OBS2)
@@ -1372,8 +1559,9 @@ T0357: LD      A,2
         JP      Z,TFAIL
         JP      TPASS
 
-; 0358 attribute bits coexist with the underlying three-character type.
-T0358: LD      A,3
+  ; 0358 attribute bits coexist with the underlying three-character type.
+
+T0358: LD      A,3                      ; test catalog item 358
         CALL    ATTRPROBE
         LD      A,(OBS1)
         AND     07FH
@@ -1385,9 +1573,10 @@ T0358: LD      A,3
         JP      NZ,TFAIL
         JP      TPASS
 
-; 0359 observation: record the reserved t3 high bit without giving it a public
-; meaning.
-T0359: LD      A,4
+  ; 0359 observation: record the reserved t3 high bit without giving it a public
+  ; meaning.
+
+T0359: LD      A,4                      ; test catalog item 359
         CALL    ATTRPROBE
         LD      A,(OBS3)
         LD      (OBS1),A
@@ -1395,8 +1584,9 @@ T0359: LD      A,4
         LD      (OBS2),A
         JP      TPASS
 
-; 0360 Function 30 accepts a prepared FCB and returns a directory slot.
-T0360: LD      A,1
+  ; 0360 Function 30 accepts a prepared FCB and returns a directory slot.
+
+T0360: LD      A,1                      ; test catalog item 360
         CALL    ATTRPROBE
         LD      (SAVE2),A
         LD      A,(RET1)
@@ -1410,8 +1600,9 @@ T0360: LD      A,1
         JP      Z,TFAIL
         JP      TPASS
 
-; 0361 Function 30 sets and clears selected attribute indicators.
-T0361: LD      A,1
+  ; 0361 Function 30 sets and clears selected attribute indicators.
+
+T0361: LD      A,1                      ; test catalog item 361
         CALL    ATTRCREATE
         JP      Z,TFAIL
         LD      HL,TDATTR
@@ -1438,15 +1629,17 @@ T0361: LD      A,1
         AND     080H
         JP      Z,TFAIL
         JP      TPASS
-T361FAIL:
+
+T361FAIL:                               ; t361fail
         LD      A,0
         CALL    SETATTR
         LD      HL,TDATTR
         CALL    CLEANDEL
         JP      TFAIL
 
-; 0362 Function 30 applies the requested indicators to every source extent.
-T0362: CALL    CLEANREN
+  ; 0362 Function 30 applies the requested indicators to every source extent.
+
+T0362: CALL    CLEANREN                 ; test catalog item 362
         CALL    MAKEBIG
         JP      Z,TFAIL
         LD      A,1
@@ -1466,14 +1659,16 @@ T0362: CALL    CLEANREN
         CALL    SETATTRSRC
         CALL    CLEANREN
         JP      TPASS
-T362FAIL:
+
+T362FAIL:                               ; t362fail
         LD      A,0
         CALL    SETATTRSRC
         CALL    CLEANREN
         JP      TFAIL
 
-; 0363 successful Function 30 returns one of the four directory slots.
-T0363: LD      A,1
+  ; 0363 successful Function 30 returns one of the four directory slots.
+
+T0363: LD      A,1                      ; test catalog item 363
         CALL    ATTRCREATE
         JP      Z,TFAIL
         LD      A,(RET1)
@@ -1488,8 +1683,9 @@ T0363: LD      A,1
         JP      NC,TFAIL
         JP      TPASS
 
-; 0364 Function 30 on a missing identity returns FFh.
-T0364: LD      HL,TDATTR
+  ; 0364 Function 30 on a missing identity returns FFh.
+
+T0364: LD      HL,TDATTR                ; test catalog item 364
         CALL    CLEANDEL
         LD      A,1
         CALL    SETATTR
@@ -1498,8 +1694,9 @@ T0364: LD      HL,TDATTR
         JP      NZ,TFAIL
         JP      TPASS
 
-; 0365 diagnostic: record the exact successful Function 30 slot.
-T0365: LD      A,1
+  ; 0365 diagnostic: record the exact successful Function 30 slot.
+
+T0365: LD      A,1                      ; test catalog item 365
         CALL    ATTRCREATE
         LD      A,(RET1)
         LD      (OBS1),A
@@ -1509,8 +1706,9 @@ T0365: LD      A,1
         CALL    CLEANDEL
         JP      TPASS
 
-; 0366 Open accepts and preserves caller-supplied indicator bits.
-T0366: LD      A,1
+  ; 0366 Open accepts and preserves caller-supplied indicator bits.
+
+T0366: LD      A,1                      ; test catalog item 366
         CALL    ATTRCREATE
         JP      Z,TFAIL
         LD      HL,TDATTR
@@ -1537,8 +1735,9 @@ T0366: LD      A,1
         JP      Z,TFAIL
         JP      TPASS
 
-; 0367 Make accepts indicator bits and records them on the new file.
-T0367: LD      HL,TDATTR
+  ; 0367 Make accepts indicator bits and records them on the new file.
+
+T0367: LD      HL,TDATTR                ; test catalog item 367
         CALL    CLEANDEL
         LD      HL,TDATTR
         CALL    PREPFCB
@@ -1572,18 +1771,23 @@ T0367: LD      HL,TDATTR
         AND     080H
         JP      Z,TFAIL
         JP      TPASS
-T367FAIL:
+
+T367FAIL:                               ; t367fail
         LD      A,0
         CALL    SETATTR
         LD      HL,TDATTR
         CALL    CLEANDEL
         JP      TFAIL
 
-;--------------------- TERMINAL ATTRIBUTE CARDS -----------------------
-; 0370 and 0371 may pass through the resident read-only error handler and not
-; return.  Aggregate control never calls them.
-; 0370 a file marked read-only cannot be deleted through Function 19.
-T0370: LD      A,1
+; -------------------------------------------------------------------------------
+; Terminal Attribute Cards
+; -------------------------------------------------------------------------------
+
+  ; 0370 and 0371 may pass through the resident read-only error handler and not
+  ; return.  Aggregate control never calls them.
+  ; 0370 a file marked read-only cannot be deleted through Function 19.
+
+T0370: LD      A,1                      ; test catalog item 370
         CALL    ATTRCREATE
         JP      Z,TFAIL
         LD      HL,TDATTR
@@ -1605,8 +1809,9 @@ T0370: LD      A,1
         JP      NZ,TFAIL
         JP      TPASS
 
-; 0371 a file marked read-only cannot be renamed through Function 23.
-T0371: CALL    CLEANREN
+  ; 0371 a file marked read-only cannot be renamed through Function 23.
+
+T0371: CALL    CLEANREN                 ; test catalog item 371
         LD      HL,TDRSRC
         CALL    PREPMAKE
         JP      Z,TFAIL
@@ -1629,16 +1834,28 @@ T0371: CALL    CLEANREN
         JP      NZ,TFAIL
         JP      TPASS
 
-;-------------------- DIRECTORY LIFETIME CARDS ------------------------
-; 0541 observation: behavior after returning to CCP has no in-process oracle.
-T0541: XOR     A
+; ================================================================================
+; =                      Directory Lifetime and Enumeration                      =
+; =                                                                              =
+; = Exercises complete enumeration, extent visibility, continuation state,       =
+; = lowercase FCB diagnostics, and behavior across harmless calls or program     =
+; = return.                                                                      =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Directory Lifetime Cards
+; -------------------------------------------------------------------------------
+
+  ; 0541 observation: behavior after returning to CCP has no in-process oracle.
+
+T0541: XOR     A                        ; test catalog item 541
         LD      (OBS1),A
         LD      A,0FFH
         LD      (OBS2),A
         JP      TPASS
 
-; 0542 complete enumeration returns extent entries, not deduplicated names.
-T0542: CALL    CLEANREN
+  ; 0542 complete enumeration returns extent entries, not deduplicated names.
+
+T0542: CALL    CLEANREN                 ; test catalog item 542
         CALL    MAKEBIG
         JP      Z,TFAIL
         CALL    COUNTEXT
@@ -1650,8 +1867,9 @@ T0542: CALL    CLEANREN
         JP      C,TFAIL
         JP      TPASS
 
-; 0543 separate matching extents remain separately visible to enumeration.
-T0543: CALL    CLEANREN
+  ; 0543 separate matching extents remain separately visible to enumeration.
+
+T0543: CALL    CLEANREN                 ; test catalog item 543
         CALL    MAKEBIG
         JP      Z,TFAIL
         CALL    COUNTEXT
@@ -1663,20 +1881,23 @@ T0543: CALL    CLEANREN
         JP      C,TFAIL
         JP      TPASS
 
-; 0544 diagnostic: application-built lowercase FCBs are not portably folded.
-T0544: CALL    CLEANREN
+  ; 0544 diagnostic: application-built lowercase FCBs are not portably folded.
+
+T0544: CALL    CLEANREN                 ; test catalog item 544
         LD      HL,TDRSRC
         CALL    PREPMAKE
         JP      Z,T544DONE
         LD      HL,TDRLOW
         CALL    PREPSRCH
         LD      (OBS1),A
-T544DONE:
+
+T544DONE:                               ; t544done
         CALL    CLEANREN
         JP      TPASS
 
-; 0545 the search FCB remains caller-owned throughout continuation.
-T0545: CALL    DMA1SET
+  ; 0545 the search FCB remains caller-owned throughout continuation.
+
+T0545: CALL    DMA1SET                  ; test catalog item 545
         LD      HL,FCBDIRW
         CALL    SFIRST
         LD      (OBS1),A
@@ -1688,8 +1909,9 @@ T0545: CALL    DMA1SET
         JP      Z,TFAIL
         JP      TPASS
 
-; 0546 a harmless state-query call need not terminate enumeration.
-T0546: CALL    DMA1SET
+  ; 0546 a harmless state-query call need not terminate enumeration.
+
+T0546: CALL    DMA1SET                  ; test catalog item 546
         LD      HL,FCBDIRW
         CALL    SFIRST
         LD      (OBS1),A
@@ -1702,15 +1924,17 @@ T0546: CALL    DMA1SET
         JP      Z,TFAIL
         JP      TPASS
 
-; 0547 diagnostic: no search continuation is promised across program return.
-T0547: XOR     A
+  ; 0547 diagnostic: no search continuation is promised across program return.
+
+T0547: XOR     A                        ; test catalog item 547
         LD      (OBS1),A
         LD      A,0FFH
         LD      (OBS2),A
         JP      TPASS
 
-; 0548 diagnostic: record two physical result slots without asserting sorting.
-T0548: CALL    DMA1SET
+  ; 0548 diagnostic: record two physical result slots without asserting sorting.
+
+T0548: CALL    DMA1SET                  ; test catalog item 548
         LD      HL,FCBDIRW
         CALL    SFIRST
         LD      (OBS1),A
@@ -1718,18 +1942,29 @@ T0548: CALL    DMA1SET
         LD      (OBS2),A
         JP      TPASS
 
-; 0549 observation: invalid-drive Search First has no portable returning oracle.
-T0549: LD      A,16
+  ; 0549 observation: invalid-drive Search First has no portable returning oracle.
+
+T0549: LD      A,16                     ; test catalog item 549
         LD      (OBS1),A
         LD      A,0FFH
         LD      (OBS2),A
         JP      TPASS
 
-;------------------------- USER CARDS ---------------------------------
-; Every card in this group saves the incoming user before changing it and
-; restores that byte after cleanup.
-; 0559 ordinary file identity includes the current user area.
-T0559: CALL    GETUSER
+; ================================================================================
+; =                             User-Area Semantics                              =
+; =                                                                              =
+; = Tests current-user selection, namespace isolation, mutation scope,           =
+; = complete-directory '?' enumeration, and the external CCP USER workflow.      =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; User Cards
+; -------------------------------------------------------------------------------
+
+  ; Every card in this group saves the incoming user before changing it and
+  ; restores that byte after cleanup.
+  ; 0559 ordinary file identity includes the current user area.
+
+T0559: CALL    GETUSER                  ; test catalog item 559
         LD      (SAVEUSR),A
         XOR     A
         CALL    SETUSER
@@ -1752,8 +1987,9 @@ T0559: CALL    GETUSER
         JP      Z,TFAIL
         JP      TPASS
 
-; 0560 Function 32 sets, reports, and restores the current user number.
-T0560: CALL    GETUSER
+  ; 0560 Function 32 sets, reports, and restores the current user number.
+
+T0560: CALL    GETUSER                  ; test catalog item 560
         LD      (SAVEUSR),A
         LD      A,1
         CALL    SETUSER
@@ -1769,8 +2005,9 @@ T0560: CALL    GETUSER
         JP      NZ,TFAIL
         JP      TPASS
 
-; 0561 the same ordinary FCB contains no embedded user-area selector.
-T0561: CALL    GETUSER
+  ; 0561 the same ordinary FCB contains no embedded user-area selector.
+
+T0561: CALL    GETUSER                  ; test catalog item 561
         LD      (SAVEUSR),A
         XOR     A
         CALL    SETUSER
@@ -1792,8 +2029,9 @@ T0561: CALL    GETUSER
         JP      Z,TFAIL
         JP      TPASS
 
-; 0562 ordinary lookup does not fall back to another user area.
-T0562: CALL    GETUSER
+  ; 0562 ordinary lookup does not fall back to another user area.
+
+T0562: CALL    GETUSER                  ; test catalog item 562
         LD      (SAVEUSR),A
         XOR     A
         LD      (FLAGS),A
@@ -1822,7 +2060,8 @@ T0562: CALL    GETUSER
         JP      NZ,T562CLN
         LD      A,1
         LD      (FLAGS),A
-T562CLN:
+
+T562CLN:                                ; t562cln
         LD      A,1
         CALL    SETUSER
         LD      HL,TDUISO
@@ -1834,9 +2073,10 @@ T562CLN:
         JP      Z,TFAIL
         JP      TPASS
 
-; 0563 proves ownership by lookup, not by peeking at a complete-directory user
-; byte.  Make in user one, find it there, and require absence in user zero.
-T0563: CALL    GETUSER
+  ; 0563 proves ownership by lookup, not by peeking at a complete-directory user
+  ; byte.  Make in user one, find it there, and require absence in user zero.
+
+T0563: CALL    GETUSER                  ; test catalog item 563
         LD      (SAVEUSR),A
         XOR     A
         LD      (FLAGS),A
@@ -1862,7 +2102,8 @@ T0563: CALL    GETUSER
         JP      NZ,T563CLN
         LD      A,1
         LD      (FLAGS),A
-T563CLN:
+
+T563CLN:                                ; t563cln
         LD      A,1
         CALL    SETUSER
         LD      HL,TDUMAKE
@@ -1874,8 +2115,9 @@ T563CLN:
         JP      Z,TFAIL
         JP      TPASS
 
-; 0564 Delete and Rename affect only the current user namespace.
-T0564: CALL    GETUSER
+  ; 0564 Delete and Rename affect only the current user namespace.
+
+T0564: CALL    GETUSER                  ; test catalog item 564
         LD      (SAVEUSR),A
         LD      A,0FFH
         LD      (FLAGS),A
@@ -1903,7 +2145,8 @@ T0564: CALL    GETUSER
         JP      NZ,T564RE
         LD      A,2
         LD      (OBS2),A
-T564RE:LD      HL,TDUSRC
+
+T564RE:LD      HL,TDUSRC                ; t564re
         CALL    PREPMAKE
         JP      Z,T564END
         LD      HL,TDUSRC
@@ -1918,7 +2161,8 @@ T564RE:LD      HL,TDUSRC
         LD      A,(OBS2)
         OR      8
         LD      (OBS2),A
-T564U0:XOR     A
+
+T564U0:XOR     A                        ; t564u0
         CALL    SETUSER
         LD      HL,TDUSRC
         CALL    PREPSRCH
@@ -1927,7 +2171,8 @@ T564U0:XOR     A
         LD      A,(OBS2)
         OR      5
         LD      (OBS2),A
-T564END:
+
+T564END:                                ; t564end
         XOR     A
         CALL    SETUSER
         LD      HL,TDUSRC
@@ -1950,8 +2195,9 @@ T564END:
         JP      NZ,TFAIL
         JP      TPASS
 
-; 0565 diagnostic: characterize continuation after changing user number.
-T0565: CALL    GETUSER
+  ; 0565 diagnostic: characterize continuation after changing user number.
+
+T0565: CALL    GETUSER                  ; test catalog item 565
         LD      (SAVEUSR),A
         XOR     A
         CALL    SETUSER
@@ -1967,10 +2213,11 @@ T0565: CALL    GETUSER
         CALL    SETUSER
         JP      TPASS
 
-; 0566 '?' requests complete-directory enumeration, not an all-user filename
-; lookup.  Count only to establish that distinction; the exact count belongs
-; to the disk format and present fixtures.
-T0566: CALL    GETUSER
+  ; 0566 '?' requests complete-directory enumeration, not an all-user filename
+  ; lookup.  Count only to establish that distinction; the exact count belongs
+  ; to the disk format and present fixtures.
+
+T0566: CALL    GETUSER                  ; test catalog item 566
         LD      (SAVEUSR),A
         XOR     A
         CALL    SETUSER
@@ -1988,14 +2235,16 @@ T0566: CALL    GETUSER
         XOR     A
         LD      (SAVE1),A
         POP     AF
-T566LP:CP      0FFH
+
+T566LP:CP      0FFH                     ; t566lp
         JP      Z,T566DONE
         LD      A,(SAVE1)
         INC     A
         LD      (SAVE1),A
         CALL    SNEXT
         JP      T566LP
-T566DONE:
+
+T566DONE:                               ; t566done
         LD      A,(SAVE1)
         LD      (OBS2),A
         LD      A,(SAVEUSR)
@@ -2008,15 +2257,28 @@ T566DONE:
         JP      C,TFAIL
         JP      TPASS
 
-; 0567 external workflow: after CCP USER 1, Function 32 must report one.
-T0567: CALL    GETUSER
+  ; 0567 external workflow: after CCP USER 1, Function 32 must report one.
+
+T0567: CALL    GETUSER                  ; test catalog item 567
         LD      (OBS1),A
         CP      1
         JP      NZ,TFAIL
         JP      TPASS
 
-; Count logical extents by wildcarding the extent field of the search FCB.
-COUNTEXT:
+; ================================================================================
+; =                   Directory Fixture and Attribute Offices                    =
+; =                                                                              =
+; = Provides extent counting, attribute manipulation, rename construction,       =
+; = multi-extent fixtures, and common scratch-file preparation for writing       =
+; = cards.                                                                       =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Extent Counting
+; -------------------------------------------------------------------------------
+
+  ; Count logical extents by wildcarding the extent field of the search FCB.
+
+COUNTEXT:                               ; count logical extents
         LD      HL,TDRSRC
         CALL    PREPFCB
         LD      A,'?'
@@ -2028,19 +2290,24 @@ COUNTEXT:
         XOR     A
         LD      (SAVE1),A
         POP     AF
-CEXLP: CP      0FFH
+
+CEXLP: CP      0FFH                     ; cexlp
         JP      Z,CEXDONE
         LD      A,(SAVE1)
         INC     A
         LD      (SAVE1),A
         CALL    SNEXT
         JP      CEXLP
-CEXDONE:
+
+CEXDONE:                                ; cexdone
         LD      A,(SAVE1)
         RET
 
-;------------------------- ATTRIBUTE OFFICE ---------------------------
-ATTRCREATE:
+; -------------------------------------------------------------------------------
+; Attribute Office
+; -------------------------------------------------------------------------------
+
+ATTRCREATE:                             ; create attribute fixture
         LD      (FLAGS),A
         LD      HL,TDATTR
         CALL    CLEANDEL
@@ -2054,15 +2321,18 @@ ATTRCREATE:
         LD      A,1
         OR      A
         RET
-ACFAIL: XOR     A
+
+ACFAIL: XOR     A                       ; acfail
         RET
 
-SETATTR:
+SETATTR:                                ; set file attributes
         LD      HL,TDATTR
         JP      SETATTHL
-SETATTRSRC:
+
+SETATTRSRC:                             ; setattrsrc
         LD      HL,TDRSRC
-SETATTHL:
+
+SETATTHL:                               ; setatthl
         LD      (FLAGS),A
         CALL    PREPFCB
         LD      A,(FLAGS)
@@ -2071,33 +2341,37 @@ SETATTHL:
         LD      A,(WORKFCB+9)
         OR      080H
         LD      (WORKFCB+9),A
-SASYS:  LD      A,(FLAGS)
+
+SASYS:  LD      A,(FLAGS)               ; sasys
         AND     2
         JP      Z,SAT3
         LD      A,(WORKFCB+10)
         OR      080H
         LD      (WORKFCB+10),A
-SAT3:   LD      A,(FLAGS)
+
+SAT3:   LD      A,(FLAGS)               ; sat3
         AND     4
         JP      Z,SACALL
         LD      A,(WORKFCB+11)
         OR      080H
         LD      (WORKFCB+11),A
-SACALL: LD      DE,WORKFCB
+
+SACALL: LD      DE,WORKFCB              ; sacall
         LD      C,30
         CALL    BDOS
         LD      (RET1),A
         RET
 
-GETT1: CALL    ENTRYPTR
+GETT1: CALL    ENTRYPTR                 ; gett1
         LD      DE,9
         ADD     HL,DE
         LD      A,(HL)
         RET
 
-; A selects RO, SYS and reserved t3 bits.  Set them, search the returned entry,
-; then clear attributes before erasing the scratch name.
-ATTRPROBE:
+  ; A selects RO, SYS and reserved t3 bits.  Set them, search the returned entry,
+  ; then clear attributes before erasing the scratch name.
+
+ATTRPROBE:                              ; probe stored attributes
         LD      (FLAGS),A
         LD      HL,TDATTR
         CALL    CLEANDEL
@@ -2112,19 +2386,22 @@ ATTRPROBE:
         LD      A,(WORKFCB+9)
         OR      080H
         LD      (WORKFCB+9),A
-APSYS:  LD      A,(FLAGS)
+
+APSYS:  LD      A,(FLAGS)               ; apsys
         AND     2
         JP      Z,APT3
         LD      A,(WORKFCB+10)
         OR      080H
         LD      (WORKFCB+10),A
-APT3:   LD      A,(FLAGS)
+
+APT3:   LD      A,(FLAGS)               ; apt3
         AND     4
         JP      Z,APSET
         LD      A,(WORKFCB+11)
         OR      080H
         LD      (WORKFCB+11),A
-APSET:  LD      DE,WORKFCB
+
+APSET:  LD      DE,WORKFCB              ; apset
         LD      C,30
         CALL    BDOS
         LD      (RET1),A
@@ -2144,7 +2421,8 @@ APSET:  LD      DE,WORKFCB
         INC     HL
         LD      A,(HL)
         LD      (OBS3),A
-APCLEAN:
+
+APCLEAN:                                ; apclean
         LD      HL,TDATTR
         CALL    PREPFCB
         LD      DE,WORKFCB
@@ -2154,12 +2432,14 @@ APCLEAN:
         CALL    CLEANDEL
         LD      A,(OBS1)
         RET
-APFAIL: XOR     A
+
+APFAIL: XOR     A                       ; apfail
         LD      (RET1),A
         RET
 
-COPY36: LD      B,36
-C36LP: LD      A,(HL)
+COPY36: LD      B,36                    ; copy36
+
+C36LP: LD      A,(HL)                   ; c36lp
         LD      (DE),A
         INC     HL
         INC     DE
@@ -2167,17 +2447,23 @@ C36LP: LD      A,(HL)
         JP      NZ,C36LP
         RET
 
-;-------------------------- RENAME OFFICE -----------------------------
-; Destination identity begins at byte 16 of the rename FCB.
-RENAMESD:
+; -------------------------------------------------------------------------------
+; Rename Office
+; -------------------------------------------------------------------------------
+
+  ; Destination identity begins at byte 16 of the rename FCB.
+
+RENAMESD:                               ; prepare rename source/destination
         LD      HL,TDRSRC
         LD      DE,TDRDST
-RENAME: PUSH    DE
+
+RENAME: PUSH    DE                      ; perform rename
         CALL    PREPFCB
         POP     HL
         LD      DE,WORKFCB+16
         LD      B,12
-RNCOPY:LD      A,(HL)
+
+RNCOPY:LD      A,(HL)                   ; rncopy
         LD      (DE),A
         INC     HL
         INC     DE
@@ -2187,14 +2473,15 @@ RNCOPY:LD      A,(HL)
         LD      C,23
         CALL    BDOS
         RET
-CLEANREN:
+
+CLEANREN:                               ; cleanren
         LD      HL,TDRSRC
         CALL    CLEANDEL
         LD      HL,TDRDST
         CALL    CLEANDEL
         RET
 
-MAKEBIG:
+MAKEBIG:                                ; make multi-extent fixture
         ; One directory entry describes EXM+1 logical extents.  Derive a
         ; length which must enter a second entry on the selected disk.
         LD      C,31
@@ -2210,7 +2497,8 @@ MAKEBIG:
         LD      (SAVE1),A           ; low byte: (EXM+1)*128 + 1
         XOR     A
         LD      (SAVE2),A           ; high byte
-MBADDL: LD      A,(SAVE1)
+
+MBADDL: LD      A,(SAVE1)               ; mbaddl
         ADD     A,128
         LD      (SAVE1),A
         LD      A,(SAVE2)
@@ -2220,13 +2508,15 @@ MBADDL: LD      A,(SAVE1)
         JP      NZ,MBADDL
         JP      MBMAKE
 
-; Fixed 129-record fixture for cards whose oracle names that exact size.
-MAKE129:
+  ; Fixed 129-record fixture for cards whose oracle names that exact size.
+
+MAKE129:                                ; make129
         LD      A,129
         LD      (SAVE1),A
         XOR     A
         LD      (SAVE2),A
-MBMAKE:
+
+MBMAKE:                                 ; mbmake
         LD      HL,TDRSRC
         CALL    PREPFCB
         LD      DE,WORKFCB
@@ -2239,7 +2529,8 @@ MBMAKE:
         LD      A,0A6H
         CALL    FILL
         CALL    DMA1SET
-MBLOOP:LD      DE,WORKFCB
+
+MBLOOP:LD      DE,WORKFCB               ; mbloop
         LD      C,21
         CALL    BDOS
         OR      A
@@ -2260,10 +2551,11 @@ MBLOOP:LD      DE,WORKFCB
         LD      A,1
         OR      A
         RET
-MBFAIL:XOR     A
+
+MBFAIL:XOR     A                        ; mbfail
         RET
 
-MAKEDATA:
+MAKEDATA:                               ; make data-preservation fixture
         LD      HL,TDRSRC
         CALL    PREPFCB
         LD      DE,WORKFCB
@@ -2287,15 +2579,21 @@ MAKEDATA:
         LD      A,1
         OR      A
         RET
-MDFAIL:XOR     A
+
+MDFAIL:XOR     A                        ; mdfail
         RET
 
-;----------------------- SCRATCH FILE OFFICE --------------------------
-; Copy the twelve-byte identity into WORKFCB and clear all working fields.
-PREPFCB:
+; -------------------------------------------------------------------------------
+; Scratch File Office
+; -------------------------------------------------------------------------------
+
+  ; Copy the twelve-byte identity into WORKFCB and clear all working fields.
+
+PREPFCB:                                ; prepare working FCB
         LD      DE,WORKFCB
         LD      B,12
-PFCOPY:LD      A,(HL)
+
+PFCOPY:LD      A,(HL)                   ; pfcopy
         LD      (DE),A
         INC     HL
         INC     DE
@@ -2303,13 +2601,14 @@ PFCOPY:LD      A,(HL)
         JP      NZ,PFCOPY
         XOR     A
         LD      B,24
-PFZERO:LD      (DE),A
+
+PFZERO:LD      (DE),A                   ; pfzero
         INC     DE
         DEC     B
         JP      NZ,PFZERO
         RET
 
-PREPMAKE:
+PREPMAKE:                               ; prepare scratch file
         PUSH    HL
         CALL    CLEANDEL
         POP     HL
@@ -2325,26 +2624,29 @@ PREPMAKE:
         LD      A,1
         OR      A
         RET
-PMFAIL:XOR     A
+
+PMFAIL:XOR     A                        ; pmfail
         RET
 
-PREPDEL:
+PREPDEL:                                ; prepare delete fixture
         CALL    PREPFCB
         LD      DE,WORKFCB
         LD      C,19
         CALL    BDOS
         RET
-CLEANDEL:
+
+CLEANDEL:                               ; cleandel
         CALL    PREPDEL
         RET
-PREPSRCH:
+
+PREPSRCH:                               ; prepare search fixture
         CALL    PREPFCB
         CALL    DMA1SET
         LD      HL,WORKFCB
         CALL    SFIRST
         RET
 
-MAKESET:
+MAKESET:                                ; make controlled file set
         LD      HL,TDW01
         CALL    PREPMAKE
         RET     Z
@@ -2355,7 +2657,7 @@ MAKESET:
         CALL    PREPMAKE
         RET
 
-COUNTMATCH:
+COUNTMATCH:                             ; count matching directory entries
         CALL    PREPFCB
         CALL    DMA1SET
         LD      HL,WORKFCB
@@ -2364,35 +2666,50 @@ COUNTMATCH:
         XOR     A
         LD      (SAVE1),A
         POP     AF
-CMLOOP:CP      0FFH
+
+CMLOOP:CP      0FFH                     ; cmloop
         JP      Z,CMDONE
         LD      A,(SAVE1)
         INC     A
         LD      (SAVE1),A
         CALL    SNEXT
         JP      CMLOOP
-CMDONE:LD      A,(SAVE1)
+
+CMDONE:LD      A,(SAVE1)                ; cmdone
         RET
 
-GETUSER:
+GETUSER:                                ; read current user
         LD      E,0FFH
         LD      C,32
         CALL    BDOS
         RET
-SETUSER:
+
+SETUSER:                                ; set current user
         LD      E,A
         LD      C,32
         CALL    BDOS
         RET
 
-TPASS: LD      A,1
-        LD      (CASEOK),A
-        RET
-TFAIL: XOR     A
+TPASS: LD      A,1                      ; tpass
         LD      (CASEOK),A
         RET
 
-FIRSTPAIR:
+TFAIL: XOR     A                        ; tfail
+        LD      (CASEOK),A
+        RET
+
+; ================================================================================
+; =                      Search, DMA, and Test Instruments                       =
+; =                                                                              =
+; = Provides controlled Search First/Next wrappers, DMA selection, returned-slot =
+; = arithmetic, identity comparison, summary reporting, and shared diagnostic    =
+; = helpers.                                                                     =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Search Helpers
+; -------------------------------------------------------------------------------
+
+FIRSTPAIR:                              ; obtain first search pair
         CALL    DMA1SET
         LD      HL,FCBDIRW
         CALL    SFIRST
@@ -2415,36 +2732,48 @@ FIRSTPAIR:
         OR      A
         RET
 
-SFIRST:EX      DE,HL
+SFIRST:EX      DE,HL                    ; perform Search First
         LD      C,17
         CALL    BDOS
         RET
-SNEXT: LD      C,18
+
+SNEXT: LD      C,18                     ; perform Search Next
         CALL    BDOS
         RET
-GETDRV:LD      C,25
+
+GETDRV:LD      C,25                     ; read current drive
         CALL    BDOS
         RET
-DMA1SET:
+
+DMA1SET:                                ; dma1set
         LD      DE,DMA1
         JP      SETDMA
-DMA2SET:
+
+DMA2SET:                                ; dma2set
         LD      DE,DMA2
-SETDMA:LD      C,26
+
+SETDMA:LD      C,26                     ; select DMA address
         CALL    BDOS
         RET
-GOODRET:
+
+GOODRET:                                ; goodret
         CP      0FFH               ; 0..3 success, FF failure
         RET
 
-ENTRYPTR:
+; -------------------------------------------------------------------------------
+; Directory Entry Pointer
+; -------------------------------------------------------------------------------
+
+ENTRYPTR:                               ; locate returned directory entry
         LD      HL,DMA1
         JP      EPTR
-EPTR2:
+
+EPTR2:                                  ; eptr2
         LD      HL,DMA2
-; Convert a successful result 0..3 into its 32-byte DMA slot.  Callers must
-; reject FFH first; masking FFH here would make failure look like slot three.
-EPTR:  AND     3
+  ; Convert a successful result 0..3 into its 32-byte DMA slot.  Callers must
+  ; reject FFH first; masking FFH here would make failure look like slot three.
+
+EPTR:  AND     3                        ; eptr
         ADD     A,A
         ADD     A,A
         ADD     A,A
@@ -2455,11 +2784,13 @@ EPTR:  AND     3
         ADD     HL,DE
         RET
 
-; Compare directory name/type bytes, ignoring their attribute high bits.
-CMPNAME11:
+  ; Compare directory name/type bytes, ignoring their attribute high bits.
+
+CMPNAME11:                              ; compare directory identity
         INC     HL
         LD      B,11
-CNLOOP:LD      A,(DE)
+
+CNLOOP:LD      A,(DE)                   ; cnloop
         AND     7FH
         LD      C,A
         LD      A,(HL)
@@ -2473,13 +2804,17 @@ CNLOOP:LD      A,(DE)
         XOR     A
         RET
 
-FILL:  LD      (HL),A
+FILL:  LD      (HL),A                   ; fill test buffer
         INC     HL
         DEC     B
         JP      NZ,FILL
         RET
 
-SUMMARY:
+; -------------------------------------------------------------------------------
+; Summary and Failure List
+; -------------------------------------------------------------------------------
+
+SUMMARY:                                ; print run summary
         LD      DE,SUM1
         CALL    PUTS
         LD      A,(PASSCT)
@@ -2496,8 +2831,9 @@ SUMMARY:
         CALL    PUTS
         JP      PRINTFAILS
 
-; Retain the detail index for every failed row so its selector survives scroll.
-SAVEFAIL:
+  ; Retain the detail index for every failed row so its selector survives scroll.
+
+SAVEFAIL:                               ; save failed item number
         PUSH    AF
         PUSH    DE
         LD      A,(FAILCT)
@@ -2513,17 +2849,18 @@ SAVEFAIL:
         POP     AF
         RET
 
-PRINTFAILS:
+PRINTFAILS:                             ; print failed-item list
         LD      A,(FAILCT)
         OR      A
         RET     Z
         LD      DE,FAILMSG
         CALL    PUTS
-; Console output may change BC. Fetch the count AFTER printing the heading.
+  ; Console output may change BC. Fetch the count AFTER printing the heading.
         LD      A,(FAILCT)
         LD      B,A
         LD      HL,FAILITEMS
-PFLP:  PUSH    BC
+
+PFLP:  PUSH    BC                       ; pflp
         PUSH    HL
         LD      A,(HL)
         CALL    PUTITEM
@@ -2537,7 +2874,7 @@ PFLP:  PUSH    BC
         LD      DE,CRLF
         JP      PUTS
 
-PUTITEM:
+PUTITEM:                                ; putitem
         DEC     A
         ADD     A,A
         LD      E,A
@@ -2549,7 +2886,7 @@ PUTITEM:
         LD      D,(HL)
         JP      PUTS
 
-PUTDETAIL:
+PUTDETAIL:                              ; putdetail
         CP      11
         JP      NC,PDNEW
         CP      1
@@ -2573,41 +2910,52 @@ PUTDETAIL:
         LD      DE,DT10
         CALL    PUTS
         JP      PDVAL2
-PD1:   LD      DE,DT1
+
+PD1:   LD      DE,DT1                   ; pd1
         CALL    PUTS
         JP      PDVAL2
-PD2:   LD      DE,DT2
+
+PD2:   LD      DE,DT2                   ; pd2
         CALL    PUTS
         JP      PDVAL2
-PD3:   LD      DE,DT3
+
+PD3:   LD      DE,DT3                   ; pd3
         CALL    PUTS
         JP      PDVAL2
-PD4:   LD      DE,DT4
+
+PD4:   LD      DE,DT4                   ; pd4
         CALL    PUTS
         LD      A,(OBS1)
         CALL    PUTHEX
         RET
-PD5:   LD      DE,DT5
+
+PD5:   LD      DE,DT5                   ; pd5
         CALL    PUTS
         JP      PDVAL2
-PD6:   LD      DE,DT6
+
+PD6:   LD      DE,DT6                   ; pd6
         CALL    PUTS
         JP      PDVAL2
-PD7:   LD      DE,DT7
+
+PD7:   LD      DE,DT7                   ; pd7
         CALL    PUTS
         JP      PDVAL2
-PD8:   LD      DE,DT8
+
+PD8:   LD      DE,DT8                   ; pd8
         CALL    PUTS
         JP      PDVAL2
-PD9:   LD      DE,DT9
+
+PD9:   LD      DE,DT9                   ; pd9
         CALL    PUTS
-PDVAL2:LD      A,(OBS1)
+
+PDVAL2:LD      A,(OBS1)                 ; pdval2
         CALL    PUTHEX
         LD      DE,SEMI
         CALL    PUTS
         LD      A,(OBS2)
         JP      PUTHEX
-PDNEW: SUB     11
+
+PDNEW: SUB     11                       ; pdnew
         ADD     A,A
         LD      E,A
         LD      D,0
@@ -2619,7 +2967,7 @@ PDNEW: SUB     11
         CALL    PUTS
         JP      PDVAL2
 
-PF11:
+PF11:                                   ; pf11
         CALL    STRLEN
         PUSH    BC
         CALL    PUTS
@@ -2627,53 +2975,65 @@ PF11:
         LD      A,11
         SUB     C
         JP      PUTSPN
-PF16:
+
+PF16:                                   ; pf16
         CALL    STRLEN
         PUSH    BC
         CALL    PUTS
         POP     BC
         LD      A,16
         SUB     C
-PUTSPN:OR      A
+
+PUTSPN:OR      A                        ; putspn
         RET     Z
         LD      B,A
-PSPNL:LD      E,' '
+
+PSPNL:LD      E,' '                     ; pspnl
         LD      C,2
         CALL    BDOS
         DEC     B
         JP      NZ,PSPNL
         RET
-STRLEN:LD      C,0
+
+STRLEN:LD      C,0                      ; strlen
         PUSH    DE
-SLEN:  LD      A,(DE)
+
+SLEN:  LD      A,(DE)                   ; slen
         CP      '$'
         JP      Z,SLEND
         INC     C
         INC     DE
         JP      SLEN
-SLEND: POP     DE
+
+SLEND: POP     DE                       ; slend
         RET
-PUTS:  LD      C,9
+
+PUTS:  LD      C,9                      ; puts
         JP      BDOS
-PUTHEX:PUSH    AF
+
+PUTHEX:PUSH    AF                       ; puthex
         RRCA
         RRCA
         RRCA
         RRCA
         CALL    PUTNIB
         POP     AF
-PUTNIB:AND     0FH
+
+PUTNIB:AND     0FH                      ; putnib
         ADD     A,'0'
         CP      '9'+1
         JP      C,PNOUT
         ADD     A,7
-PNOUT: LD      E,A
+
+PNOUT: LD      E,A                      ; pnout
         LD      C,2
         JP      BDOS
-PUTDEC:CP      100
+
+PUTDEC:CP      100                      ; putdec
         JP      C,PDUNDER
         LD      B,0
-PDHUND:SUB     100
+
+PDHUND:SUB     100                      ; pdhund
         INC     B
         CP      100
         JP      NC,PDHUND
@@ -2682,21 +3042,25 @@ PDHUND:SUB     100
         CALL    PUTDIG
         POP     AF
         LD      B,0
-PDTENS:CP      10
+
+PDTENS:CP      10                       ; pdtens
         JP      C,PDPTEN
         SUB     10
         INC     B
         JP      PDTENS
-PDPTEN:PUSH    AF
+
+PDPTEN:PUSH    AF                       ; pdpten
         LD      A,B
         CALL    PUTDIG
         POP     AF
         JP      PUTDIG
-PDUNDER:
+
+PDUNDER:                                ; pdunder
         CP      10
         JP      C,PUTDIG
         LD      B,0
-PDLOOP:SUB     10
+
+PDLOOP:SUB     10                       ; pdloop
         INC     B
         CP      10
         JP      NC,PDLOOP
@@ -2704,48 +3068,62 @@ PDLOOP:SUB     10
         LD      A,B
         CALL    PUTDIG
         POP     AF
-PUTDIG:ADD     A,'0'
+
+PUTDIG:ADD     A,'0'                    ; putdig
         LD      E,A
         LD      C,2
         JP      BDOS
 
-;------------------------- TEST INSTRUMENTS ---------------------------
-; Drive, name[8], type[3], then cleared working fields.
-FCBW1: DB 0,'BTWILD1 ','DAT',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-FCBROA:DB 0,'BTRO    ',0C4H,'AT',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-FCBCFILE:DB 3,'BTBFILE ','DAT',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-FCBALL:DB '?','????????','???',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-FCBDIRW:DB 0,'BTDIR?? ','DAT',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-FCBDIR1:DB 0,'BTDIR01 ','DAT',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-NWILD1:DB 'BTWILD1 ','DAT'
-NRO:   DB 'BTRO    ','DAT'
+  ; Drive, name[8], type[3], then cleared working fields.
 
-; Twelve-byte identities for writing cards.  Every BT...TMP name is reserved
-; to the suite.  User cards clean each name in its owning area before restoring
-; the incoming user.
-TDDEL1:DB 0,'BTDEL01 ','TMP'
-TDKEEP:DB 0,'BTKEEP  ','TMP'
-TDW01: DB 0,'BTDW01  ','TMP'
-TDW02: DB 0,'BTDW02  ','TMP'
-TDWILD:DB 0,'BTDW??  ','TMP'
-TDMISS:DB 0,'BTMISS  ','TMP'
-TDEXPB:DB 2,'BTEXPB  ','TMP'
-TDUSER:DB 0,'BTUSER  ','TMP'
-TDRSRC:DB 0,'BTRNSRC ','TMP'
-TDRDST:DB 0,'BTRNDST ','TMP'
-TDRBSR:DB 2,'BTRNBSR ','TMP'
-TDRBDT:DB 2,'BTRNBDT ','TMP'
-TDATTR:DB 0,'BTATTR  ','TMP'
-TDRLOW:DB 0,'btrnsrc ','tmp'
-TDUSRFX:DB 0,'BTUSR   ','DAT'
-TDUISO:DB 0,'BTUISOL ','TMP'
-TDUMAKE:DB 0,'BTUMAKE ','TMP'
-TDUSRC:DB 0,'BTUSCOP ','TMP'
-TDUDST:DB 0,'BTUSDST ','TMP'
+FCBW1: DB 0,'BTWILD1 ','DAT',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 ; fcbw1
+FCBROA:DB 0,'BTRO    ',0C4H,'AT',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 ; fcbroa
+FCBCFILE:DB 3,'BTBFILE ','DAT',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 ; fcbcfile
+FCBALL:DB '?','????????','???',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 ; fcball
+FCBDIRW:DB 0,'BTDIR?? ','DAT',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 ; fcbdirw
+FCBDIR1:DB 0,'BTDIR01 ','DAT',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 ; fcbdir1
+NWILD1:DB 'BTWILD1 ','DAT'              ; nwild1
+NRO:   DB 'BTRO    ','DAT'              ; nro
 
-; Card order is also the presentation order.  Each entry follows RUNENT's
-; six-byte layout; the detail byte selects its short evidence label.
-CASES: DW 196,T0196
+  ; Twelve-byte identities for writing cards.  Every BT...TMP name is reserved
+  ; to the suite.  User cards clean each name in its owning area before restoring
+  ; the incoming user.
+
+TDDEL1:DB 0,'BTDEL01 ','TMP'            ; tddel1
+TDKEEP:DB 0,'BTKEEP  ','TMP'            ; tdkeep
+TDW01: DB 0,'BTDW01  ','TMP'            ; tdw01
+TDW02: DB 0,'BTDW02  ','TMP'            ; tdw02
+TDWILD:DB 0,'BTDW??  ','TMP'            ; tdwild
+TDMISS:DB 0,'BTMISS  ','TMP'            ; tdmiss
+TDEXPB:DB 2,'BTEXPB  ','TMP'            ; tdexpb
+TDUSER:DB 0,'BTUSER  ','TMP'            ; tduser
+TDRSRC:DB 0,'BTRNSRC ','TMP'            ; tdrsrc
+TDRDST:DB 0,'BTRNDST ','TMP'            ; tdrdst
+TDRBSR:DB 2,'BTRNBSR ','TMP'            ; tdrbsr
+TDRBDT:DB 2,'BTRNBDT ','TMP'            ; tdrbdt
+TDATTR:DB 0,'BTATTR  ','TMP'            ; tdattr
+TDRLOW:DB 0,'btrnsrc ','tmp'            ; tdrlow
+TDUSRFX:DB 0,'BTUSR   ','DAT'           ; tdusrfx
+TDUISO:DB 0,'BTUISOL ','TMP'            ; tduiso
+TDUMAKE:DB 0,'BTUMAKE ','TMP'           ; tdumake
+TDUSRC:DB 0,'BTUSCOP ','TMP'            ; tdusrc
+TDUDST:DB 0,'BTUSDST ','TMP'            ; tdudst
+
+; ================================================================================
+; =                    Conformance Catalog and Working State                     =
+; =                                                                              =
+; = Defines reserved test identities, case ordering, short evidence labels,      =
+; = command/help text, fixture FCBs, buffers, saved state, and the private       =
+; = transient stack.                                                             =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Test Instruments and Case Deck
+; -------------------------------------------------------------------------------
+
+  ; Card order is also the presentation order.  Each entry follows RUNENT's
+  ; six-byte layout; the detail byte selects its short evidence label.
+
+CASES: DW 196,T0196                     ; directory case catalog
         DB 0,1
         DW 198,T0198
         DB 0,2
@@ -2880,106 +3258,108 @@ CASES: DW 196,T0196
         DW 567,T0567
         DB 0,67
 
-ITEMSTRS:DW I0196,I0198,I0200,I0202,I0204,I0206,I0208,I0210,I0212,I0214
+ITEMSTRS:DW I0196,I0198,I0200,I0202,I0204,I0206,I0208,I0210,I0212,I0214 ; itemstrs
         DW I0216,I0285,I0286,I0287,I0288,I0289,I0290,I0291,I0294,I0295
         DW I0296,I0298,I0299,I0300,I0301,I0302,I0303,I0304,I0305,I0306
         DW I0307,I0308,I0310,I0311,I0315,I0356,I0357,I0358,I0359,I0360
         DW I0361,I0362,I0363,I0364,I0365,I0366,I0367,I0370,I0371,I0541
         DW I0542,I0543,I0544,I0545,I0546,I0547,I0548,I0549,I0559,I0560
         DW I0561,I0562,I0563,I0564,I0565,I0566,I0567
-I0196: DB '0196','$'
-I0198: DB '0198','$'
-I0200: DB '0200','$'
-I0202: DB '0202','$'
-I0204: DB '0204','$'
-I0206: DB '0206','$'
-I0208: DB '0208','$'
-I0210: DB '0210','$'
-I0212: DB '0212','$'
-I0214: DB '0214','$'
-I0216: DB '0216','$'
-I0285: DB '0285','$'
-I0286: DB '0286','$'
-I0287: DB '0287','$'
-I0288: DB '0288','$'
-I0289: DB '0289','$'
-I0290: DB '0290','$'
-I0291: DB '0291','$'
-I0294: DB '0294','$'
-I0295: DB '0295','$'
-I0296: DB '0296','$'
-I0298: DB '0298','$'
-I0299: DB '0299','$'
-I0300: DB '0300','$'
-I0301: DB '0301','$'
-I0302: DB '0302','$'
-I0303: DB '0303','$'
-I0304: DB '0304','$'
-I0305: DB '0305','$'
-I0306: DB '0306','$'
-I0307: DB '0307','$'
-I0308: DB '0308','$'
-I0310: DB '0310','$'
-I0311: DB '0311','$'
-I0315: DB '0315','$'
-I0356: DB '0356','$'
-I0357: DB '0357','$'
-I0358: DB '0358','$'
-I0359: DB '0359','$'
-I0360: DB '0360','$'
-I0361: DB '0361','$'
-I0362: DB '0362','$'
-I0363: DB '0363','$'
-I0364: DB '0364','$'
-I0365: DB '0365','$'
-I0366: DB '0366','$'
-I0367: DB '0367','$'
-I0370: DB '0370','$'
-I0371: DB '0371','$'
-I0541: DB '0541','$'
-I0542: DB '0542','$'
-I0543: DB '0543','$'
-I0544: DB '0544','$'
-I0545: DB '0545','$'
-I0546: DB '0546','$'
-I0547: DB '0547','$'
-I0548: DB '0548','$'
-I0549: DB '0549','$'
-I0559: DB '0559','$'
-I0560: DB '0560','$'
-I0561: DB '0561','$'
-I0562: DB '0562','$'
-I0563: DB '0563','$'
-I0564: DB '0564','$'
-I0565: DB '0565','$'
-I0566: DB '0566','$'
-I0567: DB '0567','$'
 
-SH:     DB '/H',0
-SHELP:  DB '/HELP',0
-SLIST:  DB '/LIST',0
-SALL:   DB '/ALL',0
-SSAFE:  DB '/SAFE',0
-SINFO:  DB '/INFO',0
-SVER:   DB '/VER',0
-SVERSION:DB '/VERSION',0
-SGLIST: DB '/GROUP:LIST',0
-SGREQ:  DB '/GROUP:REQUIRED',0
-SGOBS:  DB '/GROUP:OBSERVATION',0
-SGMAN:  DB '/GROUP:MANUAL',0
-SGSEARCH:DB '/GROUP:SEARCH',0
-SGDELETE:DB '/GROUP:DELETE',0
-SGRENAME:DB '/GROUP:RENAME',0
-SGATTR: DB '/GROUP:ATTRIBUTES',0
-SGENUM: DB '/GROUP:ENUMERATION',0
-SGUSERS:DB '/GROUP:USERS',0
-SHR:    DB '/H:RESULTS',0
-SHP:    DB '/H:PROFILES',0
-SREPORT:DB ':REPORT',0
+I0196: DB '0196','$'                    ; i0196
+I0198: DB '0198','$'                    ; i0198
+I0200: DB '0200','$'                    ; i0200
+I0202: DB '0202','$'                    ; i0202
+I0204: DB '0204','$'                    ; i0204
+I0206: DB '0206','$'                    ; i0206
+I0208: DB '0208','$'                    ; i0208
+I0210: DB '0210','$'                    ; i0210
+I0212: DB '0212','$'                    ; i0212
+I0214: DB '0214','$'                    ; i0214
+I0216: DB '0216','$'                    ; i0216
+I0285: DB '0285','$'                    ; i0285
+I0286: DB '0286','$'                    ; i0286
+I0287: DB '0287','$'                    ; i0287
+I0288: DB '0288','$'                    ; i0288
+I0289: DB '0289','$'                    ; i0289
+I0290: DB '0290','$'                    ; i0290
+I0291: DB '0291','$'                    ; i0291
+I0294: DB '0294','$'                    ; i0294
+I0295: DB '0295','$'                    ; i0295
+I0296: DB '0296','$'                    ; i0296
+I0298: DB '0298','$'                    ; i0298
+I0299: DB '0299','$'                    ; i0299
+I0300: DB '0300','$'                    ; i0300
+I0301: DB '0301','$'                    ; i0301
+I0302: DB '0302','$'                    ; i0302
+I0303: DB '0303','$'                    ; i0303
+I0304: DB '0304','$'                    ; i0304
+I0305: DB '0305','$'                    ; i0305
+I0306: DB '0306','$'                    ; i0306
+I0307: DB '0307','$'                    ; i0307
+I0308: DB '0308','$'                    ; i0308
+I0310: DB '0310','$'                    ; i0310
+I0311: DB '0311','$'                    ; i0311
+I0315: DB '0315','$'                    ; i0315
+I0356: DB '0356','$'                    ; i0356
+I0357: DB '0357','$'                    ; i0357
+I0358: DB '0358','$'                    ; i0358
+I0359: DB '0359','$'                    ; i0359
+I0360: DB '0360','$'                    ; i0360
+I0361: DB '0361','$'                    ; i0361
+I0362: DB '0362','$'                    ; i0362
+I0363: DB '0363','$'                    ; i0363
+I0364: DB '0364','$'                    ; i0364
+I0365: DB '0365','$'                    ; i0365
+I0366: DB '0366','$'                    ; i0366
+I0367: DB '0367','$'                    ; i0367
+I0370: DB '0370','$'                    ; i0370
+I0371: DB '0371','$'                    ; i0371
+I0541: DB '0541','$'                    ; i0541
+I0542: DB '0542','$'                    ; i0542
+I0543: DB '0543','$'                    ; i0543
+I0544: DB '0544','$'                    ; i0544
+I0545: DB '0545','$'                    ; i0545
+I0546: DB '0546','$'                    ; i0546
+I0547: DB '0547','$'                    ; i0547
+I0548: DB '0548','$'                    ; i0548
+I0549: DB '0549','$'                    ; i0549
+I0559: DB '0559','$'                    ; i0559
+I0560: DB '0560','$'                    ; i0560
+I0561: DB '0561','$'                    ; i0561
+I0562: DB '0562','$'                    ; i0562
+I0563: DB '0563','$'                    ; i0563
+I0564: DB '0564','$'                    ; i0564
+I0565: DB '0565','$'                    ; i0565
+I0566: DB '0566','$'                    ; i0566
+I0567: DB '0567','$'                    ; i0567
 
-BADSEL:DB 13,10,'DIRTEST: unknown selector. Use DIRTEST /HELP.',13,10
+SH:     DB '/H',0                       ; sh
+SHELP:  DB '/HELP',0                    ; shelp
+SLIST:  DB '/LIST',0                    ; slist
+SALL:   DB '/ALL',0                     ; sall
+SSAFE:  DB '/SAFE',0                    ; ssafe
+SINFO:  DB '/INFO',0                    ; sinfo
+SVER:   DB '/VER',0                     ; sver
+SVERSION:DB '/VERSION',0                ; sversion
+SGLIST: DB '/GROUP:LIST',0              ; sglist
+SGREQ:  DB '/GROUP:REQUIRED',0          ; sgreq
+SGOBS:  DB '/GROUP:OBSERVATION',0       ; sgobs
+SGMAN:  DB '/GROUP:MANUAL',0            ; sgman
+SGSEARCH:DB '/GROUP:SEARCH',0           ; sgsearch
+SGDELETE:DB '/GROUP:DELETE',0           ; sgdelete
+SGRENAME:DB '/GROUP:RENAME',0           ; sgrename
+SGATTR: DB '/GROUP:ATTRIBUTES',0        ; sgattr
+SGENUM: DB '/GROUP:ENUMERATION',0       ; sgenum
+SGUSERS:DB '/GROUP:USERS',0             ; sgusers
+SHR:    DB '/H:RESULTS',0               ; shr
+SHP:    DB '/H:PROFILES',0              ; shp
+SREPORT:DB ':REPORT',0                  ; sreport
+
+BADSEL:DB 13,10,'DIRTEST: unknown selector. Use DIRTEST /HELP.',13,10 ; badsel
         DB 'Use DIRTEST /GROUP:LIST for available groups.',13,10,'$'
-HLPMSG:DB 13,10,'DIRTEST 0.1.0-dev15',13,10,13,10
+
+HLPMSG:DB 13,10,'DIRTEST 0.1.0-dev15',13,10,13,10 ; hlpmsg
         DB '  DIRTEST /NNNN[:REPORT]      Run, explain, or report one item',13,10
         DB '  DIRTEST /ALL                Run checks and report all items',13,10
         DB '  DIRTEST /SAFE               Run checks requiring no destructive media',13,10
@@ -2990,22 +3370,26 @@ HLPMSG:DB 13,10,'DIRTEST 0.1.0-dev15',13,10,13,10
         DB '  DIRTEST /H, /HELP           Show concise command help',13,10
         DB '  DIRTEST /INFO               Show build information',13,10
         DB '  DIRTEST /VER, /VERSION      Show name and version',13,10,'$'
-RESMSG:DB 13,10,'DIRTEST result terminology',13,10,13,10
+
+RESMSG:DB 13,10,'DIRTEST result terminology',13,10,13,10 ; resmsg
         DB 'STATUS: P=Pass F=Fail -=Not-run O=Observed.',13,10
         DB 'PASS=completed and matched; FAIL=completed and mismatched.',13,10
         DB 'CLASS: R=Required N=Not-guaranteed S=Out-of-scope X=Profile.',13,10
         DB 'OUT SCOPE=DIRTEST cannot execute or judge the catalog item.',13,10
         DB 'OBSERVED gives evidence or the command still required.',13,10,'$'
-PRFMSG:DB 13,10,'DIRTEST named profiles',13,10,13,10
+
+PRFMSG:DB 13,10,'DIRTEST named profiles',13,10,13,10 ; prfmsg
         DB 'DIRTEST currently defines no named compatibility profiles.',13,10
         DB 'All executable checks are REQUIRED or NOT GUARANTEED.',13,10
         DB 'For explicit C: checks, prepare C: with SCRATCH /CROSS.',13,10,'$'
-VERMSG:DB 13,10,'DIRTEST 0.1.0-dev15',13,10,'$'
-INFMSG:DB 13,10,'DIRTEST 0.1.0-dev15',13,10
+
+VERMSG:DB 13,10,'DIRTEST 0.1.0-dev15',13,10,'$' ; vermsg
+INFMSG:DB 13,10,'DIRTEST 0.1.0-dev15',13,10 ; infmsg
         DB 'Implemented: 67 executable catalog rows',13,10
         DB 'Required: 52; diagnostics: 15; outside scope: 5',13,10
         DB 'Catalog rows represented: 72 of 72; remaining 0',13,10,'$'
-LSTMSG:DB 13,10,'CLASS: R=Required N=Not-guaranteed S=Out-of-scope X=Profile',13,10
+
+LSTMSG:DB 13,10,'CLASS: R=Required N=Not-guaranteed S=Out-of-scope X=Profile',13,10 ; lstmsg
         DB 13,10,'SEARCH AND ENUMERATION (11)',13,10
         DB '  0196 R Directory entry FCB field layout',13,10
         DB '  0198 R Type attribute comparison',13,10
@@ -3086,7 +3470,7 @@ LSTMSG:DB 13,10,'CLASS: R=Required N=Not-guaranteed S=Out-of-scope X=Profile',13
         DB '  0567 R CCP USER and BDOS user state are shared',13,10
         DB 13,10,'TOTAL: 72 ITEMS',13,10,'$'
 
-GRPLIST:DB 13,10,'DIRTEST GROUPS',13,10,13,10
+GRPLIST:DB 13,10,'DIRTEST GROUPS',13,10,13,10 ; grplist
         DB 'FUNCTIONAL',13,10
         DB '  SEARCH      11  Search results, DMA, and continuation',13,10
         DB '  DELETE      11  Delete matching, results, and visibility',13,10
@@ -3099,150 +3483,157 @@ GRPLIST:DB 13,10,'DIRTEST GROUPS',13,10,13,10
         DB '  OBSERVATION 15  NOT GUARANTEED observations',13,10
         DB '  MANUAL       3  Terminal/external procedures (lists only)',13,10,'$'
 
-EMPTY:  DB '$'
-DELOOS: DB '0297  -  S  DRI E5 deletion mechanism is outside scope',13,10,'$'
-RENOOS: DB '0309  -  S  Wildcard Rename is outside scope',13,10
+EMPTY:  DB '$'                          ; empty
+DELOOS: DB '0297  -  S  DRI E5 deletion mechanism is outside scope',13,10,'$' ; deloos
+RENOOS: DB '0309  -  S  Wildcard Rename is outside scope',13,10 ; renoos
         DB '0312  -  S  Timestamp preservation is outside scope',13,10
         DB '0313  -  S  DRI in-place rename algorithm is outside scope',13,10
         DB '0316  -  S  Directory compaction is outside scope',13,10,'$'
-ALLOOS: DB '0297  -  S  DRI E5 deletion mechanism is outside scope',13,10
+
+ALLOOS: DB '0297  -  S  DRI E5 deletion mechanism is outside scope',13,10 ; alloos
         DB '0309  -  S  Wildcard Rename is outside scope',13,10
         DB '0312  -  S  Timestamp preservation is outside scope',13,10
         DB '0313  -  S  DRI in-place rename algorithm is outside scope',13,10
         DB '0316  -  S  Directory compaction is outside scope',13,10,'$'
+
 MANLIST:DB '0370  -  R  Run manually; expect Bdos Err On B: File R/O',13,10
         DB '0371  -  R  Run manually; expect Bdos Err On B: File R/O',13,10
         DB '0567  -  R  Run: USER 1, then DIRTEST /0567',13,10,'$'
 
-HEADER:DB 13,10,'STATUS: P=Pass F=Fail -=Not-run O=Observed',13,10
+HEADER:DB 13,10,'STATUS: P=Pass F=Fail -=Not-run O=Observed',13,10 ; header
         DB 'CLASS:  R=Required N=Not-guaranteed S=Out-of-scope X=Profile',13,10,13,10
         DB 'ITEM  S  C  OBSERVED',13,10
         DB '----  -  -  ----------------------------------------------------------',13,10,'$'
-SPASS: DB 'P  ','$'
-SFAIL: DB 'F  ','$'
-SOBS:  DB 'O  ','$'
-SOBFAIL:DB 'F  ','$'
-SMAN:  DB '-  ','$'
-DREQ:  DB 'R  ','$'
-DNOT:  DB 'N  ','$'
-TWO:   DB '  ','$'
+
+SPASS: DB 'P  ','$'                     ; spass
+SFAIL: DB 'F  ','$'                     ; sfail
+SOBS:  DB 'O  ','$'                     ; sobs
+SOBFAIL:DB 'F  ','$'                    ; sobfail
+SMAN:  DB '-  ','$'                     ; sman
+DREQ:  DB 'R  ','$'                     ; dreq
+DNOT:  DB 'N  ','$'                     ; dnot
+TWO:   DB '  ','$'                      ; two
 MANMSG:DB 'Run manually; expect Bdos Err On B: File R/O','$'
-USRMSG:DB 'Run: USER 1, then DIRTEST /0567','$'
-USRHELP:DB 13,10,'The supplied B: disk has DIRTEST.COM in user 1.',13,10
+USRMSG:DB 'Run: USER 1, then DIRTEST /0567','$' ; usrmsg
+USRHELP:DB 13,10,'The supplied B: disk has DIRTEST.COM in user 1.',13,10 ; usrhelp
         DB 'PASS: Function 32 reports user 01. User 00 means FAIL.',13,10,'$'
-CRLF:  DB 13,10,'$'
+
+CRLF:  DB 13,10,'$'                     ; crlf
 SEMI:  DB '; next=','$'
-DT1:   DB 'Search slot=','$'
-DT2:   DB 'Attribute search=','$'
-DT3:   DB 'Explicit result=','$'
-DT4:   DB 'Users found mask=','$'
-DT5:   DB 'First=','$'
-DT6:   DB 'First=','$'
-DT7:   DB 'Search=','$'
-DT8:   DB 'First DMA=','$'
-DT9:   DB 'Repeat first=','$'
-DT10:  DB 'Before drive change=','$'
-NEWDTAB:DW DT11,DT12,DT13,DT14,DT15,DT16,DT17,DT18,DT19,DT20
+DT1:   DB 'Search slot=','$'            ; dt1
+DT2:   DB 'Attribute search=','$'       ; dt2
+DT3:   DB 'Explicit result=','$'        ; dt3
+DT4:   DB 'Users found mask=','$'       ; dt4
+DT5:   DB 'First=','$'                  ; dt5
+DT6:   DB 'First=','$'                  ; dt6
+DT7:   DB 'Search=','$'                 ; dt7
+DT8:   DB 'First DMA=','$'              ; dt8
+DT9:   DB 'Repeat first=','$'           ; dt9
+DT10:  DB 'Before drive change=','$'    ; dt10
+NEWDTAB:DW DT11,DT12,DT13,DT14,DT15,DT16,DT17,DT18,DT19,DT20 ; newdtab
         DW DT21,DT22,DT23,DT24,DT25,DT26,DT27,DT28,DT29,DT30
         DW DT31,DT32,DT33,DT34,DT35,DT36,DT37,DT38,DT39,DT40
         DW DT41,DT42,DT43,DT44,DT45,DT46,DT47,DT48,DT49,DT50
         DW DT51,DT52,DT53,DT54,DT55,DT56,DT57,DT58,DT59,DT60
         DW DT61,DT62,DT63,DT64,DT65,DT66,DT67
-DT11:  DB 'Failed search=','$'
-DT12:  DB 'Delete=','$'
-DT13:  DB 'Delete/non-target=','$'
-DT14:  DB 'Wildcard/nonmatch=','$'
-DT15:  DB 'Matches before/after=','$'
-DT16:  DB 'Delete result/remaining=','$'
-DT17:  DB 'Absent delete=','$'
-DT18:  DB 'Delete/search=','$'
-DT19:  DB 'Drive before/after=','$'
-DT20:  DB 'User0 delete/user1 search=','$'
-DT21:  DB 'Open/delete/close=','$'
-DT22:  DB 'Rename/search=','$'
-DT23:  DB 'Rename/old search=','$'
-DT24:  DB 'Same-drive rename/search=','$'
-DT25:  DB 'Rename/size records=','$'
-DT26:  DB 'Rename result=','$'
-DT27:  DB 'Missing-source rename=','$'
-DT28:  DB 'Old/new search=','$'
-DT29:  DB 'Rename/read=','$'
-DT30:  DB 'User1 rename/user0 search=','$'
-DT31:  DB 'Default drive before/after=','$'
-DT32:  DB 'Collision result/matches=','$'
-DT33:  DB 'Open/renamed-close=','$'
-DT34:  DB 'Physical search slots=','$'
-DT35:  DB 'Invalid drive/no oracle=','$'
-DT36:  DB 'Read-only type byte=','$'
-DT37:  DB 'System type bytes=','$'
-DT38:  DB 'Coexisting type bytes=','$'
-DT39:  DB 'Reserved t3/result=','$'
-DT40:  DB 'Function30/search slot=','$'
-DT41:  DB 'Set/clear type byte=','$'
-DT42:  DB 'All-extents result/type=','$'
-DT43:  DB 'Function30 result=','$'
-DT44:  DB 'Missing attribute result=','$'
-DT45:  DB 'Exact Function30 slot=','$'
-DT46:  DB 'Open/type indicator=','$'
-DT47:  DB 'Make/type indicator=','$'
-DT48:  DB 'RO delete/search=','$'
-DT49:  DB 'RO rename/search=','$'
-DT50:  DB 'Post-RET/no oracle=','$'
-DT51:  DB 'Enumerated extents=','$'
-DT52:  DB 'Visible matching extents=','$'
-DT53:  DB 'Lowercase FCB search=','$'
-DT54:  DB 'Search first/next=','$'
-DT55:  DB 'Query between searches=','$'
-DT56:  DB 'Lifecycle/no oracle=','$'
-DT57:  DB 'Physical order slots=','$'
-DT58:  DB 'Invalid search/no oracle=','$'
-DT59:  DB 'User0/user1 search=','$'
-DT60:  DB 'Set/restored user=','$'
-DT61:  DB 'Same FCB user0/user1=','$'
-DT62:  DB 'User0 absent/user1 found=','$'
-DT63:  DB 'Made user1/user0 lookup=','$'
-DT64:  DB 'Scoped delete/result mask=','$'
-DT65:  DB 'User-change continuation=','$'
-DT66:  DB 'Public result/directory entries=','$'
-DT67:  DB 'CCP/BDOS user=','$'
-SUM1:  DB 13,10,'Summary: ','$'
-SUM2:  DB ' pass, ','$'
-SUM3:  DB ' fail, 0 error, ','$'
-SUM4:  DB ' observations',13,10
-        DB 'Details: DIRTEST /NNNN:REPORT   Help: DIRTEST /HELP',13,10,'$'
-RPTMSG:DB 'Report: ledger item $'
-RPTTAIL:DB '; observed result bytes are shown in the row above.',13,10,'$'
-FAILMSG:DB 'Failed items: $'
-FSPACE:DB ' $'
 
-ITEMNO:DW 0
-CURITEM:DW 0
-CALLPTR:DW 0
-DISP:  DB 0
-DETAIL:DB 0
-CASEOK:DB 0
-PASSCT:DB 0
-FAILCT:DB 0
-OBSCT: DB 0
-FAILITEMS:DS 68
-REPORTMODE:DB 0
-EXTRAPTR:DW 0
-OBS1:  DB 0
-OBS2:  DB 0
-OBS3:  DB 0
-FLAGS: DB 0
-RET1:  DB 0
-RET2:  DB 0
-NAME1: DB 0
-SAVE1: DB 0
-SAVE2: DB 0
-SAVEDRV:DB 0
-SAVEUSR:DB 0
-WORKFCB:DS 36
-WORK2: DS 36
-DMA1:  DS 128
-DMA2:  DS 128
-ARGBUF:DS 128
+DT11:  DB 'Failed search=','$'          ; dt11
+DT12:  DB 'Delete=','$'                 ; dt12
+DT13:  DB 'Delete/non-target=','$'      ; dt13
+DT14:  DB 'Wildcard/nonmatch=','$'      ; dt14
+DT15:  DB 'Matches before/after=','$'   ; dt15
+DT16:  DB 'Delete result/remaining=','$' ; dt16
+DT17:  DB 'Absent delete=','$'          ; dt17
+DT18:  DB 'Delete/search=','$'          ; dt18
+DT19:  DB 'Drive before/after=','$'     ; dt19
+DT20:  DB 'User0 delete/user1 search=','$' ; dt20
+DT21:  DB 'Open/delete/close=','$'      ; dt21
+DT22:  DB 'Rename/search=','$'          ; dt22
+DT23:  DB 'Rename/old search=','$'      ; dt23
+DT24:  DB 'Same-drive rename/search=','$' ; dt24
+DT25:  DB 'Rename/size records=','$'    ; dt25
+DT26:  DB 'Rename result=','$'          ; dt26
+DT27:  DB 'Missing-source rename=','$'  ; dt27
+DT28:  DB 'Old/new search=','$'         ; dt28
+DT29:  DB 'Rename/read=','$'            ; dt29
+DT30:  DB 'User1 rename/user0 search=','$' ; dt30
+DT31:  DB 'Default drive before/after=','$' ; dt31
+DT32:  DB 'Collision result/matches=','$' ; dt32
+DT33:  DB 'Open/renamed-close=','$'     ; dt33
+DT34:  DB 'Physical search slots=','$'  ; dt34
+DT35:  DB 'Invalid drive/no oracle=','$' ; dt35
+DT36:  DB 'Read-only type byte=','$'    ; dt36
+DT37:  DB 'System type bytes=','$'      ; dt37
+DT38:  DB 'Coexisting type bytes=','$'  ; dt38
+DT39:  DB 'Reserved t3/result=','$'     ; dt39
+DT40:  DB 'Function30/search slot=','$' ; dt40
+DT41:  DB 'Set/clear type byte=','$'    ; dt41
+DT42:  DB 'All-extents result/type=','$' ; dt42
+DT43:  DB 'Function30 result=','$'      ; dt43
+DT44:  DB 'Missing attribute result=','$' ; dt44
+DT45:  DB 'Exact Function30 slot=','$'  ; dt45
+DT46:  DB 'Open/type indicator=','$'    ; dt46
+DT47:  DB 'Make/type indicator=','$'    ; dt47
+DT48:  DB 'RO delete/search=','$'       ; dt48
+DT49:  DB 'RO rename/search=','$'       ; dt49
+DT50:  DB 'Post-RET/no oracle=','$'     ; dt50
+DT51:  DB 'Enumerated extents=','$'     ; dt51
+DT52:  DB 'Visible matching extents=','$' ; dt52
+DT53:  DB 'Lowercase FCB search=','$'   ; dt53
+DT54:  DB 'Search first/next=','$'      ; dt54
+DT55:  DB 'Query between searches=','$' ; dt55
+DT56:  DB 'Lifecycle/no oracle=','$'    ; dt56
+DT57:  DB 'Physical order slots=','$'   ; dt57
+DT58:  DB 'Invalid search/no oracle=','$' ; dt58
+DT59:  DB 'User0/user1 search=','$'     ; dt59
+DT60:  DB 'Set/restored user=','$'      ; dt60
+DT61:  DB 'Same FCB user0/user1=','$'   ; dt61
+DT62:  DB 'User0 absent/user1 found=','$' ; dt62
+DT63:  DB 'Made user1/user0 lookup=','$' ; dt63
+DT64:  DB 'Scoped delete/result mask=','$' ; dt64
+DT65:  DB 'User-change continuation=','$' ; dt65
+DT66:  DB 'Public result/directory entries=','$' ; dt66
+DT67:  DB 'CCP/BDOS user=','$'          ; dt67
+SUM1:  DB 13,10,'Summary: ','$'         ; sum1
+SUM2:  DB ' pass, ','$'                 ; sum2
+SUM3:  DB ' fail, 0 error, ','$'        ; sum3
+SUM4:  DB ' observations',13,10         ; sum4
+        DB 'Details: DIRTEST /NNNN:REPORT   Help: DIRTEST /HELP',13,10,'$'
+
+RPTMSG:DB 'Report: ledger item $'       ; rptmsg
+RPTTAIL:DB '; observed result bytes are shown in the row above.',13,10,'$'
+FAILMSG:DB 'Failed items: $'            ; failmsg
+FSPACE:DB ' $'                          ; fspace
+
+ITEMNO:DW 0                             ; itemno
+CURITEM:DW 0                            ; curitem
+CALLPTR:DW 0                            ; callptr
+DISP:  DB 0                             ; disp
+DETAIL:DB 0                             ; detail
+CASEOK:DB 0                             ; caseok
+PASSCT:DB 0                             ; passct
+FAILCT:DB 0                             ; failct
+OBSCT: DB 0                             ; obsct
+FAILITEMS:DS 68                         ; failitems
+REPORTMODE:DB 0                         ; reportmode
+EXTRAPTR:DW 0                           ; extraptr
+OBS1:  DB 0                             ; obs1
+OBS2:  DB 0                             ; obs2
+OBS3:  DB 0                             ; obs3
+FLAGS: DB 0                             ; flags
+RET1:  DB 0                             ; ret1
+RET2:  DB 0                             ; ret2
+NAME1: DB 0                             ; name1
+SAVE1: DB 0                             ; save1
+SAVE2: DB 0                             ; save2
+SAVEDRV:DB 0                            ; savedrv
+SAVEUSR:DB 0                            ; saveusr
+WORKFCB:DS 36                           ; workfcb
+WORK2: DS 36                            ; work2
+DMA1:  DS 128                           ; dma1
+DMA2:  DS 128                           ; dma2
+ARGBUF:DS 128                           ; argbuf
         DS 128
-STACKTOP:
+
+STACKTOP:                               ; top of private test stack
         END

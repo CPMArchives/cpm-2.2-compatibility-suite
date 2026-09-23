@@ -1,42 +1,53 @@
 ; SPDX-License-Identifier: GPL-2.0-or-later
-;
-;***********************************************************************
-;*                 C P / M   2 . 2   E N T R Y T S T                  *
-;*              TRANSIENT ENTRY AND PAGE-ZERO EXERCISER                *
-;*                         VERSION DEV17                               *
-;***********************************************************************
-;
-; Version 0.1.0-dev17
-; Intel 8080 subset; assembled by ZSM4 and linked by Digital Research LINK.
-;
-; PROGRAMMER'S NOTES
-; ------------------
-;
-; ENTRYTST examines the machine exactly where the CCP hands it to a transient:
-; page zero, default FCBs, command tail, DMA, entry stack, and loaded image.
-; It does not infer private CCP or BDOS machinery from those public effects.
-;
-; ENTRYSP is saved before our private stack is installed.  The selected RET
-; card restores it.  Function-zero and WBOOT cards deliberately do not return.
-; These terminal cards are operator procedures and never run in a batch.
-;
-; An A5h byte at the end of the COM proves the loader reached the final byte.
-; A5h paint at 0080h lets Search First prove the entry DMA: its 0..3 result is
-; multiplied by 32 to select the changed slot, after FFh has been rejected.
-;
-; The Function 40 sandbox uses ENT40.$$$, writes random record two, and reads
-; zero-filled holes back.  Returning roads restore DMA and delete the file.
-; The direct-structure probe follows the public BIOS table, DPH, DPB, and
-; SECTRAN pointer without writing disk data.
-;
-; Manual and profile rows remain UNTESTED until their recipe is performed.
 
-; LINK establishes the CP/M transient load address at 0100h.  Do not use
-; ORG 0100h in relocatable input: LINK would add a second 0100h displacement.
+; ********************************************************************************
+; *                  CP/M 2.2 Conformance Suite -- ENTRYTST                    *
+; *                                                                              *
+; * Exercises the public state presented when the CCP transfers control to a    *
+; * transient: page zero, default FCBs, command tail, DMA, entry stack, loaded  *
+; * image, Function 40 behavior, and public BIOS structures. Private CCP or BDOS*
+; * machinery is not inferred from those visible effects.                       *
+; ********************************************************************************
+
+  ; Version 0.1.0-dev17
+  ; Intel 8080 subset; assembled by ZSM4 and linked by Digital Research LINK.
+
+  ; PROGRAMMER'S NOTES
+  ; ------------------
+  ;
+  ; ENTRYTST examines the machine exactly where the CCP hands it to a transient:
+  ; page zero, default FCBs, command tail, DMA, entry stack, and loaded image.
+  ; It does not infer private CCP or BDOS machinery from those public effects.
+  ;
+  ; ENTRYSP is saved before our private stack is installed.  The selected RET
+  ; card restores it.  Function-zero and WBOOT cards deliberately do not return.
+  ; These terminal cards are operator procedures and never run in a batch.
+  ;
+  ; An A5h byte at the end of the COM proves the loader reached the final byte.
+  ; A5h paint at 0080h lets Search First prove the entry DMA: its 0..3 result is
+  ; multiplied by 32 to select the changed slot, after FFh has been rejected.
+  ;
+  ; The Function 40 sandbox uses ENT40.$$$, writes random record two, and reads
+  ; zero-filled holes back.  Returning roads restore DMA and delete the file.
+  ; The direct-structure probe follows the public BIOS table, DPH, DPB, and
+  ; SECTRAN pointer without writing disk data.
+  ;
+  ; Manual and profile rows remain UNTESTED until their recipe is performed.
+
+  ; LINK establishes the CP/M transient load address at 0100h.  Do not use
+  ; ORG 0100h in relocatable input: LINK would add a second 0100h displacement.
 BDOS    EQU     0005H
 NCASES  EQU     59
 
-START:  LD      HL,0
+; ================================================================================
+; =                   Command Interface and Catalog Selection                    =
+; =                                                                              =
+; = Parses exact selectors while preserving later command-tail operands needed   =
+; = by entry-state cards, and selects safe, aggregate, group, range, filter, or  =
+; = numeric views.                                                               =
+; ================================================================================
+
+START:  LD      HL,0                    ; enter ENTRYTST command dispatcher
         ; Save the CCP's entry stack before borrowing our own.
         ADD     HL,SP
         LD      (ENTRYSP),HL
@@ -110,21 +121,28 @@ START:  LD      HL,0
         JP      Z,HPROFILES
         CALL    ITEMARG
         JP      Z,RUNONE
-BADCOMMAND:
+
+BADCOMMAND:                             ; report invalid command
         LD      DE,BADSEL
         CALL    PUTS
         RET
 
-; Copy and fold the selector from the first token. Operand-sensitive entry
-; tests deliberately retain later tokens in the command tail/default FCBs.
-GETARG:XOR     A
+; -------------------------------------------------------------------------------
+; Command Argument Parser
+; -------------------------------------------------------------------------------
+
+  ; Copy and fold the selector from the first token. Operand-sensitive entry
+  ; tests deliberately retain later tokens in the command tail/default FCBs.
+
+GETARG:XOR     A                        ; parse selector argument
         LD      (ARGBUF),A
         LD      A,(0080H)
         OR      A
         RET     Z
         LD      B,A
         LD      HL,0081H
-PSKIP: LD      A,(HL)
+
+PSKIP: LD      A,(HL)                   ; pskip
         CP      ' '
         JP      NZ,PSTART
         INC     HL
@@ -132,8 +150,10 @@ PSKIP: LD      A,(HL)
         JP      NZ,PSKIP
         XOR     A
         RET
-PSTART:LD      DE,ARGBUF
-PCOPY: LD      A,B
+
+PSTART:LD      DE,ARGBUF                ; pstart
+
+PCOPY: LD      A,B                      ; pcopy
         OR      A
         JP      Z,PDONE
         LD      A,(HL)
@@ -144,21 +164,25 @@ PCOPY: LD      A,B
         CP      'z'+1
         JP      NC,PSTORE
         SUB     20H
-PSTORE:LD      (DE),A
+
+PSTORE:LD      (DE),A                   ; pstore
         INC     DE
         INC     HL
         DEC     B
         JP      PCOPY
-; Patch 2026-09-02: the old generic selector parser rejected any second token,
-; making the documented /0012, /0014, /0015, and /0020 procedures impossible.
-; Stop after the selector; the individual oracle reads its public entry state.
-PTRAIL:
-PDONE: XOR     A
+  ; Patch 2026-09-02: the old generic selector parser rejected any second token,
+  ; making the documented /0012, /0014, /0015, and /0020 procedures impossible.
+  ; Stop after the selector; the individual oracle reads its public entry state.
+
+PTRAIL:                                 ; ptrail
+
+PDONE: XOR     A                        ; pdone
         LD      (DE),A
         RET
 
-ARGIS: LD      HL,ARGBUF
-PACMP: LD      A,(DE)
+ARGIS: LD      HL,ARGBUF                ; argis
+
+PACMP: LD      A,(DE)                   ; pacmp
         CP      (HL)
         RET     NZ
         OR      A
@@ -167,8 +191,13 @@ PACMP: LD      A,(DE)
         INC     HL
         JP      PACMP
 
-; Accept /NNNN and /NNNN:REPORT only.
-ITEMARG:XOR    A
+; -------------------------------------------------------------------------------
+; Numeric Selector
+; -------------------------------------------------------------------------------
+
+  ; Accept /NNNN and /NNNN:REPORT only.
+
+ITEMARG:XOR    A                        ; parse numeric item selector
         LD      (REPORTMODE),A
         LD      HL,ARGBUF
         LD      A,(HL)
@@ -180,7 +209,8 @@ ITEMARG:XOR    A
         EX      DE,HL
         LD      (ITEMNO),HL
         EX      DE,HL
-PNUM:  LD      A,(HL)
+
+PNUM:  LD      A,(HL)                   ; pnum
         CP      '0'
         JP      C,PIBAD
         CP      '9'+1
@@ -207,7 +237,8 @@ PNUM:  LD      A,(HL)
         OR      A
         RET     Z
         LD      DE,SREPORT
-PIRPT: LD      A,(DE)
+
+PIRPT: LD      A,(DE)                   ; pirpt
         CP      (HL)
         JP      NZ,PIBAD
         OR      A
@@ -215,72 +246,95 @@ PIRPT: LD      A,(DE)
         INC     DE
         INC     HL
         JP      PIRPT
-PIROK: LD      A,1
+
+PIROK: LD      A,1                      ; pirok
         LD      (REPORTMODE),A
         XOR     A
         RET
-PIBAD: OR      1
+
+PIBAD: OR      1                        ; pibad
         RET
 
-HELP:  LD      DE,HLPMSG
-        CALL    PUTS
-        RET
-LIST:  LD      DE,LSTMSG
-        CALL    PUTS
-        RET
-INFO:  LD      DE,INFMSG
-        CALL    PUTS
-        RET
-VERSION:LD     DE,VERMSG
-        CALL    PUTS
-        RET
-GROUPLIST:LD   DE,GRPLIST
-        CALL    PUTS
-        RET
-HRESULTS:LD    DE,RESMSG
-        CALL    PUTS
-        RET
-HPROFILES:LD   DE,PRFMSG
+; -------------------------------------------------------------------------------
+; Help and Information Commands
+; -------------------------------------------------------------------------------
+
+HELP:  LD      DE,HLPMSG                ; display command help
         CALL    PUTS
         RET
 
-RUNSAFE:LD     A,3
+LIST:  LD      DE,LSTMSG                ; display catalog list
+        CALL    PUTS
+        RET
+
+INFO:  LD      DE,INFMSG                ; display suite information
+        CALL    PUTS
+        RET
+
+VERSION:LD     DE,VERMSG                ; display suite version
+        CALL    PUTS
+        RET
+
+GROUPLIST:LD   DE,GRPLIST               ; display functional groups
+        CALL    PUTS
+        RET
+
+HRESULTS:LD    DE,RESMSG                ; display result-class help
+        CALL    PUTS
+        RET
+
+HPROFILES:LD   DE,PRFMSG                ; display profile help
+        CALL    PUTS
+        RET
+
+; -------------------------------------------------------------------------------
+; Aggregate and Group Runs
+; -------------------------------------------------------------------------------
+
+RUNSAFE:LD     A,3                      ; run safe aggregate
         JP      RUNSET
-RUNALL: LD     A,4
+
+RUNALL: LD     A,4                      ; run complete aggregate
         JP      RUNSET
 
-; Functional groups are a disjoint view of the 59-card deck.  RUNMODE 4 runs
-; returning observations while leaving selected/manual procedures as rows.
-GROUPBEGIN:
+  ; Functional groups are a disjoint view of the 59-card deck.  RUNMODE 4 runs
+  ; returning observations while leaving selected/manual procedures as rows.
+
+GROUPBEGIN:                             ; begin functional-group run
         LD      A,4
         LD      (RUNMODE),A
         CALL    BEGIN
         RET
-RUNENTRY:
+
+RUNENTRY:                               ; run entry group
         CALL    GROUPBEGIN
         LD      HL,CASES
         LD      B,22
         CALL    RUNRANGE
         JP      SUMMARY
-RUNTERMINATION:
+
+RUNTERMINATION:                         ; run termination group
         CALL    GROUPBEGIN
         LD      HL,CASES+198
         LD      B,6
         CALL    RUNRANGE
         JP      SUMMARY
-RUNLOADER:
+
+RUNLOADER:                              ; run loader group
         CALL    GROUPBEGIN
         LD      HL,CASES+252
         LD      B,10
         CALL    RUNRANGE
         JP      SUMMARY
-RUNFUNCTION40:
+
+RUNFUNCTION40:                          ; run Function-40 group
         CALL    GROUPBEGIN
         LD      HL,CASES+378
         LD      B,4
         CALL    RUNRANGE
         JP      SUMMARY
-RUNDEVICES:
+
+RUNDEVICES:                             ; run device group
         CALL    GROUPBEGIN
         LD      HL,CASES+360
         LD      B,2
@@ -289,7 +343,8 @@ RUNDEVICES:
         LD      B,7
         CALL    RUNRANGE
         JP      SUMMARY
-RUNBIOS:
+
+RUNBIOS:                                ; run BIOS group
         CALL    GROUPBEGIN
         LD      HL,CASES+342
         LD      B,2
@@ -298,8 +353,14 @@ RUNBIOS:
         LD      B,6
         CALL    RUNRANGE
         JP      SUMMARY
-RUNRANGE:
-RGRLP:  PUSH    BC
+
+; -------------------------------------------------------------------------------
+; Range and Filter Selection
+; -------------------------------------------------------------------------------
+
+RUNRANGE:                               ; run catalog range
+
+RGRLP:  PUSH    BC                      ; rgrlp
         PUSH    HL
         CALL    RUNENT
         POP     HL
@@ -310,24 +371,28 @@ RGRLP:  PUSH    BC
         JP      NZ,RGRLP
         RET
 
-RUNREQUIRED:
+RUNREQUIRED:                            ; run required cases
         XOR     A
         LD      (FILTERMODE),A
         JP      RUNFILTER
-RUNOBSERVATION:
+
+RUNOBSERVATION:                         ; run observations
         LD      A,1
         LD      (FILTERMODE),A
         JP      RUNFILTER
-RUNMANUAL:
+
+RUNMANUAL:                              ; run manual cases
         LD      A,2
         LD      (FILTERMODE),A
-RUNFILTER:
+
+RUNFILTER:                              ; run filtered catalog
         LD      A,4
         LD      (RUNMODE),A
         CALL    BEGIN
         LD      HL,CASES
         LD      B,NCASES
-RFLP:   PUSH    BC
+
+RFLP:   PUSH    BC                      ; rflp
         PUSH    HL
         LD      DE,8
         ADD     HL,DE
@@ -345,7 +410,8 @@ RFLP:   PUSH    BC
         CP      5
         JP      Z,RFPRINT
         JP      RFSKIP
-RFREQ:  LD      A,C
+
+RFREQ:  LD      A,C                     ; rfreq
         OR      A
         JP      Z,RFPRINT
         CP      2
@@ -353,13 +419,16 @@ RFREQ:  LD      A,C
         CP      4
         JP      NZ,RFSKIP
         JP      RFPRINT
-RFOBS:  LD      A,C
+
+RFOBS:  LD      A,C                     ; rfobs
         CP      1
         JP      NZ,RFSKIP
-RFPRINT:POP     HL
+
+RFPRINT:POP     HL                      ; rfprint
         PUSH    HL
         CALL    RUNENT
-RFSKIP: POP     HL
+
+RFSKIP: POP     HL                      ; rfskip
         LD      DE,9
         ADD     HL,DE
         POP     BC
@@ -367,12 +436,16 @@ RFSKIP: POP     HL
         JP      NZ,RFLP
         JP      SUMMARY
 
-; THE NINE-BYTE CARD DECK
-RUNSET:LD      (RUNMODE),A
+; -------------------------------------------------------------------------------
+; Selected Case Set
+; -------------------------------------------------------------------------------
+
+RUNSET:LD      (RUNMODE),A              ; run selected case set
         CALL    BEGIN
         LD      HL,CASES
         LD      B,NCASES
-RSLOOP:PUSH    BC
+
+RSLOOP:PUSH    BC                       ; rsloop
         PUSH    HL
         CALL    RUNENT
         POP     HL
@@ -383,11 +456,16 @@ RSLOOP:PUSH    BC
         JP      NZ,RSLOOP
         JP      SUMMARY
 
-RUNONE:XOR     A
+; -------------------------------------------------------------------------------
+; Single-Item Selection
+; -------------------------------------------------------------------------------
+
+RUNONE:XOR     A                        ; run one catalog item
         LD      (RUNMODE),A
         LD      HL,CASES
         LD      B,NCASES
-ROLOOP:LD      E,(HL)
+
+ROLOOP:LD      E,(HL)                   ; roloop
         INC     HL
         LD      D,(HL)
         INC     HL
@@ -401,15 +479,18 @@ ROLOOP:LD      E,(HL)
         POP     HL
         JP      Z,ROFOUND
         JP      ROADV
-RONEXT:POP     HL
-ROADV: LD      DE,7
+
+RONEXT:POP     HL                       ; ronext
+
+ROADV: LD      DE,7                     ; roadv
         ADD     HL,DE
         DEC     B
         JP      NZ,ROLOOP
         LD      DE,BADSEL
         CALL    PUTS
         RET
-ROFOUND:DEC    HL
+
+ROFOUND:DEC    HL                       ; rofound
         DEC     HL
         PUSH    HL
         CALL    BEGIN
@@ -417,17 +498,29 @@ ROFOUND:DEC    HL
         CALL    RUNENT
         JP      SUMMARY
 
-BEGIN: XOR     A
+; ================================================================================
+; =                   Case Execution and Result Classification                   =
+; =                                                                              =
+; = Dispatches the nine-byte card deck by class, separates required failures     =
+; = from observations, and leaves terminal, manual, profile, and selected        =
+; = procedures explicitly unrun.                                                 =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Card Deck and Score Keeper
+; -------------------------------------------------------------------------------
+
+BEGIN: XOR     A                        ; begin case execution
         LD      (PASSCT),A
         LD      (FAILCT),A
         LD      (OBSCT),A
         LD      DE,HEADER
         JP      PUTS
 
-; Entry: item, probe, observation, record, class.
-; Class 0 REQUIRED, 1 NOT GUARANTEED, 2 separately-run REQUIRED,
-; 3 separately-run PROFILE, 4 selected REQUIRED, 5 selected PROFILE, 6 OUTSIDE.
-RUNENT:LD      E,(HL)
+  ; Entry: item, probe, observation, record, class.
+  ; Class 0 REQUIRED, 1 NOT GUARANTEED, 2 separately-run REQUIRED,
+  ; 3 separately-run PROFILE, 4 selected REQUIRED, 5 selected PROFILE, 6 OUTSIDE.
+
+RUNENT:LD      E,(HL)                   ; execute catalog entry
         INC     HL
         LD      D,(HL)
         INC     HL
@@ -470,19 +563,21 @@ RUNENT:LD      E,(HL)
         CALL    CALLHL
         OR      A
         JP      NZ,OBSFAIL
-; An observation is not a required-test pass. Count it only once.
+  ; An observation is not a required-test pass. Count it only once.
         LD      A,(OBSCT)
         INC     A
         LD      (OBSCT),A
         LD      DE,SOBS
         JP      ROWOUT
-OBSFAIL:LD     A,(FAILCT)
+
+OBSFAIL:LD     A,(FAILCT)               ; obsfail
         CALL    SAVEFAIL
         INC     A
         LD      (FAILCT),A
         LD      DE,SOBFAIL
         JP      ROWOUT
-RUNREQ:LD      HL,(PROCPTR)
+
+RUNREQ:LD      HL,(PROCPTR)             ; runreq
         CALL    CALLHL
         OR      A
         JP      NZ,ROWFAIL
@@ -491,34 +586,40 @@ RUNREQ:LD      HL,(PROCPTR)
         LD      (PASSCT),A
         LD      DE,SPASS
         JP      ROWOUT
-ROWFAIL:LD     A,(FAILCT)
+
+ROWFAIL:LD     A,(FAILCT)               ; rowfail
         CALL    SAVEFAIL
         INC     A
         LD      (FAILCT),A
         LD      DE,SFAIL
         JP      ROWOUT
-OOSROW:LD      HL,OOSOBS
+
+OOSROW:LD      HL,OOSOBS                ; oosrow
         LD      (OBSPTR),HL
         LD      DE,SOOS
         JP      ROWOUT
-MANROW:LD      DE,SMAN
+
+MANROW:LD      DE,SMAN                  ; manrow
         CALL    ROWOUT
         LD      A,(RUNMODE)
         OR      A
         RET     NZ
         JP      MANDETAIL
-PRFROW:LD      DE,SPROF
+
+PRFROW:LD      DE,SPROF                 ; prfrow
         CALL    ROWOUT
         LD      A,(RUNMODE)
         OR      A
         RET     NZ
         JP      MANDETAIL
-SELREQ:LD      A,(RUNMODE)
+
+SELREQ:LD      A,(RUNMODE)              ; selreq
         OR      A
         JP      Z,RUNREQ
         LD      DE,SSEL
         JP      ROWOUT
-SELPROF:LD     A,(RUNMODE)
+
+SELPROF:LD     A,(RUNMODE)              ; selprof
         OR      A
         JP      NZ,SELPROW
         LD      HL,(PROCPTR)
@@ -530,15 +631,18 @@ SELPROF:LD     A,(RUNMODE)
         LD      (PASSCT),A
         LD      DE,SPPASS
         JP      ROWOUT
-SELPRF:LD      A,(FAILCT)
+
+SELPRF:LD      A,(FAILCT)               ; selprf
         CALL    SAVEFAIL
         INC     A
         LD      (FAILCT),A
         LD      DE,SPFAIL
         JP      ROWOUT
-SELPROW:LD     DE,SPROF
+
+SELPROW:LD     DE,SPROF                 ; selprow
         JP      ROWOUT
-ROWOUT:PUSH    DE
+
+ROWOUT:PUSH    DE                       ; rowout
         CALL    PUTITEM
         LD      DE,TWO
         CALL    PUTS
@@ -549,14 +653,27 @@ ROWOUT:PUSH    DE
         CALL    PUTS
         LD      DE,CRLF
         JP      PUTS
-CALLHL:JP      (HL)
 
-; Numeric selection of a manual row prints the complete operator procedure.
-; Aggregate runs retain one compact row per item.
-; THE OPERATOR'S CLIPBOARD -- selected manual cards print the full recipe.
-MANDETAIL:LD   HL,MANTAB
+CALLHL:JP      (HL)                     ; call probe through HL
+
+; ================================================================================
+; =                             Operator Procedures                              =
+; =                                                                              =
+; = Prints the complete recipe for selected manual and terminal cards whose      =
+; = behavior occurs before loading or after the transient surrenders control.    =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Operator's Clipboard
+; -------------------------------------------------------------------------------
+
+  ; Numeric selection of a manual row prints the complete operator procedure.
+  ; Aggregate runs retain one compact row per item.
+  ; THE OPERATOR'S CLIPBOARD -- selected manual cards print the full recipe.
+
+MANDETAIL:LD   HL,MANTAB                ; print manual procedure
         LD      B,10
-MDLOOP:LD      E,(HL)
+
+MDLOOP:LD      E,(HL)                   ; mdloop
         INC     HL
         LD      D,(HL)
         INC     HL
@@ -574,13 +691,15 @@ MDLOOP:LD      E,(HL)
         DEC     B
         JP      NZ,MDLOOP
         RET
-MDNEXT:POP     HL
+
+MDNEXT:POP     HL                       ; mdnext
         INC     HL
         INC     HL
         DEC     B
         JP      NZ,MDLOOP
         RET
-MDFOUND:LD     E,(HL)
+
+MDFOUND:LD     E,(HL)                   ; mdfound
         INC     HL
         LD      D,(HL)
         CALL    PUTS
@@ -600,26 +719,31 @@ MDFOUND:LD     E,(HL)
         OR      A
         JP      Z,MDTERM95
         RET
-MDTERM26:LD    DE,MDGO26
+
+MDTERM26:LD    DE,MDGO26                ; mdterm26
         CALL    MDPAUSE
         LD      C,0
         CALL    BDOS
         LD      DE,MDFAIL26
         JP      PUTS
-MDTERM27:LD    DE,MDGO27
+
+MDTERM27:LD    DE,MDGO27                ; mdterm27
         CALL    MDPAUSE
         LD      HL,(ENTRYSP)
         LD      SP,HL
         RET
-MDTERM95:LD    DE,MDGO95
+
+MDTERM95:LD    DE,MDGO95                ; mdterm95
         CALL    MDPAUSE
         JP      0000H
-MDPAUSE:CALL   PUTS
+
+MDPAUSE:CALL   PUTS                     ; mdpause
         LD      C,1
         CALL    BDOS
         LD      DE,CRLF
         JP      PUTS
-PUTCHARS:LD    E,(HL)
+
+PUTCHARS:LD    E,(HL)                   ; putchars
         INC     HL
         PUSH    HL
         PUSH    BC
@@ -631,65 +755,101 @@ PUTCHARS:LD    E,(HL)
         JP      NZ,PUTCHARS
         RET
 
-; --- Entry and page-zero probes -----------------------------------------
-; ENTRY FURNITURE AND PAGE ZERO
-P0001: LD      HL,START
+; ================================================================================
+; =                        Entry Furniture and Page Zero                         =
+; =                                                                              =
+; = Examines public entry stack, page-zero vectors, default FCBs, command tail,  =
+; = and other CCP-supplied transient state without consulting private workspace. =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Entry and Page-Zero Probes
+; -------------------------------------------------------------------------------
+
+  ; --- Entry and page-zero probes -----------------------------------------
+
+P0001: LD      HL,START                 ; probe catalog item 1
         LD      DE,0100H
         JP      CMPEQ
-P0003: JP      P0001
-P0005: LD      A,(0000H)
+
+P0003: JP      P0001                    ; probe catalog item 3
+
+P0005: LD      A,(0000H)                ; probe catalog item 5
         CP      0C3H
         JP      RETCMP
-P0006: LD      HL,0003H
+
+P0006: LD      HL,0003H                 ; probe catalog item 6
         LD      DE,0003H
         JP      CMPEQ
-P0008: LD      A,(0005H)
+
+P0008: LD      A,(0005H)                ; probe catalog item 8
         CP      0C3H
         JP      RETCMP
-P0009: CALL    P0005
+
+P0009: CALL    P0005                    ; probe catalog item 9
         OR      A
         RET     NZ
         JP      P0008
-P0011: LD      HL,005CH
+
+P0011: LD      HL,005CH                 ; probe catalog item 11
         LD      DE,005CH
         JP      CMPEQ
-P0012: LD      HL,006CH
+
+P0012: LD      HL,006CH                 ; probe catalog item 12
         LD      DE,FCB12
         LD      B,12
         JP      CMPMEM
-P0014: LD      HL,006CH
+
+P0014: LD      HL,006CH                 ; probe catalog item 14
         LD      DE,FCB14
         LD      B,12
         JP      CMPMEM
-P0015: LD      HL,006CH
+
+P0015: LD      HL,006CH                 ; probe catalog item 15
         LD      DE,FCB15
         LD      B,12
         JP      CMPMEM
-P0017: LD      A,(0080H)
+
+P0017: LD      A,(0080H)                ; probe catalog item 17
         CP      128
         JP      NC,FAILRET
         XOR     A
         RET
-P0018: LD      A,(0080H)
+
+P0018: LD      A,(0080H)                ; probe catalog item 18
         OR      A
         JP      Z,FAILRET
         LD      A,(0081H)
         CP      ' '
         JP      RETCMP
-P0020: LD      A,(0080H)
+
+P0020: LD      A,(0080H)                ; probe catalog item 20
         LD      B,A
         LD      HL,0081H
-P20LP: LD      A,(HL)
+
+P20LP: LD      A,(HL)                   ; p20lp
         CP      'a'
         JP      C,P20NEXT
         CP      'z'+1
         JP      C,FAILRET
-P20NEXT:INC    HL
+
+P20NEXT:INC    HL                       ; p20next
         DEC     B
         JP      NZ,P20LP
         XOR     A
         RET
-P0021: LD      A,(0080H)
+
+; ================================================================================
+; =                        Entry DMA and Loader Witnesses                        =
+; =                                                                              =
+; = Uses Search First to prove the entry DMA at 0080H and an A5H end-of-image    =
+; = witness to show that the loader reached the complete COM image below the     =
+; = BDOS ceiling.                                                                =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Painted DMA Trick
+; -------------------------------------------------------------------------------
+
+P0021: LD      A,(0080H)                ; probe catalog item 21
         LD      L,A
         LD      H,0
         LD      DE,0081H
@@ -703,9 +863,10 @@ P0021: LD      A,(0080H)
         XOR     A
         RET
 
-; Search First observes that the entry DMA remains 0080h.
-; THE PAINTED-DMA TRICK -- convert Search First's 0..3 result to DMA+32*A.
-P0023: LD      HL,0080H
+  ; Search First observes that the entry DMA remains 0080h.
+  ; THE PAINTED-DMA TRICK -- convert Search First's 0..3 result to DMA+32*A.
+
+P0023: LD      HL,0080H                 ; probe catalog item 23
         LD      B,128
         LD      A,0A5H
         CALL    FILL
@@ -728,13 +889,20 @@ P0023: LD      HL,0080H
         JP      Z,FAILRET
         XOR     A
         RET
-P0024: JP      P0023
-P0537: LD      C,12
+
+P0024: JP      P0023                    ; probe catalog item 24
+
+; -------------------------------------------------------------------------------
+; Load-Limit Witness
+; -------------------------------------------------------------------------------
+
+P0537: LD      C,12                     ; probe catalog item 537
         CALL    BDOS
         CP      22H
         JP      RETCMP
-; LOAD-LIMIT WITNESS -- the complete image must lie below the BDOS ceiling.
-P0589: LD      HL,(0006H)
+  ; LOAD-LIMIT WITNESS -- the complete image must lie below the BDOS ceiling.
+
+P0589: LD      HL,(0006H)               ; probe catalog item 589
         LD      DE,ENDPROG
         LD      A,H
         CP      D
@@ -743,12 +911,15 @@ P0589: LD      HL,(0006H)
         LD      A,L
         CP      E
         JP      C,FAILRET
-PASSRET:XOR    A
+
+PASSRET:XOR    A                        ; return probe success
         RET
 
-; Public vector and disk-parameter probes are read-only.
-P0598: JP      P0005
-P0599: LD      C,31
+  ; Public vector and disk-parameter probes are read-only.
+
+P0598: JP      P0005                    ; probe catalog item 598
+
+P0599: LD      C,31                     ; probe catalog item 599
         CALL    BDOS
         LD      A,H
         OR      L
@@ -756,10 +927,11 @@ P0599: LD      C,31
         XOR     A
         RET
 
-; IOBYTE probes restore the entry value. Toggling only bit zero also proves
-; that the other assignment fields can be preserved.
-; BORROWED IOBYTE -- toggle one bit and restore the entry value.
-P0608: LD      A,(0003H)
+  ; IOBYTE probes restore the entry value. Toggling only bit zero also proves
+  ; that the other assignment fields can be preserved.
+  ; BORROWED IOBYTE -- toggle one bit and restore the entry value.
+
+P0608: LD      A,(0003H)                ; probe catalog item 608
         LD      B,A
         XOR     1
         LD      (0003H),A
@@ -771,8 +943,10 @@ P0608: LD      A,(0003H)
         LD      (0003H),A
         POP     AF
         JP      RETCMP
-P0609: JP      P0608
-P0610: LD      A,(0003H)
+
+P0609: JP      P0608                    ; probe catalog item 609
+
+P0610: LD      A,(0003H)                ; probe catalog item 610
         LD      B,A
         XOR     1
         LD      (0003H),A
@@ -783,15 +957,31 @@ P0610: LD      A,(0003H)
         LD      A,C
         CP      1
         JP      RETCMP
-P0613: JP      P0599
 
-; Function 40 uses a reserved scratch file. Cleanup restores DMA 0080h and
-; deletes the file on every returning path.
-P0602: JP      P40COMMON
-P0603: JP      P40COMMON
-P0605: JP      P40COMMON
-; THE FUNCTION 40 SANDBOX -- all exits restore DMA and remove ENT40.$$$.
-P40COMMON:LD   HL,F40INIT
+P0613: JP      P0599                    ; probe catalog item 613
+
+; ================================================================================
+; =                    Function 40 and Public BIOS Structures                    =
+; =                                                                              =
+; = Uses a reserved Function-40 sandbox with full cleanup, then follows the      =
+; = public BIOS jump table, DPH, DPB, and SECTRAN pointer without writing disk   =
+; = data.                                                                        =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Function 40 Sandbox
+; -------------------------------------------------------------------------------
+
+  ; Function 40 uses a reserved scratch file. Cleanup restores DMA 0080h and
+  ; deletes the file on every returning path.
+
+P0602: JP      P40COMMON                ; probe catalog item 602
+
+P0603: JP      P40COMMON                ; probe catalog item 603
+
+P0605: JP      P40COMMON                ; probe catalog item 605
+  ; THE FUNCTION 40 SANDBOX -- all exits restore DMA and remove ENT40.$$$.
+
+P40COMMON:LD   HL,F40INIT               ; p40common
         LD      DE,F40FCB
         LD      B,36
         CALL    COPYMEM
@@ -829,7 +1019,8 @@ P40COMMON:LD   HL,F40INIT
         JP      NZ,P40FAIL
         LD      HL,F40DMA
         LD      B,128
-P40ZERO:LD     A,(HL)
+
+P40ZERO:LD     A,(HL)                   ; p40zero
         OR      A
         JP      NZ,P40FAIL
         INC     HL
@@ -844,7 +1035,8 @@ P40ZERO:LD     A,(HL)
         JP      NZ,P40FAIL
         LD      HL,F40DMA
         LD      B,128
-P40ZER2:LD     A,(HL)
+
+P40ZER2:LD     A,(HL)                   ; p40zer2
         OR      A
         JP      NZ,P40FAIL
         INC     HL
@@ -853,27 +1045,31 @@ P40ZER2:LD     A,(HL)
         CALL    P40CLEAN
         XOR     A
         RET
-P40FAIL:CALL   P40CLEAN
+
+P40FAIL:CALL   P40CLEAN                 ; p40fail
         JP      FAILRET
-P40CLEAN:LD    DE,0080H
+
+P40CLEAN:LD    DE,0080H                 ; p40clean
         LD      C,26
         CALL    BDOS
         LD      DE,F40FCB
         LD      C,19
         JP      BDOS
 
-P0614: LD      C,31
+P0614: LD      C,31                     ; probe catalog item 614
         CALL    BDOS
         LD      DE,2
         ADD     HL,DE
         LD      C,(HL)
         INC     HL
         LD      A,1
-P14SH: DEC     C
+
+P14SH: DEC     C                        ; p14sh
         JP      M,P14MASK
         ADD     A,A
         JP      P14SH
-P14MASK:DEC    A
+
+P14MASK:DEC    A                        ; p14mask
         CP      (HL)
         JP      NZ,FAILRET
         INC     HL
@@ -889,14 +1085,19 @@ P14MASK:DEC    A
         JP      Z,FAILRET
         XOR     A
         RET
-P0615: JP      P0617
 
-; Act as a conforming direct-structure caller. Locate SELDSK and SECTRAN from
-; the public BIOS jump table, select the already-current disk, follow the DPH
-; to its DPB, compare that pointer with BDOS Function 31, validate core DPB
-; fields, and exercise the active translation pointer. No disk data is changed.
-; A READ-ONLY WALK THROUGH THE BIOS PUBLIC TABLE, DPH, DPB, AND SECTRAN.
-P0617: LD      C,25
+P0615: JP      P0617                    ; probe catalog item 615
+
+; -------------------------------------------------------------------------------
+; Public BIOS Structure Walk
+; -------------------------------------------------------------------------------
+
+  ; Act as a conforming direct-structure caller. Locate SELDSK and SECTRAN from
+  ; the public BIOS jump table, select the already-current disk, follow the DPH
+  ; to its DPB, compare that pointer with BDOS Function 31, validate core DPB
+  ; fields, and exercise the active translation pointer. No disk data is changed.
+
+P0617: LD      C,25                     ; probe catalog item 617
         CALL    BDOS
         LD      C,A
         LD      HL,(0001H)
@@ -960,25 +1161,40 @@ P0617: LD      C,25
         XOR     A
         RET
 
-; --- Diagnostic observations -------------------------------------------
-; DIAGNOSTIC RESIDUE IS RECORDED, NEVER PROMOTED TO A PORTABLE RULE.
-P0032: LD      HL,O0032
+; ================================================================================
+; =                 Diagnostic Observations and Test Instruments                 =
+; =                                                                              =
+; = Records deliberately unspecified residue as observations and provides common =
+; = comparison, memory, fill, numeric, and diagnostic helpers for the probe      =
+; = deck.                                                                        =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Diagnostic Observations
+; -------------------------------------------------------------------------------
+
+  ; --- Diagnostic observations -------------------------------------------
+
+P0032: LD      HL,O0032                 ; probe catalog item 32
         LD      (OBSPTR),HL
         XOR     A
         RET
-P0033: LD      HL,O0033
+
+P0033: LD      HL,O0033                 ; probe catalog item 33
         LD      (OBSPTR),HL
         XOR     A
         RET
-P0511: LD      HL,O0511
+
+P0511: LD      HL,O0511                 ; probe catalog item 511
         LD      (OBSPTR),HL
         XOR     A
         RET
-P0533: LD      HL,O0533
+
+P0533: LD      HL,O0533                 ; probe catalog item 533
         LD      (OBSPTR),HL
         XOR     A
         RET
-P0539: LD      HL,DIAGSP
+
+P0539: LD      HL,DIAGSP                ; probe catalog item 539
         LD      (OBSPTR),HL
         LD      DE,3
         ADD     HL,DE
@@ -989,15 +1205,22 @@ P0539: LD      HL,DIAGSP
         XOR     A
         RET
 
-CMPEQ: LD      A,H
+; -------------------------------------------------------------------------------
+; Test Instruments
+; -------------------------------------------------------------------------------
+
+CMPEQ: LD      A,H                      ; compare values
         CP      D
         JP      NZ,FAILRET
         LD      A,L
         CP      E
-RETCMP:JP      NZ,FAILRET
-PASS0: XOR     A
+
+RETCMP:JP      NZ,FAILRET               ; retcmp
+
+PASS0: XOR     A                        ; pass0
         RET
-CMPMEM:LD     A,(DE)
+
+CMPMEM:LD     A,(DE)                    ; compare memory regions
         CP      (HL)
         JP      NZ,FAILRET
         INC     DE
@@ -1006,22 +1229,25 @@ CMPMEM:LD     A,(DE)
         JP      NZ,CMPMEM
         XOR     A
         RET
-COPYMEM:LD    A,(HL)
+
+COPYMEM:LD    A,(HL)                    ; copy memory region
         LD      (DE),A
         INC     HL
         INC     DE
         DEC     B
         JP      NZ,COPYMEM
         RET
-FAILRET:LD     A,1
+
+FAILRET:LD     A,1                      ; return probe failure
         RET
 
-FILL:  LD      (HL),A
+FILL:  LD      (HL),A                   ; fill diagnostic buffer
         INC     HL
         DEC     B
         JP      NZ,FILL
         RET
-HEXMEM:PUSH    AF
+
+HEXMEM:PUSH    AF                       ; hexmem
         RRCA
         RRCA
         RRCA
@@ -1030,16 +1256,29 @@ HEXMEM:PUSH    AF
         CALL    NIBMEM
         POP     AF
         AND     0FH
-NIBMEM:CP      10
+
+NIBMEM:CP      10                       ; nibmem
         JP      C,NMDIG
         ADD     A,'A'-10
         JP      NMHAVE
-NMDIG: ADD     A,'0'
-NMHAVE:LD      (HL),A
+
+NMDIG: ADD     A,'0'                    ; nmdig
+
+NMHAVE:LD      (HL),A                   ; nmhave
         INC     HL
         RET
 
-SUMMARY:LD     DE,SUM1
+; ================================================================================
+; =                         Reporting and Numeric Output                         =
+; =                                                                              =
+; = Prints aggregate counts, failed-item lists, item numbers, and supporting     =
+; = diagnostics after the selected run completes.                                =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Summary and Failure List
+; -------------------------------------------------------------------------------
+
+SUMMARY:LD     DE,SUM1                  ; print run summary
         CALL    PUTS
         LD      A,(PASSCT)
         CALL    PUTNUM
@@ -1060,7 +1299,7 @@ SUMMARY:LD     DE,SUM1
         LD      DE,REPORTMSG
         JP      PUTS
 
-SAVEFAIL:
+SAVEFAIL:                               ; savefail
         PUSH    AF
         PUSH    BC
         PUSH    DE
@@ -1085,17 +1324,18 @@ SAVEFAIL:
         POP     AF
         RET
 
-PRINTFAILS:
+PRINTFAILS:                             ; print failed-item list
         LD      A,(FAILCT)
         OR      A
         RET     Z
         LD      DE,FAILMSG
         CALL    PUTS
-; Console output may change BC. Fetch the count AFTER printing the heading.
+  ; Console output may change BC. Fetch the count AFTER printing the heading.
         LD      A,(FAILCT)
         LD      B,A
         LD      HL,FAILITEMS
-PFLP:  PUSH    BC
+
+PFLP:  PUSH    BC                       ; pflp
         LD      E,(HL)
         INC     HL
         LD      D,(HL)
@@ -1113,56 +1353,69 @@ PFLP:  PUSH    BC
         LD      DE,CRLF
         JP      PUTS
 
-PUTITEM:LD     HL,(CURITEM)
+; -------------------------------------------------------------------------------
+; Numeric Output Helpers
+; -------------------------------------------------------------------------------
+
+PUTITEM:LD     HL,(CURITEM)             ; print catalog item number
         LD      DE,1000
         LD      B,0
-PI1:   OR      A
+
+PI1:   OR      A                        ; pi1
         CALL    SUBHLDE
         JP      C,PI1D
         INC     B
         JP      PI1
-PI1D:  ADD     HL,DE
+
+PI1D:  ADD     HL,DE                    ; pi1d
         LD      A,B
         PUSH    HL
         CALL    PUTDIG
         POP     HL
         LD      DE,100
         LD      B,0
-PI2:   OR      A
+
+PI2:   OR      A                        ; pi2
         CALL    SUBHLDE
         JP      C,PI2D
         INC     B
         JP      PI2
-PI2D:  ADD     HL,DE
+
+PI2D:  ADD     HL,DE                    ; pi2d
         LD      A,B
         PUSH    HL
         CALL    PUTDIG
         POP     HL
         LD      DE,10
         LD      B,0
-PI3:   OR      A
+
+PI3:   OR      A                        ; pi3
         CALL    SUBHLDE
         JP      C,PI3D
         INC     B
         JP      PI3
-PI3D:  ADD     HL,DE
+
+PI3D:  ADD     HL,DE                    ; pi3d
         LD      A,B
         PUSH    HL
         CALL    PUTDIG
         POP     HL
         LD      A,L
         JP      PUTDIG
-SUBHLDE:LD     A,L
+
+SUBHLDE:LD     A,L                      ; subhlde
         SUB     E
         LD      L,A
         LD      A,H
         SBC     A,D
         LD      H,A
         RET
-PUTNUM:CP      10
+
+PUTNUM:CP      10                       ; print decimal number
         JP      C,PUTDIG
         LD      B,0
-PN1:   SUB     10
+
+PN1:   SUB     10                       ; pn1
         INC     B
         CP      10
         JP      NC,PN1
@@ -1170,14 +1423,26 @@ PN1:   SUB     10
         LD      A,B
         CALL    PUTDIG
         POP     AF
-PUTDIG:ADD     A,'0'
+
+PUTDIG:ADD     A,'0'                    ; putdig
         LD      E,A
         LD      C,2
         JP      BDOS
-PUTS:  LD      C,9
+
+PUTS:  LD      C,9                      ; print $-terminated string
         JP      BDOS
 
-CASES:
+; ================================================================================
+; =                    Conformance Catalog and Manual Tables                     =
+; =                                                                              =
+; = Defines the nine-byte card deck, manual procedures, command/help text,       =
+; = requirement and observation records, group tables, and result markers.       =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Case Deck
+; -------------------------------------------------------------------------------
+
+CASES:                                  ; entry conformance case catalog
         DW 1,P0001,O0001,R0001
         DB 0
         DW 3,P0003,O0003,R0003
@@ -1297,7 +1562,11 @@ CASES:
         DW 619,P0001,O0619,R0619
         DB 1
 
-MANTAB:DW 26,MD0026
+; -------------------------------------------------------------------------------
+; Manual Procedure Table
+; -------------------------------------------------------------------------------
+
+MANTAB:DW 26,MD0026                     ; manual procedure table
         DW 27,MD0027
         DW 509,MD0509
         DW 590,MD0590
@@ -1308,9 +1577,10 @@ MANTAB:DW 26,MD0026
         DW 607,MD0607
         DW 612,MD0612
 
-BADSEL:DB 13,10,'ENTRYTST: unknown selector. Use ENTRYTST /HELP.',13,10
+BADSEL:DB 13,10,'ENTRYTST: unknown selector. Use ENTRYTST /HELP.',13,10 ; badsel
         DB 'Use ENTRYTST /GROUP:LIST for available groups.',13,10,'$'
-HLPMSG:DB 13,10,'ENTRYTST 0.1.0-dev17',13,10,13,10
+
+HLPMSG:DB 13,10,'ENTRYTST 0.1.0-dev17',13,10,13,10 ; hlpmsg
         DB '  ENTRYTST /NNNN[:REPORT]     Run, explain, or report one item',13,10
         DB '  ENTRYTST /ALL               Run checks and report all items',13,10
         DB '  ENTRYTST /SAFE              Run automated REQUIRED items',13,10
@@ -1321,25 +1591,29 @@ HLPMSG:DB 13,10,'ENTRYTST 0.1.0-dev17',13,10,13,10
         DB '  ENTRYTST /H, /HELP          Show concise command help',13,10
         DB '  ENTRYTST /INFO              Show build information',13,10
         DB '  ENTRYTST /VER, /VERSION     Show name and version',13,10,'$'
-RESMSG:DB 13,10,'ENTRYTST result terminology',13,10,13,10
+
+RESMSG:DB 13,10,'ENTRYTST result terminology',13,10,13,10 ; resmsg
         DB 'STATUS: P=Pass F=Fail -=Not-run O=Observed.',13,10
         DB 'PASS=completed and matched; FAIL=completed and mismatched.',13,10
         DB 'CLASS: R=Required N=Not-guaranteed S=Out-of-scope X=Profile.',13,10
         DB 'PROFILE=required only when its named profile is claimed.',13,10
         DB 'OUT SCOPE=ENTRYTST cannot execute or judge the item.',13,10
         DB 'OBSERVED gives evidence or the command still required.',13,10,'$'
-PRFMSG:DB 13,10,'ENTRYTST named profiles',13,10,13,10
+
+PRFMSG:DB 13,10,'ENTRYTST named profiles',13,10,13,10 ; prfmsg
         DB 'DRI-CCP: strict DRI default-FCB parsing behavior (0012).',13,10
         DB 'A PROFILE row applies only when that named behavior is claimed.',13,10
         DB 'Run the numbered item for prerequisites and expected behavior.',13,10
         DB 'For expendable-media procedures, first run SCRATCH /BLANK.',13,10,'$'
-INFMSG:DB 13,10,'ENTRYTST 0.1.0-dev17',13,10
+
+INFMSG:DB 13,10,'ENTRYTST 0.1.0-dev17',13,10 ; infmsg
         DB 'Implemented: all 59 assigned rows',13,10
         DB 'Required: 38 (10 manual, 3 selected); diagnostics: 16',13,10
         DB 'Profile: 1 selected; outside scope: 4',13,10
         DB 'Catalog rows represented: 59 of 59; remaining 0',13,10,'$'
-VERMSG:DB 13,10,'ENTRYTST 0.1.0-dev17',13,10,'$'
-GRPLIST:DB 13,10,'ENTRYTST GROUPS',13,10,13,10
+
+VERMSG:DB 13,10,'ENTRYTST 0.1.0-dev17',13,10,'$' ; vermsg
+GRPLIST:DB 13,10,'ENTRYTST GROUPS',13,10,13,10 ; grplist
         DB 'FUNCTIONAL',13,10
         DB '  ENTRY       22  Entry image, page zero, FCBs, tail, and DMA',13,10
         DB '  TERMINATION  6  Termination, readiness, and entry stack',13,10
@@ -1351,7 +1625,8 @@ GRPLIST:DB 13,10,'ENTRYTST GROUPS',13,10,13,10
         DB '  REQUIRED    38  REQUIRED items; thirteen list-only procedures',13,10
         DB '  OBSERVATION 16  NOT GUARANTEED observations',13,10
         DB '  MANUAL      14  Manual, selected, and profile rows (lists only)',13,10,'$'
-LSTMSG:DB 13,10,'CLASS: R=Required N=Not-guaranteed S=Out-of-scope X=Profile',13,10
+
+LSTMSG:DB 13,10,'CLASS: R=Required N=Not-guaranteed S=Out-of-scope X=Profile',13,10 ; lstmsg
         DB 13,10,'ENTRY (22)',13,10
         DB '  0001 R .COM load origin',13,10
         DB '  0003 R TPA lower boundary',13,10
@@ -1418,288 +1693,332 @@ LSTMSG:DB 13,10,'CLASS: R=Required N=Not-guaranteed S=Out-of-scope X=Profile',13
         DB '  0611 N IOBYTE assignment does not validate device presence',13,10
         DB '  0612 R STAT device-assignment semantics',13,10
         DB 13,10,'TOTAL: 59 ITEMS',13,10,'$'
-HEADER: DB 13,10,'STATUS: P=Pass F=Fail -=Not-run O=Observed',13,10
+
+HEADER: DB 13,10,'STATUS: P=Pass F=Fail -=Not-run O=Observed',13,10 ; header
         DB 'CLASS:  R=Required N=Not-guaranteed S=Out-of-scope X=Profile',13,10,13,10
         DB 'ITEM  S  C  OBSERVED',13,10
         DB '----  -  -  ----------------------------------------------------------',13,10,'$'
-SPASS: DB 'P  R  $'
-SFAIL: DB 'F  R  $'
-SOBS:  DB 'O  N  $'
-SOBFAIL:DB 'F  N  $'
-SOOS:  DB '-  S  $'
-SMAN:  DB '-  R  $'
-SPROF: DB '-  X  $'
-SSEL:  DB '-  R  $'
-SPPASS:DB 'P  X  $'
-SPFAIL:DB 'F  X  $'
-OOSOBS:DB 'Outside executable scope$'
-TWO:   DB '  $'
-CRLF:  DB 13,10,'$'
-SUM1:  DB 13,10,'Summary: $'
-SUM2:  DB ' pass, $'
-SUM3:  DB ' fail, 0 error, $'
-SUM4:  DB ' observations',13,10,'$'
-FAILMSG:DB 'Failed items: $'
-FSPACE:DB ' $'
-REPORTMSG:DB 'Report: the selected row shows its class and returning evidence.',13,10
+
+SPASS: DB 'P  R  $'                     ; spass
+SFAIL: DB 'F  R  $'                     ; sfail
+SOBS:  DB 'O  N  $'                     ; sobs
+SOBFAIL:DB 'F  N  $'                    ; sobfail
+SOOS:  DB '-  S  $'                     ; soos
+SMAN:  DB '-  R  $'                     ; sman
+SPROF: DB '-  X  $'                     ; sprof
+SSEL:  DB '-  R  $'                     ; ssel
+SPPASS:DB 'P  X  $'                     ; sppass
+SPFAIL:DB 'F  X  $'                     ; spfail
+OOSOBS:DB 'Outside executable scope$'   ; oosobs
+TWO:   DB '  $'                         ; two
+CRLF:  DB 13,10,'$'                     ; crlf
+SUM1:  DB 13,10,'Summary: $'            ; sum1
+SUM2:  DB ' pass, $'                    ; sum2
+SUM3:  DB ' fail, 0 error, $'           ; sum3
+SUM4:  DB ' observations',13,10,'$'     ; sum4
+FAILMSG:DB 'Failed items: $'            ; failmsg
+FSPACE:DB ' $'                          ; fspace
+REPORTMSG:DB 'Report: the selected row shows its class and returning evidence.',13,10 ; reportmsg
         DB 'Manual rows above include the complete operator procedure.',13,10,'$'
+
 DIAGTAIL:DB 'Tail-end=00; not guaranteed$'
 DIAGSP:DB 'SP=0000; not guaranteed$'
 
-MD0012:DB 13,10,'PROCEDURE: run ENTRYTST /0012 SECOND.BIN',13,10
+MD0012:DB 13,10,'PROCEDURE: run ENTRYTST /0012 SECOND.BIN',13,10 ; md0012
         DB 'EXPECTED: FCB2 at 006Ch has drive 0 and SECOND.BIN.',13,10
         DB 'Compare the actual 8.3 field printed below.',13,10,'$'
-MDACT12:DB 'ACTUAL FCB2 name.type: $'
-MD0014:DB 13,10,'PROCEDURE: copy program as WILD.COM, then run:',13,10
+
+MDACT12:DB 'ACTUAL FCB2 name.type: $'   ; mdact12
+MD0014:DB 13,10,'PROCEDURE: copy program as WILD.COM, then run:',13,10 ; md0014
         DB 'WILD A:AB???.*',13,10
         DB 'EXPECTED: FCB1 drive=1, name AB???   , type ???.',13,10
         DB 'Inspect bytes 005Ch-0067h with a debugger.',13,10,'$'
-MD0015:DB 13,10,'PROCEDURE: copy program as LOWER.COM, then run:',13,10
+
+MD0015:DB 13,10,'PROCEDURE: copy program as LOWER.COM, then run:',13,10 ; md0015
         DB 'LOWER mixed.txt',13,10
         DB 'EXPECTED: FCB1 name MIXED   , type TXT, space padded.',13,10,'$'
-MD0020:DB 13,10,'PROCEDURE: copy program as TAIL.COM, then run:',13,10
+
+MD0020:DB 13,10,'PROCEDURE: copy program as TAIL.COM, then run:',13,10 ; md0020
         DB 'TAIL mixed Case',13,10
         DB 'EXPECTED (DRI CCP): tail at 0081h is uppercase.',13,10
         DB 'Record clones that preserve lowercase as incompatible.',13,10,'$'
-MD0026:DB 13,10,'This calls BDOS C=0.',13,10
+
+MD0026:DB 13,10,'This calls BDOS C=0.',13,10 ; md0026
         DB 'SUCCESS: control returns to the CCP with a usable prompt.',13,10
         DB 'ENTRYTST cannot print a result after it terminates.',13,10,'$'
-MDGO26:DB 'Press Enter to run the test: $'
-MDFAIL26:DB 'FAIL: BDOS C=0 returned to ENTRYTST.',13,10,'$'
-MD0027:DB 13,10,'This restores the original entry stack and executes RET.',13,10
+
+MDGO26:DB 'Press Enter to run the test: $' ; mdgo26
+MDFAIL26:DB 'FAIL: BDOS C=0 returned to ENTRYTST.',13,10,'$' ; mdfail26
+MD0027:DB 13,10,'This restores the original entry stack and executes RET.',13,10 ; md0027
         DB 'SUCCESS: control returns to the CCP with a usable prompt.',13,10
         DB 'ENTRYTST cannot print a result after it terminates.',13,10,'$'
-MDGO27:DB 'Press Enter to run the test: $'
-MD0509:DB 13,10,'Run these three commands and follow each prompt:',13,10
+
+MDGO27:DB 'Press Enter to run the test: $' ; mdgo27
+MD0509:DB 13,10,'Run these three commands and follow each prompt:',13,10 ; md0509
         DB '  ENTRYTST /0026   (BDOS Function 0)',13,10
         DB '  ENTRYTST /0027   (entry RET)',13,10
         DB '  ENTRYTST /0595   (JMP 0000h / WBOOT)',13,10
         DB 'SUCCESS: every command returns a usable CCP prompt.',13,10
         DB 'FAIL: any command hangs, crashes, or leaves no usable prompt.',13,10,'$'
-MD0590:DB 13,10,'This destructive test needs a restorable emulator snapshot',13,10
+
+MD0590:DB 13,10,'This destructive test needs a restorable emulator snapshot',13,10 ; md0590
         DB 'and an overlay helper that overwrites the resident CCP.',13,10
         DB 'After overwrite, execute entry RET.',13,10
         DB 'SUCCESS: RET is not treated as a safe return to erased CCP.',13,10
         DB 'UNAVAILABLE: no snapshot or overlay helper is installed.',13,10,'$'
-MD0593:DB 13,10,'1. Reset or power-cycle the CP/M machine.',13,10
+
+MD0593:DB 13,10,'1. Reset or power-cycle the CP/M machine.',13,10 ; md0593
         DB '2. Wait for CP/M to finish a true cold boot.',13,10
         DB 'SUCCESS: drive A is current, an A> prompt appears, and DIR works.',13,10
         DB 'FAIL: boot hangs, another drive is current, or commands fail.',13,10
         DB 'ENTRYTST cannot continue across the reset.',13,10,'$'
-MD0595:DB 13,10,'This jumps through 0000h to invoke WBOOT.',13,10
+
+MD0595:DB 13,10,'This jumps through 0000h to invoke WBOOT.',13,10 ; md0595
         DB 'SUCCESS: CP/M reconstructs a usable CCP prompt.',13,10
         DB 'ENTRYTST cannot print a result after WBOOT.',13,10,'$'
-MDGO95:DB 'Press Enter to run the test: $'
-MD0600:DB 13,10,'PREREQUISITE: documented BIOS disk profile and scratch disk.',13,10
+
+MDGO95:DB 'Press Enter to run the test: $' ; mdgo95
+MD0600:DB 13,10,'PREREQUISITE: documented BIOS disk profile and scratch disk.',13,10 ; md0600
         DB 'Prepare the expendable disk first with SCRATCH /BLANK.',13,10
         DB '1. Record sector size, numbering, translation, and error codes.',13,10
         DB '2. Run ENTRYTST /0617 to validate public DPH/DPB access.',13,10
         DB '3. Use the profile monitor to read one known scratch sector.',13,10
         DB 'SUCCESS: raw bytes and status match the documented BIOS profile.',13,10
         DB 'Restore the original scratch image after the test.',13,10,'$'
-MD0602:DB 13,10,'SETUP: use a disposable file on a restorable scratch disk.',13,10
+
+MD0602:DB 13,10,'SETUP: use a disposable file on a restorable scratch disk.',13,10 ; md0602
         DB 'Prepare the expendable disk first with SCRATCH /BLANK.',13,10
         DB 'ACTION: call BDOS C=40 with DE pointing to its random FCB.',13,10
         DB 'EXPECTED: selector 40 consumes the FCB address in DE.',13,10,'$'
-MD0603:DB 13,10,'SETUP: make a short file on a restorable scratch disk.',13,10
+
+MD0603:DB 13,10,'SETUP: make a short file on a restorable scratch disk.',13,10 ; md0603
         DB 'Prepare the expendable disk first with SCRATCH /BLANK.',13,10
         DB 'ACTION: random-write with zero fill beyond current EOF.',13,10
         DB 'EXPECTED: newly allocated intervening records read as zero.',13,10,'$'
-MD0605:DB 13,10,'ACTION: run Function 40 on valid and exhausted media.',13,10
+
+MD0605:DB 13,10,'ACTION: run Function 40 on valid and exhausted media.',13,10 ; md0605
         DB 'EXPECTED: result is in the documented success/error family;',13,10
         DB 'record the exact code for the selected disk profile.',13,10,'$'
-MD0606:DB 13,10,'PREREQUISITE: observable console, reader, punch, and list.',13,10
+
+MD0606:DB 13,10,'PREREQUISITE: observable console, reader, punch, and list.',13,10 ; md0606
         DB 'Send byte 41h through each documented BIOS output entry.',13,10
         DB 'Supply byte 42h to each documented BIOS input entry.',13,10
         DB 'SUCCESS: exactly A is output and exactly B is returned;',13,10
         DB 'no TAB expansion, echo, or BDOS formatting is added.',13,10
         DB 'UNAVAILABLE: required character devices cannot be observed.',13,10,'$'
-MD0607:DB 13,10,'PREREQUISITE: separately observable device routes.',13,10
+
+MD0607:DB 13,10,'PREREQUISITE: separately observable device routes.',13,10 ; md0607
         DB 'Route console, reader, punch, and list to distinct endpoints.',13,10
         DB 'Send a different identifying byte through each BIOS path.',13,10
         DB 'SUCCESS: every byte appears only at its assigned endpoint.',13,10
         DB 'Restore all original routes after the test.',13,10
         DB 'UNAVAILABLE: the profile exposes no distinct endpoints.',13,10,'$'
-MD0612:DB 13,10,'This test requires STAT.COM and an alternate device.',13,10
+
+MD0612:DB 13,10,'This test requires STAT.COM and an alternate device.',13,10 ; md0612
         DB '1. Run: STAT DEV:',13,10
         DB '2. Record the current assignment and IOBYTE value.',13,10
         DB '3. Use STAT to select a documented alternate assignment.',13,10
         DB '4. Run: STAT DEV:',13,10
         DB 'SUCCESS: STAT shows the new route; only its IOBYTE field changed.',13,10
         DB 'Restore the original assignment. UNAVAILABLE if STAT is absent.',13,10,'$'
-MD0614:DB 13,10,'SETUP: obtain the selected disk DPB and a scratch directory.',13,10
+
+MD0614:DB 13,10,'SETUP: obtain the selected disk DPB and a scratch directory.',13,10 ; md0614
         DB 'Prepare the expendable disk first with SCRATCH /BLANK.',13,10
         DB 'ACTION: compare DSM with directory allocation entry width.',13,10
         DB 'EXPECTED: DSM below 256 uses 8-bit entries; otherwise 16-bit.',13,10,'$'
-MD0615:DB 13,10,'ACTION: use BIOS SELDSK/SETTRK/SETSEC/SETDMA/READ on a',13,10
+
+MD0615:DB 13,10,'ACTION: use BIOS SELDSK/SETTRK/SETSEC/SETDMA/READ on a',13,10 ; md0615
         DB 'restorable disk, translating logical sectors with SECTRAN.',13,10
         DB 'Prepare the expendable disk first with SCRATCH /BLANK.',13,10
         DB 'EXPECTED: computed directory sectors contain valid entries.',13,10,'$'
 
-O0001: DB 'Program began at 0100h$'
-O0003: DB 'TPA lower boundary is 0100h$'
-O0005: DB 'JMP at 0000h is warm start$'
-O0006: DB 'IOBYTE resides at 0003h$'
-O0008: DB 'JMP at 0005h is BDOS gateway$'
-O0009: DB 'Page-zero gateway roles present$'
-O0011: DB 'First default FCB is at 005Ch$'
-O0012: DB 'DRI-CCP: Run: ENTRYTST /0012 SECOND.BIN$'
-O0014: DB 'Use /0014 A:AB*.C?M$'
-O0015: DB 'Use /0015 mixed.txt$'
-O0017: DB 'Tail count read from 0080h$'
-O0018: DB 'Tail text begins at 0081h$'
+; -------------------------------------------------------------------------------
+; Observation Records
+; -------------------------------------------------------------------------------
+
+O0001: DB 'Program began at 0100h$'     ; observation record for item 1
+O0003: DB 'TPA lower boundary is 0100h$' ; observation record for item 3
+O0005: DB 'JMP at 0000h is warm start$' ; observation record for item 5
+O0006: DB 'IOBYTE resides at 0003h$'    ; observation record for item 6
+O0008: DB 'JMP at 0005h is BDOS gateway$' ; observation record for item 8
+O0009: DB 'Page-zero gateway roles present$' ; observation record for item 9
+O0011: DB 'First default FCB is at 005Ch$' ; observation record for item 11
+O0012: DB 'DRI-CCP: Run: ENTRYTST /0012 SECOND.BIN$' ; observation record for item 12
+O0014: DB 'Use /0014 A:AB*.C?M$'        ; observation record for item 14
+O0015: DB 'Use /0015 mixed.txt$'        ; observation record for item 15
+O0017: DB 'Tail count read from 0080h$' ; observation record for item 17
+O0018: DB 'Tail text begins at 0081h$'  ; observation record for item 18
 O0020: DB 'Use /0020 mixed Case; tail must uppercase$'
-O0021: DB 'Tail-end byte observed$'
-O0023: DB 'Entry DMA was 0080h$'
-O0024: DB 'Tail and default DMA overlap$'
-O0026: DB 'Run ENTRYTST /0026 manually$'
-O0027: DB 'Run ENTRYTST /0027 manually$'
-O0032: DB 'Extended registers unspecified$'
-O0033: DB 'Flags/interrupt unspecified$'
-O0509: DB 'Run ENTRYTST /0509 manually$'
-O0511: DB 'Open FCBs need explicit close$'
-O0533: DB 'BDOS is not reentrant$'
-O0537: DB 'BDOS ready at transient entry$'
-O0539: DB 'Entry stack recorded$'
-O0589: DB 'BDOS ceiling lies above program$'
-O0590: DB 'Run ENTRYTST /0590 manually$'
-O0591: DB 'Application owns constraints$'
-O0592: DB 'Entry stack may be overlayable$'
-O0593: DB 'Run ENTRYTST /0593 manually$'
-O0594: DB 'BOOT need not clear all memory$'
-O0595: DB 'Run ENTRYTST /0595 manually$'
-O0596: DB 'Residual WBOOT state varies$'
-O0597: DB 'Post-WBOOT console state varies$'
-O0598: DB 'WBOOT vector present at 0000h$'
-O0599: DB 'Function 31 returned a DPB$'
-O0600: DB 'Run ENTRYTST /0600 manually$'
-O0601: DB 'BIOS internals vary by profile$'
-O0602: DB 'Function 40 consumed scratch FCB$'
-O0603: DB 'Intervening records were zero$'
-O0604: DB 'Sparse-hole behavior varies$'
-O0605: DB 'Function 40 returned success$'
-O0606: DB 'Run ENTRYTST /0606 manually$'
-O0607: DB 'Run ENTRYTST /0607 manually$'
-O0608: DB 'IOBYTE reassignment was visible$'
-O0609: DB 'IOBYTE read/write was coherent$'
-O0610: DB 'Other IOBYTE fields preserved$'
-O0611: DB 'Assignment need not prove I/O$'
-O0612: DB 'Run ENTRYTST /0612 manually$'
-O0613: DB 'Disk parameter block available$'
-O0614: DB 'DPB block mask/limits coherent$'
-O0615: DB 'Logical disk structures followed$'
-O0616: DB 'Raw disk format is nonportable$'
-O0617: DB 'Active DPH/DPB contract followed$'
-O0619: DB 'Private BDOS is not a gateway$'
+O0021: DB 'Tail-end byte observed$'     ; observation record for item 21
+O0023: DB 'Entry DMA was 0080h$'        ; observation record for item 23
+O0024: DB 'Tail and default DMA overlap$' ; observation record for item 24
+O0026: DB 'Run ENTRYTST /0026 manually$' ; observation record for item 26
+O0027: DB 'Run ENTRYTST /0027 manually$' ; observation record for item 27
+O0032: DB 'Extended registers unspecified$' ; observation record for item 32
+O0033: DB 'Flags/interrupt unspecified$' ; observation record for item 33
+O0509: DB 'Run ENTRYTST /0509 manually$' ; observation record for item 509
+O0511: DB 'Open FCBs need explicit close$' ; observation record for item 511
+O0533: DB 'BDOS is not reentrant$'      ; observation record for item 533
+O0537: DB 'BDOS ready at transient entry$' ; observation record for item 537
+O0539: DB 'Entry stack recorded$'       ; observation record for item 539
+O0589: DB 'BDOS ceiling lies above program$' ; observation record for item 589
+O0590: DB 'Run ENTRYTST /0590 manually$' ; observation record for item 590
+O0591: DB 'Application owns constraints$' ; observation record for item 591
+O0592: DB 'Entry stack may be overlayable$' ; observation record for item 592
+O0593: DB 'Run ENTRYTST /0593 manually$' ; observation record for item 593
+O0594: DB 'BOOT need not clear all memory$' ; observation record for item 594
+O0595: DB 'Run ENTRYTST /0595 manually$' ; observation record for item 595
+O0596: DB 'Residual WBOOT state varies$' ; observation record for item 596
+O0597: DB 'Post-WBOOT console state varies$' ; observation record for item 597
+O0598: DB 'WBOOT vector present at 0000h$' ; observation record for item 598
+O0599: DB 'Function 31 returned a DPB$' ; observation record for item 599
+O0600: DB 'Run ENTRYTST /0600 manually$' ; observation record for item 600
+O0601: DB 'BIOS internals vary by profile$' ; observation record for item 601
+O0602: DB 'Function 40 consumed scratch FCB$' ; observation record for item 602
+O0603: DB 'Intervening records were zero$' ; observation record for item 603
+O0604: DB 'Sparse-hole behavior varies$' ; observation record for item 604
+O0605: DB 'Function 40 returned success$' ; observation record for item 605
+O0606: DB 'Run ENTRYTST /0606 manually$' ; observation record for item 606
+O0607: DB 'Run ENTRYTST /0607 manually$' ; observation record for item 607
+O0608: DB 'IOBYTE reassignment was visible$' ; observation record for item 608
+O0609: DB 'IOBYTE read/write was coherent$' ; observation record for item 609
+O0610: DB 'Other IOBYTE fields preserved$' ; observation record for item 610
+O0611: DB 'Assignment need not prove I/O$' ; observation record for item 611
+O0612: DB 'Run ENTRYTST /0612 manually$' ; observation record for item 612
+O0613: DB 'Disk parameter block available$' ; observation record for item 613
+O0614: DB 'DPB block mask/limits coherent$' ; observation record for item 614
+O0615: DB 'Logical disk structures followed$' ; observation record for item 615
+O0616: DB 'Raw disk format is nonportable$' ; observation record for item 616
+O0617: DB 'Active DPH/DPB contract followed$' ; observation record for item 617
+O0619: DB 'Private BDOS is not a gateway$' ; observation record for item 619
 
-R0001: DB 'MEM-001-P0001 OR-0001$'
-R0003: DB 'MEM-001-P0003 OR-0003$'
-R0005: DB 'MEM-001-P0005 OR-0005$'
-R0006: DB 'MEM-005-P0006 OR-0006$'
-R0008: DB 'MEM-001-P0008 OR-0008$'
-R0009: DB 'MEM-005-P0009 OR-0009$'
-R0011: DB 'MEM-001-P0011 OR-0011$'
-R0012: DB 'MEM-005-P0012 OR-0012$'
-R0014: DB 'MEM-001-P0014 OR-0014$'
-R0015: DB 'MEM-005-P0015 OR-0015$'
-R0017: DB 'MEM-001-P0017 OR-0017$'
-R0018: DB 'MEM-005-P0018 OR-0018$'
-R0020: DB 'MEM-001-P0020 OR-0020$'
-R0021: DB 'MEM-005-P0021 OR-0021$'
-R0023: DB 'MEM-001-P0023 OR-0023$'
-R0024: DB 'MEM-005-P0024 OR-0024$'
-R0026: DB 'MEM-001-P0026 OR-0026$'
-R0027: DB 'MEM-005-P0027 OR-0027$'
-R0029: DB 'MEM-001-P0029 OR-0029$'
-R0030: DB 'MEM-005-P0030 OR-0030$'
-R0032: DB 'MEM-001-P0032 OR-0032$'
-R0033: DB 'MEM-005-P0033 OR-0033$'
-R0509: DB 'MEM-005-P0509 OR-0509$'
-R0511: DB 'MEM-005-P0511 OR-0511$'
-R0533: DB 'MEM-004-P0533 OR-0533$'
-R0535: DB 'MEM-004-P0535 OR-0535$'
-R0537: DB 'MEM-004-P0537 OR-0537$'
-R0539: DB 'MEM-004-P0539 OR-0539$'
-R0588: DB 'MEM-002-P0588 OR-0588$'
-R0589: DB 'MEM-002-P0589 OR-0589$'
-R0590: DB 'MEM-002-P0590 OR-0590$'
-R0591: DB 'MEM-002-P0591 OR-0591$'
-R0592: DB 'MEM-002-P0592 OR-0592$'
-R0593: DB 'MEM-004-P0593 OR-0593$'
-R0594: DB 'MEM-002-P0594 OR-0594$'
-R0595: DB 'MEM-004-P0595 OR-0595$'
-R0596: DB 'MEM-002-P0596 OR-0596$'
-R0597: DB 'MEM-004-P0597 OR-0597$'
-R0598: DB 'MEM-002-P0598 OR-0598$'
-R0599: DB 'MEM-004-P0599 OR-0599$'
-R0600: DB 'MEM-002-P0600 OR-0600$'
-R0601: DB 'MEM-004-P0601 OR-0601$'
-R0602: DB 'MEM-002-P0602 OR-0602$'
-R0603: DB 'MEM-004-P0603 OR-0603$'
-R0604: DB 'MEM-002-P0604 OR-0604$'
-R0605: DB 'MEM-004-P0605 OR-0605$'
-R0606: DB 'MEM-002-P0606 OR-0606$'
-R0607: DB 'MEM-004-P0607 OR-0607$'
-R0608: DB 'MEM-002-P0608 OR-0608$'
-R0609: DB 'MEM-004-P0609 OR-0609$'
-R0610: DB 'MEM-005-P0610 OR-0610$'
-R0611: DB 'MEM-002-P0611 OR-0611$'
-R0612: DB 'MEM-004-P0612 OR-0612$'
-R0613: DB 'MEM-005-P0613 OR-0613$'
-R0614: DB 'MEM-002-P0614 OR-0614$'
-R0615: DB 'MEM-004-P0615 OR-0615$'
-R0616: DB 'MEM-005-P0616 OR-0616$'
-R0617: DB 'MEM-002-P0617 OR-0617$'
-R0619: DB 'MEM-006-P0619 OR-0619$'
+; -------------------------------------------------------------------------------
+; Catalog Records
+; -------------------------------------------------------------------------------
 
-SH:     DB '/H',0
-SHELP:  DB '/HELP',0
-SLIST:  DB '/LIST',0
-SSAFE:  DB '/SAFE',0
-SALL:   DB '/ALL',0
-SINFO:  DB '/INFO',0
-SVER:   DB '/VER',0
-SVERSION:DB '/VERSION',0
-SGLIST: DB '/GROUP:LIST',0
-SGENTRY:DB '/GROUP:ENTRY',0
-SGTERM: DB '/GROUP:TERMINATION',0
-SGLOADER:DB '/GROUP:LOADER',0
-SGBIOS: DB '/GROUP:BIOS',0
-SGF40:  DB '/GROUP:FUNCTION40',0
-SGDEV:  DB '/GROUP:DEVICES',0
-SGREQ:  DB '/GROUP:REQUIRED',0
-SGOBS:  DB '/GROUP:OBSERVATION',0
-SGMAN:  DB '/GROUP:MANUAL',0
-SHR:    DB '/H:RESULTS',0
-SHP:    DB '/H:PROFILES',0
-SREPORT:DB ':REPORT',0
+R0001: DB 'MEM-001-P0001 OR-0001$'      ; catalog record for item 1
+R0003: DB 'MEM-001-P0003 OR-0003$'      ; catalog record for item 3
+R0005: DB 'MEM-001-P0005 OR-0005$'      ; catalog record for item 5
+R0006: DB 'MEM-005-P0006 OR-0006$'      ; catalog record for item 6
+R0008: DB 'MEM-001-P0008 OR-0008$'      ; catalog record for item 8
+R0009: DB 'MEM-005-P0009 OR-0009$'      ; catalog record for item 9
+R0011: DB 'MEM-001-P0011 OR-0011$'      ; catalog record for item 11
+R0012: DB 'MEM-005-P0012 OR-0012$'      ; catalog record for item 12
+R0014: DB 'MEM-001-P0014 OR-0014$'      ; catalog record for item 14
+R0015: DB 'MEM-005-P0015 OR-0015$'      ; catalog record for item 15
+R0017: DB 'MEM-001-P0017 OR-0017$'      ; catalog record for item 17
+R0018: DB 'MEM-005-P0018 OR-0018$'      ; catalog record for item 18
+R0020: DB 'MEM-001-P0020 OR-0020$'      ; catalog record for item 20
+R0021: DB 'MEM-005-P0021 OR-0021$'      ; catalog record for item 21
+R0023: DB 'MEM-001-P0023 OR-0023$'      ; catalog record for item 23
+R0024: DB 'MEM-005-P0024 OR-0024$'      ; catalog record for item 24
+R0026: DB 'MEM-001-P0026 OR-0026$'      ; catalog record for item 26
+R0027: DB 'MEM-005-P0027 OR-0027$'      ; catalog record for item 27
+R0029: DB 'MEM-001-P0029 OR-0029$'      ; catalog record for item 29
+R0030: DB 'MEM-005-P0030 OR-0030$'      ; catalog record for item 30
+R0032: DB 'MEM-001-P0032 OR-0032$'      ; catalog record for item 32
+R0033: DB 'MEM-005-P0033 OR-0033$'      ; catalog record for item 33
+R0509: DB 'MEM-005-P0509 OR-0509$'      ; catalog record for item 509
+R0511: DB 'MEM-005-P0511 OR-0511$'      ; catalog record for item 511
+R0533: DB 'MEM-004-P0533 OR-0533$'      ; catalog record for item 533
+R0535: DB 'MEM-004-P0535 OR-0535$'      ; catalog record for item 535
+R0537: DB 'MEM-004-P0537 OR-0537$'      ; catalog record for item 537
+R0539: DB 'MEM-004-P0539 OR-0539$'      ; catalog record for item 539
+R0588: DB 'MEM-002-P0588 OR-0588$'      ; catalog record for item 588
+R0589: DB 'MEM-002-P0589 OR-0589$'      ; catalog record for item 589
+R0590: DB 'MEM-002-P0590 OR-0590$'      ; catalog record for item 590
+R0591: DB 'MEM-002-P0591 OR-0591$'      ; catalog record for item 591
+R0592: DB 'MEM-002-P0592 OR-0592$'      ; catalog record for item 592
+R0593: DB 'MEM-004-P0593 OR-0593$'      ; catalog record for item 593
+R0594: DB 'MEM-002-P0594 OR-0594$'      ; catalog record for item 594
+R0595: DB 'MEM-004-P0595 OR-0595$'      ; catalog record for item 595
+R0596: DB 'MEM-002-P0596 OR-0596$'      ; catalog record for item 596
+R0597: DB 'MEM-004-P0597 OR-0597$'      ; catalog record for item 597
+R0598: DB 'MEM-002-P0598 OR-0598$'      ; catalog record for item 598
+R0599: DB 'MEM-004-P0599 OR-0599$'      ; catalog record for item 599
+R0600: DB 'MEM-002-P0600 OR-0600$'      ; catalog record for item 600
+R0601: DB 'MEM-004-P0601 OR-0601$'      ; catalog record for item 601
+R0602: DB 'MEM-002-P0602 OR-0602$'      ; catalog record for item 602
+R0603: DB 'MEM-004-P0603 OR-0603$'      ; catalog record for item 603
+R0604: DB 'MEM-002-P0604 OR-0604$'      ; catalog record for item 604
+R0605: DB 'MEM-004-P0605 OR-0605$'      ; catalog record for item 605
+R0606: DB 'MEM-002-P0606 OR-0606$'      ; catalog record for item 606
+R0607: DB 'MEM-004-P0607 OR-0607$'      ; catalog record for item 607
+R0608: DB 'MEM-002-P0608 OR-0608$'      ; catalog record for item 608
+R0609: DB 'MEM-004-P0609 OR-0609$'      ; catalog record for item 609
+R0610: DB 'MEM-005-P0610 OR-0610$'      ; catalog record for item 610
+R0611: DB 'MEM-002-P0611 OR-0611$'      ; catalog record for item 611
+R0612: DB 'MEM-004-P0612 OR-0612$'      ; catalog record for item 612
+R0613: DB 'MEM-005-P0613 OR-0613$'      ; catalog record for item 613
+R0614: DB 'MEM-002-P0614 OR-0614$'      ; catalog record for item 614
+R0615: DB 'MEM-004-P0615 OR-0615$'      ; catalog record for item 615
+R0616: DB 'MEM-005-P0616 OR-0616$'      ; catalog record for item 616
+R0617: DB 'MEM-002-P0617 OR-0617$'      ; catalog record for item 617
+R0619: DB 'MEM-006-P0619 OR-0619$'      ; catalog record for item 619
 
-WILDFCB:DB 0,'ENTRYTST','COM',0,0,0,0
+SH:     DB '/H',0                       ; sh
+SHELP:  DB '/HELP',0                    ; shelp
+SLIST:  DB '/LIST',0                    ; slist
+SSAFE:  DB '/SAFE',0                    ; ssafe
+SALL:   DB '/ALL',0                     ; sall
+SINFO:  DB '/INFO',0                    ; sinfo
+SVER:   DB '/VER',0                     ; sver
+SVERSION:DB '/VERSION',0                ; sversion
+SGLIST: DB '/GROUP:LIST',0              ; sglist
+SGENTRY:DB '/GROUP:ENTRY',0             ; sgentry
+SGTERM: DB '/GROUP:TERMINATION',0       ; sgterm
+SGLOADER:DB '/GROUP:LOADER',0           ; sgloader
+SGBIOS: DB '/GROUP:BIOS',0              ; sgbios
+SGF40:  DB '/GROUP:FUNCTION40',0        ; sgf40
+SGDEV:  DB '/GROUP:DEVICES',0           ; sgdev
+SGREQ:  DB '/GROUP:REQUIRED',0          ; sgreq
+SGOBS:  DB '/GROUP:OBSERVATION',0       ; sgobs
+SGMAN:  DB '/GROUP:MANUAL',0            ; sgman
+SHR:    DB '/H:RESULTS',0               ; shr
+SHP:    DB '/H:PROFILES',0              ; shp
+SREPORT:DB ':REPORT',0                  ; sreport
+
+; ================================================================================
+; =                          Fixtures and Runner State                           =
+; =                                                                              =
+; = Defines FCB fixtures, Function-40 state, current catalog pointers, counters, =
+; = saved entry stack, public-structure pointers, private stack, and image-end   =
+; = witness.                                                                     =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Fixtures and Runner State
+; -------------------------------------------------------------------------------
+
+WILDFCB:DB 0,'ENTRYTST','COM',0,0,0,0   ; wildcard FCB fixture
         DS 20
-FCB12:  DB 0,'SECOND  ','BIN'
-FCB14:  DB 1,'AB??????','C?M'
-FCB15:  DB 0,'MIXED   ','TXT'
-F40INIT:DB 0,'ENT40   ','$$$',0,0,0,0
+
+FCB12:  DB 0,'SECOND  ','BIN'           ; fcb12
+FCB14:  DB 1,'AB??????','C?M'           ; fcb14
+FCB15:  DB 0,'MIXED   ','TXT'           ; fcb15
+F40INIT:DB 0,'ENT40   ','$$$',0,0,0,0   ; f40init
         DS 20
-F40FCB: DS 36
-F40DMA: DS 128
-ITEMNO:DW 0
-REPORTMODE:DB 0
-FILTERMODE:DB 0
-ARGBUF: DS 40
-CURITEM:DW 0
-PROCPTR:DW 0
-OBSPTR:DW 0
-PASSCT:DB 0
-FAILCT:DB 0
-OBSCT: DB 0
-FAILITEMS:DS 118
-RUNMODE:DB 0
-ENTRYSP:DW 0
-DPHPTR:DW 0
-DPBPTR:DW 0
-BIOPTR: DW 0
+
+F40FCB: DS 36                           ; Function-40 scratch FCB
+F40DMA: DS 128                          ; Function-40 DMA buffer
+ITEMNO:DW 0                             ; itemno
+REPORTMODE:DB 0                         ; reportmode
+FILTERMODE:DB 0                         ; filtermode
+ARGBUF: DS 40                           ; argbuf
+CURITEM:DW 0                            ; curitem
+PROCPTR:DW 0                            ; procptr
+OBSPTR:DW 0                             ; obsptr
+PASSCT:DB 0                             ; passct
+FAILCT:DB 0                             ; failct
+OBSCT: DB 0                             ; obsct
+FAILITEMS:DS 118                        ; failitems
+RUNMODE:DB 0                            ; runmode
+ENTRYSP:DW 0                            ; saved CCP entry stack
+DPHPTR:DW 0                             ; dphptr
+DPBPTR:DW 0                             ; dpbptr
+BIOPTR: DW 0                            ; bioptr
         DS 128
-STACKTOP:
-ENDPROG:
+
+STACKTOP:                               ; top of private test stack
+
+ENDPROG:                                ; end of transient image
         END     START

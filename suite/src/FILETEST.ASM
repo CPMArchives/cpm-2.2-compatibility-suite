@@ -1,75 +1,85 @@
 ; SPDX-License-Identifier: GPL-2.0-or-later
-;
-;***********************************************************************
-;*                                                                     *
-;*              F I L E T E S T   --   RELEASE DEV30                  *
-;*                                                                     *
-;*             CP/M 2.2 FILE COMPATIBILITY TEST PROGRAM               *
-;*                                                                     *
-;***********************************************************************
-;
-; Version 0.1.0-dev37 - report an absent cross-drive fixture as not-run
-;
-; ASSEMBLY: ZSM4, THEN DIGITAL RESEARCH LINK.  ONLY 8080 OPERATIONS ARE USED.
-; LOAD AT:  0100H
-;
-;------------------------- PROGRAMMER'S NOTES --------------------------
-;
-; FILETEST is a card file of small experiments, not one long disk exercise.
-; Each RUNnnnn routine arranges one state, makes the few calls needed for
-; that card, and judges only the evidence named by its oracle.  Shared
-; routines do the clerical work, but never decide a result from a ledger
-; number or from the wording printed on the console.
-;
-; TESTFCB and DMABUF have tell-tales on both sides.  INITFCB writes A5H and
-; 5AH around the 36-byte FCB; PREPDMA writes C3H and 3CH around the 128-byte
-; record.  These values are unlike the fixture text and unlike each other.
-; If a tell-tale changes, the card reports ERROR, not FAIL: an overrun means
-; the program can no longer trust either its evidence or its own machinery.
-;
-; A DMA record is first filled with E7H.  Successful reads must replace the
-; expected marker, and whole-record checks can also prove that no E7H was
-; left behind.  The ordinary DMA address is restored to 0080H on every exit
-; from a path which selects DMABUF.  When adding a path, write its RESTDMA or
-; TEMPCLEAN exit before writing the success exit.
-;
-; BTTEMP.DAT is the expendable working file.  TEMPMAKE first erases any stale
-; copy, and TEMPCLEAN closes and erases it after success, failure or error.
-; Named BT files and their record marks are test instruments; they are never
-; aliases for an operator's files.  Full-directory and cross-drive cards use
-; SCRATCH-built D: and C: media and do not manufacture those conditions here.
-;
-; Several claims share an operation but not an oracle.  For example, one
-; read may prove its return, its CR advance, its record bytes, or merely
-; characterize state after EOF.  The NOT GUARANTEED cards go through the
-; diagnostic table and always print O; no observed byte can promote one of
-; them to PASS or demote it to FAIL.
-;
-; Random I/O keeps CR deliberately different from R0-R2.  This catches code
-; which accidentally uses the sequential position.  Written records are
-; closed, reopened and read again before their A5H mark is accepted, so the
-; comparison is against disk state rather than the caller's old DMA image.
-;
-; The read-only write cards are special.  On the declared CP/M 2.2 profile a
-; correct call may abandon this transient and return straight to the CCP.
-; They are therefore absent from /ALL and belong to an outside terminal-
-; outcome transcript.  A normal return from either call is itself the bad
-; outcome.  Do not put cleanup code after a call which is not meant to return.
-;
-; Compact output and /REPORT are two views of the same result cells.  The
-; long case records carry the four ledger digits used by compact printing;
-; keep that first-line layout fixed unless PUTCID is changed with it.
-;
-;***********************************************************************
 
-; LINK establishes the CP/M transient load address at 0100h.
+; ********************************************************************************
+; *                  CP/M 2.2 Conformance Suite -- FILETEST                     *
+; *                                                                              *
+; * Exercises CP/M 2.2 FCB layout, Open/Close, sequential and random I/O, file  *
+; * lifecycle, persistence, extent boundaries, and defined failure returns.     *
+; * Guarded FCB and DMA objects distinguish ordinary conformance failures from  *
+; * corruption of the test machinery itself.                                    *
+; ********************************************************************************
+
+  ; Version 0.1.0-dev37 - report an absent cross-drive fixture as not-run
+
+  ; ASSEMBLY: ZSM4, THEN DIGITAL RESEARCH LINK.  ONLY 8080 OPERATIONS ARE USED.
+  ; LOAD AT:  0100H
+
+  ; PROGRAMMER'S NOTES
+  ; ------------------
+  ;
+  ; FILETEST is a card file of small experiments, not one long disk exercise.
+  ; Each RUNnnnn routine arranges one state, makes the few calls needed for
+  ; that card, and judges only the evidence named by its oracle.  Shared
+  ; routines do the clerical work, but never decide a result from a ledger
+  ; number or from the wording printed on the console.
+  ;
+  ; TESTFCB and DMABUF have tell-tales on both sides.  INITFCB writes A5H and
+  ; 5AH around the 36-byte FCB; PREPDMA writes C3H and 3CH around the 128-byte
+  ; record.  These values are unlike the fixture text and unlike each other.
+  ; If a tell-tale changes, the card reports ERROR, not FAIL: an overrun means
+  ; the program can no longer trust either its evidence or its own machinery.
+  ;
+  ; A DMA record is first filled with E7H.  Successful reads must replace the
+  ; expected marker, and whole-record checks can also prove that no E7H was
+  ; left behind.  The ordinary DMA address is restored to 0080H on every exit
+  ; from a path which selects DMABUF.  When adding a path, write its RESTDMA or
+  ; TEMPCLEAN exit before writing the success exit.
+  ;
+  ; BTTEMP.DAT is the expendable working file.  TEMPMAKE first erases any stale
+  ; copy, and TEMPCLEAN closes and erases it after success, failure or error.
+  ; Named BT files and their record marks are test instruments; they are never
+  ; aliases for an operator's files.  Full-directory and cross-drive cards use
+  ; SCRATCH-built D: and C: media and do not manufacture those conditions here.
+  ;
+  ; Several claims share an operation but not an oracle.  For example, one
+  ; read may prove its return, its CR advance, its record bytes, or merely
+  ; characterize state after EOF.  The NOT GUARANTEED cards go through the
+  ; diagnostic table and always print O; no observed byte can promote one of
+  ; them to PASS or demote it to FAIL.
+  ;
+  ; Random I/O keeps CR deliberately different from R0-R2.  This catches code
+  ; which accidentally uses the sequential position.  Written records are
+  ; closed, reopened and read again before their A5H mark is accepted, so the
+  ; comparison is against disk state rather than the caller's old DMA image.
+  ;
+  ; The read-only write cards are special.  On the declared CP/M 2.2 profile a
+  ; correct call may abandon this transient and return straight to the CCP.
+  ; They are therefore absent from /ALL and belong to an outside terminal-
+  ; outcome transcript.  A normal return from either call is itself the bad
+  ; outcome.  Do not put cleanup code after a call which is not meant to return.
+  ;
+  ; Compact output and /REPORT are two views of the same result cells.  The
+  ; long case records carry the four ledger digits used by compact printing;
+  ; keep that first-line layout fixed unless PUTCID is changed with it.
+  ;
+  ;***********************************************************************
+
+  ; LINK establishes the CP/M transient load address at 0100h.
 
 BDOS    EQU     0005H
 CMDLEN  EQU     0080H
 CMDTXT  EQU     0081H
 DIAG_COUNT EQU  16
 
-START:
+; ================================================================================
+; =                   Command Interface and Aggregate Control                    =
+; =                                                                              =
+; = Parses exact selectors and dispatches functional, universal, required,       =
+; = observation, manual, diagnostic, and individual views over the               =
+; = file-conformance card deck.                                                  =
+; ================================================================================
+
+START:                                  ; enter FILETEST command dispatcher
         ; Own the stack.  Every finished command jumps through page zero;
         ; no card depends upon the depth or contents of the CCP's old stack.
         LD      SP,STACKTOP
@@ -733,15 +743,19 @@ START:
         CALL    STREQ
         JP      Z,DOVERSION
 
-BADCOMMAND:
+BADCOMMAND:                             ; report invalid command
         LD      DE,MSG_BADSEL
         CALL    PUTS
         JP      0000H
 
-;------------------------ DECODE COMMAND TAIL -------------------------
-; Copy and fold exactly one selector.  A second nonblank token is invalid.
-; /NNNN:REPORT is canonicalized to /NNNN after selecting the full report.
-PARSEARG:
+; -------------------------------------------------------------------------------
+; Command Argument Parser
+; -------------------------------------------------------------------------------
+
+  ; Copy and fold exactly one selector.  A second nonblank token is invalid.
+  ; /NNNN:REPORT is canonicalized to /NNNN after selecting the full report.
+
+PARSEARG:                               ; parse command selector
         XOR     A
         LD      (FULLMODE),A
         LD      (PARSEBAD),A
@@ -749,7 +763,8 @@ PARSEARG:
         LD      B,A
         LD      HL,CMDTXT
         LD      DE,ARGBUF
-PASKIP:
+
+PASKIP:                                 ; paskip
         LD      A,B
         OR      A
         JP      Z,PADONE
@@ -759,7 +774,8 @@ PASKIP:
         INC     HL
         DEC     B
         JP      PASKIP
-PACOPY:
+
+PACOPY:                                 ; pacopy
         LD      A,B
         OR      A
         JP      Z,PADONE
@@ -771,16 +787,19 @@ PACOPY:
         CP      'z'+1
         JP      NC,PASTORE
         SUB     20H
-PASTORE:
+
+PASTORE:                                ; pastore
         LD      (DE),A
         INC     DE
         INC     HL
         DEC     B
         JP      PACOPY
-PATRAIL:
+
+PATRAIL:                                ; patrail
         INC     HL
         DEC     B
-PATLOOP:
+
+PATLOOP:                                ; patloop
         LD      A,B
         OR      A
         JP      Z,PADONE
@@ -790,9 +809,11 @@ PATLOOP:
         INC     HL
         DEC     B
         JP      PATLOOP
-PABAD:  LD      A,1
+
+PABAD:  LD      A,1                     ; pabad
         LD      (PARSEBAD),A
-PADONE:
+
+PADONE:                                 ; padone
         XOR     A
         LD      (DE),A
         LD      A,(PARSEBAD)
@@ -804,7 +825,8 @@ PADONE:
         RET     NZ
         INC     HL
         LD      B,4
-PARDIG:LD      A,(HL)
+
+PARDIG:LD      A,(HL)                   ; pardig
         CP      '0'
         RET     C
         CP      '9'+1
@@ -826,8 +848,9 @@ PARDIG:LD      A,(HL)
         LD      (FULLMODE),A
         RET
 
-; Compare two zero-ended words.  Exit Z only when both ends agree.
-STREQ:
+  ; Compare two zero-ended words.  Exit Z only when both ends agree.
+
+STREQ:                                  ; streq
         LD      A,(DE)
         CP      (HL)
         RET     NZ
@@ -837,40 +860,49 @@ STREQ:
         INC     HL
         JP      STREQ
 
-DOLIST:
+DOLIST:                                 ; display catalog list
         LD      DE,MSG_LIST
         CALL    PUTS
         JP      0000H
-DOGROUPLIST:
+
+DOGROUPLIST:                            ; display functional groups
         LD      DE,MSG_GROUPS
         CALL    PUTS
         JP      0000H
 
-DOHELP:
+DOHELP:                                 ; display command help
         LD      DE,MSG_HELP
         CALL    PUTS
         JP      0000H
-DOHRESULTS:
+
+DOHRESULTS:                             ; dohresults
         LD      DE,MSG_RESULTS
         CALL    PUTS
         JP      0000H
-DOHPROFILES:
+
+DOHPROFILES:                            ; dohprofiles
         LD      DE,MSG_PROFILES
         CALL    PUTS
         JP      0000H
-DOINFO:
+
+DOINFO:                                 ; display suite information
         LD      DE,MSG_INFO
         CALL    PUTS
         JP      0000H
-DOVERSION:
+
+DOVERSION:                              ; display suite version
         LD      DE,MSG_VERSION
         CALL    PUTS
         JP      0000H
 
-;----------------------- GROUP RUN CONTROL ----------------------------
-; AGGMODE keeps an individual card from returning through page zero.  Counts
-; belong only to cards actually called; catalog coverage is printed elsewhere.
-AGGINIT:
+; -------------------------------------------------------------------------------
+; Aggregate Run Control
+; -------------------------------------------------------------------------------
+
+  ; AGGMODE keeps an individual card from returning through page zero.  Counts
+  ; belong only to cards actually called; catalog coverage is printed elsewhere.
+
+AGGINIT:                                ; initialize aggregate run
         LD      A,1
         LD      (AGGMODE),A
         XOR     A
@@ -888,7 +920,7 @@ AGGINIT:
         CALL    PUTZ
         RET
 
-RUNOPEN:
+RUNOPEN:                                ; run Open group
         CALL    AGGINIT
         LD      DE,HOPEN
         CALL    PUTFULL
@@ -900,7 +932,7 @@ RUNOPEN:
         CALL    PUTSUM
         JP      0000H
 
-RUNSEQ:
+RUNSEQ:                                 ; run sequential group
         CALL    AGGINIT
         LD      DE,HSEQ
         CALL    PUTFULL
@@ -916,7 +948,7 @@ RUNSEQ:
         CALL    PUTSUM
         JP      0000H
 
-RUNCLOSE:
+RUNCLOSE:                               ; run Close group
         CALL    AGGINIT
         LD      DE,HCLOSE
         CALL    PUTFULL
@@ -925,7 +957,7 @@ RUNCLOSE:
         CALL    PUTSUM
         JP      0000H
 
-RUNREADS:
+RUNREADS:                               ; run read group
         CALL    AGGINIT
         LD      DE,HREADS
         CALL    PUTFULL
@@ -942,7 +974,7 @@ RUNREADS:
         CALL    PUTSUM
         JP      0000H
 
-RUNALL:
+RUNALL:                                 ; run all returning cases
         CALL    AGGINIT
         LD      DE,HALL
         CALL    PUTFULL
@@ -964,8 +996,9 @@ RUNALL:
         CALL    PUTSUM
         JP      0000H
 
-; Functional and universal groups reuse the established card routines.
-RUNFCBOPEN:
+  ; Functional and universal groups reuse the established card routines.
+
+RUNFCBOPEN:                             ; run FCB/Open group
         CALL    AGGINIT
         LD      DE,HGFCB
         CALL    PUTFULL
@@ -1006,7 +1039,7 @@ RUNFCBOPEN:
         CALL    PUTSUM
         JP      0000H
 
-RUNGREAD:
+RUNGREAD:                               ; run grouped read cases
         CALL    AGGINIT
         LD      DE,HGREAD
         CALL    PUTFULL
@@ -1059,7 +1092,7 @@ RUNGREAD:
         CALL    PUTSUM
         JP      0000H
 
-RUNGWRITE:
+RUNGWRITE:                              ; run grouped write cases
         CALL    AGGINIT
         LD      DE,HGWRITE
         CALL    PUTFULL
@@ -1095,7 +1128,7 @@ RUNGWRITE:
         CALL    PUTSUM
         JP      0000H
 
-RUNGRANDOM:
+RUNGRANDOM:                             ; run random-I/O group
         CALL    AGGINIT
         LD      DE,HGRANDOM
         CALL    PUTFULL
@@ -1105,7 +1138,7 @@ RUNGRANDOM:
         CALL    PUTSUM
         JP      0000H
 
-RUNGLIFE:
+RUNGLIFE:                               ; run lifecycle group
         CALL    AGGINIT
         LD      DE,HGLIFE
         CALL    PUTFULL
@@ -1115,7 +1148,7 @@ RUNGLIFE:
         CALL    PUTSUM
         JP      0000H
 
-RUNREQUIRED:
+RUNREQUIRED:                            ; run required cases
         CALL    AGGINIT
         LD      DE,HGREQ
         CALL    PUTFULL
@@ -1193,7 +1226,7 @@ RUNREQUIRED:
         CALL    PUTSUM
         JP      0000H
 
-RUNOBSERVATION:
+RUNOBSERVATION:                         ; run observation cases
         CALL    AGGINIT
         LD      DE,HGOBS
         CALL    PUTFULL
@@ -1201,22 +1234,23 @@ RUNOBSERVATION:
         CALL    PUTSUM
         JP      0000H
 
-RUNMANUAL:
+RUNMANUAL:                              ; run manual cases
         LD      DE,MSG_MANUAL
         CALL    PUTS
         JP      0000H
 
-PUTSKIPS:
+PUTSKIPS:                               ; putskips
         LD      (NOTRUNCT),A
         OR      A
         RET     Z
         JP      PUTS
 
 
-; /ALL means all implemented cards which can return, plus the observation
-; deck.  It cannot include 0368 and 0369: either may lose the transient and
-; return directly to CCP.  Those two require their outside terminal transcript.
-RUNCOMPLETE:
+  ; /ALL means all implemented cards which can return, plus the observation
+  ; deck.  It cannot include 0368 and 0369: either may lose the transient and
+  ; return directly to CCP.  Those two require their outside terminal transcript.
+
+RUNCOMPLETE:                            ; runcomplete
         CALL    AGGINIT
         LD      DE,HCOMPLETE
         CALL    PUTFULL
@@ -1273,13 +1307,15 @@ RUNCOMPLETE:
         CALL    PUTSUM
         JP      0000H
 
-; Walk the observation deck.  Each seven-byte entry contains two selector
-; pointers, a case pointer and a one-byte operation number.
-RUNDIAGALL:
+  ; Walk the observation deck.  Each seven-byte entry contains two selector
+  ; pointers, a case pointer and a one-byte operation number.
+
+RUNDIAGALL:                             ; rundiagall
         LD      HL,DIAGTAB
         LD      A,DIAG_COUNT
         LD      (DIAGLEFT),A
-RDAL1:  LD      DE,4
+
+RDAL1:  LD      DE,4                    ; rdal1
         ADD     HL,DE
         LD      E,(HL)
         INC     HL
@@ -1299,8 +1335,9 @@ RDAL1:  LD      DE,4
         JP      NZ,RDAL1
         RET
 
-; Run one observation entry selected by its zero-based DIAGTAB index.
-RUNDIAGONE:
+  ; Run one observation entry selected by its zero-based DIAGTAB index.
+
+RUNDIAGONE:                             ; rundiagone
         LD      H,0
         LD      L,A
         LD      D,H
@@ -1325,7 +1362,7 @@ RUNDIAGONE:
         LD      A,(HL)
         JP      RUNDIAG
 
-RUNB10:
+RUNB10:                                 ; runb10
         CALL    RUN0223
         CALL    RUN0224
         CALL    RUN0226
@@ -1337,7 +1374,7 @@ RUNB10:
         CALL    RUN0232
         RET
 
-RUND10:
+RUND10:                                 ; rund10
         CALL    RUN0234
         CALL    RUN0235
         CALL    RUN0236
@@ -1346,7 +1383,7 @@ RUND10:
         CALL    RUN0242
         RET
 
-RUND9:
+RUND9:                                  ; rund9
         CALL    RUN0243
         CALL    RUN0248
         CALL    RUN0249
@@ -1359,14 +1396,15 @@ RUND9:
         CALL    RUN0261
         RET
 
-;---------------------- OBSERVATION CARD DECK -------------------------
-; These NOT GUARANTEED cards are absent from /SAFE and can never add a PASS.
-; Each table entry holds the short selector, long selector, printed card and
-; a small operation number understood by RUNDIAG.
-DIAGSELECT:
+  ; These NOT GUARANTEED cards are absent from /SAFE and can never add a PASS.
+  ; Each table entry holds the short selector, long selector, printed card and
+  ; a small operation number understood by RUNDIAG.
+
+DIAGSELECT:                             ; diagselect
         LD      HL,DIAGTAB
         LD      B,DIAG_COUNT
-DSL1:   LD      (DIAGPTR),HL
+
+DSL1:   LD      (DIAGPTR),HL            ; dsl1
         LD      E,(HL)
         INC     HL
         LD      D,(HL)
@@ -1395,10 +1433,12 @@ DSL1:   LD      (DIAGPTR),HL
         DEC     B
         JP      NZ,DSL1
         RET
-DSFOUND:
+
+DSFOUND:                                ; dsfound
         INC     HL
         INC     HL
-DSFOUND2:
+
+DSFOUND2:                               ; dsfound2
         LD      E,(HL)
         INC     HL
         LD      D,(HL)
@@ -1408,10 +1448,22 @@ DSFOUND2:
         LD      A,(HL)
         JP      RUNDIAG
 
-; Make an observation without inventing an oracle.  NEWOBS1 is normally the
-; call result; NEWOBS2 is a selected FCB or DMA byte.  Whatever values arrive,
-; DIAGDONE prints O and leaves the PASS and FAIL counters alone.
-RUNDIAG:
+; ================================================================================
+; =                            Observation Card Deck                             =
+; =                                                                              =
+; = Runs NOT GUARANTEED diagnostic operations through a separate table so        =
+; = recorded residue can never be promoted to PASS or FAIL by a convenient       =
+; = observed value.                                                              =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Observation Card Deck
+; -------------------------------------------------------------------------------
+
+  ; Make an observation without inventing an oracle.  NEWOBS1 is normally the
+  ; call result; NEWOBS2 is a selected FCB or DMA byte.  Whatever values arrive,
+  ; DIAGDONE prints O and leaves the PASS and FAIL counters alone.
+
+RUNDIAG:                                ; run diagnostic observation
         PUSH    AF
         CALL    INDHEAD
         POP     AF
@@ -1453,19 +1505,21 @@ RUNDIAG:
         JP      Z,DGEFFCB
         JP      DGOPEN1
 
-DGOPEN1:
+DGOPEN1:                                ; dgopen1
         LD      HL,ONEFCB
         CALL    OPENHL
         LD      A,(TESTFCB+13)
         LD      (NEWOBS2),A
         JP      DIAGDONE
-DGOPENM:
+
+DGOPENM:                                ; dgopenm
         LD      HL,MISSFCB
         CALL    OPENHL
         LD      A,(TESTFCB+13)
         LD      (NEWOBS2),A
         JP      DIAGDONE
-DGALLOC:
+
+DGALLOC:                                ; dgalloc
         LD      HL,ONEFCB
         CALL    OPENHL
         LD      A,(TESTFCB+16)
@@ -1473,7 +1527,8 @@ DGALLOC:
         LD      A,(TESTFCB+17)
         LD      (NEWOBS2),A
         JP      DIAGDONE
-DGREADU:
+
+DGREADU:                                ; dgreadu
         LD      HL,ONEFCB
         CALL    INITFCB
         CALL    PREPDMA
@@ -1482,7 +1537,8 @@ DGREADU:
         LD      (NEWOBS2),A
         CALL    RESTDMA
         JP      DIAGDONE
-DGINVALID:
+
+DGINVALID:                              ; dginvalid
         LD      HL,ONEFCB
         CALL    INITFCB
         LD      A,0FFH
@@ -1493,7 +1549,8 @@ DGINVALID:
         LD      (NEWOBS2),A
         CALL    RESTDMA
         JP      DIAGDONE
-DGMAKEX:
+
+DGMAKEX:                                ; dgmakex
         LD      HL,ONEFCB
         CALL    INITFCB
         LD      DE,TESTFCB
@@ -1503,7 +1560,8 @@ DGMAKEX:
         LD      A,(TESTFCB+15)
         LD      (NEWOBS2),A
         JP      DIAGDONE
-DGMAKEW:
+
+DGMAKEW:                                ; dgmakew
         LD      HL,WILDFCB
         CALL    INITFCB
         LD      DE,TESTFCB
@@ -1513,7 +1571,8 @@ DGMAKEW:
         LD      A,(TESTFCB+15)
         LD      (NEWOBS2),A
         JP      DIAGDONE
-DGPART:
+
+DGPART:                                 ; dgpart
         LD      HL,PARTFCB
         CALL    OPENHL
         CP      0FFH
@@ -1524,9 +1583,10 @@ DGPART:
         LD      (NEWOBS2),A
         CALL    RESTDMA
         JP      DIAGDONE
-; EOF and failure residue are recorded exactly as found.  They are useful
-; fingerprints, but no particular DMA or working-FCB residue is required.
-DGEOF:
+  ; EOF and failure residue are recorded exactly as found.  They are useful
+  ; fingerprints, but no particular DMA or working-FCB residue is required.
+
+DGEOF:                                  ; dgeof
         LD      HL,ONEFCB
         CALL    OPENHL
         CP      0FFH
@@ -1540,7 +1600,8 @@ DGEOF:
         LD      (NEWOBS2),A
         CALL    RESTDMA
         JP      DIAGDONE
-DGEFDMA:
+
+DGEFDMA:                                ; dgefdma
         LD      HL,EMPTYFCB
         CALL    OPENHL
         CP      0FFH
@@ -1553,7 +1614,8 @@ DGEFDMA:
         LD      (NEWOBS2),A
         CALL    RESTDMA
         JP      DIAGDONE
-DGEFFCB:
+
+DGEFFCB:                                ; dgeffcb
         LD      HL,EMPTYFCB
         CALL    OPENHL
         CP      0FFH
@@ -1566,7 +1628,8 @@ DGEFFCB:
         LD      (NEWOBS2),A
         CALL    RESTDMA
         JP      DIAGDONE
-DGWRITEU:
+
+DGWRITEU:                               ; dgwriteu
         LD      HL,TEMPFCB
         CALL    INITFCB
         CALL    PREPDMA
@@ -1578,7 +1641,8 @@ DGWRITEU:
         LD      (NEWOBS2),A
         CALL    RESTDMA
         JP      DIAGDONE
-DGTEMPW:
+
+DGTEMPW:                                ; dgtempw
         CALL    WRITEONE
         LD      A,(TESTFCB+16)
         LD      (NEWOBS1),A
@@ -1586,7 +1650,8 @@ DGTEMPW:
         LD      (NEWOBS2),A
         CALL    TEMPCLEAN
         JP      DIAGDONE
-DGF36:
+
+DGF36:                                  ; dgf36
         LD      HL,ONEFCB
         CALL    OPENHL
         LD      A,1
@@ -1598,7 +1663,8 @@ DGF36:
         LD      A,(TESTFCB+33)
         LD      (NEWOBS2),A
         JP      DIAGDONE
-DGRFAIL:
+
+DGRFAIL:                                ; dgrfail
         CALL    RANDOPEN
         LD      A,130
         LD      (TESTFCB+33),A
@@ -1610,7 +1676,8 @@ DGRFAIL:
         LD      (NEWOBS2),A
         CALL    RESTDMA
         JP      DIAGDONE
-DGF35:
+
+DGF35:                                  ; dgf35
         LD      HL,ONEFCB
         CALL    OPENHL
         LD      DE,TESTFCB
@@ -1620,7 +1687,8 @@ DGF35:
         LD      A,(TESTFCB+33)
         LD      (NEWOBS2),A
         JP      DIAGDONE
-DGREOPEN:
+
+DGREOPEN:                               ; dgreopen
         LD      HL,ONEFCB
         CALL    OPENHL
         LD      A,(TESTFCB+16)
@@ -1630,12 +1698,14 @@ DGREOPEN:
         LD      A,(TESTFCB+16)
         LD      (NEWOBS2),A
         JP      DIAGDONE
-DGPROT:
+
+DGPROT:                                 ; dgprot
         LD      HL,ROFCB
         CALL    OPENHL
         LD      A,(TESTFCB+9)
         LD      (NEWOBS2),A
-DIAGDONE:
+
+DIAGDONE:                               ; diagdone
         LD      A,(FULLMODE)
         OR      A
         JP      Z,COMPOBS
@@ -1652,9 +1722,20 @@ DIAGDONE:
         RET     NZ
         JP      0000H
 
-;--------------------- FCB AND OPEN CARDS -----------------------------
-; Required FCB-layout and Function-15 cards begin here.
-RUN0156:
+; ================================================================================
+; =                        FCB Layout and Open Semantics                         =
+; =                                                                              =
+; = Exercises guarded FCB initialization, Open inputs and returned working       =
+; = state, exact and wildcard identity behavior, and defined success or refusal  =
+; = results.                                                                     =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; FCB and Open Cards
+; -------------------------------------------------------------------------------
+
+  ; Required FCB-layout and Function-15 cards begin here.
+
+RUN0156:                                ; run catalog item 156
         LD      HL,C156MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -1670,7 +1751,7 @@ RUN0156:
         JP      NZ,NEWERROR
         JP      NEWPASS
 
-RUN0157:
+RUN0157:                                ; run catalog item 157
         LD      HL,C157MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -1697,7 +1778,7 @@ RUN0157:
         JP      NZ,NEWERROR
         JP      NEWPASS
 
-RUN0158:
+RUN0158:                                ; run catalog item 158
         LD      HL,C158MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -1720,7 +1801,7 @@ RUN0158:
         JP      Z,NEWFAIL
         JP      NEWPASS
 
-RUN0159:
+RUN0159:                                ; run catalog item 159
         LD      HL,C159MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -1735,7 +1816,7 @@ RUN0159:
         JP      NZ,NEWFAIL
         JP      NEWPASS
 
-RUN0160:
+RUN0160:                                ; run catalog item 160
         LD      HL,C160MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -1750,7 +1831,7 @@ RUN0160:
         JP      NZ,NEWFAIL
         JP      NEWPASS
 
-RUN0161:
+RUN0161:                                ; run catalog item 161
         LD      HL,C161MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -1764,7 +1845,7 @@ RUN0161:
         JP      Z,NEWFAIL
         JP      NEWPASS
 
-RUN0162:
+RUN0162:                                ; run catalog item 162
         LD      HL,C162MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -1785,10 +1866,11 @@ RUN0162:
         JP      NZ,NEWFAIL
         JP      NEWPASS
 
-; 0164 separates caller input from returned working state.  S2 goes in zero;
-; a successful Open may use it afterward.  Record the returned byte, but do
-; not demand that BDOS hand the input zero back to us.
-RUN0164:
+  ; 0164 separates caller input from returned working state.  S2 goes in zero;
+  ; a successful Open may use it afterward.  Record the returned byte, but do
+  ; not demand that BDOS hand the input zero back to us.
+
+RUN0164:                                ; run catalog item 164
         LD      HL,C164MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -1809,7 +1891,7 @@ RUN0164:
         CALL    TEMPCLEAN
         JP      NEWPASS
 
-RUN0166:
+RUN0166:                                ; run catalog item 166
         LD      HL,C166MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -1820,7 +1902,8 @@ RUN0166:
         LD      HL,TESTFCB+16
         LD      B,16
         XOR     A
-R166LP: OR      (HL)
+
+R166LP: OR      (HL)                    ; r166lp
         INC     HL
         DEC     B
         JP      NZ,R166LP
@@ -1829,7 +1912,7 @@ R166LP: OR      (HL)
         JP      Z,NEWFAIL
         JP      NEWPASS
 
-RUN0168:
+RUN0168:                                ; run catalog item 168
         LD      HL,C168MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -1845,7 +1928,7 @@ RUN0168:
         JP      NZ,NEWERROR
         JP      NEWPASS
 
-RUN0170:
+RUN0170:                                ; run catalog item 170
         LD      HL,C170MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -1856,7 +1939,7 @@ RUN0170:
         JP      NC,NEWFAIL
         JP      NEWPASS
 
-RUN0172:
+RUN0172:                                ; run catalog item 172
         LD      HL,C172MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -1875,10 +1958,11 @@ RUN0172:
         JP      NZ,R172BAD
         CALL    RESTDMA
         JP      NEWPASS
-R172BAD: CALL    RESTDMA
+
+R172BAD: CALL    RESTDMA                ; r172bad
         JP      NEWFAIL
 
-RUN0174:
+RUN0174:                                ; run catalog item 174
         LD      HL,C174MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -1897,10 +1981,11 @@ RUN0174:
         JP      NZ,R174BAD
         CALL    RESTDMA
         JP      NEWPASS
-R174BAD: CALL    RESTDMA
+
+R174BAD: CALL    RESTDMA                ; r174bad
         JP      NEWFAIL
 
-RUN0176:
+RUN0176:                                ; run catalog item 176
         LD      HL,C176MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -1921,16 +2006,17 @@ RUN0176:
         JP      NZ,R176BAD
         CALL    RESTDMA
         JP      NEWPASS
-R176BAD: CALL    RESTDMA
+
+R176BAD: CALL    RESTDMA                ; r176bad
         JP      NEWFAIL
 
-RUN0178:
+RUN0178:                                ; run catalog item 178
         LD      HL,C178MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      VERIFYWRITE
 
-RUN0180:
+RUN0180:                                ; run catalog item 180
         LD      HL,C180MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -1946,7 +2032,7 @@ RUN0180:
         JP      NC,NEWFAIL
         JP      NEWPASS
 
-RUN0165:
+RUN0165:                                ; run catalog item 165
         LD      HL,C165MSG
         LD      (CASEPTR),HL
         LD      A,(AGGMODE)
@@ -1954,7 +2040,8 @@ RUN0165:
         JP      NZ,R165GO
         LD      DE,H165MSG
         CALL    PUTFULL
-R165GO:
+
+R165GO:                                 ; r165go
         LD      HL,ONEFCB
         CALL    INITFCB
         LD      A,0E7H
@@ -1975,7 +2062,7 @@ R165GO:
         JP      NC,C165FAIL
         JP      C165PASS
 
-C165PASS:
+C165PASS:                               ; c165pass
         LD      A,(O165RET)
         LD      (NEWOBS1),A
         LD      A,(O165RC)
@@ -1996,14 +2083,15 @@ C165PASS:
         LD      DE,MENDP
         CALL    PUTS
         JP      0000H
-A165PASS:
+
+A165PASS:                               ; a165pass
         LD      HL,PASSCT
         INC     (HL)
         LD      DE,ENDONLY
         CALL    PUTS
         RET
 
-C165FAIL:
+C165FAIL:                               ; c165fail
         LD      A,(O165RET)
         LD      (NEWOBS1),A
         LD      A,(O165RC)
@@ -2026,7 +2114,8 @@ C165FAIL:
         LD      DE,MENDF
         CALL    PUTS
         JP      0000H
-A165FAIL:
+
+A165FAIL:                               ; a165fail
         CALL    SAVEFCID
         LD      HL,FAILCT
         INC     (HL)
@@ -2034,7 +2123,7 @@ A165FAIL:
         CALL    PUTS
         RET
 
-C165ERR:
+C165ERR:                                ; c165err
         LD      A,(FULLMODE)
         OR      A
         JP      Z,COMPERR
@@ -2051,14 +2140,15 @@ C165ERR:
         LD      DE,MENDE
         CALL    PUTS
         JP      0000H
-A165ERR:
+
+A165ERR:                                ; a165err
         LD      HL,ERRCT
         INC     (HL)
         LD      DE,ENDONLY
         CALL    PUTS
         RET
 
-PO165:
+PO165:                                  ; po165
         LD      DE,O165A
         CALL    PUTS
         LD      A,(O165RET)
@@ -2072,7 +2162,7 @@ PO165:
         LD      E,10
         JP      PUTC
 
-RUN0169:
+RUN0169:                                ; run catalog item 169
         LD      HL,C169MSG
         LD      (CASEPTR),HL
         LD      A,(AGGMODE)
@@ -2082,7 +2172,8 @@ RUN0169:
         OR      A
         JP      NZ,R169CHECK
         CALL    COMPACTHEAD
-R169CHECK:
+
+R169CHECK:                              ; r169check
         CALL    CROSSREADY
         JP      NZ,NEWNOTRUN
         LD      A,(AGGMODE)
@@ -2090,7 +2181,8 @@ R169CHECK:
         JP      NZ,R169GO
         LD      DE,H169MSG
         CALL    PUTFULL
-R169GO:
+
+R169GO:                                 ; r169go
         LD      C,25
         CALL    BDOS
         LD      (DRVBEFORE),A
@@ -2125,30 +2217,44 @@ R169GO:
         JP      NZ,C169FAIL
         JP      C169PASS
 
-;------------------------- GUARDED FCB --------------------------------
-; HL -> drive/name/type template.  Put fresh tell-tales around TESTFCB, copy
-; its first twelve bytes and clear all working fields.  No earlier call is
-; allowed to lend extent, record or allocation state to the next card.
-INITFCB:
+; ================================================================================
+; =                              Guarded FCB Office                              =
+; =                                                                              =
+; = Surrounds the 36-byte FCB with unlike tell-tales, copies a fresh identity,   =
+; = and clears all working fields so no prior call can lend state to the next    =
+; = card.                                                                        =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Guarded FCB
+; -------------------------------------------------------------------------------
+
+  ; HL -> drive/name/type template.  Put fresh tell-tales around TESTFCB, copy
+  ; its first twelve bytes and clear all working fields.  No earlier call is
+  ; allowed to lend extent, record or allocation state to the next card.
+
+INITFCB:                                ; initialize guarded FCB
         PUSH    HL
         LD      HL,GPRE
         LD      B,8
         LD      A,0A5H
-IFG1:   LD      (HL),A
+
+IFG1:   LD      (HL),A                  ; ifg1
         INC     HL
         DEC     B
         JP      NZ,IFG1
         LD      HL,GPOST
         LD      B,8
         LD      A,05AH
-IFG2:   LD      (HL),A
+
+IFG2:   LD      (HL),A                  ; ifg2
         INC     HL
         DEC     B
         JP      NZ,IFG2
         POP     HL
         LD      DE,TESTFCB
         LD      B,12
-IFCP:   LD      A,(HL)
+
+IFCP:   LD      A,(HL)                  ; ifcp
         LD      (DE),A
         INC     HL
         INC     DE
@@ -2156,13 +2262,14 @@ IFCP:   LD      A,(HL)
         JP      NZ,IFCP
         LD      B,24
         XOR     A
-IFCL:   LD      (DE),A
+
+IFCL:   LD      (DE),A                  ; ifcl
         INC     DE
         DEC     B
         JP      NZ,IFCL
         RET
 
-C169PASS:
+C169PASS:                               ; c169pass
         LD      A,(OBS169A)
         LD      (NEWOBS1),A
         LD      A,(OBS169B)
@@ -2183,14 +2290,15 @@ C169PASS:
         LD      DE,MENDP
         CALL    PUTS
         JP      0000H
-A169PASS:
+
+A169PASS:                               ; a169pass
         LD      HL,PASSCT
         INC     (HL)
         LD      DE,ENDONLY
         CALL    PUTS
         RET
 
-C169FAIL:
+C169FAIL:                               ; c169fail
         LD      A,(OBS169A)
         LD      (NEWOBS1),A
         LD      A,(OBS169B)
@@ -2213,7 +2321,8 @@ C169FAIL:
         LD      DE,MENDF
         CALL    PUTS
         JP      0000H
-A169FAIL:
+
+A169FAIL:                               ; a169fail
         CALL    SAVEFCID
         LD      HL,FAILCT
         INC     (HL)
@@ -2221,7 +2330,7 @@ A169FAIL:
         CALL    PUTS
         RET
 
-C169ERR:
+C169ERR:                                ; c169err
         LD      A,(FULLMODE)
         OR      A
         JP      Z,COMPERR
@@ -2238,14 +2347,15 @@ C169ERR:
         LD      DE,MENDE
         CALL    PUTS
         JP      0000H
-A169ERR:
+
+A169ERR:                                ; a169err
         LD      HL,ERRCT
         INC     (HL)
         LD      DE,ENDONLY
         CALL    PUTS
         RET
 
-PUTOBS169:
+PUTOBS169:                              ; putobs169
         LD      DE,O169A
         CALL    PUTS
         LD      A,(OBS169A)
@@ -2267,7 +2377,7 @@ PUTOBS169:
         LD      E,10
         JP      PUTC
 
-RUN0171:
+RUN0171:                                ; run catalog item 171
         LD      HL,MSG_CASE_BEGIN
         LD      (CASEPTR),HL
         LD      A,(AGGMODE)
@@ -2275,7 +2385,8 @@ RUN0171:
         JP      NZ,R171GO
         LD      DE,MSG_HEADER
         CALL    PUTFULL
-R171GO:
+
+R171GO:                                 ; r171go
         CALL    INIT0171
         LD      DE,TESTFCB
         LD      C,15
@@ -2288,11 +2399,12 @@ R171GO:
         JP      Z,CASE_PASS
         JP      CASE_FAIL
 
-INIT0171:
+INIT0171:                               ; init0171
         LD      HL,GPRE
         LD      B,8
         LD      A,0A5H
-I17G1:
+
+I17G1:                                  ; i17g1
         LD      (HL),A
         INC     HL
         DEC     B
@@ -2300,7 +2412,8 @@ I17G1:
         LD      HL,GPOST
         LD      B,8
         LD      A,05AH
-I17G2:
+
+I17G2:                                  ; i17g2
         LD      (HL),A
         INC     HL
         DEC     B
@@ -2308,7 +2421,8 @@ I17G2:
         LD      HL,MISSFCB
         LD      DE,TESTFCB
         LD      B,12
-I17CP:
+
+I17CP:                                  ; i17cp
         LD      A,(HL)
         LD      (DE),A
         INC     HL
@@ -2317,18 +2431,20 @@ I17CP:
         JP      NZ,I17CP
         LD      B,24
         XOR     A
-I17CL:
+
+I17CL:                                  ; i17cl
         LD      (DE),A
         INC     DE
         DEC     B
         JP      NZ,I17CL
         RET
 
-CHECKGUARDS:
+CHECKGUARDS:                            ; checkguards
         LD      HL,GPRE
         LD      B,8
         LD      C,0A5H
-CG1:
+
+CG1:                                    ; cg1
         LD      A,(HL)
         CP      C
         RET     NZ
@@ -2338,7 +2454,8 @@ CG1:
         LD      HL,GPOST
         LD      B,8
         LD      C,05AH
-CG2:
+
+CG2:                                    ; cg2
         LD      A,(HL)
         CP      C
         RET     NZ
@@ -2348,7 +2465,7 @@ CG2:
         XOR     A
         RET
 
-CASE_PASS:
+CASE_PASS:                              ; case pass
         LD      A,(OBSERVED)
         LD      (NEWOBS1),A
         XOR     A
@@ -2369,14 +2486,15 @@ CASE_PASS:
         LD      DE,MENDP
         CALL    PUTS
         JP      0000H
-A171PASS:
+
+A171PASS:                               ; a171pass
         LD      HL,PASSCT
         INC     (HL)
         LD      DE,ENDONLY
         CALL    PUTS
         RET
 
-CASE_FAIL:
+CASE_FAIL:                              ; case fail
         LD      A,(OBSERVED)
         LD      (NEWOBS1),A
         XOR     A
@@ -2399,7 +2517,8 @@ CASE_FAIL:
         LD      DE,MENDF
         CALL    PUTS
         JP      0000H
-A171FAIL:
+
+A171FAIL:                               ; a171fail
         CALL    SAVEFCID
         LD      HL,FAILCT
         INC     (HL)
@@ -2407,7 +2526,7 @@ A171FAIL:
         CALL    PUTS
         RET
 
-CASE_ERROR:
+CASE_ERROR:                             ; case error
         LD      A,(FULLMODE)
         OR      A
         JP      Z,COMPERR
@@ -2424,17 +2543,18 @@ CASE_ERROR:
         LD      DE,MENDE
         CALL    PUTS
         JP      0000H
-A171ERR:
+
+A171ERR:                                ; a171err
         LD      HL,ERRCT
         INC     (HL)
         LD      DE,ENDONLY
         CALL    PUTS
         RET
 
-;---------------------- SEQUENTIAL READ CARDS -------------------------
-; The following cards share reporting, not evidence.  Each opens and guards
-; its own FCB and selects a freshly marked DMA record.
-RUN0167:
+  ; The following cards share reporting, not evidence.  Each opens and guards
+  ; its own FCB and selects a freshly marked DMA record.
+
+RUN0167:                                ; run catalog item 167
         LD      HL,C167MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -2448,7 +2568,8 @@ RUN0167:
         JP      Z,NEWFAIL
         CALL    PREPDMA
         LD      B,3
-R167LP:
+
+R167LP:                                 ; r167lp
         PUSH    BC
         LD      DE,TESTFCB
         LD      C,20
@@ -2477,11 +2598,12 @@ R167LP:
         CALL    MEMEQ
         JP      NZ,NEWFAIL
         JP      NEWPASS
-R167BAD:
+
+R167BAD:                                ; r167bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-RUN0173:
+RUN0173:                                ; run catalog item 173
         LD      HL,C173MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -2511,7 +2633,7 @@ RUN0173:
         JP      NZ,NEWFAIL
         JP      NEWPASS
 
-RUN0175:
+RUN0175:                                ; run catalog item 175
         LD      HL,C175MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -2541,7 +2663,7 @@ RUN0175:
         JP      NZ,NEWFAIL
         JP      NEWPASS
 
-RUN0177:
+RUN0177:                                ; run catalog item 177
         LD      HL,C177MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -2564,7 +2686,7 @@ RUN0177:
         JP      Z,NEWFAIL
         JP      NEWPASS
 
-RUN0179:
+RUN0179:                                ; run catalog item 179
         LD      HL,C179MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -2594,7 +2716,7 @@ RUN0179:
         JP      NZ,NEWFAIL
         JP      NEWPASS
 
-RUN0181:
+RUN0181:                                ; run catalog item 181
         LD      HL,C181MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -2617,7 +2739,18 @@ RUN0181:
         JP      NZ,NEWFAIL
         JP      NEWPASS
 
-RUN0219:
+; ================================================================================
+; =                       Sequential Read and Extent Tests                       =
+; =                                                                              =
+; = Exercises return codes, CR advancement, DMA contents, FCB selection, EOF,    =
+; = multi-record reads, and extent-boundary behavior using freshly guarded FCB   =
+; = and DMA state.                                                               =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Sequential Read Cards
+; -------------------------------------------------------------------------------
+
+RUN0219:                                ; run catalog item 219
         LD      HL,C219MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -2648,7 +2781,7 @@ RUN0219:
         JP      NZ,NEWFAIL
         JP      NEWPASS
 
-RUN0220:
+RUN0220:                                ; run catalog item 220
         LD      HL,C220MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -2678,7 +2811,7 @@ RUN0220:
         JP      NZ,NEWFAIL
         JP      NEWPASS
 
-RUN0221:
+RUN0221:                                ; run catalog item 221
         LD      HL,C221MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -2728,11 +2861,12 @@ RUN0221:
         CALL    CHECKALLGUARDS
         JP      NZ,NEWERROR
         JP      NEWPASS
-R221BAD:
+
+R221BAD:                                ; r221bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-RUN0222:
+RUN0222:                                ; run catalog item 222
         LD      HL,C222MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -2759,25 +2893,27 @@ RUN0222:
         JP      NZ,NEWFAIL
         JP      NEWPASS
 
-; Open the template at HL in the guarded FCB.  OPENRAW records A before any
-; following instruction can obscure it.
-OPENHL:
+  ; Open the template at HL in the guarded FCB.  OPENRAW records A before any
+  ; following instruction can obscure it.
+
+OPENHL:                                 ; open template through guarded FCB
         CALL    INITFCB
-OPENRAW:
+
+OPENRAW:                                ; perform raw Open
         LD      DE,TESTFCB
         LD      C,15
         CALL    BDOS
         LD      (NEWOBS1),A
         RET
 
-READTEST:
+READTEST:                               ; run common read test
         LD      DE,TESTFCB
         LD      C,20
         CALL    BDOS
         LD      (NEWOBS2),A
         RET
 
-RUN0223:
+RUN0223:                                ; run catalog item 223
         LD      HL,C223MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -2797,7 +2933,7 @@ RUN0223:
         JP      NZ,NEWFAIL
         JP      NEWPASS
 
-RUN0224:
+RUN0224:                                ; run catalog item 224
         LD      HL,C224MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -2820,7 +2956,7 @@ RUN0224:
         JP      NZ,NEWFAIL
         JP      NEWPASS
 
-RUN0226:
+RUN0226:                                ; run catalog item 226
         LD      HL,C226MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -2854,11 +2990,12 @@ RUN0226:
         CP      2
         JP      NZ,NEWFAIL
         JP      NEWPASS
-R226BAD:
+
+R226BAD:                                ; r226bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-RUN0227:
+RUN0227:                                ; run catalog item 227
         LD      HL,C227MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -2868,7 +3005,8 @@ RUN0227:
         JP      Z,NEWFAIL
         CALL    PREPDMA
         LD      B,3
-R227LP:
+
+R227LP:                                 ; r227lp
         PUSH    BC
         CALL    READTEST
         POP     BC
@@ -2888,11 +3026,12 @@ R227LP:
         CALL    CHECKALLGUARDS
         JP      NZ,NEWERROR
         JP      NEWPASS
-R227BAD:
+
+R227BAD:                                ; r227bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-RUN0228:
+RUN0228:                                ; run catalog item 228
         LD      HL,C228MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -2902,7 +3041,8 @@ RUN0228:
         JP      Z,NEWFAIL
         CALL    PREPDMA
         LD      B,128
-R228LP:
+
+R228LP:                                 ; r228lp
         PUSH    BC
         CALL    READTEST
         POP     BC
@@ -2924,13 +3064,15 @@ R228LP:
         CALL    MEMEQ
         JP      NZ,NEWFAIL
         JP      NEWPASS
-R228BAD:
+
+R228BAD:                                ; r228bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-; Start BIG130 at CR=127 and read twice.  The fixture marks both records, so
-; the test sees the extent crossing in data as well as in FCB state.
-BIGCROSS:
+  ; Start BIG130 at CR=127 and read twice.  The fixture marks both records, so
+  ; the test sees the extent crossing in data as well as in FCB state.
+
+BIGCROSS:                               ; bigcross
         LD      HL,BIGFCB
         CALL    OPENHL
         CP      0FFH
@@ -2954,12 +3096,13 @@ BIGCROSS:
         LD      B,7
         CALL    MEMEQ
         RET
-BIGFAIL:
+
+BIGFAIL:                                ; bigfail
         LD      A,1
         OR      A
         RET
 
-RUN0229:
+RUN0229:                                ; run catalog item 229
         LD      HL,C229MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -2969,11 +3112,12 @@ RUN0229:
         CALL    CHECKALLGUARDS
         JP      NZ,NEWERROR
         JP      NEWPASS
-R229BAD:
+
+R229BAD:                                ; r229bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-RUN0230:
+RUN0230:                                ; run catalog item 230
         LD      HL,C230MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -2990,11 +3134,12 @@ RUN0230:
         CALL    CHECKALLGUARDS
         JP      NZ,NEWERROR
         JP      NEWPASS
-R230BAD:
+
+R230BAD:                                ; r230bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-RUN0231:
+RUN0231:                                ; run catalog item 231
         LD      HL,C231MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3022,11 +3167,12 @@ RUN0231:
         CALL    CHECKALLGUARDS
         JP      NZ,NEWERROR
         JP      NEWPASS
-R231BAD:
+
+R231BAD:                                ; r231bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-RUN0232:
+RUN0232:                                ; run catalog item 232
         LD      HL,C232MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3046,11 +3192,12 @@ RUN0232:
         CALL    CHECKALLGUARDS
         JP      NZ,NEWERROR
         JP      NEWPASS
-R232BAD:
+
+R232BAD:                                ; r232bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-RUN0234:
+RUN0234:                                ; run catalog item 234
         LD      HL,C234MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3067,11 +3214,12 @@ RUN0234:
         CALL    CHECKALLGUARDS
         JP      NZ,NEWERROR
         JP      NEWPASS
-R234BAD:
+
+R234BAD:                                ; r234bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-RUN0235:
+RUN0235:                                ; run catalog item 235
         LD      HL,C235MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3094,20 +3242,23 @@ RUN0235:
         CALL    CHECKALLGUARDS
         JP      NZ,NEWERROR
         JP      NEWPASS
-R235BAD:
+
+R235BAD:                                ; r235bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-; Read all 128 records of the boundary fixture.  DMA remains selected for the
-; caller's final inspection; every caller must take a RESTDMA exit.
-READBOUND:
+  ; Read all 128 records of the boundary fixture.  DMA remains selected for the
+  ; caller's final inspection; every caller must take a RESTDMA exit.
+
+READBOUND:                              ; readbound
         LD      HL,BNDFCB
         CALL    OPENHL
         CP      0FFH
         JP      Z,RBFAIL
         CALL    PREPDMA
         LD      B,128
-RBDLP:  PUSH    BC
+
+RBDLP:  PUSH    BC                      ; rbdlp
         CALL    READTEST
         POP     BC
         OR      A
@@ -3116,11 +3267,12 @@ RBDLP:  PUSH    BC
         JP      NZ,RBDLP
         XOR     A
         RET
-RBFAIL: LD      A,1
+
+RBFAIL: LD      A,1                     ; rbfail
         OR      A
         RET
 
-RUN0236:
+RUN0236:                                ; run catalog item 236
         LD      HL,C236MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3134,11 +3286,12 @@ RUN0236:
         CALL    CHECKALLGUARDS
         JP      NZ,NEWERROR
         JP      NEWPASS
-R236BAD:
+
+R236BAD:                                ; r236bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-RUN0237:
+RUN0237:                                ; run catalog item 237
         LD      HL,C237MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3158,11 +3311,12 @@ RUN0237:
         CALL    CHECKALLGUARDS
         JP      NZ,NEWERROR
         JP      NEWPASS
-R237BAD:
+
+R237BAD:                                ; r237bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-RUN0239:
+RUN0239:                                ; run catalog item 239
         LD      HL,C239MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3174,7 +3328,8 @@ RUN0239:
         LD      (OLDCR),A
         CALL    PREPDMA
         LD      B,3
-R239LP: PUSH    BC
+
+R239LP: PUSH    BC                      ; r239lp
         CALL    READTEST
         POP     BC
         OR      A
@@ -3194,11 +3349,12 @@ R239LP: PUSH    BC
         CALL    CHECKALLGUARDS
         JP      NZ,NEWERROR
         JP      NEWPASS
-R239BAD:
+
+R239BAD:                                ; r239bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-RUN0242:
+RUN0242:                                ; run catalog item 242
         LD      HL,C242MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3231,11 +3387,12 @@ RUN0242:
         CALL    CHECKALLGUARDS
         JP      NZ,NEWERROR
         JP      NEWPASS
-R242BAD:
+
+R242BAD:                                ; r242bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-RUN0243:
+RUN0243:                                ; run catalog item 243
         LD      HL,C243MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3256,14 +3413,26 @@ RUN0243:
         CALL    CHECKALLGUARDS
         JP      NZ,NEWERROR
         JP      NEWPASS
-R243BAD:
+
+R243BAD:                                ; r243bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-;----------------------- SCRATCH FILE OFFICE --------------------------
-; First erase the reserved name, then Make it.  Every caller owes TEMPCLEAN
-; before reporting, so a stopped or repeated selector begins from one state.
-TEMPMAKE:
+; ================================================================================
+; =                   Scratch File and Sequential Write Office                   =
+; =                                                                              =
+; = Creates and cleans the reserved BTTEMP.DAT fixture, writes persistent marked =
+; = records, and verifies data after Close and reopen rather than trusting stale =
+; = DMA contents.                                                                =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Scratch File Office
+; -------------------------------------------------------------------------------
+
+  ; First erase the reserved name, then Make it.  Every caller owes TEMPCLEAN
+  ; before reporting, so a stopped or repeated selector begins from one state.
+
+TEMPMAKE:                               ; make reserved scratch file
         LD      HL,TEMPFCB
         CALL    INITFCB
         LD      DE,TESTFCB
@@ -3277,7 +3446,7 @@ TEMPMAKE:
         LD      (NEWOBS1),A
         RET
 
-TEMPCLEAN:
+TEMPCLEAN:                              ; clean reserved scratch file
         LD      DE,TESTFCB
         LD      C,16
         CALL    BDOS
@@ -3288,7 +3457,7 @@ TEMPCLEAN:
         CALL    BDOS
         JP      RESTDMA
 
-MAKESIMPLE:
+MAKESIMPLE:                             ; makesimple
         CALL    TEMPMAKE
         CP      0FFH
         JP      Z,MSFAIL
@@ -3298,23 +3467,27 @@ MAKESIMPLE:
         JP      NZ,MSERROR
         CALL    TEMPCLEAN
         JP      NEWPASS
-MSFAIL: CALL    TEMPCLEAN
+
+MSFAIL: CALL    TEMPCLEAN               ; msfail
         JP      NEWFAIL
-MSERROR:
+
+MSERROR:                                ; mserror
         CALL    TEMPCLEAN
         JP      NEWERROR
 
-RUN0248:
+RUN0248:                                ; run catalog item 248
         LD      HL,C248MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      MAKESIMPLE
-RUN0249:
+
+RUN0249:                                ; run catalog item 249
         LD      HL,C249MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      MAKESIMPLE
-RUN0250:
+
+RUN0250:                                ; run catalog item 250
         LD      HL,C250MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3337,23 +3510,28 @@ RUN0250:
         JP      NZ,METERROR
         CALL    TEMPCLEAN
         JP      NEWPASS
-METFAIL:
+
+METFAIL:                                ; metfail
         CALL    TEMPCLEAN
         JP      NEWFAIL
-METERROR:
+
+METERROR:                               ; meterror
         CALL    TEMPCLEAN
         JP      NEWERROR
-RUN0251:
+
+RUN0251:                                ; run catalog item 251
         LD      HL,C251MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      MAKESIMPLE
-RUN0252:
+
+RUN0252:                                ; run catalog item 252
         LD      HL,C252MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      MAKESIMPLE
-RUN0254:
+
+RUN0254:                                ; run catalog item 254
         LD      HL,C254MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3372,14 +3550,17 @@ RUN0254:
         JP      NZ,MVERROR
         CALL    TEMPCLEAN
         JP      NEWPASS
-MVFAIL: CALL    TEMPCLEAN
+
+MVFAIL: CALL    TEMPCLEAN               ; mvfail
         JP      NEWFAIL
-MVERROR:
+
+MVERROR:                                ; mverror
         CALL    TEMPCLEAN
         JP      NEWERROR
 
-; Make an active temporary FCB and write one complete current-DMA record.
-WRITEONE:
+  ; Make an active temporary FCB and write one complete current-DMA record.
+
+WRITEONE:                               ; write one persistent record
         CALL    TEMPMAKE
         CP      0FFH
         RET     Z
@@ -3387,7 +3568,8 @@ WRITEONE:
         LD      HL,DMABUF
         LD      B,128
         LD      A,05AH
-W1FILL: LD      (HL),A
+
+W1FILL: LD      (HL),A                  ; w1fill
         INC     HL
         DEC     B
         JP      NZ,W1FILL
@@ -3397,7 +3579,7 @@ W1FILL: LD      (HL),A
         LD      (NEWOBS2),A
         RET
 
-WRITECASE:
+WRITECASE:                              ; writecase
         CALL    WRITEONE
         LD      A,(NEWOBS1)
         CP      0FFH
@@ -3412,49 +3594,57 @@ WRITECASE:
         JP      NZ,WCERROR
         CALL    TEMPCLEAN
         JP      NEWPASS
-WCFAIL: CALL    TEMPCLEAN
+
+WCFAIL: CALL    TEMPCLEAN               ; wcfail
         JP      NEWFAIL
-WCERROR:
+
+WCERROR:                                ; wcerror
         CALL    TEMPCLEAN
         JP      NEWERROR
 
-RUN0259:
+RUN0259:                                ; run catalog item 259
         LD      HL,C259MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      WRITECASE
-RUN0260:
+
+RUN0260:                                ; run catalog item 260
         LD      HL,C260MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      WRITECASE
-RUN0261:
+
+RUN0261:                                ; run catalog item 261
         LD      HL,C261MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      WRITECASE
 
-RUN0262:
+RUN0262:                                ; run catalog item 262
         LD      HL,C262MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      WRITECASE
-RUN0263:
+
+RUN0263:                                ; run catalog item 263
         LD      HL,C263MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      VERIFYWRITE
-RUN0264:
+
+RUN0264:                                ; run catalog item 264
         LD      HL,C264MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      VERIFYWRITE
-RUN0266:
+
+RUN0266:                                ; run catalog item 266
         LD      HL,C266MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      WRITECASE
-RUN0267:
+
+RUN0267:                                ; run catalog item 267
         LD      HL,C267MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3470,13 +3660,15 @@ RUN0267:
         JP      Z,R267BAD
         CALL    TEMPCLEAN
         JP      NEWPASS
-R267BAD:
+
+R267BAD:                                ; r267bad
         CALL    TEMPCLEAN
         JP      NEWFAIL
 
-; Close, reopen and read the full 5AH record written by WRITEONE.  Reopening
-; prevents the old DMA buffer from masquerading as persistent data.
-VERIFYWRITE:
+  ; Close, reopen and read the full 5AH record written by WRITEONE.  Reopening
+  ; prevents the old DMA buffer from masquerading as persistent data.
+
+VERIFYWRITE:                            ; verify persisted write
         CALL    WRITEONE
         LD      A,(NEWOBS1)
         CP      0FFH
@@ -3497,7 +3689,8 @@ VERIFYWRITE:
         JP      NZ,VWBAD
         LD      HL,DMABUF
         LD      B,128
-VWLP:   LD      A,(HL)
+
+VWLP:   LD      A,(HL)                  ; vwlp
         CP      05AH
         JP      NZ,VWBAD
         INC     HL
@@ -3507,12 +3700,14 @@ VWLP:   LD      A,(HL)
         JP      NZ,VWERR
         CALL    TEMPCLEAN
         JP      NEWPASS
-VWBAD:  CALL    TEMPCLEAN
+
+VWBAD:  CALL    TEMPCLEAN               ; vwbad
         JP      NEWFAIL
-VWERR:  CALL    TEMPCLEAN
+
+VWERR:  CALL    TEMPCLEAN               ; vwerr
         JP      NEWERROR
 
-RUN0268:
+RUN0268:                                ; run catalog item 268
         LD      HL,C268MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3525,7 +3720,8 @@ RUN0268:
         LD      HL,DMABUF
         LD      B,128
         LD      A,0A5H
-R268FL: LD      (HL),A
+
+R268FL: LD      (HL),A                  ; r268fl
         INC     HL
         DEC     B
         JP      NZ,R268FL
@@ -3548,7 +3744,8 @@ R268FL: LD      (HL),A
         JP      NZ,R268BAD
         LD      HL,DMABUF
         LD      B,128
-R268CK: LD      A,(HL)
+
+R268CK: LD      A,(HL)                  ; r268ck
         CP      0A5H
         JP      NZ,R268BAD
         INC     HL
@@ -3556,19 +3753,21 @@ R268CK: LD      A,(HL)
         JP      NZ,R268CK
         CALL    TEMPCLEAN
         JP      NEWPASS
-R268BAD:
+
+R268BAD:                                ; r268bad
         CALL    TEMPCLEAN
         JP      NEWFAIL
 
-RUN0269:
+RUN0269:                                ; run catalog item 269
         LD      HL,C269MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      VERIFYWRITE
 
-; Write 129 marked records.  The last write cannot succeed unless sequential
-; output carries itself from extent zero into extent one.
-WRITE129:
+  ; Write 129 marked records.  The last write cannot succeed unless sequential
+  ; output carries itself from extent zero into extent one.
+
+WRITE129:                               ; write129
         CALL    TEMPMAKE
         CP      0FFH
         RET     Z
@@ -3576,12 +3775,14 @@ WRITE129:
         LD      HL,DMABUF
         LD      B,128
         LD      A,05AH
-W129F:  LD      (HL),A
+
+W129F:  LD      (HL),A                  ; w129f
         INC     HL
         DEC     B
         JP      NZ,W129F
         LD      B,128
-W129L:  PUSH    BC
+
+W129L:  PUSH    BC                      ; w129l
         LD      DE,TESTFCB
         LD      C,21
         CALL    BDOS
@@ -3596,7 +3797,7 @@ W129L:  PUSH    BC
         LD      (NEWOBS2),A
         RET
 
-BOUNDWRITE:
+BOUNDWRITE:                             ; boundwrite
         CALL    WRITE129
         LD      A,(NEWOBS1)
         CP      0FFH
@@ -3614,28 +3815,32 @@ BOUNDWRITE:
         JP      NZ,BWERR
         CALL    TEMPCLEAN
         JP      NEWPASS
-BWBAD:  CALL    TEMPCLEAN
+
+BWBAD:  CALL    TEMPCLEAN               ; bwbad
         JP      NEWFAIL
-BWERR:  CALL    TEMPCLEAN
+
+BWERR:  CALL    TEMPCLEAN               ; bwerr
         JP      NEWERROR
 
-RUN0271:
+RUN0271:                                ; run catalog item 271
         LD      HL,C271MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      BOUNDWRITE
-RUN0272:
+
+RUN0272:                                ; run catalog item 272
         LD      HL,C272MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      BOUNDWRITE
-RUN0273:
+
+RUN0273:                                ; run catalog item 273
         LD      HL,C273MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      BOUNDWRITE
 
-RUN0274:
+RUN0274:                                ; run catalog item 274
         LD      HL,C274MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3657,11 +3862,12 @@ RUN0274:
         JP      Z,R274BAD
         CALL    TEMPCLEAN
         JP      NEWPASS
-R274BAD:
+
+R274BAD:                                ; r274bad
         CALL    TEMPCLEAN
         JP      NEWFAIL
 
-RUN0278:
+RUN0278:                                ; run catalog item 278
         LD      HL,C278MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3696,11 +3902,12 @@ RUN0278:
         JP      NZ,R278BAD
         CALL    CTEMPCLEAN
         JP      NEWPASS
-R278BAD:
+
+R278BAD:                                ; r278bad
         CALL    CTEMPCLEAN
         JP      NEWFAIL
 
-CTEMPCLEAN:
+CTEMPCLEAN:                             ; ctempclean
         LD      DE,TESTFCB
         LD      C,16
         CALL    BDOS
@@ -3711,15 +3918,26 @@ CTEMPCLEAN:
         CALL    BDOS
         JP      RESTDMA
 
-RUN0279:
+RUN0279:                                ; run catalog item 279
         LD      HL,C279MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      VERIFYWRITE
 
-;------------------------ RANDOM I/O CARDS ----------------------------
-; Open BIG130 and select the guarded alternate DMA.
-RANDOPEN:
+; ================================================================================
+; =                        Random I/O and File-Size Tests                        =
+; =                                                                              =
+; = Exercises random-record mapping, boundary reads, defined refusals,           =
+; = random-write persistence, Function 35 size reporting, and extent-crossing    =
+; = state with CR deliberately decoupled from R0-R2.                             =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Random I/O Cards
+; -------------------------------------------------------------------------------
+
+  ; Open BIG130 and select the guarded alternate DMA.
+
+RANDOPEN:                               ; open random-I/O fixture
         LD      HL,BIGFCB
         CALL    OPENHL
         CP      0FFH
@@ -3727,18 +3945,19 @@ RANDOPEN:
         CALL    PREPDMA
         XOR     A
         RET
-ROFAIL: LD      A,1
+
+ROFAIL: LD      A,1                     ; rofail
         OR      A
         RET
 
-RANDREAD:
+RANDREAD:                               ; perform random read
         LD      DE,TESTFCB
         LD      C,33
         CALL    BDOS
         LD      (NEWOBS2),A
         RET
 
-RUN0317:
+RUN0317:                                ; run catalog item 317
         LD      HL,C317MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3759,11 +3978,12 @@ RUN0317:
         JP      NZ,R317BAD
         CALL    RESTDMA
         JP      NEWPASS
-R317BAD:
+
+R317BAD:                                ; r317bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-RUN0318:
+RUN0318:                                ; run catalog item 318
         LD      HL,C318MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3784,19 +4004,21 @@ RUN0318:
         JP      NZ,R318BAD
         CALL    RESTDMA
         JP      NEWPASS
-R318BAD:
+
+R318BAD:                                ; r318bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-; Function 36 maps EX/S2/CR into little-endian R0/R1/R2.  Cards set awkward
-; boundary values so byte-order or carry mistakes cannot hide at record zero.
-SETF36:
+  ; Function 36 maps EX/S2/CR into little-endian R0/R1/R2.  Cards set awkward
+  ; boundary values so byte-order or carry mistakes cannot hide at record zero.
+
+SETF36:                                 ; setf36
         LD      DE,TESTFCB
         LD      C,36
         CALL    BDOS
         RET
 
-RUN0319:
+RUN0319:                                ; run catalog item 319
         LD      HL,C319MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3822,7 +4044,7 @@ RUN0319:
         JP      NZ,NEWFAIL
         JP      NEWPASS
 
-RUN0320:
+RUN0320:                                ; run catalog item 320
         LD      HL,C320MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3848,11 +4070,12 @@ RUN0320:
         JP      NZ,R320BAD
         CALL    RESTDMA
         JP      NEWPASS
-R320BAD:
+
+R320BAD:                                ; r320bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-RUN0321:
+RUN0321:                                ; run catalog item 321
         LD      HL,C321MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3868,7 +4091,7 @@ RUN0321:
         JP      NZ,NEWFAIL
         JP      NEWPASS
 
-RUN0322:
+RUN0322:                                ; run catalog item 322
         LD      HL,C322MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3888,7 +4111,7 @@ RUN0322:
         JP      NZ,NEWFAIL
         JP      NEWPASS
 
-RUN0323:
+RUN0323:                                ; run catalog item 323
         LD      HL,C323MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3909,7 +4132,7 @@ RUN0323:
         JP      NZ,NEWFAIL
         JP      NEWPASS
 
-RUN0324:
+RUN0324:                                ; run catalog item 324
         LD      HL,C324MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3927,9 +4150,10 @@ RUN0324:
         JP      NZ,NEWERROR
         JP      NEWPASS
 
-; Common good random read.  CR says 7 while R says 1; using the sequential
-; byte by mistake therefore fetches a visibly different marked record.
-RANDONE:
+  ; Common good random read.  CR says 7 while R says 1; using the sequential
+  ; byte by mistake therefore fetches a visibly different marked record.
+
+RANDONE:                                ; randone
         CALL    RANDOPEN
         RET     NZ
         LD      A,7
@@ -3947,41 +4171,46 @@ RANDONE:
         LD      B,7
         JP      MEMEQ
 
-RANDONECASE:
+RANDONECASE:                            ; randonecase
         CALL    RANDONE
         JP      NZ,ROCFAIL
         CALL    CHECKALLGUARDS
         JP      NZ,ROCERR
         CALL    RESTDMA
         JP      NEWPASS
-ROCFAIL:
+
+ROCFAIL:                                ; rocfail
         CALL    RESTDMA
         JP      NEWFAIL
-ROCERR: CALL    RESTDMA
+
+ROCERR: CALL    RESTDMA                 ; rocerr
         JP      NEWERROR
 
-RUN0326:
+RUN0326:                                ; run catalog item 326
         LD      HL,C326MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      RANDONECASE
-RUN0327:
+
+RUN0327:                                ; run catalog item 327
         LD      HL,C327MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      RANDONECASE
-RUN0328:
+
+RUN0328:                                ; run catalog item 328
         LD      HL,C328MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      RANDONECASE
-RUN0329:
+
+RUN0329:                                ; run catalog item 329
         LD      HL,C329MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      RANDONECASE
 
-RUN0330:
+RUN0330:                                ; run catalog item 330
         LD      HL,C330MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -3998,13 +4227,15 @@ RUN0330:
         JP      NZ,R330BAD
         CALL    RESTDMA
         JP      NEWPASS
-R330BAD:
+
+R330BAD:                                ; r330bad
         CALL    RESTDMA
         JP      NEWFAIL
 
-; Ask beyond the fixture and require a defined nonzero refusal.  Residue is
-; checked only by the separate observation card, never by this oracle.
-RANDBADCASE:
+  ; Ask beyond the fixture and require a defined nonzero refusal.  Residue is
+  ; checked only by the separate observation card, never by this oracle.
+
+RANDBADCASE:                            ; randbadcase
         CALL    RANDREAD
         LD      A,(NEWOBS2)
         OR      A
@@ -4013,13 +4244,15 @@ RANDBADCASE:
         JP      NZ,RBCERR
         CALL    RESTDMA
         JP      NEWPASS
-RBCFAIL:
+
+RBCFAIL:                                ; rbcfail
         CALL    RESTDMA
         JP      NEWFAIL
-RBCERR: CALL    RESTDMA
+
+RBCERR: CALL    RESTDMA                 ; rbcerr
         JP      NEWERROR
 
-RUN0331:
+RUN0331:                                ; run catalog item 331
         LD      HL,C331MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4032,7 +4265,7 @@ RUN0331:
         LD      (TESTFCB+35),A
         JP      RANDBADCASE
 
-RUN0332:
+RUN0332:                                ; run catalog item 332
         LD      HL,C332MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4046,7 +4279,7 @@ RUN0332:
         LD      (TESTFCB+35),A
         JP      RANDBADCASE
 
-RUN0333:
+RUN0333:                                ; run catalog item 333
         LD      HL,C333MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4059,7 +4292,7 @@ RUN0333:
         LD      (TESTFCB+35),A
         JP      RANDBADCASE
 
-RUN0335:
+RUN0335:                                ; run catalog item 335
         LD      HL,C335MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4070,7 +4303,8 @@ RUN0335:
         LD      HL,DMABUF
         LD      B,128
         LD      A,05AH
-R335FL: LD      (HL),A
+
+R335FL: LD      (HL),A                  ; r335fl
         INC     HL
         DEC     B
         JP      NZ,R335FL
@@ -4097,7 +4331,8 @@ R335FL: LD      (HL),A
         JP      NZ,R335BAD
         LD      HL,DMABUF
         LD      B,128
-R335CK: LD      A,(HL)
+
+R335CK: LD      A,(HL)                  ; r335ck
         CP      05AH
         JP      NZ,R335BAD
         INC     HL
@@ -4105,12 +4340,14 @@ R335CK: LD      A,(HL)
         JP      NZ,R335CK
         CALL    TEMPCLEAN
         JP      NEWPASS
-R335BAD:
+
+R335BAD:                                ; r335bad
         CALL    TEMPCLEAN
         JP      NEWFAIL
 
-; Prepare a new temporary file and fill the complete DMA record with A5H.
-RWPREP:
+  ; Prepare a new temporary file and fill the complete DMA record with A5H.
+
+RWPREP:                                 ; rwprep
         CALL    TEMPMAKE
         CP      0FFH
         RET     Z
@@ -4118,15 +4355,17 @@ RWPREP:
         LD      HL,DMABUF
         LD      B,128
         LD      A,0A5H
-RWFILL: LD      (HL),A
+
+RWFILL: LD      (HL),A                  ; rwfill
         INC     HL
         DEC     B
         JP      NZ,RWFILL
         XOR     A
         RET
 
-; Random-write record A, with upper R bytes cleared.  Return the call result.
-RWWRITE:
+  ; Random-write record A, with upper R bytes cleared.  Return the call result.
+
+RWWRITE:                                ; rwwrite
         LD      (TESTFCB+33),A
         XOR     A
         LD      (TESTFCB+34),A
@@ -4137,9 +4376,10 @@ RWWRITE:
         LD      (NEWOBS2),A
         RET
 
-; Close, reopen, random-read record A and verify all 128 A5H bytes.  This is
-; the persistence oracle used by the random-write cards.
-RWVERIFY:
+  ; Close, reopen, random-read record A and verify all 128 A5H bytes.  This is
+  ; the persistence oracle used by the random-write cards.
+
+RWVERIFY:                               ; rwverify
         PUSH    AF
         LD      DE,TESTFCB
         LD      C,16
@@ -4159,7 +4399,8 @@ RWVERIFY:
         RET     NZ
         LD      HL,DMABUF
         LD      B,128
-RWVLP:  LD      A,(HL)
+
+RWVLP:  LD      A,(HL)                  ; rwvlp
         CP      0A5H
         RET     NZ
         INC     HL
@@ -4167,20 +4408,21 @@ RWVLP:  LD      A,(HL)
         JP      NZ,RWVLP
         XOR     A
         RET
-RWVFAIL:
+
+RWVFAIL:                                ; rwvfail
         POP     AF
         LD      A,1
         OR      A
         RET
 
-RWGOOD0:
+RWGOOD0:                                ; rwgood0
         CALL    RWPREP
         RET     NZ
         XOR     A
         CALL    RWWRITE
         RET
 
-RUN0336:
+RUN0336:                                ; run catalog item 336
         LD      HL,C336MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4189,13 +4431,15 @@ RUN0336:
         XOR     A
         CALL    RWVERIFY
         JP      RWRESULT
-RUN0337:
+
+RUN0337:                                ; run catalog item 337
         LD      HL,C337MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         CALL    RWGOOD0
         JP      RWRESULT
-RUN0338:
+
+RUN0338:                                ; run catalog item 338
         LD      HL,C338MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4206,7 +4450,8 @@ RUN0338:
         JP      Z,RWFAIL
         XOR     A
         JP      RWDONE
-RUN0339:
+
+RUN0339:                                ; run catalog item 339
         LD      HL,C339MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4217,7 +4462,8 @@ RUN0339:
         JP      NZ,RWFAIL
         LD      A,2
         JP      RWDONE
-RUN0340:
+
+RUN0340:                                ; run catalog item 340
         LD      HL,C340MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4230,7 +4476,8 @@ RUN0340:
         CP      3
         JP      C,RWFAIL
         JP      RWPASS
-RUN0341:
+
+RUN0341:                                ; run catalog item 341
         LD      HL,C341MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4246,7 +4493,8 @@ RUN0341:
         CP      3
         JP      C,RWFAIL
         JP      RWPASS
-RUN0342:
+
+RUN0342:                                ; run catalog item 342
         LD      HL,C342MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4262,7 +4510,8 @@ RUN0342:
         OR      A
         JP      NZ,RWFAIL
         JP      RWPASS
-RUN0343:
+
+RUN0343:                                ; run catalog item 343
         LD      HL,C343MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4278,28 +4527,35 @@ RUN0343:
         OR      A
         JP      NZ,RWFAIL
         JP      RWPASS
-RUN0344:
+
+RUN0344:                                ; run catalog item 344
         LD      HL,C344MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         CALL    RWGOOD0
         JP      NZ,RWFAIL
         XOR     A
-RWDONE:
+
+RWDONE:                                 ; rwdone
         CALL    RWVERIFY
-RWRESULT:
+
+RWRESULT:                               ; rwresult
         OR      A
         JP      NZ,RWFAIL
-RWPASS: CALL    CHECKALLGUARDS
+
+RWPASS: CALL    CHECKALLGUARDS          ; rwpass
         JP      NZ,RWERROR
         CALL    TEMPCLEAN
         JP      NEWPASS
-RWFAIL: CALL    TEMPCLEAN
+
+RWFAIL: CALL    TEMPCLEAN               ; rwfail
         JP      NEWFAIL
-RWERROR:
+
+RWERROR:                                ; rwerror
         CALL    TEMPCLEAN
         JP      NEWERROR
-RUN0345:
+
+RUN0345:                                ; run catalog item 345
         LD      HL,C345MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4318,9 +4574,10 @@ RUN0345:
         JP      Z,RWFAIL
         JP      RWPASS
 
-; Function 35 office.  F35OPEN obtains the size; F35EXPECT compares the three
-; returned random-record bytes with DE and a zero high byte.
-F35OPEN:
+  ; Function 35 office.  F35OPEN obtains the size; F35EXPECT compares the three
+  ; returned random-record bytes with DE and a zero high byte.
+
+F35OPEN:                                ; f35open
         CALL    OPENHL
         CP      0FFH
         RET     Z
@@ -4330,7 +4587,7 @@ F35OPEN:
         XOR     A
         RET
 
-F35EXPECT:
+F35EXPECT:                              ; f35expect
         LD      A,(TESTFCB+33)
         CP      E
         RET     NZ
@@ -4341,7 +4598,7 @@ F35EXPECT:
         OR      A
         RET
 
-RUN0346:
+RUN0346:                                ; run catalog item 346
         LD      HL,C346MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4350,7 +4607,8 @@ RUN0346:
         XOR     A
         LD      (TESTFCB+33),A
         LD      (TESTFCB+34),A
-R346LP:LD      DE,TESTFCB
+
+R346LP:LD      DE,TESTFCB               ; r346lp
         LD      C,34
         CALL    BDOS
         OR      A
@@ -4361,13 +4619,14 @@ R346LP:LD      DE,TESTFCB
         INC     HL
         INC     (HL)
         JP      R346LP
-R346END:
+
+R346END:                                ; r346end
         LD      (NEWOBS2),A
         CP      2
         JP      Z,RWPASS
         JP      RWFAIL
 
-RUN0347:
+RUN0347:                                ; run catalog item 347
         LD      HL,C347MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4378,7 +4637,8 @@ RUN0347:
         CALL    F35EXPECT
         JP      Z,NEWPASS
         JP      NEWFAIL
-RUN0348:
+
+RUN0348:                                ; run catalog item 348
         LD      HL,C348MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4389,7 +4649,8 @@ RUN0348:
         CALL    F35EXPECT
         JP      Z,NEWPASS
         JP      NEWFAIL
-RUN0349:
+
+RUN0349:                                ; run catalog item 349
         LD      HL,C349MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4400,7 +4661,8 @@ RUN0349:
         CALL    F35EXPECT
         JP      Z,NEWPASS
         JP      NEWFAIL
-RUN0350:
+
+RUN0350:                                ; run catalog item 350
         LD      HL,C350MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4411,7 +4673,8 @@ RUN0350:
         CALL    F35EXPECT
         JP      Z,NEWPASS
         JP      NEWFAIL
-RUN0351:
+
+RUN0351:                                ; run catalog item 351
         LD      HL,C351MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4435,10 +4698,21 @@ RUN0351:
         JP      Z,RWPASS
         JP      RWFAIL
 
-;---------------------- TERMINAL OUTCOME CARDS ------------------------
-; The read-only write path is terminal on the declared profile.  The outside
-; harness owns the verdict after the call; reaching NEWFAIL means it returned.
-RUN0368:
+; ================================================================================
+; =                  Terminal Outcome and Media-Provider Tests                   =
+; =                                                                              =
+; = Keeps read-only terminal writes outside returning aggregates and validates   =
+; = required full-directory or cross-drive provider fixtures before judging CP/M =
+; = behavior.                                                                    =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Terminal Outcome Cards
+; -------------------------------------------------------------------------------
+
+  ; The read-only write path is terminal on the declared profile.  The outside
+  ; harness owns the verdict after the call; reaching NEWFAIL means it returned.
+
+RUN0368:                                ; run catalog item 368
         LD      HL,C368MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4451,7 +4725,8 @@ RUN0368:
         LD      C,21
         CALL    BDOS
         JP      NEWFAIL       ; a normal return is nonconforming for this profile
-RUN0369:
+
+RUN0369:                                ; run catalog item 369
         LD      HL,C369MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4469,7 +4744,7 @@ RUN0369:
         CALL    BDOS
         JP      NEWFAIL       ; a normal return is nonconforming for this profile
 
-RUN0550:
+RUN0550:                                ; run catalog item 550
         LD      HL,C550MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4485,7 +4760,8 @@ RUN0550:
         CALL    CHECKALLGUARDS
         JP      NZ,NEWERROR
         JP      NEWPASS
-RUN0551:
+
+RUN0551:                                ; run catalog item 551
         LD      HL,C551MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4506,7 +4782,7 @@ RUN0551:
         CALL    TEMPCLEAN
         JP      NEWPASS
 
-RUN0253:
+RUN0253:                                ; run catalog item 253
         LD      HL,C253MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4520,15 +4796,16 @@ RUN0253:
         JP      NZ,NEWFAIL
         JP      NEWPASS
 
-RUN0553:
+RUN0553:                                ; run catalog item 553
         LD      HL,C553MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
         JP      VERIFYWRITE
 
-; Read the three marked records 127, 128 and 129 in order.  The marks prove
-; that the apparent extent crossing did not merely repeat record 127.
-RUN0555:
+  ; Read the three marked records 127, 128 and 129 in order.  The marks prove
+  ; that the apparent extent crossing did not merely repeat record 127.
+
+RUN0555:                                ; run catalog item 555
         LD      HL,C555MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4567,12 +4844,14 @@ RUN0555:
         JP      NZ,R555BAD
         CALL    RESTDMA
         JP      NEWPASS
-R555BAD: CALL    RESTDMA
+
+R555BAD: CALL    RESTDMA                ; r555bad
         JP      NEWFAIL
 
-; D: has a full directory and a complete 128-record BTFULL.DAT.  Attempt to
-; grow it at record 128, then ask Function 35 whether its old size survived.
-FULLFAIL:
+  ; D: has a full directory and a complete 128-record BTFULL.DAT.  Attempt to
+  ; grow it at record 128, then ask Function 35 whether its old size survived.
+
+FULLFAIL:                               ; fullfail
         LD      HL,FULLFCB
         CALL    OPENHL
         CP      0FFH
@@ -4602,7 +4881,7 @@ FULLFAIL:
         OR      A
         RET
 
-RUN0556:
+RUN0556:                                ; run catalog item 556
         LD      HL,C556MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4628,10 +4907,11 @@ RUN0556:
         JP      NZ,R556BAD
         CALL    RESTDMA
         JP      NEWPASS
-R556BAD: CALL    RESTDMA
+
+R556BAD: CALL    RESTDMA                ; r556bad
         JP      NEWFAIL
 
-RUN0557:
+RUN0557:                                ; run catalog item 557
         LD      HL,C557MSG
         LD      (CASEPTR),HL
         CALL    INDHEAD
@@ -4639,24 +4919,27 @@ RUN0557:
         JP      NZ,R557BAD
         CALL    RESTDMA
         JP      NEWPASS
-R557BAD: CALL    RESTDMA
+
+R557BAD: CALL    RESTDMA                ; r557bad
         JP      NEWFAIL
 
-INITDEF:
+INITDEF:                                ; initdef
         LD      HL,0080H
         LD      B,128
         LD      A,06DH
-IDFLP:  LD      (HL),A
+
+IDFLP:  LD      (HL),A                  ; idflp
         INC     HL
         DEC     B
         JP      NZ,IDFLP
         RET
 
-CHECKDEF:
+CHECKDEF:                               ; checkdef
         LD      HL,0080H
         LD      B,128
         LD      C,06DH
-CDFLP:  LD      A,(HL)
+
+CDFLP:  LD      A,(HL)                  ; cdflp
         CP      C
         RET     NZ
         INC     HL
@@ -4665,12 +4948,14 @@ CDFLP:  LD      A,(HL)
         XOR     A
         RET
 
-; Fixture records are ASCII; an E7H therefore proves that the prefill survived
-; and that the complete record did not arrive.
-CHECKFULLDMA:
+  ; Fixture records are ASCII; an E7H therefore proves that the prefill survived
+  ; and that the complete record did not arrive.
+
+CHECKFULLDMA:                           ; checkfulldma
         LD      HL,DMABUF
         LD      B,128
-CFDLP:  LD      A,(HL)
+
+CFDLP:  LD      A,(HL)                  ; cfdlp
         CP      0E7H
         RET     Z
         INC     HL
@@ -4679,10 +4964,11 @@ CFDLP:  LD      A,(HL)
         XOR     A
         RET
 
-CHECKONE128:
+CHECKONE128:                            ; checkone128
         LD      HL,DMABUF
         LD      C,16
-CO1LP:  PUSH    BC
+
+CO1LP:  PUSH    BC                      ; co1lp
         LD      DE,MONE8
         LD      B,8
         CALL    MEMEQ
@@ -4693,10 +4979,11 @@ CO1LP:  PUSH    BC
         XOR     A
         RET
 
-; Verify the explicit C: fixture before judging a cross-drive card.  An absent
-; or incorrectly marked provider fixture is a setup condition, not a failed
-; CP/M compatibility assertion.
-CROSSREADY:
+  ; Verify the explicit C: fixture before judging a cross-drive card.  An absent
+  ; or incorrectly marked provider fixture is a setup condition, not a failed
+  ; CP/M compatibility assertion.
+
+CROSSREADY:                             ; crossready
         LD      HL,BFILEFCB
         CALL    OPENHL
         CP      0FFH
@@ -4713,14 +5000,16 @@ CROSSREADY:
         CALL    RESTDMA
         XOR     A
         RET
-CROSSBAD:
+
+CROSSBAD:                               ; crossbad
         CALL    RESTDMA
-CROSSNO:
+
+CROSSNO:                                ; crossno
         LD      A,1
         OR      A
         RET
 
-INDHEAD:
+INDHEAD:                                ; indhead
         LD      A,(AGGMODE)
         OR      A
         RET     NZ
@@ -4734,28 +5023,42 @@ INDHEAD:
         LD      DE,HNEW2
         JP      PUTS
 
-;------------------------- GUARDED DMA --------------------------------
-; Put unlike tell-tales before and after DMABUF, fill the record with E7H,
-; and select it.  RESTDMA is intentionally tiny so all unwind paths can use it.
-PREPDMA:
+; ================================================================================
+; =                      Guarded DMA and Comparison Helpers                      =
+; =                                                                              =
+; = Surrounds the 128-byte DMA record with tell-tales, prefills it with E7H,     =
+; = restores 0080H on unwind, and treats guard corruption as ERROR rather than   =
+; = an ordinary failed oracle.                                                   =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Guarded DMA
+; -------------------------------------------------------------------------------
+
+  ; Put unlike tell-tales before and after DMABUF, fill the record with E7H,
+  ; and select it.  RESTDMA is intentionally tiny so all unwind paths can use it.
+
+PREPDMA:                                ; prepare guarded DMA
         LD      HL,DPRE
         LD      B,16
         LD      A,0C3H
-PDI1:   LD      (HL),A
+
+PDI1:   LD      (HL),A                  ; pdi1
         INC     HL
         DEC     B
         JP      NZ,PDI1
         LD      HL,DMABUF
         LD      B,128
         LD      A,0E7H
-PDI2:   LD      (HL),A
+
+PDI2:   LD      (HL),A                  ; pdi2
         INC     HL
         DEC     B
         JP      NZ,PDI2
         LD      HL,DPOST
         LD      B,16
         LD      A,03CH
-PDI3:   LD      (HL),A
+
+PDI3:   LD      (HL),A                  ; pdi3
         INC     HL
         DEC     B
         JP      NZ,PDI3
@@ -4763,21 +5066,23 @@ PDI3:   LD      (HL),A
         LD      C,26
         JP      BDOS
 
-RESTDMA:
+RESTDMA:                                ; restore default DMA
         LD      DE,0080H
         LD      C,26
         JP      BDOS
 
-; A changed tell-tale is ERROR, not an ordinary failed card.  BDOS has written
-; outside the object offered to it, so both the evidence and this transient
-; may already be spoiled.
-CHECKALLGUARDS:
+  ; A changed tell-tale is ERROR, not an ordinary failed card.  BDOS has written
+  ; outside the object offered to it, so both the evidence and this transient
+  ; may already be spoiled.
+
+CHECKALLGUARDS:                         ; checkallguards
         CALL    CHECKGUARDS
         RET     NZ
         LD      HL,DPRE
         LD      B,16
         LD      C,0C3H
-CAG1:   LD      A,(HL)
+
+CAG1:   LD      A,(HL)                  ; cag1
         CP      C
         RET     NZ
         INC     HL
@@ -4786,7 +5091,8 @@ CAG1:   LD      A,(HL)
         LD      HL,DPOST
         LD      B,16
         LD      C,03CH
-CAG2:   LD      A,(HL)
+
+CAG2:   LD      A,(HL)                  ; cag2
         CP      C
         RET     NZ
         INC     HL
@@ -4795,8 +5101,9 @@ CAG2:   LD      A,(HL)
         XOR     A
         RET
 
-; Compare B bytes at HL and DE.  Exit Z on a complete match.
-MEMEQ:
+  ; Compare B bytes at HL and DE.  Exit Z on a complete match.
+
+MEMEQ:                                  ; memeq
         LD      A,(DE)
         CP      (HL)
         RET     NZ
@@ -4807,16 +5114,27 @@ MEMEQ:
         XOR     A
         RET
 
-;------------------------- REPORT OFFICE ------------------------------
-; CASEPTR names both the long evidence card and the ledger digits used by the
-; short row.  NEWOBS1/2 are raw bytes; presentation never changes the oracle.
-PUTNEWCASE:
+; ================================================================================
+; =                                Report Office                                 =
+; =                                                                              =
+; = Uses the long case record as the source for compact ledger digits, class,    =
+; = byte labels, and full /REPORT evidence without allowing presentation logic   =
+; = to decide an oracle.                                                         =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Report Office
+; -------------------------------------------------------------------------------
+
+  ; CASEPTR names both the long evidence card and the ledger digits used by the
+  ; short row.  NEWOBS1/2 are raw bytes; presentation never changes the oracle.
+
+PUTNEWCASE:                             ; print full evidence card
         LD      HL,(CASEPTR)
         PUSH    HL
         POP     DE
         JP      PUTS
 
-PUTNEWOBS:
+PUTNEWOBS:                              ; putnewobs
         LD      DE,NOBS1
         CALL    PUTS
         LD      A,(NEWOBS1)
@@ -4830,7 +5148,7 @@ PUTNEWOBS:
         LD      E,10
         JP      PUTC
 
-PUTDOBS:
+PUTDOBS:                                ; putdobs
         LD      DE,DOBS1
         CALL    PUTS
         LD      A,(NEWOBS1)
@@ -4844,7 +5162,7 @@ PUTDOBS:
         LD      E,10
         JP      PUTC
 
-NEWPASS:
+NEWPASS:                                ; newpass
         LD      A,(FULLMODE)
         OR      A
         JP      Z,COMPPASS
@@ -4860,13 +5178,14 @@ NEWPASS:
         LD      DE,MENDP
         CALL    PUTS
         JP      0000H
-NEWAPASS:
+
+NEWAPASS:                               ; newapass
         LD      HL,PASSCT
         INC     (HL)
         LD      DE,ENDONLY
         JP      PUTS
 
-NEWFAIL:
+NEWFAIL:                                ; newfail
         LD      A,(FULLMODE)
         OR      A
         JP      Z,COMPFAIL
@@ -4884,14 +5203,15 @@ NEWFAIL:
         LD      DE,MENDF
         CALL    PUTS
         JP      0000H
-NEWAFAIL:
+
+NEWAFAIL:                               ; newafail
         CALL    SAVEFCID
         LD      HL,FAILCT
         INC     (HL)
         LD      DE,ENDONLY
         JP      PUTS
 
-NEWERROR:
+NEWERROR:                               ; newerror
         LD      A,(FULLMODE)
         OR      A
         JP      Z,COMPERR
@@ -4909,13 +5229,14 @@ NEWERROR:
         LD      DE,MENDE
         CALL    PUTS
         JP      0000H
-NEWAERR:
+
+NEWAERR:                                ; newaerr
         LD      HL,ERRCT
         INC     (HL)
         LD      DE,ENDONLY
         JP      PUTS
 
-NEWNOTRUN:
+NEWNOTRUN:                              ; newnotrun
         LD      A,(FULLMODE)
         OR      A
         JP      Z,COMPNOTRUN
@@ -4928,29 +5249,33 @@ NEWNOTRUN:
         LD      DE,MENDNOTRUN
         CALL    PUTS
         JP      0000H
-NEWANOTRUN:
+
+NEWANOTRUN:                             ; newanotrun
         LD      HL,NOTRUNCT
         INC     (HL)
         LD      DE,ENDONLY
         JP      PUTS
 
-COMPACTHEAD:
+COMPACTHEAD:                            ; print compact result heading
         LD      DE,CTITLE
         JP      PUTS
 
-; Find the four ledger digits after the first LF in the long card.  The card's
-; opening layout is consequently part of the program; change PUTCID whenever
-; that layout is changed.
-PUTCID:
+  ; Find the four ledger digits after the first LF in the long card.  The card's
+  ; opening layout is consequently part of the program; change PUTCID whenever
+  ; that layout is changed.
+
+PUTCID:                                 ; putcid
         LD      HL,(CASEPTR)
-PCID1: LD      A,(HL)
+
+PCID1: LD      A,(HL)                   ; pcid1
         INC     HL
         CP      10
         JP      NZ,PCID1
         LD      DE,7
         ADD     HL,DE
         LD      B,4
-PCID2: LD      E,(HL)
+
+PCID2: LD      E,(HL)                   ; pcid2
         PUSH    HL
         PUSH    BC
         CALL    PUTC
@@ -4961,9 +5286,10 @@ PCID2: LD      E,(HL)
         JP      NZ,PCID2
         RET
 
-; DE names the padded result word.  The short row gives useful byte labels;
-; the complete requirement remains in the ledger and /REPORT card.
-COMPROW:
+  ; DE names the padded result word.  The short row gives useful byte labels;
+  ; the complete requirement remains in the ledger and /REPORT card.
+
+COMPROW:                                ; comprow
         PUSH    DE
         CALL    PUTCID
         LD      DE,CSEP
@@ -4977,9 +5303,10 @@ COMPROW:
         LD      E,10
         JP      PUTC
 
-; Class comes from the card, not from its runtime result.  NOT GUARANTEED
-; cards print as observations even when their calls return quite normally.
-PUTDISP:
+  ; Class comes from the card, not from its runtime result.  NOT GUARANTEED
+  ; cards print as observations even when their calls return quite normally.
+
+PUTDISP:                                ; putdisp
         LD      A,(ROWSTATUS)
         CP      3
         LD      DE,CDREQ
@@ -4987,8 +5314,9 @@ PUTDISP:
         LD      DE,CDNOTG
         JP      PUTS
 
-; Exit Z when CASEPTR names the card at DE.
-CASEIS:
+  ; Exit Z when CASEPTR names the card at DE.
+
+CASEIS:                                 ; caseis
         LD      HL,(CASEPTR)
         LD      A,L
         CP      E
@@ -4997,9 +5325,10 @@ CASEIS:
         CP      D
         RET
 
-; Pick labels suitable for Open, Read, Write, Random or life-cycle evidence.
-; Ledger digits select wording only; no test result or class is decided here.
-PUTSEMOBS:
+  ; Pick labels suitable for Open, Read, Write, Random or life-cycle evidence.
+  ; Ledger digits select wording only; no test result or class is decided here.
+
+PUTSEMOBS:                              ; putsemobs
         LD      DE,C165MSG
         CALL    CASEIS
         JP      Z,PSO165
@@ -5014,7 +5343,8 @@ PUTSEMOBS:
         JP      Z,PSO171
         ; Locate the ledger digits following the first LF in CASEPTR.
         LD      HL,(CASEPTR)
-PSOFIND:LD      A,(HL)
+
+PSOFIND:LD      A,(HL)                  ; psofind
         INC     HL
         CP      10
         JP      NZ,PSOFIND
@@ -5033,10 +5363,12 @@ PSOFIND:LD      A,(HL)
         JP      Z,PSORAND
         CP      '5'
         JP      Z,PSOLIFE
-PSOGEN:LD      DE,CSFVALUE
+
+PSOGEN:LD      DE,CSFVALUE              ; psogen
         LD      HL,CS2VALUE
         JP      PSOSET
-PSO2XX:INC     HL
+
+PSO2XX:INC     HL                       ; pso2xx
         LD      A,(HL)
         CP      '4'
         JP      C,PSOREAD
@@ -5045,27 +5377,34 @@ PSO2XX:INC     HL
         LD      A,(HL)
         CP      '6'
         JP      C,PSOREAD
-PSOWRITE:
+
+PSOWRITE:                               ; psowrite
         LD      DE,CSFWRITE
         LD      HL,CS2WRITE
         JP      PSOSET
-PSOOPEN:
+
+PSOOPEN:                                ; psoopen
         LD      DE,CSFOPEN
         LD      HL,CS2OPEN
         JP      PSOSET
-PSOREAD:
+
+PSOREAD:                                ; psoread
         LD      DE,CSFREAD
         LD      HL,CS2READ
         JP      PSOSET
-PSORAND:
+
+PSORAND:                                ; psorand
         LD      DE,CSFRANDOM
         LD      HL,CS2RANDOM
         JP      PSOSET
-PSOLIFE:
+
+PSOLIFE:                                ; psolife
         LD      DE,CSFLIFE
         LD      HL,CS2LIFE
-PSOSET: LD      (OBSSEPPTR),HL
-PSOTWO:CALL    PUTS
+
+PSOSET: LD      (OBSSEPPTR),HL          ; psoset
+
+PSOTWO:CALL    PUTS                     ; psotwo
         LD      A,(NEWOBS1)
         CALL    HEXBYTE
         LD      HL,(OBSSEPPTR)
@@ -5075,7 +5414,7 @@ PSOTWO:CALL    PUTS
         LD      A,(NEWOBS2)
         JP      HEXBYTE
 
-PSO165:LD      DE,CF165A
+PSO165:LD      DE,CF165A                ; pso165
         CALL    PUTS
         LD      A,(O165RET)
         CALL    HEXBYTE
@@ -5083,14 +5422,16 @@ PSO165:LD      DE,CF165A
         CALL    PUTS
         LD      A,(O165RC)
         JP      HEXBYTE
-PSO167:LD      DE,CF167A
+
+PSO167:LD      DE,CF167A                ; pso167
         LD      A,(ROWSTATUS)
         OR      A
         JP      NZ,PSO167F
         CALL    PUTS
         LD      A,(NEWOBS2)
         JP      HEXBYTE
-PSO167F:
+
+PSO167F:                                ; pso167f
         LD      DE,CF167F
         CALL    PUTS
         LD      A,(NEWOBS1)
@@ -5099,7 +5440,8 @@ PSO167F:
         CALL    PUTS
         LD      A,(NEWOBS2)
         JP      HEXBYTE
-PSO169:LD      DE,CF169A
+
+PSO169:LD      DE,CF169A                ; pso169
         CALL    PUTS
         LD      A,(OBS169A)
         CALL    HEXBYTE
@@ -5119,7 +5461,8 @@ PSO169:LD      DE,CF169A
         ADD     A,'A'
         LD      E,A
         JP      PUTC
-PSO171:LD      DE,CF171A
+
+PSO171:LD      DE,CF171A                ; pso171
         CALL    PUTS
         LD      A,(OBSERVED)
         CALL    HEXBYTE
@@ -5130,7 +5473,7 @@ PSO171:LD      DE,CF171A
         LD      DE,CF171E
         JP      PUTS
 
-COMPPASS:
+COMPPASS:                               ; comppass
         XOR     A
         LD      (ROWSTATUS),A
         LD      DE,CSTPASS
@@ -5141,11 +5484,12 @@ COMPPASS:
         LD      DE,CSUMPASS
         CALL    PUTS
         JP      0000H
-CPASSA:LD      HL,PASSCT
+
+CPASSA:LD      HL,PASSCT                ; cpassa
         INC     (HL)
         RET
 
-COMPFAIL:
+COMPFAIL:                               ; compfail
         LD      A,1
         LD      (ROWSTATUS),A
         LD      DE,CSTFAIL
@@ -5156,12 +5500,13 @@ COMPFAIL:
         LD      DE,CSUMFAIL
         CALL    PUTS
         JP      0000H
-CFAILA:CALL    SAVEFCID
+
+CFAILA:CALL    SAVEFCID                 ; cfaila
         LD      HL,FAILCT
         INC     (HL)
         RET
 
-COMPERR:
+COMPERR:                                ; comperr
         LD      A,2
         LD      (ROWSTATUS),A
         LD      DE,CSTERR
@@ -5172,11 +5517,12 @@ COMPERR:
         LD      DE,CSUMERR
         CALL    PUTS
         JP      0000H
-CERRA: LD      HL,ERRCT
+
+CERRA: LD      HL,ERRCT                 ; cerra
         INC     (HL)
         RET
 
-COMPOBS:
+COMPOBS:                                ; compobs
         LD      A,3
         LD      (ROWSTATUS),A
         LD      DE,CSTOBS
@@ -5187,11 +5533,12 @@ COMPOBS:
         LD      DE,CSUMOBS
         CALL    PUTS
         JP      0000H
-COBSA:  LD      HL,OBSCT
+
+COBSA:  LD      HL,OBSCT                ; cobsa
         INC     (HL)
         RET
 
-COMPNOTRUN:
+COMPNOTRUN:                             ; compnotrun
         CALL    PUTCID
         LD      DE,CSEP
         CALL    PUTS
@@ -5211,12 +5558,13 @@ COMPNOTRUN:
         LD      DE,CSUMNOTRUN
         CALL    PUTS
         JP      0000H
-CNOTRUNA:
+
+CNOTRUNA:                               ; cnotruna
         LD      HL,NOTRUNCT
         INC     (HL)
         RET
 
-COMPSUM:
+COMPSUM:                                ; compsum
         LD      DE,CSUM1
         CALL    PUTS
         LD      A,(PASSCT)
@@ -5243,13 +5591,13 @@ COMPSUM:
         CALL    PUTS
         JP      PRINTFAILS
 
-PUTFULL:
+PUTFULL:                                ; putfull
         LD      A,(FULLMODE)
         OR      A
         RET     Z
         JP      PUTS
 
-PUTSUM:
+PUTSUM:                                 ; putsum
         LD      A,(FULLMODE)
         OR      A
         JP      Z,COMPSUM
@@ -5284,11 +5632,13 @@ PUTSUM:
         LD      DE,SUMYES
         JP      Z,PSOUT
         LD      DE,SUMNO
-PSOUT:  CALL    PUTS
+
+PSOUT:  CALL    PUTS                    ; psout
         JP      PRINTFAILS
 
-; Copy the current card's four ledger digits into the aggregate failure log.
-SAVEFCID:
+  ; Copy the current card's four ledger digits into the aggregate failure log.
+
+SAVEFCID:                               ; savefcid
         PUSH    AF
         PUSH    BC
         PUSH    DE
@@ -5302,14 +5652,16 @@ SAVEFCID:
         ADD     HL,DE
         EX      DE,HL
         LD      HL,(CASEPTR)
-SFCF:  LD      A,(HL)
+
+SFCF:  LD      A,(HL)                   ; sfcf
         INC     HL
         CP      10
         JP      NZ,SFCF
         LD      BC,7
         ADD     HL,BC
         LD      B,4
-SFCC:  LD      A,(HL)
+
+SFCC:  LD      A,(HL)                   ; sfcc
         LD      (DE),A
         INC     HL
         INC     DE
@@ -5321,19 +5673,21 @@ SFCC:  LD      A,(HL)
         POP     AF
         RET
 
-PRINTFAILS:
+PRINTFAILS:                             ; print failed-item list
         LD      A,(FAILCT)
         OR      A
         RET     Z
         LD      DE,FAILMSG
         CALL    PUTS
-; Console output may change BC. Fetch the count AFTER printing the heading.
+  ; Console output may change BC. Fetch the count AFTER printing the heading.
         LD      A,(FAILCT)
         LD      B,A
         LD      HL,FAILITEMS
-PFLP:  PUSH    BC
+
+PFLP:  PUSH    BC                       ; pflp
         LD      B,4
-PFCHR: LD      E,(HL)
+
+PFCHR: LD      E,(HL)                   ; pfchr
         PUSH    HL
         PUSH    BC
         CALL    PUTC
@@ -5354,17 +5708,19 @@ PFCHR: LD      E,(HL)
         LD      E,10
         JP      PUTC
 
-PUTDIG:
+PUTDIG:                                 ; putdig
         ADD     A,'0'
         LD      E,A
         JP      PUTC
 
-; Print unsigned A in decimal, without leading zeroes.
-PUTNUM:
+  ; Print unsigned A in decimal, without leading zeroes.
+
+PUTNUM:                                 ; putnum
         CP      100
         JP      C,PNUNDER
         LD      B,0
-PNHUND: SUB     100
+
+PNHUND: SUB     100                     ; pnhund
         INC     B
         CP      100
         JP      NC,PNHUND
@@ -5373,21 +5729,25 @@ PNHUND: SUB     100
         CALL    PUTDIG
         POP     AF
         LD      B,0
-PNTENS: CP      10
+
+PNTENS: CP      10                      ; pntens
         JP      C,PNPTEN
         SUB     10
         INC     B
         JP      PNTENS
-PNPTEN: PUSH    AF
+
+PNPTEN: PUSH    AF                      ; pnpten
         LD      A,B
         CALL    PUTDIG
         POP     AF
         JP      PUTDIG
-PNUNDER:
+
+PNUNDER:                                ; pnunder
         CP      10
         JP      C,PUTDIG
         LD      B,0
-PNLOOP:
+
+PNLOOP:                                 ; pnloop
         SUB     10
         INC     B
         CP      10
@@ -5398,8 +5758,9 @@ PNLOOP:
         POP     AF
         JP      PUTDIG
 
-; Print the zero-ended word at HL, one character at a time.
-PUTZ:
+  ; Print the zero-ended word at HL, one character at a time.
+
+PUTZ:                                   ; putz
         LD      A,(HL)
         OR      A
         RET     Z
@@ -5410,7 +5771,7 @@ PUTZ:
         INC     HL
         JP      PUTZ
 
-PUTOBS:
+PUTOBS:                                 ; putobs
         LD      DE,MSG_OBS
         CALL    PUTS
         LD      A,(OBSERVED)
@@ -5420,15 +5781,15 @@ PUTOBS:
         LD      E,10
         JP      PUTC
 
-PUTS:
+PUTS:                                   ; puts
         LD      C,9
         JP      BDOS
 
-PUTC:
+PUTC:                                   ; putc
         LD      C,2
         JP      BDOS
 
-HEXBYTE:
+HEXBYTE:                                ; hexbyte
         PUSH    AF
         RRCA
         RRCA
@@ -5436,57 +5797,71 @@ HEXBYTE:
         RRCA
         CALL    HEXNIB
         POP     AF
-HEXNIB:
+
+HEXNIB:                                 ; hexnib
         AND     0FH
         ADD     A,'0'
         CP      '9'+1
         JP      C,HXOUT
         ADD     A,7
-HXOUT:
+
+HXOUT:                                  ; hxout
         LD      E,A
         JP      PUTC
 
-S0163: DB '/0163',0
-SC163: DB '/CASE:BDOS-FILE-001-P0163',0
-S0182: DB '/0182',0
-SC182: DB '/CASE:BDOS-FILE-002-P0182',0
-S0183: DB '/0183',0
-SC183: DB '/CASE:BDOS-FILE-001-P0183',0
-S0244: DB '/0244',0
-SC244: DB '/CASE:BDOS-FILE-004-P0244',0
-S0245: DB '/0245',0
-SC245: DB '/CASE:BDOS-FILE-004-P0245',0
-S0256: DB '/0256',0
-SC256: DB '/CASE:BDOS-FILE-011-P0256',0
-S0257: DB '/0257',0
-SC257: DB '/CASE:BDOS-FILE-005-P0257',0
-S0265: DB '/0265',0
-SC265: DB '/CASE:BDOS-FILE-005-P0265',0
-S0270: DB '/0270',0
-SC270: DB '/CASE:BDOS-FILE-011-P0270',0
-S0277: DB '/0277',0
-SC277: DB '/CASE:BDOS-FILE-002-P0277',0
-S0280: DB '/0280',0
-SC280: DB '/CASE:BDOS-FILE-002-P0280',0
-S0281: DB '/0281',0
-SC281: DB '/CASE:BDOS-FILE-005-P0281',0
-S0325: DB '/0325',0
-SC325: DB '/CASE:BDOS-FILE-007-P0325',0
-S0334: DB '/0334',0
-SC334: DB '/CASE:BDOS-FILE-008-P0334',0
-S0352: DB '/0352',0
-SC352: DB '/CASE:BDOS-FILE-006-P0352',0
-S0372: DB '/0372',0
-SC372: DB '/CASE:BDOS-FILE-006-P0372',0
-S0388: DB '/0388',0
-SC388: DB '/CASE:BDOS-FILE-006-P0388',0
-S0552: DB '/0552',0
-SC552: DB '/CASE:BDOS-FILE-011-P0552',0
-S0554: DB '/0554',0
-SC554: DB '/CASE:BDOS-FILE-011-P0554',0
+S0163: DB '/0163',0                     ; s0163
+SC163: DB '/CASE:BDOS-FILE-001-P0163',0 ; sc163
+S0182: DB '/0182',0                     ; s0182
+SC182: DB '/CASE:BDOS-FILE-002-P0182',0 ; sc182
+S0183: DB '/0183',0                     ; s0183
+SC183: DB '/CASE:BDOS-FILE-001-P0183',0 ; sc183
+S0244: DB '/0244',0                     ; s0244
+SC244: DB '/CASE:BDOS-FILE-004-P0244',0 ; sc244
+S0245: DB '/0245',0                     ; s0245
+SC245: DB '/CASE:BDOS-FILE-004-P0245',0 ; sc245
+S0256: DB '/0256',0                     ; s0256
+SC256: DB '/CASE:BDOS-FILE-011-P0256',0 ; sc256
+S0257: DB '/0257',0                     ; s0257
+SC257: DB '/CASE:BDOS-FILE-005-P0257',0 ; sc257
+S0265: DB '/0265',0                     ; s0265
+SC265: DB '/CASE:BDOS-FILE-005-P0265',0 ; sc265
+S0270: DB '/0270',0                     ; s0270
+SC270: DB '/CASE:BDOS-FILE-011-P0270',0 ; sc270
+S0277: DB '/0277',0                     ; s0277
+SC277: DB '/CASE:BDOS-FILE-002-P0277',0 ; sc277
+S0280: DB '/0280',0                     ; s0280
+SC280: DB '/CASE:BDOS-FILE-002-P0280',0 ; sc280
+S0281: DB '/0281',0                     ; s0281
+SC281: DB '/CASE:BDOS-FILE-005-P0281',0 ; sc281
+S0325: DB '/0325',0                     ; s0325
+SC325: DB '/CASE:BDOS-FILE-007-P0325',0 ; sc325
+S0334: DB '/0334',0                     ; s0334
+SC334: DB '/CASE:BDOS-FILE-008-P0334',0 ; sc334
+S0352: DB '/0352',0                     ; s0352
+SC352: DB '/CASE:BDOS-FILE-006-P0352',0 ; sc352
+S0372: DB '/0372',0                     ; s0372
+SC372: DB '/CASE:BDOS-FILE-006-P0372',0 ; sc372
+S0388: DB '/0388',0                     ; s0388
+SC388: DB '/CASE:BDOS-FILE-006-P0388',0 ; sc388
+S0552: DB '/0552',0                     ; s0552
+SC552: DB '/CASE:BDOS-FILE-011-P0552',0 ; sc552
+S0554: DB '/0554',0                     ; s0554
+SC554: DB '/CASE:BDOS-FILE-011-P0554',0 ; sc554
 
-; Short selector, frozen selector, report card, observation operation.
-DIAGTAB:
+; ================================================================================
+; =                     Catalog Tables and Test Instruments                      =
+; =                                                                              =
+; = Defines observation-table entries, case records, reserved fixture            =
+; = identities, guarded FCB and DMA storage, aggregate state, result cells,      =
+; = command strings, and the private stack.                                      =
+; ================================================================================
+; -------------------------------------------------------------------------------
+; Observation and Case Tables
+; -------------------------------------------------------------------------------
+
+  ; Short selector, frozen selector, report card, observation operation.
+
+DIAGTAB:                                ; observation card table
         DW S0163,SC163,C163MSG
         DB 1
         DW S0182,SC182,C182MSG
@@ -5520,265 +5895,266 @@ DIAGTAB:
         DW S0281,SC281,C281MSG
         DB 8
 
-S0171:      DB '/0171',0
-SCASE0171:  DB '/CASE:BDOS-FILE-001-P0171',0
-S0156:      DB '/0156',0
-SC156:      DB '/CASE:BDOS-FILE-002-P0156',0
-S0157:      DB '/0157',0
-SC157:      DB '/CASE:BDOS-FILE-001-P0157',0
-S0158:      DB '/0158',0
-SC158:      DB '/CASE:BDOS-FILE-002-P0158',0
-S0159:      DB '/0159',0
-SC159:      DB '/CASE:BDOS-FILE-001-P0159',0
-S0160:      DB '/0160',0
-SC160:      DB '/CASE:BDOS-FILE-002-P0160',0
-S0161:      DB '/0161',0
-SC161:      DB '/CASE:BDOS-FILE-001-P0161',0
-S0162:      DB '/0162',0
-SC162:      DB '/CASE:BDOS-FILE-002-P0162',0
-S0164:      DB '/0164',0
-SC164:      DB '/CASE:BDOS-FILE-002-P0164',0
-S0166:      DB '/0166',0
-SC166:      DB '/CASE:BDOS-FILE-002-P0166',0
-S0168:      DB '/0168',0
-SC168:      DB '/CASE:BDOS-FILE-002-P0168',0
-S0170:      DB '/0170',0
-SC170:      DB '/CASE:BDOS-FILE-002-P0170',0
-S0172:      DB '/0172',0
-SC172:      DB '/CASE:BDOS-FILE-002-P0172',0
-S0174:      DB '/0174',0
-SC174:      DB '/CASE:BDOS-FILE-002-P0174',0
-S0176:      DB '/0176',0
-SC176:      DB '/CASE:BDOS-FILE-002-P0176',0
-S0178:      DB '/0178',0
-SC178:      DB '/CASE:BDOS-FILE-002-P0178',0
-S0180:      DB '/0180',0
-SC180:      DB '/CASE:BDOS-FILE-002-P0180',0
-S0253:      DB '/0253',0
-SC253:      DB '/CASE:BDOS-FILE-005-P0253',0
-S0553:      DB '/0553',0
-SC553:      DB '/CASE:BDOS-FILE-011-P0553',0
-S0555:      DB '/0555',0
-SC555:      DB '/CASE:BDOS-FILE-011-P0555',0
-S0556:      DB '/0556',0
-SC556:      DB '/CASE:BDOS-FILE-011-P0556',0
-S0557:      DB '/0557',0
-SC557:      DB '/CASE:BDOS-FILE-011-P0557',0
-S0165:      DB '/0165',0
-SCASE165:   DB '/CASE:BDOS-FILE-001-P0165',0
-S0167:      DB '/0167',0
-SCASE167:   DB '/CASE:BDOS-FILE-001-P0167',0
-S0169:      DB '/0169',0
-SCASE0169:  DB '/CASE:BDOS-FILE-001-P0169',0
-S0173:      DB '/0173',0
-SC173:      DB '/CASE:BDOS-FILE-001-P0173',0
-S0175:      DB '/0175',0
-SC175:      DB '/CASE:BDOS-FILE-001-P0175',0
-S0177:      DB '/0177',0
-SC177:      DB '/CASE:BDOS-FILE-001-P0177',0
-S0179:      DB '/0179',0
-SC179:      DB '/CASE:BDOS-FILE-001-P0179',0
-S0181:      DB '/0181',0
-SC181:      DB '/CASE:BDOS-FILE-001-P0181',0
-S0219:      DB '/0219',0
-SC219:      DB '/CASE:BDOS-FILE-004-P0219',0
-S0220:      DB '/0220',0
-SC220:      DB '/CASE:BDOS-FILE-004-P0220',0
-S0221:      DB '/0221',0
-SC221:      DB '/CASE:BDOS-FILE-004-P0221',0
-S0222:      DB '/0222',0
-SC222:      DB '/CASE:BDOS-FILE-004-P0222',0
-S0223:      DB '/0223',0
-SC223:      DB '/CASE:BDOS-FILE-004-P0223',0
-S0224:      DB '/0224',0
-SC224:      DB '/CASE:BDOS-FILE-004-P0224',0
-S0225:      DB '/0225',0
-SC225:      DB '/CASE:BDOS-FILE-004-P0225',0
-S0226:      DB '/0226',0
-SC226:      DB '/CASE:BDOS-FILE-004-P0226',0
-S0227:      DB '/0227',0
-SC227:      DB '/CASE:BDOS-FILE-004-P0227',0
-S0228:      DB '/0228',0
-SC228:      DB '/CASE:BDOS-FILE-004-P0228',0
-S0229:      DB '/0229',0
-SC229:      DB '/CASE:BDOS-FILE-004-P0229',0
-S0230:      DB '/0230',0
-SC230:      DB '/CASE:BDOS-FILE-004-P0230',0
-S0231:      DB '/0231',0
-SC231:      DB '/CASE:BDOS-FILE-004-P0231',0
-S0232:      DB '/0232',0
-SC232:      DB '/CASE:BDOS-FILE-004-P0232',0
-S0233:      DB '/0233',0
-SC233:      DB '/CASE:BDOS-FILE-004-P0233',0
-S0234:      DB '/0234',0
-SC234:      DB '/CASE:BDOS-FILE-004-P0234',0
-S0235:      DB '/0235',0
-SC235:      DB '/CASE:BDOS-FILE-004-P0235',0
-S0236:      DB '/0236',0
-SC236:      DB '/CASE:BDOS-FILE-004-P0236',0
-S0237:      DB '/0237',0
-SC237:      DB '/CASE:BDOS-FILE-004-P0237',0
-S0238:      DB '/0238',0
-SC238:      DB '/CASE:BDOS-FILE-004-P0238',0
-S0239:      DB '/0239',0
-SC239:      DB '/CASE:BDOS-FILE-004-P0239',0
-S0240:      DB '/0240',0
-SC240:      DB '/CASE:BDOS-FILE-004-P0240',0
-S0242:      DB '/0242',0
-SC242:      DB '/CASE:BDOS-FILE-004-P0242',0
-S0243:      DB '/0243',0
-SC243:      DB '/CASE:BDOS-FILE-004-P0243',0
-S0248:      DB '/0248',0
-SC248:      DB '/CASE:BDOS-FILE-005-P0248',0
-S0249:      DB '/0249',0
-SC249:      DB '/CASE:BDOS-FILE-005-P0249',0
-S0250:      DB '/0250',0
-SC250:      DB '/CASE:BDOS-FILE-005-P0250',0
-S0251:      DB '/0251',0
-SC251:      DB '/CASE:BDOS-FILE-005-P0251',0
-S0252:      DB '/0252',0
-SC252:      DB '/CASE:BDOS-FILE-005-P0252',0
-S0254:      DB '/0254',0
-SC254:      DB '/CASE:BDOS-FILE-005-P0254',0
-S0259:      DB '/0259',0
-SC259:      DB '/CASE:BDOS-FILE-005-P0259',0
-S0260:      DB '/0260',0
-SC260:      DB '/CASE:BDOS-FILE-011-P0260',0
-S0261:      DB '/0261',0
-SC261:      DB '/CASE:BDOS-FILE-005-P0261',0
-S0262:      DB '/0262',0
-SC262:      DB '/CASE:BDOS-FILE-011-P0262',0
-S0263:      DB '/0263',0
-SC263:      DB '/CASE:BDOS-FILE-005-P0263',0
-S0264:      DB '/0264',0
-SC264:      DB '/CASE:BDOS-FILE-011-P0264',0
-S0266:      DB '/0266',0
-SC266:      DB '/CASE:BDOS-FILE-011-P0266',0
-S0267:      DB '/0267',0
-SC267:      DB '/CASE:BDOS-FILE-005-P0267',0
-S0268:      DB '/0268',0
-SC268:      DB '/CASE:BDOS-FILE-011-P0268',0
-S0269:      DB '/0269',0
-SC269:      DB '/CASE:BDOS-FILE-005-P0269',0
-S0271:      DB '/0271',0
-SC271:      DB '/CASE:BDOS-FILE-002-P0271',0
-S0272:      DB '/0272',0
-SC272:      DB '/CASE:BDOS-FILE-005-P0272',0
-S0273:      DB '/0273',0
-SC273:      DB '/CASE:BDOS-FILE-011-P0273',0
-S0274:      DB '/0274',0
-SC274:      DB '/CASE:BDOS-FILE-002-P0274',0
-S0278:      DB '/0278',0
-SC278:      DB '/CASE:BDOS-FILE-005-P0278',0
-S0279:      DB '/0279',0
-SC279:      DB '/CASE:BDOS-FILE-011-P0279',0
-S0317:      DB '/0317',0
-SC317:      DB '/CASE:BDOS-FILE-007-P0317',0
-S0318:      DB '/0318',0
-SC318:      DB '/CASE:BDOS-FILE-008-P0318',0
-S0319:      DB '/0319',0
-SC319:      DB '/CASE:BDOS-FILE-009-P0319',0
-S0320:      DB '/0320',0
-SC320:      DB '/CASE:BDOS-FILE-006-P0320',0
-S0321:      DB '/0321',0
-SC321:      DB '/CASE:BDOS-FILE-007-P0321',0
-S0322:      DB '/0322',0
-SC322:      DB '/CASE:BDOS-FILE-008-P0322',0
-S0323:      DB '/0323',0
-SC323:      DB '/CASE:BDOS-FILE-009-P0323',0
-S0324:      DB '/0324',0
-SC324:      DB '/CASE:BDOS-FILE-006-P0324',0
-S0326:      DB '/0326',0
-SC326:      DB '/CASE:BDOS-FILE-008-P0326',0
-S0327:      DB '/0327',0
-SC327:      DB '/CASE:BDOS-FILE-009-P0327',0
-S0328:      DB '/0328',0
-SC328:      DB '/CASE:BDOS-FILE-006-P0328',0
-S0329:      DB '/0329',0
-SC329:      DB '/CASE:BDOS-FILE-007-P0329',0
-S0330:      DB '/0330',0
-SC330:      DB '/CASE:BDOS-FILE-008-P0330',0
-S0331:      DB '/0331',0
-SC331:      DB '/CASE:BDOS-FILE-009-P0331',0
-S0332:      DB '/0332',0
-SC332:      DB '/CASE:BDOS-FILE-006-P0332',0
-S0333:      DB '/0333',0
-SC333:      DB '/CASE:BDOS-FILE-007-P0333',0
-S0335:      DB '/0335',0
-SC335:      DB '/CASE:BDOS-FILE-009-P0335',0
-S0336:      DB '/0336',0
-SC336:      DB '/CASE:BDOS-FILE-006-P0336',0
-S0337:      DB '/0337',0
-SC337:      DB '/CASE:BDOS-FILE-007-P0337',0
-S0338:      DB '/0338',0
-SC338:      DB '/CASE:BDOS-FILE-008-P0338',0
-S0339:      DB '/0339',0
-SC339:      DB '/CASE:BDOS-FILE-009-P0339',0
-S0340:      DB '/0340',0
-SC340:      DB '/CASE:BDOS-FILE-006-P0340',0
-S0341:      DB '/0341',0
-SC341:      DB '/CASE:BDOS-FILE-007-P0341',0
-S0342:      DB '/0342',0
-SC342:      DB '/CASE:BDOS-FILE-008-P0342',0
-S0343:      DB '/0343',0
-SC343:      DB '/CASE:BDOS-FILE-009-P0343',0
-S0344:      DB '/0344',0
-SC344:      DB '/CASE:BDOS-FILE-006-P0344',0
-S0345:      DB '/0345',0
-SC345:      DB '/CASE:BDOS-FILE-007-P0345',0
-S0346:      DB '/0346',0
-SC346:      DB '/CASE:BDOS-FILE-008-P0346',0
-S0347:      DB '/0347',0
-SC347:      DB '/CASE:BDOS-FILE-009-P0347',0
-S0348:      DB '/0348',0
-SC348:      DB '/CASE:BDOS-FILE-006-P0348',0
-S0349:      DB '/0349',0
-SC349:      DB '/CASE:BDOS-FILE-007-P0349',0
-S0350:      DB '/0350',0
-SC350:      DB '/CASE:BDOS-FILE-008-P0350',0
-S0351:      DB '/0351',0
-SC351:      DB '/CASE:BDOS-FILE-009-P0351',0
-S0368:      DB '/0368',0
-SC368:      DB '/CASE:BDOS-FILE-006-P0368',0
-S0369:      DB '/0369',0
-SC369:      DB '/CASE:BDOS-FILE-007-P0369',0
-S0550:      DB '/0550',0
-SC550:      DB '/CASE:BDOS-FILE-011-P0550',0
-S0551:      DB '/0551',0
-SC551:      DB '/CASE:BDOS-FILE-011-P0551',0
-SGROUPOPEN: DB '/GROUP:OPEN',0
-SGROUPSEQ:  DB '/GROUP:SEQREAD',0
-SGROUPCLOSE: DB '/GROUP:CLOSE',0
-SGLIST:     DB '/GROUP:LIST',0
-SGFCB:      DB '/GROUP:FCBOPEN',0
-SGREAD:     DB '/GROUP:READ',0
-SGWRITE:    DB '/GROUP:WRITE',0
-SGRANDOM:   DB '/GROUP:RANDOM',0
-SGLIFE:     DB '/GROUP:LIFECYCLE',0
-SGREQ:      DB '/GROUP:REQUIRED',0
-SGOBS:      DB '/GROUP:OBSERVATION',0
-SGMAN:      DB '/GROUP:MANUAL',0
-SFN15:      DB '/FN:15',0
-SFN16:      DB '/FN:16',0
-SFN20:      DB '/FN:20',0
-SGFN15:     DB '/GROUP:FN:15',0
-SGFN16:     DB '/GROUP:FN:16',0
-SGFN20:     DB '/GROUP:FN:20',0
-SSAFE:      DB '/SAFE',0
-SALL:       DB '/ALL',0
-SLIST:      DB '/LIST',0
-SHELP:      DB '/H',0
-SHELP2:     DB '/HELP',0
-SHRESULTS:  DB '/H:RESULTS',0
-SHPROFILES: DB '/H:PROFILES',0
-SINFO:      DB '/INFO',0
-SVER:       DB '/VER',0
-SVERSION:   DB '/VERSION',0
-SREPORT:    DB ':REPORT',0
+S0171:      DB '/0171',0                ; s0171
+SCASE0171:  DB '/CASE:BDOS-FILE-001-P0171',0 ; scase0171
+S0156:      DB '/0156',0                ; s0156
+SC156:      DB '/CASE:BDOS-FILE-002-P0156',0 ; sc156
+S0157:      DB '/0157',0                ; s0157
+SC157:      DB '/CASE:BDOS-FILE-001-P0157',0 ; sc157
+S0158:      DB '/0158',0                ; s0158
+SC158:      DB '/CASE:BDOS-FILE-002-P0158',0 ; sc158
+S0159:      DB '/0159',0                ; s0159
+SC159:      DB '/CASE:BDOS-FILE-001-P0159',0 ; sc159
+S0160:      DB '/0160',0                ; s0160
+SC160:      DB '/CASE:BDOS-FILE-002-P0160',0 ; sc160
+S0161:      DB '/0161',0                ; s0161
+SC161:      DB '/CASE:BDOS-FILE-001-P0161',0 ; sc161
+S0162:      DB '/0162',0                ; s0162
+SC162:      DB '/CASE:BDOS-FILE-002-P0162',0 ; sc162
+S0164:      DB '/0164',0                ; s0164
+SC164:      DB '/CASE:BDOS-FILE-002-P0164',0 ; sc164
+S0166:      DB '/0166',0                ; s0166
+SC166:      DB '/CASE:BDOS-FILE-002-P0166',0 ; sc166
+S0168:      DB '/0168',0                ; s0168
+SC168:      DB '/CASE:BDOS-FILE-002-P0168',0 ; sc168
+S0170:      DB '/0170',0                ; s0170
+SC170:      DB '/CASE:BDOS-FILE-002-P0170',0 ; sc170
+S0172:      DB '/0172',0                ; s0172
+SC172:      DB '/CASE:BDOS-FILE-002-P0172',0 ; sc172
+S0174:      DB '/0174',0                ; s0174
+SC174:      DB '/CASE:BDOS-FILE-002-P0174',0 ; sc174
+S0176:      DB '/0176',0                ; s0176
+SC176:      DB '/CASE:BDOS-FILE-002-P0176',0 ; sc176
+S0178:      DB '/0178',0                ; s0178
+SC178:      DB '/CASE:BDOS-FILE-002-P0178',0 ; sc178
+S0180:      DB '/0180',0                ; s0180
+SC180:      DB '/CASE:BDOS-FILE-002-P0180',0 ; sc180
+S0253:      DB '/0253',0                ; s0253
+SC253:      DB '/CASE:BDOS-FILE-005-P0253',0 ; sc253
+S0553:      DB '/0553',0                ; s0553
+SC553:      DB '/CASE:BDOS-FILE-011-P0553',0 ; sc553
+S0555:      DB '/0555',0                ; s0555
+SC555:      DB '/CASE:BDOS-FILE-011-P0555',0 ; sc555
+S0556:      DB '/0556',0                ; s0556
+SC556:      DB '/CASE:BDOS-FILE-011-P0556',0 ; sc556
+S0557:      DB '/0557',0                ; s0557
+SC557:      DB '/CASE:BDOS-FILE-011-P0557',0 ; sc557
+S0165:      DB '/0165',0                ; s0165
+SCASE165:   DB '/CASE:BDOS-FILE-001-P0165',0 ; scase165
+S0167:      DB '/0167',0                ; s0167
+SCASE167:   DB '/CASE:BDOS-FILE-001-P0167',0 ; scase167
+S0169:      DB '/0169',0                ; s0169
+SCASE0169:  DB '/CASE:BDOS-FILE-001-P0169',0 ; scase0169
+S0173:      DB '/0173',0                ; s0173
+SC173:      DB '/CASE:BDOS-FILE-001-P0173',0 ; sc173
+S0175:      DB '/0175',0                ; s0175
+SC175:      DB '/CASE:BDOS-FILE-001-P0175',0 ; sc175
+S0177:      DB '/0177',0                ; s0177
+SC177:      DB '/CASE:BDOS-FILE-001-P0177',0 ; sc177
+S0179:      DB '/0179',0                ; s0179
+SC179:      DB '/CASE:BDOS-FILE-001-P0179',0 ; sc179
+S0181:      DB '/0181',0                ; s0181
+SC181:      DB '/CASE:BDOS-FILE-001-P0181',0 ; sc181
+S0219:      DB '/0219',0                ; s0219
+SC219:      DB '/CASE:BDOS-FILE-004-P0219',0 ; sc219
+S0220:      DB '/0220',0                ; s0220
+SC220:      DB '/CASE:BDOS-FILE-004-P0220',0 ; sc220
+S0221:      DB '/0221',0                ; s0221
+SC221:      DB '/CASE:BDOS-FILE-004-P0221',0 ; sc221
+S0222:      DB '/0222',0                ; s0222
+SC222:      DB '/CASE:BDOS-FILE-004-P0222',0 ; sc222
+S0223:      DB '/0223',0                ; s0223
+SC223:      DB '/CASE:BDOS-FILE-004-P0223',0 ; sc223
+S0224:      DB '/0224',0                ; s0224
+SC224:      DB '/CASE:BDOS-FILE-004-P0224',0 ; sc224
+S0225:      DB '/0225',0                ; s0225
+SC225:      DB '/CASE:BDOS-FILE-004-P0225',0 ; sc225
+S0226:      DB '/0226',0                ; s0226
+SC226:      DB '/CASE:BDOS-FILE-004-P0226',0 ; sc226
+S0227:      DB '/0227',0                ; s0227
+SC227:      DB '/CASE:BDOS-FILE-004-P0227',0 ; sc227
+S0228:      DB '/0228',0                ; s0228
+SC228:      DB '/CASE:BDOS-FILE-004-P0228',0 ; sc228
+S0229:      DB '/0229',0                ; s0229
+SC229:      DB '/CASE:BDOS-FILE-004-P0229',0 ; sc229
+S0230:      DB '/0230',0                ; s0230
+SC230:      DB '/CASE:BDOS-FILE-004-P0230',0 ; sc230
+S0231:      DB '/0231',0                ; s0231
+SC231:      DB '/CASE:BDOS-FILE-004-P0231',0 ; sc231
+S0232:      DB '/0232',0                ; s0232
+SC232:      DB '/CASE:BDOS-FILE-004-P0232',0 ; sc232
+S0233:      DB '/0233',0                ; s0233
+SC233:      DB '/CASE:BDOS-FILE-004-P0233',0 ; sc233
+S0234:      DB '/0234',0                ; s0234
+SC234:      DB '/CASE:BDOS-FILE-004-P0234',0 ; sc234
+S0235:      DB '/0235',0                ; s0235
+SC235:      DB '/CASE:BDOS-FILE-004-P0235',0 ; sc235
+S0236:      DB '/0236',0                ; s0236
+SC236:      DB '/CASE:BDOS-FILE-004-P0236',0 ; sc236
+S0237:      DB '/0237',0                ; s0237
+SC237:      DB '/CASE:BDOS-FILE-004-P0237',0 ; sc237
+S0238:      DB '/0238',0                ; s0238
+SC238:      DB '/CASE:BDOS-FILE-004-P0238',0 ; sc238
+S0239:      DB '/0239',0                ; s0239
+SC239:      DB '/CASE:BDOS-FILE-004-P0239',0 ; sc239
+S0240:      DB '/0240',0                ; s0240
+SC240:      DB '/CASE:BDOS-FILE-004-P0240',0 ; sc240
+S0242:      DB '/0242',0                ; s0242
+SC242:      DB '/CASE:BDOS-FILE-004-P0242',0 ; sc242
+S0243:      DB '/0243',0                ; s0243
+SC243:      DB '/CASE:BDOS-FILE-004-P0243',0 ; sc243
+S0248:      DB '/0248',0                ; s0248
+SC248:      DB '/CASE:BDOS-FILE-005-P0248',0 ; sc248
+S0249:      DB '/0249',0                ; s0249
+SC249:      DB '/CASE:BDOS-FILE-005-P0249',0 ; sc249
+S0250:      DB '/0250',0                ; s0250
+SC250:      DB '/CASE:BDOS-FILE-005-P0250',0 ; sc250
+S0251:      DB '/0251',0                ; s0251
+SC251:      DB '/CASE:BDOS-FILE-005-P0251',0 ; sc251
+S0252:      DB '/0252',0                ; s0252
+SC252:      DB '/CASE:BDOS-FILE-005-P0252',0 ; sc252
+S0254:      DB '/0254',0                ; s0254
+SC254:      DB '/CASE:BDOS-FILE-005-P0254',0 ; sc254
+S0259:      DB '/0259',0                ; s0259
+SC259:      DB '/CASE:BDOS-FILE-005-P0259',0 ; sc259
+S0260:      DB '/0260',0                ; s0260
+SC260:      DB '/CASE:BDOS-FILE-011-P0260',0 ; sc260
+S0261:      DB '/0261',0                ; s0261
+SC261:      DB '/CASE:BDOS-FILE-005-P0261',0 ; sc261
+S0262:      DB '/0262',0                ; s0262
+SC262:      DB '/CASE:BDOS-FILE-011-P0262',0 ; sc262
+S0263:      DB '/0263',0                ; s0263
+SC263:      DB '/CASE:BDOS-FILE-005-P0263',0 ; sc263
+S0264:      DB '/0264',0                ; s0264
+SC264:      DB '/CASE:BDOS-FILE-011-P0264',0 ; sc264
+S0266:      DB '/0266',0                ; s0266
+SC266:      DB '/CASE:BDOS-FILE-011-P0266',0 ; sc266
+S0267:      DB '/0267',0                ; s0267
+SC267:      DB '/CASE:BDOS-FILE-005-P0267',0 ; sc267
+S0268:      DB '/0268',0                ; s0268
+SC268:      DB '/CASE:BDOS-FILE-011-P0268',0 ; sc268
+S0269:      DB '/0269',0                ; s0269
+SC269:      DB '/CASE:BDOS-FILE-005-P0269',0 ; sc269
+S0271:      DB '/0271',0                ; s0271
+SC271:      DB '/CASE:BDOS-FILE-002-P0271',0 ; sc271
+S0272:      DB '/0272',0                ; s0272
+SC272:      DB '/CASE:BDOS-FILE-005-P0272',0 ; sc272
+S0273:      DB '/0273',0                ; s0273
+SC273:      DB '/CASE:BDOS-FILE-011-P0273',0 ; sc273
+S0274:      DB '/0274',0                ; s0274
+SC274:      DB '/CASE:BDOS-FILE-002-P0274',0 ; sc274
+S0278:      DB '/0278',0                ; s0278
+SC278:      DB '/CASE:BDOS-FILE-005-P0278',0 ; sc278
+S0279:      DB '/0279',0                ; s0279
+SC279:      DB '/CASE:BDOS-FILE-011-P0279',0 ; sc279
+S0317:      DB '/0317',0                ; s0317
+SC317:      DB '/CASE:BDOS-FILE-007-P0317',0 ; sc317
+S0318:      DB '/0318',0                ; s0318
+SC318:      DB '/CASE:BDOS-FILE-008-P0318',0 ; sc318
+S0319:      DB '/0319',0                ; s0319
+SC319:      DB '/CASE:BDOS-FILE-009-P0319',0 ; sc319
+S0320:      DB '/0320',0                ; s0320
+SC320:      DB '/CASE:BDOS-FILE-006-P0320',0 ; sc320
+S0321:      DB '/0321',0                ; s0321
+SC321:      DB '/CASE:BDOS-FILE-007-P0321',0 ; sc321
+S0322:      DB '/0322',0                ; s0322
+SC322:      DB '/CASE:BDOS-FILE-008-P0322',0 ; sc322
+S0323:      DB '/0323',0                ; s0323
+SC323:      DB '/CASE:BDOS-FILE-009-P0323',0 ; sc323
+S0324:      DB '/0324',0                ; s0324
+SC324:      DB '/CASE:BDOS-FILE-006-P0324',0 ; sc324
+S0326:      DB '/0326',0                ; s0326
+SC326:      DB '/CASE:BDOS-FILE-008-P0326',0 ; sc326
+S0327:      DB '/0327',0                ; s0327
+SC327:      DB '/CASE:BDOS-FILE-009-P0327',0 ; sc327
+S0328:      DB '/0328',0                ; s0328
+SC328:      DB '/CASE:BDOS-FILE-006-P0328',0 ; sc328
+S0329:      DB '/0329',0                ; s0329
+SC329:      DB '/CASE:BDOS-FILE-007-P0329',0 ; sc329
+S0330:      DB '/0330',0                ; s0330
+SC330:      DB '/CASE:BDOS-FILE-008-P0330',0 ; sc330
+S0331:      DB '/0331',0                ; s0331
+SC331:      DB '/CASE:BDOS-FILE-009-P0331',0 ; sc331
+S0332:      DB '/0332',0                ; s0332
+SC332:      DB '/CASE:BDOS-FILE-006-P0332',0 ; sc332
+S0333:      DB '/0333',0                ; s0333
+SC333:      DB '/CASE:BDOS-FILE-007-P0333',0 ; sc333
+S0335:      DB '/0335',0                ; s0335
+SC335:      DB '/CASE:BDOS-FILE-009-P0335',0 ; sc335
+S0336:      DB '/0336',0                ; s0336
+SC336:      DB '/CASE:BDOS-FILE-006-P0336',0 ; sc336
+S0337:      DB '/0337',0                ; s0337
+SC337:      DB '/CASE:BDOS-FILE-007-P0337',0 ; sc337
+S0338:      DB '/0338',0                ; s0338
+SC338:      DB '/CASE:BDOS-FILE-008-P0338',0 ; sc338
+S0339:      DB '/0339',0                ; s0339
+SC339:      DB '/CASE:BDOS-FILE-009-P0339',0 ; sc339
+S0340:      DB '/0340',0                ; s0340
+SC340:      DB '/CASE:BDOS-FILE-006-P0340',0 ; sc340
+S0341:      DB '/0341',0                ; s0341
+SC341:      DB '/CASE:BDOS-FILE-007-P0341',0 ; sc341
+S0342:      DB '/0342',0                ; s0342
+SC342:      DB '/CASE:BDOS-FILE-008-P0342',0 ; sc342
+S0343:      DB '/0343',0                ; s0343
+SC343:      DB '/CASE:BDOS-FILE-009-P0343',0 ; sc343
+S0344:      DB '/0344',0                ; s0344
+SC344:      DB '/CASE:BDOS-FILE-006-P0344',0 ; sc344
+S0345:      DB '/0345',0                ; s0345
+SC345:      DB '/CASE:BDOS-FILE-007-P0345',0 ; sc345
+S0346:      DB '/0346',0                ; s0346
+SC346:      DB '/CASE:BDOS-FILE-008-P0346',0 ; sc346
+S0347:      DB '/0347',0                ; s0347
+SC347:      DB '/CASE:BDOS-FILE-009-P0347',0 ; sc347
+S0348:      DB '/0348',0                ; s0348
+SC348:      DB '/CASE:BDOS-FILE-006-P0348',0 ; sc348
+S0349:      DB '/0349',0                ; s0349
+SC349:      DB '/CASE:BDOS-FILE-007-P0349',0 ; sc349
+S0350:      DB '/0350',0                ; s0350
+SC350:      DB '/CASE:BDOS-FILE-008-P0350',0 ; sc350
+S0351:      DB '/0351',0                ; s0351
+SC351:      DB '/CASE:BDOS-FILE-009-P0351',0 ; sc351
+S0368:      DB '/0368',0                ; s0368
+SC368:      DB '/CASE:BDOS-FILE-006-P0368',0 ; sc368
+S0369:      DB '/0369',0                ; s0369
+SC369:      DB '/CASE:BDOS-FILE-007-P0369',0 ; sc369
+S0550:      DB '/0550',0                ; s0550
+SC550:      DB '/CASE:BDOS-FILE-011-P0550',0 ; sc550
+S0551:      DB '/0551',0                ; s0551
+SC551:      DB '/CASE:BDOS-FILE-011-P0551',0 ; sc551
+SGROUPOPEN: DB '/GROUP:OPEN',0          ; sgroupopen
+SGROUPSEQ:  DB '/GROUP:SEQREAD',0       ; sgroupseq
+SGROUPCLOSE: DB '/GROUP:CLOSE',0        ; sgroupclose
+SGLIST:     DB '/GROUP:LIST',0          ; sglist
+SGFCB:      DB '/GROUP:FCBOPEN',0       ; sgfcb
+SGREAD:     DB '/GROUP:READ',0          ; sgread
+SGWRITE:    DB '/GROUP:WRITE',0         ; sgwrite
+SGRANDOM:   DB '/GROUP:RANDOM',0        ; sgrandom
+SGLIFE:     DB '/GROUP:LIFECYCLE',0     ; sglife
+SGREQ:      DB '/GROUP:REQUIRED',0      ; sgreq
+SGOBS:      DB '/GROUP:OBSERVATION',0   ; sgobs
+SGMAN:      DB '/GROUP:MANUAL',0        ; sgman
+SFN15:      DB '/FN:15',0               ; sfn15
+SFN16:      DB '/FN:16',0               ; sfn16
+SFN20:      DB '/FN:20',0               ; sfn20
+SGFN15:     DB '/GROUP:FN:15',0         ; sgfn15
+SGFN16:     DB '/GROUP:FN:16',0         ; sgfn16
+SGFN20:     DB '/GROUP:FN:20',0         ; sgfn20
+SSAFE:      DB '/SAFE',0                ; ssafe
+SALL:       DB '/ALL',0                 ; sall
+SLIST:      DB '/LIST',0                ; slist
+SHELP:      DB '/H',0                   ; shelp
+SHELP2:     DB '/HELP',0                ; shelp2
+SHRESULTS:  DB '/H:RESULTS',0           ; shresults
+SHPROFILES: DB '/H:PROFILES',0          ; shprofiles
+SINFO:      DB '/INFO',0                ; sinfo
+SVER:       DB '/VER',0                 ; sver
+SVERSION:   DB '/VERSION',0             ; sversion
+SREPORT:    DB ':REPORT',0              ; sreport
 
-MSG_BADSEL:
+MSG_BADSEL:                             ; msg badsel
         DB 'FILETEST: unknown command. Use /HELP or /GROUP:LIST.',13,10,'$'
-MSG_LIST:
+
+MSG_LIST:                               ; msg list
         DB 13,10,'CLASS: R=Required N=Not-guaranteed S=Out-of-scope',13,10
         DB 13,10,'FCB AND OPEN (31)',13,10
         DB '  0156 R A sequential FCB occupies bytes 0-32 (33 bytes).',13,10
@@ -5877,7 +6253,8 @@ MSG_LIST:
         DB '  0282 S Exact close-time update sequence',13,10
         DB '  0284 S DRI private write machinery',13,10
         DB 13,10,'TOTAL: 93 ITEMS',13,10,'$'
-MSG_HELP:
+
+MSG_HELP:                               ; msg help
         DB 13,10,'FILETEST 0.1.0-dev37',13,10,13,10
         DB '  FILETEST /NNNN[:REPORT]   Run, explain, or report one item',13,10
         DB '  FILETEST /ALL             Run checks and report all items',13,10
@@ -5890,7 +6267,8 @@ MSG_HELP:
         DB '  FILETEST /H, /HELP        Show concise command help',13,10
         DB '  FILETEST /INFO            Show build information',13,10
         DB '  FILETEST /VER, /VERSION   Show name and version',13,10,'$'
-MSG_RESULTS:
+
+MSG_RESULTS:                            ; msg results
         DB 13,10,'FILETEST result terminology',13,10,13,10
         DB 'STATUS: P=Pass F=Fail -=Not-run O=Observed.',13,10
         DB 'PASS=completed and matched; FAIL=completed and mismatched.',13,10
@@ -5898,7 +6276,8 @@ MSG_RESULTS:
         DB 'OUT SCOPE=FILETEST cannot execute or judge the catalog item.',13,10
         DB 'OBSERVED gives compact evidence.',13,10
         DB '/NNNN:REPORT gives complete expected/observed context.',13,10,'$'
-MSG_PROFILES:
+
+MSG_PROFILES:                           ; msg profiles
         DB 13,10,'FILETEST named profiles',13,10,13,10
         DB 'FILETEST currently defines no named compatibility profiles.',13,10
         DB 'Its optional selectors choose workflows or BDOS functions;',13,10
@@ -5907,14 +6286,17 @@ MSG_PROFILES:
         DB 'mount that disk as C: for the explicit-drive checks.',13,10
         DB 'Prepare the allocation-full fixture with SCRATCH /DISK;',13,10
         DB 'mount that disk as D: for the data-full checks.',13,10,'$'
-MSG_INFO:
+
+MSG_INFO:                               ; msg info
         DB 'FILETEST 0.1.0-dev37',13,10
         DB 'Coverage: 93 implemented FILETEST catalog items',13,10
         DB 'Required: 68  Diagnostics: 16  Outside scope: 9',13,10
         DB 'Interface revision: grouped catalog and exact selectors',13,10,'$'
-MSG_VERSION:
+
+MSG_VERSION:                            ; msg version
         DB 'FILETEST 0.1.0-dev37',13,10,'$'
-MSG_GROUPS:
+
+MSG_GROUPS:                             ; msg groups
         DB 13,10,'UNIVERSAL GROUPS',13,10
         DB '  REQUIRED      Run returning REQUIRED items; list manual items',13,10
         DB '  OBSERVATION   Run NOT GUARANTEED observation items',13,10
@@ -5931,10 +6313,12 @@ MSG_GROUPS:
         DB '  FN:15         Function 15/Open-dependent items (/FN:15)',13,10
         DB '  FN:16         Function 16/Close-dependent items (/FN:16)',13,10
         DB '  FN:20         Function 20/Read-dependent items (/FN:20)',13,10,'$'
-MSG_MANUAL:
+
+MSG_MANUAL:                             ; msg manual
         DB 13,10,'MANUAL ITEMS (0)',13,10
         DB 13,10,'These terminal procedures are listed but not run.',13,10,'$'
-MSG_HEADER:
+
+MSG_HEADER:                             ; msg header
         DB 'REPORT CPM22-COMPAT-RPT 1',13,10
         DB 'SUITE_VERSION 0.1.0-dev37',13,10
         DB 'EXECUTABLE FILETEST.COM',13,10
@@ -5945,7 +6329,8 @@ MSG_HEADER:
         DB 'REQUESTED_SCOPE LEDGER:0171',13,10
         DB 'REPORT_SINK CONSOLE',13,10
         DB 'CERTIFICATION_ELIGIBLE NO',13,10,13,10,'$'
-HAGG1:
+
+HAGG1:                                  ; hagg1
         DB 'REPORT CPM22-COMPAT-RPT 1',13,10
         DB 'SUITE_VERSION 0.1.0-dev37',13,10
         DB 'EXECUTABLE FILETEST.COM',13,10
@@ -5954,56 +6339,69 @@ HAGG1:
         DB 'WORKFLOW FILESYSTEM_BRINGUP',13,10
         DB 'RUN_MODE DEVELOPMENT_SUBSET',13,10
         DB 'REQUESTED_SCOPE ','$'
-HOPEN:
+
+HOPEN:                                  ; hopen
         DB 13,10,'SELECTED_CASES 0165,0169,0171,0173,0175',13,10
         DB 'REPORT_SINK CONSOLE',13,10
         DB 'CERTIFICATION_ELIGIBLE NO',13,10,13,10,'$'
-HSEQ:
+
+HSEQ:                                   ; hseq
         DB 13,10,'SELECTED_CASES 0167,0179,0219-0243',13,10
         DB 'REPORT_SINK CONSOLE',13,10
         DB 'CERTIFICATION_ELIGIBLE NO',13,10,13,10,'$'
-HCLOSE:
+
+HCLOSE:                                 ; hclose
         DB 13,10,'SELECTED_CASES 0177,0181',13,10
         DB 'REPORT_SINK CONSOLE',13,10
         DB 'CERTIFICATION_ELIGIBLE NO',13,10,13,10,'$'
-HREADS:
+
+HREADS:                                 ; hreads
         DB 13,10,'SELECTED_CASES 0167,0173,0179,0219-0243',13,10
         DB 'REPORT_SINK CONSOLE',13,10
         DB 'CERTIFICATION_ELIGIBLE NO',13,10,13,10,'$'
-HALL:
+
+HALL:                                   ; hall
         DB 13,10,'SELECTED_CASES 0165,0167,0169,0171,0173,0175,0177,0179,0219-0243',13,10
         DB 'REPORT_SINK CONSOLE',13,10
         DB 'CERTIFICATION_ELIGIBLE NO',13,10,13,10,'$'
-HCOMPLETE:
+
+HCOMPLETE:                              ; hcomplete
         DB 13,10,'SELECTED_CASES ALL_RETURNING_IMPLEMENTED',13,10
         DB 'EXCLUDED_TERMINAL_OUTCOMES 0368,0369',13,10
         DB 'REPORT_SINK CONSOLE',13,10
         DB 'CERTIFICATION_ELIGIBLE NO',13,10,13,10,'$'
-HGFCB: DB 13,10,'SELECTED_GROUP FCBOPEN',13,10,'$'
-HGREAD:DB 13,10,'SELECTED_GROUP READ',13,10,'$'
-HGWRITE:DB 13,10,'SELECTED_GROUP WRITE',13,10,'$'
-HGRANDOM:DB 13,10,'SELECTED_GROUP RANDOM',13,10,'$'
-HGLIFE:DB 13,10,'SELECTED_GROUP LIFECYCLE',13,10,'$'
-HGREQ: DB 13,10,'SELECTED_GROUP REQUIRED',13,10,'$'
-HGOBS: DB 13,10,'SELECTED_GROUP OBSERVATION',13,10,'$'
-SKIPFCB:
+
+HGFCB: DB 13,10,'SELECTED_GROUP FCBOPEN',13,10,'$' ; hgfcb
+HGREAD:DB 13,10,'SELECTED_GROUP READ',13,10,'$' ; hgread
+HGWRITE:DB 13,10,'SELECTED_GROUP WRITE',13,10,'$' ; hgwrite
+HGRANDOM:DB 13,10,'SELECTED_GROUP RANDOM',13,10,'$' ; hgrandom
+HGLIFE:DB 13,10,'SELECTED_GROUP LIFECYCLE',13,10,'$' ; hglife
+HGREQ: DB 13,10,'SELECTED_GROUP REQUIRED',13,10,'$' ; hgreq
+HGOBS: DB 13,10,'SELECTED_GROUP OBSERVATION',13,10,'$' ; hgobs
+
+SKIPFCB:                                ; skipfcb
         DB '  0184 - S Private high-S2 flag representation',13,10
         DB '  0185 - S Unnecessary Close exact result',13,10
         DB '  0186 - S Private Open/Close algorithms',13,10,'$'
-SKIPREAD:
+
+SKIPREAD:                               ; skipread
         DB '  0218 - S Private search implementation',13,10
         DB '  0241 - S Exact-boundary EX drift',13,10
         DB '  0247 - S Private read machinery',13,10,'$'
-SKIPWRITE:
+
+SKIPWRITE:                              ; skipwrite
         DB '  0258 - S Immediate block reservation',13,10
         DB '  0282 - S Exact Close update sequence',13,10
         DB '  0284 - S Private write machinery',13,10,'$'
-SKIPRANDOM:
+
+SKIPRANDOM:                             ; skiprandom
         DB '  0353 - S Private random-seek machinery',13,10,'$'
-SKIPMAN:
+
+SKIPMAN:                                ; skipman
         DB '  0368 - R Manual: sequential read-only protection',13,10
         DB '  0369 - R Manual: random read-only protection',13,10,'$'
-SKIPALL:
+
+SKIPALL:                                ; skipall
         DB '  0184 - S Private high-S2 flag representation',13,10
         DB '  0185 - S Unnecessary Close exact result',13,10
         DB '  0186 - S Private Open/Close algorithms',13,10
@@ -6016,8 +6414,10 @@ SKIPALL:
         DB '  0353 - S Private random-seek machinery',13,10
         DB '  0368 - R Manual: sequential read-only protection',13,10
         DB '  0369 - R Manual: random read-only protection',13,10,'$'
-SKIPNONE: DB '$'
-HNEW1:
+
+SKIPNONE: DB '$'                        ; skipnone
+
+HNEW1:                                  ; hnew1
         DB 'REPORT CPM22-COMPAT-RPT 1',13,10
         DB 'SUITE_VERSION 0.1.0-dev37',13,10
         DB 'EXECUTABLE FILETEST.COM',13,10
@@ -6026,10 +6426,12 @@ HNEW1:
         DB 'WORKFLOW FILESYSTEM_BRINGUP',13,10
         DB 'RUN_MODE DEVELOPMENT_SUBSET',13,10
         DB 'REQUESTED_SCOPE ','$'
-HNEW2:
+
+HNEW2:                                  ; hnew2
         DB 13,10,'REPORT_SINK CONSOLE',13,10
         DB 'CERTIFICATION_ELIGIBLE NO',13,10,13,10,'$'
-H165MSG:
+
+H165MSG:                                ; h165msg
         DB 'REPORT CPM22-COMPAT-RPT 1',13,10
         DB 'SUITE_VERSION 0.1.0-dev37',13,10
         DB 'EXECUTABLE FILETEST.COM',13,10
@@ -6040,79 +6442,98 @@ H165MSG:
         DB 'REQUESTED_SCOPE LEDGER:0165',13,10
         DB 'REPORT_SINK CONSOLE',13,10
         DB 'CERTIFICATION_ELIGIBLE NO',13,10,13,10,'$'
-C156MSG: DB 'CASE BDOS-FILE-002-P0156',13,10,'LEDGER 0156',13,10
+
+C156MSG: DB 'CASE BDOS-FILE-002-P0156',13,10,'LEDGER 0156',13,10 ; c156msg
         DB 'PARENT BDOS-FILE-002',13,10,'MODULE_CASE FIL-001',13,10
         DB 'ORACLE OR-0156',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Sequential FCB occupies bytes 0-32 without overlap.',13,10,'$'
-C157MSG: DB 'CASE BDOS-FILE-001-P0157',13,10,'LEDGER 0157',13,10
+
+C157MSG: DB 'CASE BDOS-FILE-001-P0157',13,10,'LEDGER 0157',13,10 ; c157msg
         DB 'PARENT BDOS-FILE-001',13,10,'MODULE_CASE FIL-002',13,10
         DB 'ORACLE OR-0157',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Random FCB adds little-endian record bytes 33-35.',13,10,'$'
-C158MSG: DB 'CASE BDOS-FILE-002-P0158',13,10,'LEDGER 0158',13,10
+
+C158MSG: DB 'CASE BDOS-FILE-002-P0158',13,10,'LEDGER 0158',13,10 ; c158msg
         DB 'PARENT BDOS-FILE-002',13,10,'MODULE_CASE FIL-003',13,10
         DB 'ORACLE OR-0158',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Drive byte 0 means default; 1-16 encode A-P.',13,10,'$'
-C159MSG: DB 'CASE BDOS-FILE-001-P0159',13,10,'LEDGER 0159',13,10
+
+C159MSG: DB 'CASE BDOS-FILE-001-P0159',13,10,'LEDGER 0159',13,10 ; c159msg
         DB 'PARENT BDOS-FILE-001',13,10,'MODULE_CASE FIL-004',13,10
         DB 'ORACLE OR-0159',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Name bytes 1-8 are uppercase, clear, blank padded.',13,10,'$'
-C160MSG: DB 'CASE BDOS-FILE-002-P0160',13,10,'LEDGER 0160',13,10
+
+C160MSG: DB 'CASE BDOS-FILE-002-P0160',13,10,'LEDGER 0160',13,10 ; c160msg
         DB 'PARENT BDOS-FILE-002',13,10,'MODULE_CASE FIL-005',13,10
         DB 'ORACLE OR-0160',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Type bytes 9-11 contain uppercase DAT.',13,10,'$'
-C161MSG: DB 'CASE BDOS-FILE-001-P0161',13,10,'LEDGER 0161',13,10
+
+C161MSG: DB 'CASE BDOS-FILE-001-P0161',13,10,'LEDGER 0161',13,10 ; c161msg
         DB 'PARENT BDOS-FILE-001',13,10,'MODULE_CASE FIL-006',13,10
         DB 'ORACLE OR-0161',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Type-byte high bit carries read-only attribute.',13,10,'$'
-C162MSG: DB 'CASE BDOS-FILE-002-P0162',13,10,'LEDGER 0162',13,10
+
+C162MSG: DB 'CASE BDOS-FILE-002-P0162',13,10,'LEDGER 0162',13,10 ; c162msg
         DB 'PARENT BDOS-FILE-002',13,10,'MODULE_CASE FIL-007',13,10
         DB 'ORACLE OR-0162',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED EX occupies byte 12 and accepts range 0-31.',13,10,'$'
-C164MSG: DB 'CASE BDOS-FILE-002-P0164',13,10,'LEDGER 0164',13,10
+
+C164MSG: DB 'CASE BDOS-FILE-002-P0164',13,10,'LEDGER 0164',13,10 ; c164msg
         DB 'PARENT BDOS-FILE-002',13,10,'MODULE_CASE FIL-009',13,10
         DB 'ORACLE OR-0164',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED S2 is byte 14 and supplied zero to Open and Make.',13,10,'$'
-C166MSG: DB 'CASE BDOS-FILE-002-P0166',13,10,'LEDGER 0166',13,10
+
+C166MSG: DB 'CASE BDOS-FILE-002-P0166',13,10,'LEDGER 0166',13,10 ; c166msg
         DB 'PARENT BDOS-FILE-002',13,10,'MODULE_CASE FIL-011',13,10
         DB 'ORACLE OR-0166',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Open supplies allocation state in bytes 16-31.',13,10,'$'
-C168MSG: DB 'CASE BDOS-FILE-002-P0168',13,10,'LEDGER 0168',13,10
+
+C168MSG: DB 'CASE BDOS-FILE-002-P0168',13,10,'LEDGER 0168',13,10 ; c168msg
         DB 'PARENT BDOS-FILE-002',13,10,'MODULE_CASE FIL-013',13,10
         DB 'ORACLE OR-0168',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Function 15 is invoked with C=0Fh and FCB in DE.',13,10,'$'
-C170MSG: DB 'CASE BDOS-FILE-002-P0170',13,10,'LEDGER 0170',13,10
+
+C170MSG: DB 'CASE BDOS-FILE-002-P0170',13,10,'LEDGER 0170',13,10 ; c170msg
         DB 'PARENT BDOS-FILE-002',13,10,'MODULE_CASE FIL-015',13,10
         DB 'ORACLE OR-0170',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Successful Open returns directory code 0-3.',13,10,'$'
-C172MSG: DB 'CASE BDOS-FILE-002-P0172',13,10,'LEDGER 0172',13,10
+
+C172MSG: DB 'CASE BDOS-FILE-002-P0172',13,10,'LEDGER 0172',13,10 ; c172msg
         DB 'PARENT BDOS-FILE-002',13,10,'MODULE_CASE FIL-017',13,10
         DB 'ORACLE OR-0172',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Open supplies FCB state supporting subsequent I/O.',13,10,'$'
-C174MSG: DB 'CASE BDOS-FILE-002-P0174',13,10,'LEDGER 0174',13,10
+
+C174MSG: DB 'CASE BDOS-FILE-002-P0174',13,10,'LEDGER 0174',13,10 ; c174msg
         DB 'PARENT BDOS-FILE-002',13,10,'MODULE_CASE FIL-019',13,10
         DB 'ORACLE OR-0174',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Question-mark wildcard matches one identity character.',13,10,'$'
-C176MSG: DB 'CASE BDOS-FILE-002-P0176',13,10,'LEDGER 0176',13,10
+
+C176MSG: DB 'CASE BDOS-FILE-002-P0176',13,10,'LEDGER 0176',13,10 ; c176msg
         DB 'PARENT BDOS-FILE-002',13,10,'MODULE_CASE FIL-021',13,10
         DB 'ORACLE OR-0176',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Caller-supplied CR zero selects first sequential record.',13,10,'$'
-C178MSG: DB 'CASE BDOS-FILE-002-P0178',13,10,'LEDGER 0178',13,10
+
+C178MSG: DB 'CASE BDOS-FILE-002-P0178',13,10,'LEDGER 0178',13,10 ; c178msg
         DB 'PARENT BDOS-FILE-002',13,10,'MODULE_CASE FIL-023',13,10
         DB 'ORACLE OR-0178',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Close after write persists new directory state.',13,10,'$'
-C180MSG: DB 'CASE BDOS-FILE-002-P0180',13,10,'LEDGER 0180',13,10
+
+C180MSG: DB 'CASE BDOS-FILE-002-P0180',13,10,'LEDGER 0180',13,10 ; c180msg
         DB 'PARENT BDOS-FILE-002',13,10,'MODULE_CASE FIL-025',13,10
         DB 'ORACLE OR-0180',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Successful Close returns directory code 0-3.',13,10,'$'
-C253MSG: DB 'CASE BDOS-FILE-005-P0253',13,10,'LEDGER 0253',13,10
+
+C253MSG: DB 'CASE BDOS-FILE-005-P0253',13,10,'LEDGER 0253',13,10 ; c253msg
         DB 'PARENT BDOS-FILE-005',13,10,'MODULE_CASE FIL-066',13,10
         DB 'ORACLE OR-0253',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Make on controlled directory-full drive returns FFh.',13,10,'$'
-C553MSG: DB '$'
-C555MSG: DB '$'
-C556MSG: DB '$'
-C557MSG: DB '$'
-C165MSG:
+
+C553MSG: DB '$'                         ; c553msg
+C555MSG: DB '$'                         ; c555msg
+C556MSG: DB '$'                         ; c556msg
+C557MSG: DB '$'                         ; c557msg
+
+C165MSG:                                ; c165msg
         DB 'CASE BDOS-FILE-001-P0165',13,10
         DB 'LEDGER 0165',13,10
         DB 'PARENT BDOS-FILE-001',13,10
@@ -6120,7 +6541,8 @@ C165MSG:
         DB 'ORACLE OR-0165',13,10
         DB 'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED FCB byte 15 holds extent RC in documented range 0-128.',13,10,'$'
-H169MSG:
+
+H169MSG:                                ; h169msg
         DB 'REPORT CPM22-COMPAT-RPT 1',13,10
         DB 'SUITE_VERSION 0.1.0-dev37',13,10
         DB 'EXECUTABLE FILETEST.COM',13,10
@@ -6131,7 +6553,8 @@ H169MSG:
         DB 'REQUESTED_SCOPE LEDGER:0169',13,10
         DB 'REPORT_SINK CONSOLE',13,10
         DB 'CERTIFICATION_ELIGIBLE NO',13,10,13,10,'$'
-C169MSG:
+
+C169MSG:                                ; c169msg
         DB 'CASE BDOS-FILE-001-P0169',13,10
         DB 'LEDGER 0169',13,10
         DB 'PARENT BDOS-FILE-001',13,10
@@ -6139,359 +6562,425 @@ C169MSG:
         DB 'ORACLE OR-0169',13,10
         DB 'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Existing files open on current and explicit drives; current drive unchanged.',13,10,'$'
-C167MSG:
+
+C167MSG:                                ; c167msg
         DB 'CASE BDOS-FILE-001-P0167',13,10,'LEDGER 0167',13,10
         DB 'PARENT BDOS-FILE-001',13,10,'MODULE_CASE SEQ-001',13,10
         DB 'ORACLE OR-0167',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED CR at FCB byte 32 progresses 1,2,3 with marked records.',13,10,'$'
-C173MSG:
+
+C173MSG:                                ; c173msg
         DB 'CASE BDOS-FILE-001-P0173',13,10,'LEDGER 0173',13,10
         DB 'PARENT BDOS-FILE-001',13,10,'MODULE_CASE OPE-005',13,10
         DB 'ORACLE OR-0173',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Successful Function 15 precedes access to marked record.',13,10,'$'
-C175MSG:
+
+C175MSG:                                ; c175msg
         DB 'CASE BDOS-FILE-001-P0175',13,10,'LEDGER 0175',13,10
         DB 'PARENT BDOS-FILE-001',13,10,'MODULE_CASE OPE-006',13,10
         DB 'ORACLE OR-0175',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Wildcard Open activates first deterministic BTWILD match.',13,10,'$'
-C177MSG:
+
+C177MSG:                                ; c177msg
         DB 'CASE BDOS-FILE-001-P0177',13,10,'LEDGER 0177',13,10
         DB 'PARENT BDOS-FILE-001',13,10,'MODULE_CASE CLO-001',13,10
         DB 'ORACLE OR-0177',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Function 16 closes a successfully activated unchanged FCB.',13,10,'$'
-C179MSG:
+
+C179MSG:                                ; c179msg
         DB 'CASE BDOS-FILE-001-P0179',13,10,'LEDGER 0179',13,10
         DB 'PARENT BDOS-FILE-001',13,10,'MODULE_CASE SEQ-002',13,10
         DB 'ORACLE OR-0179',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Marked record reads successfully without Function 16.',13,10,'$'
-C181MSG:
+
+C181MSG:                                ; c181msg
         DB 'CASE BDOS-FILE-001-P0181',13,10,'LEDGER 0181',13,10
         DB 'PARENT BDOS-FILE-001',13,10,'MODULE_CASE CLO-002',13,10
         DB 'ORACLE OR-0181',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Dirty FCB with absent BTMISS.DAT returns FFh from Function 16.',13,10,'$'
-C219MSG:
+
+C219MSG:                                ; c219msg
         DB 'CASE BDOS-FILE-004-P0219',13,10,'LEDGER 0219',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-004',13,10
         DB 'ORACLE OR-0219',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED DE-selected activated FCB controls the marked read.',13,10,'$'
-C220MSG:
+
+C220MSG:                                ; c220msg
         DB 'CASE BDOS-FILE-004-P0220',13,10,'LEDGER 0220',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-005',13,10
         DB 'ORACLE OR-0220',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Successful Function 15 is recorded before Function 20.',13,10,'$'
-C221MSG:
+
+C221MSG:                                ; c221msg
         DB 'CASE BDOS-FILE-004-P0221',13,10,'LEDGER 0221',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-006',13,10
         DB 'ORACLE OR-0221',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Three successive records have distinct 000,001,002 markers.',13,10,'$'
-C222MSG:
+
+C222MSG:                                ; c222msg
         DB 'CASE BDOS-FILE-004-P0222',13,10,'LEDGER 0222',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-007',13,10
         DB 'ORACLE OR-0222',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Allocated record read returns 00h and all 128 bytes match.',13,10,'$'
-C223MSG:
+
+C223MSG:                                ; c223msg
         DB 'CASE BDOS-FILE-004-P0223',13,10,'LEDGER 0223',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-008',13,10
         DB 'ORACLE OR-0223',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Complete 128-byte DMA transfer preserves 16-byte guards.',13,10,'$'
-C224MSG:
+
+C224MSG:                                ; c224msg
         DB 'CASE BDOS-FILE-004-P0224',13,10,'LEDGER 0224',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-009',13,10
         DB 'ORACLE OR-0224',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Alternate DMA changes while 0080h and guards remain sentinels.',13,10,'$'
-C225MSG:
+
+C225MSG:                                ; c225msg
         DB 'CASE BDOS-FILE-004-P0225',13,10,'LEDGER 0225',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-010',13,10
         DB 'ORACLE OR-0225',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Function 20 transfers a full record, not a byte-length value.',13,10,'$'
-C226MSG:
+
+C226MSG:                                ; c226msg
         DB 'CASE BDOS-FILE-004-P0226',13,10,'LEDGER 0226',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-011',13,10
         DB 'ORACLE OR-0226',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Consecutive reads advance to distinct 000 and 001 markers.',13,10,'$'
-C227MSG:
+
+C227MSG:                                ; c227msg
         DB 'CASE BDOS-FILE-004-P0227',13,10,'LEDGER 0227',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-012',13,10
         DB 'ORACLE OR-0227',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED CR equals 1,2,3 after three successful calls from CR=0.',13,10,'$'
-C228MSG:
+
+C228MSG:                                ; c228msg
         DB 'CASE BDOS-FILE-004-P0228',13,10,'LEDGER 0228',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-013',13,10
         DB 'ORACLE OR-0228',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED 128th successful read leaves CR=80h and record 127 marker.',13,10,'$'
-C229MSG:
+
+C229MSG:                                ; c229msg
         DB 'CASE BDOS-FILE-004-P0229',13,10,'LEDGER 0229',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-014',13,10
         DB 'ORACLE OR-0229',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Consecutive success and markers across records 127 and 128.',13,10,'$'
-C230MSG:
+
+C230MSG:                                ; c230msg
         DB 'CASE BDOS-FILE-004-P0230',13,10,'LEDGER 0230',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-015',13,10
         DB 'ORACLE OR-0230',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED First record in new extent leaves EX=01h and CR=01h.',13,10,'$'
-C231MSG:
+
+C231MSG:                                ; c231msg
         DB 'CASE BDOS-FILE-004-P0231',13,10,'LEDGER 0231',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-016',13,10
         DB 'ORACLE OR-0231',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED EX/RC/allocation remain coherent through record 129.',13,10,'$'
-C232MSG:
+
+C232MSG:                                ; c232msg
         DB 'CASE BDOS-FILE-004-P0232',13,10,'LEDGER 0232',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-017',13,10
         DB 'ORACLE OR-0232',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED First read beyond controlled one-record file is nonzero.',13,10,'$'
-C233MSG:
+
+C233MSG:                                ; c233msg
         DB 'CASE BDOS-FILE-004-P0233',13,10,'LEDGER 0233',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-018',13,10
         DB 'ORACLE OR-0233',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED EOF result is nonzero; no implementation-specific literal.',13,10,'$'
-C234MSG:
+
+C234MSG:                                ; c234msg
         DB 'CASE BDOS-FILE-004-P0234',13,10,'LEDGER 0234',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-019',13,10
         DB 'ORACLE OR-0234',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Empty file opens; first read is nonzero with guards intact.',13,10,'$'
-C235MSG:
+
+C235MSG:                                ; c235msg
         DB 'CASE BDOS-FILE-004-P0235',13,10,'LEDGER 0235',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-020',13,10
         DB 'ORACLE OR-0235',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Partial final extent gives two successes then nonzero EOF.',13,10,'$'
-C236MSG:
+
+C236MSG:                                ; c236msg
         DB 'CASE BDOS-FILE-004-P0236',13,10,'LEDGER 0236',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-021',13,10
         DB 'ORACLE OR-0236',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Exact 128-record boundary is followed by nonzero EOF.',13,10,'$'
-C237MSG:
+
+C237MSG:                                ; c237msg
         DB 'CASE BDOS-FILE-004-P0237',13,10,'LEDGER 0237',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-022',13,10
         DB 'ORACLE OR-0237',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Two consecutive reads after exhaustion are both nonzero.',13,10,'$'
-C238MSG:
+
+C238MSG:                                ; c238msg
         DB 'CASE BDOS-FILE-004-P0238',13,10,'LEDGER 0238',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-023',13,10
         DB 'ORACLE OR-0238',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Failed-read DMA is observed without literal-content rule.',13,10,'$'
-C239MSG:
+
+C239MSG:                                ; c239msg
         DB 'CASE BDOS-FILE-004-P0239',13,10,'LEDGER 0239',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-024',13,10
         DB 'ORACLE OR-0239',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Working FCB changes coherently through three reads.',13,10,'$'
-C240MSG:
+
+C240MSG:                                ; c240msg
         DB 'CASE BDOS-FILE-004-P0240',13,10,'LEDGER 0240',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-025',13,10
         DB 'ORACLE OR-0240',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Failed-read FCB is observed without byte-identity rule.',13,10,'$'
-C242MSG:
+
+C242MSG:                                ; c242msg
         DB 'CASE BDOS-FILE-004-P0242',13,10,'LEDGER 0242',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-027',13,10
         DB 'ORACLE OR-0242',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Explicit-drive marked read succeeds; default unchanged.',13,10,'$'
-C243MSG:
+
+C243MSG:                                ; c243msg
         DB 'CASE BDOS-FILE-004-P0243',13,10,'LEDGER 0243',13,10
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE SEQ-028',13,10
         DB 'ORACLE OR-0243',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Read-only file opens and its marked record reads.',13,10,'$'
-C248MSG:
+
+C248MSG:                                ; c248msg
         DB 'CASE BDOS-FILE-005-P0248',13,10,'LEDGER 0248',13,10
         DB 'PARENT BDOS-FILE-005',13,10,'MODULE_CASE MAK-001',13,10
         DB 'ORACLE OR-0248',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Function 22 uses DE-selected FCB and returns success.',13,10,'$'
-C249MSG:
+
+C249MSG:                                ; c249msg
         DB 'CASE BDOS-FILE-005-P0249',13,10,'LEDGER 0249',13,10
         DB 'PARENT BDOS-FILE-005',13,10,'MODULE_CASE MAK-002',13,10
         DB 'ORACLE OR-0249',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Reserved name is absent before Make and creation succeeds.',13,10,'$'
-C250MSG:
+
+C250MSG:                                ; c250msg
         DB 'CASE BDOS-FILE-005-P0250',13,10,'LEDGER 0250',13,10
         DB 'PARENT BDOS-FILE-005',13,10,'MODULE_CASE MAK-003',13,10
         DB 'ORACLE OR-0250',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED New empty file reopens and its first read is nonzero.',13,10,'$'
-C251MSG:
+
+C251MSG:                                ; c251msg
         DB 'CASE BDOS-FILE-005-P0251',13,10,'LEDGER 0251',13,10
         DB 'PARENT BDOS-FILE-005',13,10,'MODULE_CASE MAK-004',13,10
         DB 'ORACLE OR-0251',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Successful Make activates the guarded working FCB.',13,10,'$'
-C252MSG:
+
+C252MSG:                                ; c252msg
         DB 'CASE BDOS-FILE-005-P0252',13,10,'LEDGER 0252',13,10
         DB 'PARENT BDOS-FILE-005',13,10,'MODULE_CASE MAK-005',13,10
         DB 'ORACLE OR-0252',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Make of unique reserved name returns a non-FF result.',13,10,'$'
-C254MSG:
+
+C254MSG:                                ; c254msg
         DB 'CASE BDOS-FILE-005-P0254',13,10,'LEDGER 0254',13,10
         DB 'PARENT BDOS-FILE-005',13,10,'MODULE_CASE MAK-007',13,10
         DB 'ORACLE OR-0254',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Newly made empty file is immediately open-visible.',13,10,'$'
-C259MSG:
+
+C259MSG:                                ; c259msg
         DB 'CASE BDOS-FILE-005-P0259',13,10,'LEDGER 0259',13,10
         DB 'PARENT BDOS-FILE-005',13,10,'MODULE_CASE WRI-001',13,10
         DB 'ORACLE OR-0259',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Function 21 writes through the DE-selected activated FCB.',13,10,'$'
-C260MSG:
+
+C260MSG:                                ; c260msg
         DB 'CASE BDOS-FILE-011-P0260',13,10,'LEDGER 0260',13,10
         DB 'PARENT BDOS-FILE-011',13,10,'MODULE_CASE WRI-002',13,10
         DB 'ORACLE OR-0260',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Sequential write follows successful FCB activation.',13,10,'$'
-C261MSG:
+
+C261MSG:                                ; c261msg
         DB 'CASE BDOS-FILE-005-P0261',13,10,'LEDGER 0261',13,10
         DB 'PARENT BDOS-FILE-005',13,10,'MODULE_CASE WRI-003',13,10
         DB 'ORACLE OR-0261',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Write at CR zero succeeds and advances CR to one.',13,10,'$'
-C262MSG:
+
+C262MSG:                                ; c262msg
         DB 'CASE BDOS-FILE-011-P0262',13,10,'LEDGER 0262',13,10
         DB 'PARENT BDOS-FILE-011',13,10,'MODULE_CASE WRI-004',13,10
         DB 'ORACLE OR-0262',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Successful sequential write returns 00h.',13,10,'$'
-C263MSG:
+
+C263MSG:                                ; c263msg
         DB 'CASE BDOS-FILE-005-P0263',13,10,'LEDGER 0263',13,10
         DB 'PARENT BDOS-FILE-005',13,10,'MODULE_CASE WRI-005',13,10
         DB 'ORACLE OR-0263',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Write persists one complete 128-byte record.',13,10,'$'
-C264MSG:
+
+C264MSG:                                ; c264msg
         DB 'CASE BDOS-FILE-011-P0264',13,10,'LEDGER 0264',13,10
         DB 'PARENT BDOS-FILE-011',13,10,'MODULE_CASE WRI-006',13,10
         DB 'ORACLE OR-0264',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Current DMA supplies all bytes of the written record.',13,10,'$'
-C266MSG:
+
+C266MSG:                                ; c266msg
         DB 'CASE BDOS-FILE-011-P0266',13,10,'LEDGER 0266',13,10
         DB 'PARENT BDOS-FILE-011',13,10,'MODULE_CASE WRI-008',13,10
         DB 'ORACLE OR-0266',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Successful write advances CR from zero to one.',13,10,'$'
-C267MSG:
+
+C267MSG:                                ; c267msg
         DB 'CASE BDOS-FILE-005-P0267',13,10,'LEDGER 0267',13,10
         DB 'PARENT BDOS-FILE-005',13,10,'MODULE_CASE WRI-009',13,10
         DB 'ORACLE OR-0267',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED First write extends the extent record count.',13,10,'$'
-C268MSG:
+
+C268MSG:                                ; c268msg
         DB 'CASE BDOS-FILE-011-P0268',13,10,'LEDGER 0268',13,10
         DB 'PARENT BDOS-FILE-011',13,10,'MODULE_CASE WRI-010',13,10
         DB 'ORACLE OR-0268',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Rewriting CR zero replaces the existing record.',13,10,'$'
-C269MSG:
+
+C269MSG:                                ; c269msg
         DB 'CASE BDOS-FILE-005-P0269',13,10,'LEDGER 0269',13,10
         DB 'PARENT BDOS-FILE-005',13,10,'MODULE_CASE WRI-011',13,10
         DB 'ORACLE OR-0269',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED First write allocates storage on demand and persists.',13,10,'$'
-C271MSG:
+
+C271MSG:                                ; c271msg
         DB 'CASE BDOS-FILE-002-P0271',13,10,'LEDGER 0271',13,10
         DB 'PARENT BDOS-FILE-002',13,10,'MODULE_CASE WRI-013',13,10
         DB 'ORACLE OR-0271',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Sequential writing crosses automatically into extent one.',13,10,'$'
-C272MSG:
+
+C272MSG:                                ; c272msg
         DB 'CASE BDOS-FILE-005-P0272',13,10,'LEDGER 0272',13,10
         DB 'PARENT BDOS-FILE-005',13,10,'MODULE_CASE WRI-014',13,10
         DB 'ORACLE OR-0272',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Successful transition leaves EX=01h and CR=01h.',13,10,'$'
-C273MSG:
+
+C273MSG:                                ; c273msg
         DB 'CASE BDOS-FILE-011-P0273',13,10,'LEDGER 0273',13,10
         DB 'PARENT BDOS-FILE-011',13,10,'MODULE_CASE WRI-015',13,10
         DB 'ORACLE OR-0273',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Full record at the extent transition remains successful.',13,10,'$'
-C274MSG:
+
+C274MSG:                                ; c274msg
         DB 'CASE BDOS-FILE-002-P0274',13,10,'LEDGER 0274',13,10
         DB 'PARENT BDOS-FILE-002',13,10,'MODULE_CASE WRI-016',13,10
         DB 'ORACLE OR-0274',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Write beyond maximum sequential extent is nonzero.',13,10,'$'
-C278MSG:
+
+C278MSG:                                ; c278msg
         DB 'CASE BDOS-FILE-005-P0278',13,10,'LEDGER 0278',13,10
         DB 'PARENT BDOS-FILE-005',13,10,'MODULE_CASE WRI-020',13,10
         DB 'ORACLE OR-0278',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Explicit-drive Make/write succeeds; default unchanged.',13,10,'$'
-C279MSG:
+
+C279MSG:                                ; c279msg
         DB 'CASE BDOS-FILE-011-P0279',13,10,'LEDGER 0279',13,10
         DB 'PARENT BDOS-FILE-011',13,10,'MODULE_CASE WRI-021',13,10
         DB 'ORACLE OR-0279',13,10,'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Close commits written metadata for reopen and read.',13,10,'$'
-C317MSG: DB '$'
-C318MSG: DB '$'
-C319MSG: DB '$'
-C320MSG: DB '$'
-C321MSG: DB '$'
-C322MSG: DB '$'
-C323MSG: DB '$'
-C324MSG: DB '$'
-C326MSG: DB '$'
-C327MSG: DB '$'
-C328MSG: DB '$'
-C329MSG: DB '$'
-C330MSG: DB '$'
-C331MSG: DB '$'
-C332MSG: DB '$'
-C333MSG: DB '$'
-C335MSG: DB '$'
-C336MSG: DB '$'
-C337MSG: DB '$'
-C338MSG: DB '$'
-C339MSG: DB '$'
-C340MSG: DB '$'
-C341MSG: DB '$'
-C342MSG: DB '$'
-C343MSG: DB '$'
-C344MSG: DB '$'
-C345MSG: DB '$'
-C346MSG: DB '$'
-C347MSG: DB '$'
-C348MSG: DB '$'
-C349MSG: DB '$'
-C350MSG: DB '$'
-C351MSG: DB '$'
-C368MSG: DB '$'
-C369MSG: DB '$'
-C550MSG: DB '$'
-C551MSG: DB '$'
-C163MSG: DB 'CASE BDOS-FILE-001-P0163',13,10,'LEDGER 0163',13,10
+
+C317MSG: DB '$'                         ; c317msg
+C318MSG: DB '$'                         ; c318msg
+C319MSG: DB '$'                         ; c319msg
+C320MSG: DB '$'                         ; c320msg
+C321MSG: DB '$'                         ; c321msg
+C322MSG: DB '$'                         ; c322msg
+C323MSG: DB '$'                         ; c323msg
+C324MSG: DB '$'                         ; c324msg
+C326MSG: DB '$'                         ; c326msg
+C327MSG: DB '$'                         ; c327msg
+C328MSG: DB '$'                         ; c328msg
+C329MSG: DB '$'                         ; c329msg
+C330MSG: DB '$'                         ; c330msg
+C331MSG: DB '$'                         ; c331msg
+C332MSG: DB '$'                         ; c332msg
+C333MSG: DB '$'                         ; c333msg
+C335MSG: DB '$'                         ; c335msg
+C336MSG: DB '$'                         ; c336msg
+C337MSG: DB '$'                         ; c337msg
+C338MSG: DB '$'                         ; c338msg
+C339MSG: DB '$'                         ; c339msg
+C340MSG: DB '$'                         ; c340msg
+C341MSG: DB '$'                         ; c341msg
+C342MSG: DB '$'                         ; c342msg
+C343MSG: DB '$'                         ; c343msg
+C344MSG: DB '$'                         ; c344msg
+C345MSG: DB '$'                         ; c345msg
+C346MSG: DB '$'                         ; c346msg
+C347MSG: DB '$'                         ; c347msg
+C348MSG: DB '$'                         ; c348msg
+C349MSG: DB '$'                         ; c349msg
+C350MSG: DB '$'                         ; c350msg
+C351MSG: DB '$'                         ; c351msg
+C368MSG: DB '$'                         ; c368msg
+C369MSG: DB '$'                         ; c369msg
+C550MSG: DB '$'                         ; c550msg
+C551MSG: DB '$'                         ; c551msg
+C163MSG: DB 'CASE BDOS-FILE-001-P0163',13,10,'LEDGER 0163',13,10 ; c163msg
         DB 'PARENT BDOS-FILE-001',13,10,'MODULE_CASE FIL-008',13,10
         DB 'ORACLE OR-0163',13,10,'CLASSIFICATION NOT_GUARANTEED',13,10
         DB 'EXPECTED Diagnostic only: observe reserved FCB byte 13 after Open.',13,10,'$'
-C182MSG: DB 'CASE BDOS-FILE-002-P0182',13,10,'LEDGER 0182',13,10
+
+C182MSG: DB 'CASE BDOS-FILE-002-P0182',13,10,'LEDGER 0182',13,10 ; c182msg
         DB 'PARENT BDOS-FILE-002',13,10,'MODULE_CASE FIL-027',13,10
         DB 'ORACLE OR-0182',13,10,'CLASSIFICATION NOT_GUARANTEED',13,10
         DB 'EXPECTED Diagnostic only: observe format-dependent allocation state.',13,10,'$'
-C183MSG: DB 'CASE BDOS-FILE-001-P0183',13,10,'LEDGER 0183',13,10
+
+C183MSG: DB 'CASE BDOS-FILE-001-P0183',13,10,'LEDGER 0183',13,10 ; c183msg
         DB 'PARENT BDOS-FILE-001',13,10,'MODULE_CASE FIL-028',13,10
         DB 'ORACLE OR-0183',13,10,'CLASSIFICATION NOT_GUARANTEED',13,10
         DB 'EXPECTED Diagnostic only: observe FCB state after failed Open.',13,10,'$'
-C244MSG: DB 'CASE BDOS-FILE-004-P0244',13,10,'LEDGER 0244',13,10
+
+C244MSG: DB 'CASE BDOS-FILE-004-P0244',13,10,'LEDGER 0244',13,10 ; c244msg
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE FIL-058',13,10
         DB 'ORACLE OR-0244',13,10,'CLASSIFICATION NOT_GUARANTEED',13,10
         DB 'EXPECTED Diagnostic only: observe sequential read on unopened FCB.',13,10,'$'
-C245MSG: DB 'CASE BDOS-FILE-004-P0245',13,10,'LEDGER 0245',13,10
+
+C245MSG: DB 'CASE BDOS-FILE-004-P0245',13,10,'LEDGER 0245',13,10 ; c245msg
         DB 'PARENT BDOS-FILE-004',13,10,'MODULE_CASE FIL-059',13,10
         DB 'ORACLE OR-0245',13,10,'CLASSIFICATION NOT_GUARANTEED',13,10
         DB 'EXPECTED Diagnostic only: observe invalid/unactivated FCB result.',13,10,'$'
-C256MSG: DB 'CASE BDOS-FILE-011-P0256',13,10,'LEDGER 0256',13,10
+
+C256MSG: DB 'CASE BDOS-FILE-011-P0256',13,10,'LEDGER 0256',13,10 ; c256msg
         DB 'PARENT BDOS-FILE-011',13,10,'MODULE_CASE FIL-068',13,10
         DB 'ORACLE OR-0256',13,10,'CLASSIFICATION NOT_GUARANTEED',13,10
         DB 'EXPECTED Diagnostic only: observe Make on an existing name.',13,10,'$'
-C257MSG: DB 'CASE BDOS-FILE-005-P0257',13,10,'LEDGER 0257',13,10
+
+C257MSG: DB 'CASE BDOS-FILE-005-P0257',13,10,'LEDGER 0257',13,10 ; c257msg
         DB 'PARENT BDOS-FILE-005',13,10,'MODULE_CASE FIL-069',13,10
         DB 'ORACLE OR-0257',13,10,'CLASSIFICATION NOT_GUARANTEED',13,10
         DB 'EXPECTED Diagnostic only: observe Make with ambiguous name.',13,10,'$'
-C265MSG: DB 'CASE BDOS-FILE-005-P0265',13,10,'LEDGER 0265',13,10
+
+C265MSG: DB 'CASE BDOS-FILE-005-P0265',13,10,'LEDGER 0265',13,10 ; c265msg
         DB 'PARENT BDOS-FILE-005',13,10,'MODULE_CASE FIL-077',13,10
         DB 'ORACLE OR-0265',13,10,'CLASSIFICATION NOT_GUARANTEED',13,10
         DB 'EXPECTED Diagnostic only: observe final byte of partial record.',13,10,'$'
-C270MSG: DB 'CASE BDOS-FILE-011-P0270',13,10,'LEDGER 0270',13,10
+
+C270MSG: DB 'CASE BDOS-FILE-011-P0270',13,10,'LEDGER 0270',13,10 ; c270msg
         DB 'PARENT BDOS-FILE-011',13,10,'MODULE_CASE FIL-082',13,10
         DB 'ORACLE OR-0270',13,10,'CLASSIFICATION NOT_GUARANTEED',13,10
         DB 'EXPECTED Diagnostic only: observe allocation chosen for new file.',13,10,'$'
-C277MSG: DB 'CASE BDOS-FILE-002-P0277',13,10,'LEDGER 0277',13,10
+
+C277MSG: DB 'CASE BDOS-FILE-002-P0277',13,10,'LEDGER 0277',13,10 ; c277msg
         DB 'PARENT BDOS-FILE-002',13,10,'MODULE_CASE FIL-087',13,10
         DB 'ORACLE OR-0277',13,10,'CLASSIFICATION NOT_GUARANTEED',13,10
         DB 'EXPECTED Diagnostic only: observe write through unactivated FCB.',13,10,'$'
-C280MSG: DB 'CASE BDOS-FILE-002-P0280',13,10,'LEDGER 0280',13,10
+
+C280MSG: DB 'CASE BDOS-FILE-002-P0280',13,10,'LEDGER 0280',13,10 ; c280msg
         DB 'PARENT BDOS-FILE-002',13,10,'MODULE_CASE FIL-090',13,10
         DB 'ORACLE OR-0280',13,10,'CLASSIFICATION NOT_GUARANTEED',13,10
         DB 'EXPECTED Diagnostic only: observe dirty working FCB before cleanup.',13,10,'$'
-C281MSG: DB 'CASE BDOS-FILE-005-P0281',13,10,'LEDGER 0281',13,10
+
+C281MSG: DB 'CASE BDOS-FILE-005-P0281',13,10,'LEDGER 0281',13,10 ; c281msg
         DB 'PARENT BDOS-FILE-005',13,10,'MODULE_CASE FIL-091',13,10
         DB 'ORACLE OR-0281',13,10,'CLASSIFICATION NOT_GUARANTEED',13,10
         DB 'EXPECTED Diagnostic only: observe pre-Close working metadata.',13,10,'$'
-C325MSG: DB '$'
-C334MSG: DB '$'
-C352MSG: DB '$'
-C372MSG: DB '$'
-C388MSG: DB '$'
-C552MSG: DB '$'
-C554MSG: DB '$'
-MSG_CASE_BEGIN:
+
+C325MSG: DB '$'                         ; c325msg
+C334MSG: DB '$'                         ; c334msg
+C352MSG: DB '$'                         ; c352msg
+C372MSG: DB '$'                         ; c372msg
+C388MSG: DB '$'                         ; c388msg
+C552MSG: DB '$'                         ; c552msg
+C554MSG: DB '$'                         ; c554msg
+
+MSG_CASE_BEGIN:                         ; msg case begin
         DB 'CASE BDOS-FILE-001-P0171',13,10
         DB 'LEDGER 0171',13,10
         DB 'PARENT BDOS-FILE-001',13,10
@@ -6499,199 +6988,223 @@ MSG_CASE_BEGIN:
         DB 'ORACLE OR-0171',13,10
         DB 'ORACLE_VERSION 1.0.0',13,10
         DB 'EXPECTED Function 15 on absent BTMISS.DAT returns FFh in A.',13,10,'$'
-MSG_PASS:       DB 'RESULT PASS',13,10,'$'
-MSG_FAIL:       DB 'RESULT FAIL',13,10,'$'
-MSG_ERROR:      DB 'RESULT ERROR',13,10,'$'
-MSG_DOBS:       DB 'RESULT OBSERVATION',13,10,'$'
-CTITLE:         DB 13,10,'FILETEST',13,10
+
+MSG_PASS:       DB 'RESULT PASS',13,10,'$' ; msg pass
+MSG_FAIL:       DB 'RESULT FAIL',13,10,'$' ; msg fail
+MSG_ERROR:      DB 'RESULT ERROR',13,10,'$' ; msg error
+MSG_DOBS:       DB 'RESULT OBSERVATION',13,10,'$' ; msg dobs
+CTITLE:         DB 13,10,'FILETEST',13,10 ; ctitle
                 DB 'STATUS: P=Pass F=Fail -=Not-run O=Observed',13,10
                 DB 'CLASS:  R=Required N=Not-guaranteed S=Out-of-scope',13,10
                 DB 'ITEM  S  C  OBSERVED',13,10
                 DB '----  -  -  ----------------------------------------------------------',13,10,'$'
-CSEP:           DB '  ','$'
-CDREQ:          DB 'R  ','$'
-CDNOTG:         DB 'N  ','$'
-CSFVALUE:       DB 'Result=','$'
+
+CSEP:           DB '  ','$'             ; csep
+CDREQ:          DB 'R  ','$'            ; cdreq
+CDNOTG:         DB 'N  ','$'            ; cdnotg
+CSFVALUE:       DB 'Result=','$'        ; csfvalue
 CS2VALUE:       DB '; FCB/state=','$'
-CSFOPEN:        DB 'Prereq/Open=','$'
+CSFOPEN:        DB 'Prereq/Open=','$'   ; csfopen
 CS2OPEN:        DB '; FCB/I/O state=','$'
-CSFREAD:        DB 'Prereq/Open=','$'
+CSFREAD:        DB 'Prereq/Open=','$'   ; csfread
 CS2READ:        DB '; read/state=','$'
-CSFWRITE:       DB 'Prereq=','$'
+CSFWRITE:       DB 'Prereq=','$'        ; csfwrite
 CS2WRITE:       DB '; Make/write=','$'
-CSFRANDOM:      DB 'Prereq/Open=','$'
+CSFRANDOM:      DB 'Prereq/Open=','$'   ; csfrandom
 CS2RANDOM:      DB '; random-I/O=','$'
-CSFLIFE:        DB 'Prereq=','$'
+CSFLIFE:        DB 'Prereq=','$'        ; csflife
 CS2LIFE:        DB '; lifecycle=','$'
-CF165A:         DB 'Open=','$'
+CF165A:         DB 'Open=','$'          ; cf165a
 CF165B:         DB '; RC=','$'
 CF167A:         DB 'Read returns=00,00,00; CR=','$'
-CF167F:         DB 'Open=','$'
+CF167F:         DB 'Open=','$'          ; cf167f
 CF167G:         DB '; failing read/state=','$'
-CF169A:         DB 'Current=','$'
+CF169A:         DB 'Current=','$'       ; cf169a
 CF169B:         DB '; explicit=','$'
 CF169C:         DB '; drive ','$'
-CF169D:         DB '->','$'
-CF171A:         DB 'Open=','$'
+CF169D:         DB '->','$'             ; cf169d
+CF171A:         DB 'Open=','$'          ; cf171a
 CF171B:         DB '; FCB guards unchanged','$'
 CF171E:         DB '; FCB guard corruption','$'
-CSTPASS:        DB 'P  ','$'
-CSTFAIL:        DB 'F  ','$'
-CSTERR:         DB 'F  ','$'
-CSTOBS:         DB 'O  ','$'
-CSTNOT:         DB '-  ','$'
-CROSSMISS:      DB 'Required C: BTBFILE.DAT fixture unavailable','$'
-CSUMPASS:       DB 13,10,'Summary: 1 pass, 0 fail, 0 error',13,10
+CSTPASS:        DB 'P  ','$'            ; cstpass
+CSTFAIL:        DB 'F  ','$'            ; cstfail
+CSTERR:         DB 'F  ','$'            ; csterr
+CSTOBS:         DB 'O  ','$'            ; cstobs
+CSTNOT:         DB '-  ','$'            ; cstnot
+CROSSMISS:      DB 'Required C: BTBFILE.DAT fixture unavailable','$' ; crossmiss
+CSUMPASS:       DB 13,10,'Summary: 1 pass, 0 fail, 0 error',13,10 ; csumpass
                 DB 'Details: FILETEST /NNNN:REPORT    Help: FILETEST /HELP',13,10,'$'
-CSUMFAIL:       DB 13,10,'Summary: 0 pass, 1 fail, 0 error',13,10
+
+CSUMFAIL:       DB 13,10,'Summary: 0 pass, 1 fail, 0 error',13,10 ; csumfail
                 DB 'Details: FILETEST /NNNN:REPORT    Help: FILETEST /HELP',13,10,'$'
-CSUMERR:        DB 13,10,'Summary: 0 pass, 0 fail, 1 error',13,10
+
+CSUMERR:        DB 13,10,'Summary: 0 pass, 0 fail, 1 error',13,10 ; csumerr
                 DB 'Details: FILETEST /NNNN:REPORT    Help: FILETEST /HELP',13,10,'$'
-CSUMOBS:        DB 13,10,'Summary: 1 observation, no conformance effect',13,10
+
+CSUMOBS:        DB 13,10,'Summary: 1 observation, no conformance effect',13,10 ; csumobs
                 DB 'Details: FILETEST /NNNN:REPORT    Help: FILETEST /HELP',13,10,'$'
-CSUMNOTRUN:     DB 13,10,'Summary: 0 pass, 0 fail, 0 error, 1 not-run',13,10
+
+CSUMNOTRUN:     DB 13,10,'Summary: 0 pass, 0 fail, 0 error, 1 not-run',13,10 ; csumnotrun
                 DB 'Prepare C: with SCRATCH /CROSS and retry.',13,10,'$'
-CSUM1:          DB 13,10,'Summary: ','$'
-CSUM2:          DB ' pass, ','$'
-CSUM3:          DB ' fail, ','$'
-CSUM4:          DB ' error, ','$'
-CSUM5:          DB '$'
-CSUM6:          DB ' observations, ','$'
-CSUM7:          DB ' not-run',13,10
+
+CSUM1:          DB 13,10,'Summary: ','$' ; csum1
+CSUM2:          DB ' pass, ','$'        ; csum2
+CSUM3:          DB ' fail, ','$'        ; csum3
+CSUM4:          DB ' error, ','$'       ; csum4
+CSUM5:          DB '$'                  ; csum5
+CSUM6:          DB ' observations, ','$' ; csum6
+CSUM7:          DB ' not-run',13,10     ; csum7
                 DB 'Details: FILETEST /NNNN:REPORT    Help: FILETEST /HELP',13,10,'$'
-FAILMSG:        DB 'Failed items: ','$'
-MSG_OBS:        DB 'OBSERVED Function 15 returned ','$'
-MSG_NOTRUN:     DB 'STATUS NOT-RUN',13,10
+
+FAILMSG:        DB 'Failed items: ','$' ; failmsg
+MSG_OBS:        DB 'OBSERVED Function 15 returned ','$' ; msg obs
+MSG_NOTRUN:     DB 'STATUS NOT-RUN',13,10 ; msg notrun
                 DB 'REASON Required C: BTBFILE.DAT fixture unavailable.',13,10,'$'
-MC002:          DB 'CODE C002',13,10,'$'
-MC003:          DB 'CODE C003',13,10,'$'
-MC004:          DB 'CODE C004',13,10,'$'
-MC006:          DB 'CODE C006',13,10,'$'
-ME005:          DB 'CODE E005',13,10,'REASON FCB guard corruption detected.',13,10,'$'
-MSG_EVIDENCE:   DB 'EVIDENCE Return value and 8-byte FCB guards before/after.',13,10,'$'
-O165A:          DB 'OBSERVED Open returned ','$'
+
+MC002:          DB 'CODE C002',13,10,'$' ; mc002
+MC003:          DB 'CODE C003',13,10,'$' ; mc003
+MC004:          DB 'CODE C004',13,10,'$' ; mc004
+MC006:          DB 'CODE C006',13,10,'$' ; mc006
+ME005:          DB 'CODE E005',13,10,'REASON FCB guard corruption detected.',13,10,'$' ; me005
+MSG_EVIDENCE:   DB 'EVIDENCE Return value and 8-byte FCB guards before/after.',13,10,'$' ; msg evidence
+O165A:          DB 'OBSERVED Open returned ','$' ; o165a
 O165B:          DB '; FCB byte 15 RC=','$'
-E165MSG:
+
+E165MSG:                                ; e165msg
         DB 'EVIDENCE RC read at offset 15 after Open; accepted range 00-80; FCB guards.',13,10,'$'
-O169A:          DB 'OBSERVED current-drive Open returned ','$'
+
+O169A:          DB 'OBSERVED current-drive Open returned ','$' ; o169a
 O169B:          DB '; explicit-drive Open returned ','$'
 O169C:          DB '; drive before ','$'
-O169D:          DB ', after ','$'
-E169MSG:
+O169D:          DB ', after ','$'       ; o169d
+
+E169MSG:                                ; e169msg
         DB 'EVIDENCE Two Function-15 returns, current-drive snapshots, and FCB guards.',13,10,'$'
-NOBS1:          DB 'OBSERVED prerequisite/Open return ','$'
+
+NOBS1:          DB 'OBSERVED prerequisite/Open return ','$' ; nobs1
 NOBS2:          DB '; operation/state ','$'
-DOBS1:          DB 'OBSERVED value-1 ','$'
+DOBS1:          DB 'OBSERVED value-1 ','$' ; dobs1
 DOBS2:          DB '; value-2 ','$'
-NEVID:
+
+NEVID:                                  ; nevid
         DB 'EVIDENCE Independent BDOS returns, FCB/DMA guards, state and record marker.',13,10,'$'
-DIAGEVID:
+
+DIAGEVID:                               ; diagevid
         DB 'EVIDENCE Characterization only; observed values have no portable pass/fail oracle.',13,10,'$'
-MENDP:
+
+MENDP:                                  ; mendp
         DB 'END_CASE',13,10,13,10
         DB 'SUMMARY 1 PASS, 0 FAIL, 0 BLOCKED, 0 ERROR',13,10
         DB 'COMPLETE_FOR_REQUESTED_SCOPE YES',13,10,'$'
-MENDF:
+
+MENDF:                                  ; mendf
         DB 'END_CASE',13,10,13,10
         DB 'SUMMARY 0 PASS, 1 FAIL, 0 BLOCKED, 0 ERROR',13,10
         DB 'COMPLETE_FOR_REQUESTED_SCOPE YES',13,10,'$'
-MENDE:
+
+MENDE:                                  ; mende
         DB 'END_CASE',13,10,13,10
         DB 'SUMMARY 0 PASS, 0 FAIL, 0 BLOCKED, 1 ERROR',13,10
         DB 'COMPLETE_FOR_REQUESTED_SCOPE NO',13,10,'$'
-MENDOBS:
+
+MENDOBS:                                ; mendobs
         DB 'END_CASE',13,10,13,10
         DB 'SUMMARY 0 PASS, 0 FAIL, 0 BLOCKED, 0 ERROR, 1 OBSERVATION',13,10
         DB 'COMPLETE_FOR_REQUESTED_SCOPE YES',13,10
         DB 'CONFORMANCE_EFFECT NONE',13,10,'$'
-ENDONLY: DB 'END_CASE',13,10,13,10,'$'
-MENDNOTRUN:
+
+ENDONLY: DB 'END_CASE',13,10,13,10,'$'  ; endonly
+
+MENDNOTRUN:                             ; mendnotrun
         DB 'END_CASE',13,10,13,10
         DB 'SUMMARY 0 PASS, 0 FAIL, 0 BLOCKED, 0 ERROR, 1 NOT-RUN',13,10
         DB 'COMPLETE_FOR_REQUESTED_SCOPE NO',13,10,'$'
-SUM1:   DB 'SUMMARY ','$'
-SUM2:   DB ' PASS, ','$'
-SUM3:   DB ' FAIL, 0 BLOCKED, ','$'
-SUM4:   DB ' ERROR',13,10,'$'
-SUMOBS1: DB 'OBSERVATIONS ','$'
-SUMOBS2: DB 13,10,'$'
-SUMNR1:  DB 'NOT-RUN ','$'
-SUMNR2:  DB 13,10,'$'
-SUMYES: DB 'COMPLETE_FOR_REQUESTED_SCOPE YES',13,10,'$'
-SUMNO:  DB 'COMPLETE_FOR_REQUESTED_SCOPE NO',13,10,'$'
 
-;------------------------- TEST INSTRUMENTS ---------------------------
-; Drive, name[8], type[3].  Every BT name is reserved to the suite.  A writing
-; card may replace its scratch name; a media builder must never give that name
-; to an operator's file.
-MISSFCB:    DB 0,'BTMISS  ','DAT'
-EMPTYFCB:   DB 0,'BTEMPTY ','DAT'
-TEMPFCB:    DB 0,'BTTEMP  ','DAT'
-CTEMPFCB:   DB 3,'BTTEMP  ','DAT'
-ONEFCB:     DB 0,'BTONE   ','DAT'
-NMONE:      DB 'BTONE   '
-TYPDAT:     DB 'DAT'
-OPENFCB:    DB 0,'BTOPEN  ','DAT'
-BFILEFCB:   DB 3,'BTBFILE ','DAT'
-FULLFCB:    DB 4,'BTFULL  ','DAT'
-DTEMPFCB:   DB 4,'BTTEMP  ','DAT'
-MULTIFCB:   DB 0,'BTMULTI ','DAT'
-PARTFCB:    DB 0,'BTPART  ','DAT'
-BNDFCB:     DB 0,'BTBND128','DAT'
-BIGFCB:     DB 0,'BTBIG130','DAT'
-ROFCB:      DB 0,'BTRO    ','DAT'
-QFCB:       DB 3FH,'???????????'
-WILDFCB:    DB 0,'BTWILD? ','DAT'
-CLOSEFCB:   DB 0,'BTCLOSE ','DAT'
-DECOYFCB:   DB 0,'BTMULTI ','DAT'
+SUM1:   DB 'SUMMARY ','$'               ; sum1
+SUM2:   DB ' PASS, ','$'                ; sum2
+SUM3:   DB ' FAIL, 0 BLOCKED, ','$'     ; sum3
+SUM4:   DB ' ERROR',13,10,'$'           ; sum4
+SUMOBS1: DB 'OBSERVATIONS ','$'         ; sumobs1
+SUMOBS2: DB 13,10,'$'                   ; sumobs2
+SUMNR1:  DB 'NOT-RUN ','$'              ; sumnr1
+SUMNR2:  DB 13,10,'$'                   ; sumnr2
+SUMYES: DB 'COMPLETE_FOR_REQUESTED_SCOPE YES',13,10,'$' ; sumyes
+SUMNO:  DB 'COMPLETE_FOR_REQUESTED_SCOPE NO',13,10,'$' ; sumno
+
+  ; Drive, name[8], type[3].  Every BT name is reserved to the suite.  A writing
+  ; card may replace its scratch name; a media builder must never give that name
+  ; to an operator's file.
+
+MISSFCB:    DB 0,'BTMISS  ','DAT'       ; missfcb
+EMPTYFCB:   DB 0,'BTEMPTY ','DAT'       ; emptyfcb
+TEMPFCB:    DB 0,'BTTEMP  ','DAT'       ; tempfcb
+CTEMPFCB:   DB 3,'BTTEMP  ','DAT'       ; ctempfcb
+ONEFCB:     DB 0,'BTONE   ','DAT'       ; onefcb
+NMONE:      DB 'BTONE   '               ; nmone
+TYPDAT:     DB 'DAT'                    ; typdat
+OPENFCB:    DB 0,'BTOPEN  ','DAT'       ; openfcb
+BFILEFCB:   DB 3,'BTBFILE ','DAT'       ; bfilefcb
+FULLFCB:    DB 4,'BTFULL  ','DAT'       ; fullfcb
+DTEMPFCB:   DB 4,'BTTEMP  ','DAT'       ; dtempfcb
+MULTIFCB:   DB 0,'BTMULTI ','DAT'       ; multifcb
+PARTFCB:    DB 0,'BTPART  ','DAT'       ; partfcb
+BNDFCB:     DB 0,'BTBND128','DAT'       ; bndfcb
+BIGFCB:     DB 0,'BTBIG130','DAT'       ; bigfcb
+ROFCB:      DB 0,'BTRO    ','DAT'       ; rofcb
+QFCB:       DB 3FH,'???????????'        ; qfcb
+WILDFCB:    DB 0,'BTWILD? ','DAT'       ; wildfcb
+CLOSEFCB:   DB 0,'BTCLOSE ','DAT'       ; closefcb
+DECOYFCB:   DB 0,'BTMULTI ','DAT'       ; decoyfcb
             DS 24
-MONE:       DB 'ONE'
-MMULTI:     DB 'MULTI'
-MWILD1:     DB 'WILD1'
-MMULTI0:    DB 'MULTI-000'
-MMULTI1:    DB 'MULTI-001'
-MMULTI2:    DB 'MULTI-002'
-MONE8:      DB 'ONE-000 '
-MPART0:     DB 'PART-000 '
-MBOUND127:  DB 'BOUND-127'
-MBIG127:    DB 'BIG-127'
-MBIG001:    DB 'BIG-001'
-MBIG128:    DB 'BIG-128'
-MBIG129:    DB 'BIG-129'
-MBFILE:     DB 'BFILE-000'
-MFULL127:   DB 'FULL-127'
-MRO:        DB 'READONLY-000'
-OBSERVED:   DB 0
-OBS169A:    DB 0
-OBS169B:    DB 0
-DRVBEFORE:  DB 0
-DRVAFTER:   DB 0
-AGGMODE:    DB 0
-FULLMODE:   DB 0
-PASSCT:     DB 0
-FAILCT:     DB 0
-FAILITEMS:  DS 448
-ERRCT:      DB 0
-OBSCT:      DB 0
-NOTRUNCT:   DB 0
-PARSEBAD:   DB 0
-ROWSTATUS:  DB 0
-O165RET:    DB 0
-O165RC:     DB 0
-NEWOBS1:    DB 0
-NEWOBS2:    DB 0
-OLDCR:      DB 0
-CASEPTR:    DW 0
-OBSSEPPTR:  DW 0
-DIAGPTR:    DW 0
-DIAGLEFT:   DB 0
-ARGBUF:     DS 40
-GPRE:       DS 8
-TESTFCB:    DS 36
-GPOST:      DS 8
-DPRE:       DS 16
-DMABUF:     DS 128
-DPOST:      DS 16
+
+MONE:       DB 'ONE'                    ; mone
+MMULTI:     DB 'MULTI'                  ; mmulti
+MWILD1:     DB 'WILD1'                  ; mwild1
+MMULTI0:    DB 'MULTI-000'              ; mmulti0
+MMULTI1:    DB 'MULTI-001'              ; mmulti1
+MMULTI2:    DB 'MULTI-002'              ; mmulti2
+MONE8:      DB 'ONE-000 '               ; mone8
+MPART0:     DB 'PART-000 '              ; mpart0
+MBOUND127:  DB 'BOUND-127'              ; mbound127
+MBIG127:    DB 'BIG-127'                ; mbig127
+MBIG001:    DB 'BIG-001'                ; mbig001
+MBIG128:    DB 'BIG-128'                ; mbig128
+MBIG129:    DB 'BIG-129'                ; mbig129
+MBFILE:     DB 'BFILE-000'              ; mbfile
+MFULL127:   DB 'FULL-127'               ; mfull127
+MRO:        DB 'READONLY-000'           ; mro
+OBSERVED:   DB 0                        ; observed
+OBS169A:    DB 0                        ; obs169a
+OBS169B:    DB 0                        ; obs169b
+DRVBEFORE:  DB 0                        ; drvbefore
+DRVAFTER:   DB 0                        ; drvafter
+AGGMODE:    DB 0                        ; aggmode
+FULLMODE:   DB 0                        ; fullmode
+PASSCT:     DB 0                        ; passct
+FAILCT:     DB 0                        ; failct
+FAILITEMS:  DS 448                      ; failitems
+ERRCT:      DB 0                        ; errct
+OBSCT:      DB 0                        ; obsct
+NOTRUNCT:   DB 0                        ; notrunct
+PARSEBAD:   DB 0                        ; parsebad
+ROWSTATUS:  DB 0                        ; rowstatus
+O165RET:    DB 0                        ; o165ret
+O165RC:     DB 0                        ; o165rc
+NEWOBS1:    DB 0                        ; newobs1
+NEWOBS2:    DB 0                        ; newobs2
+OLDCR:      DB 0                        ; oldcr
+CASEPTR:    DW 0                        ; caseptr
+OBSSEPPTR:  DW 0                        ; obssepptr
+DIAGPTR:    DW 0                        ; diagptr
+DIAGLEFT:   DB 0                        ; diagleft
+ARGBUF:     DS 40                       ; argbuf
+GPRE:       DS 8                        ; gpre
+TESTFCB:    DS 36                       ; testfcb
+GPOST:      DS 8                        ; gpost
+DPRE:       DS 16                       ; dpre
+DMABUF:     DS 128                      ; dmabuf
+DPOST:      DS 16                       ; dpost
             DS 128
-STACKTOP:
+
+STACKTOP:                               ; top of private test stack
         END     START
