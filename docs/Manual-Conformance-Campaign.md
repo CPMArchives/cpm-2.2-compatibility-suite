@@ -6,19 +6,73 @@ This is a recipe for a **complete manual conformance campaign** against one CP/M
 
 Use a **working copy** of the runtime disk, never your master copy.
 
-For the maintained Montezuma distribution, keep available:
+Keep available, in the image/container format required by the candidate
+machine or emulator:
+
+- one protected working copy of the complete runtime/test disk;
+
+- separate disposable formatted disks for CROSS, BLANK, and DISK scratch
+  states, or a recorded procedure which recreates each state before use;
+
+- a disposable SYSTEM-format disk whose selected DPB has nonzero `OFF`,
+  specifically for BIOSTEST 0453;
+
+- a way to restore or snapshot the CP/M system and every mutable test disk;
+
+- preferably, a complete terminal transcript.
+
+The container is a property of the platform path, not of the conformance
+suite. For example, BetterCP/M uses DMK images under trs80gp and physical-order
+raw `.dsk` images under z80pack. Use the same CP/M filesystem layout and
+configured disk format on both paths; renaming or changing the container does
+not select a BIOS DPB.
+
+For the maintained Montezuma distribution, the corresponding examples are:
 
 - `Conformance Suite.dmk` — runtime/test disk
 
-- a disposable blank formatted disk for SCRATCH operations
+- disposable formatted disks for SCRATCH operations
 
 - `BIOSTEST OFF Scratch.dmk` — specifically for BIOSTEST 0453
 
-- a way to restore/snapshot the CP/M system
-
-- preferably, a complete terminal transcript
-
 The source disk is **not required** merely to run the suite.
+
+## Complete Runtime Disk Required
+
+Do not construct a campaign disk by copying only the twelve test executables
+and `SCRATCH.COM`. Several tests require distributed data fixtures,
+`CPMTEST.CFG`, empty directory-search witnesses, and deliberate USER-area
+placement. Use the maintained runtime image when possible.
+
+If a platform requires a newly constructed runtime disk, reproduce the
+maintained runtime listing for that suite revision. In particular:
+
+- install the twelve test executables and `SCRATCH.COM` in USER 0;
+- install every file under `suite/runtime-payload/` in USER 0;
+- generate and install the current `BDSA.TMP` and `BDSB.TMP` witnesses;
+- install `DIRTEST.COM` and `BTUSR.DAT` in USER 1 as well as their USER 0
+  copies; and
+- include `SYSINFO.COM` if the campaign will use the SYSINFO procedures in
+  this document.
+
+The maintained distribution's listing is the authority for its exact content.
+After constructing an image, enumerate every USER area and compare it with
+that listing before beginning Phase 1. Record the image hash and the method
+used to create it.
+
+For example, merely copying BetterCP/M's host-built COM files into a raw image
+puts them in USER 0 and does not create the required USER 1 copy. With the
+appropriate cpmtools disk definition selected, the missing placement can be
+made explicitly with a command of this form:
+
+```sh
+cpmcp -T raw -f bettercpm-default conformance.dsk \
+  suite/build/DIRTEST.COM 1:
+```
+
+That one command is only an illustration of USER-area placement. It does not
+install the other fixtures listed above or by itself create a complete runtime
+disk.
 
 Record before beginning:
 
